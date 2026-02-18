@@ -17,6 +17,11 @@ Read more https://doc.didww.com/api
 ### Gradle
 
 ```kotlin
+repositories {
+    mavenCentral()
+    maven("https://jitpack.io")
+}
+
 dependencies {
     implementation("com.didww:didww-api-java-sdk:1.0.0")
 }
@@ -30,6 +35,26 @@ dependencies {
     <artifactId>didww-api-java-sdk</artifactId>
     <version>1.0.0</version>
 </dependency>
+```
+
+### JitPack (no release required)
+
+You can consume the SDK directly from GitHub branch/commit via JitPack.
+
+Gradle:
+
+```kotlin
+repositories {
+    maven("https://jitpack.io")
+}
+
+dependencies {
+    // branch
+    implementation("com.github.didww:didww-api-3-java-sdk:main-SNAPSHOT")
+
+    // or exact commit
+    // implementation("com.github.didww:didww-api-3-java-sdk:<commit-hash>")
+}
 ```
 
 ## Usage
@@ -317,6 +342,17 @@ byte[] encrypted = Encrypt.encryptWithKeys(fileBytes, publicKeyPems);
 String fingerprint = Encrypt.calculateFingerprint(publicKeyPems);
 ```
 
+Upload encrypted file:
+
+```java
+List<String> encryptedFileIds = client.uploadEncryptedFile(
+    encrypted,          // encrypted bytes
+    "document.pdf.enc", // uploaded file name
+    fingerprint,        // Encrypt#getFingerprint()
+    "document.pdf"      // description
+);
+```
+
 ## Webhook Signature Validation
 
 Validate incoming webhook callbacks from DIDWW using HMAC-SHA1 signature verification.
@@ -403,7 +439,7 @@ try {
 | Address | `client.addresses()` | list, find, create, update, delete |
 | AddressVerification | `client.addressVerifications()` | list, find, create |
 | Identity | `client.identities()` | list, find, create, update, delete |
-| EncryptedFile | `client.encryptedFiles()` | list, find, create |
+| EncryptedFile | `client.encryptedFiles()` | list, find, delete |
 | PermanentSupportingDocument | `client.permanentSupportingDocuments()` | create |
 | Proof | `client.proofs()` | create |
 | RequirementValidation | `client.requirementValidations()` | create |
