@@ -1,6 +1,5 @@
 package com.didww.sdk.repository;
 
-import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.JsonApiMediaType;
 import com.didww.sdk.http.QueryParams;
@@ -43,7 +42,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
             byte[] responseBody = getResponseBody(response);
             JSONAPIDocument<T> responseDoc = converter.readDocument(responseBody, resourceClass);
             return new ApiResponse<>(responseDoc.get(), extractMeta(responseDoc));
-        } catch (DidwwApiException e) {
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new DidwwClientException("Failed to create " + endpoint, e);
@@ -73,7 +72,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
             byte[] responseBody = getResponseBody(response);
             JSONAPIDocument<T> responseDoc = converter.readDocument(responseBody, resourceClass);
             return new ApiResponse<>(responseDoc.get(), extractMeta(responseDoc));
-        } catch (DidwwApiException e) {
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new DidwwClientException("Failed to update " + endpoint + "/" + id, e);
@@ -86,7 +85,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
 
         try (Response response = httpClient.newCall(request).execute()) {
             handleErrorResponse(response);
-        } catch (DidwwApiException e) {
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new DidwwClientException("Failed to delete " + endpoint + "/" + id, e);

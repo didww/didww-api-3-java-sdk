@@ -59,10 +59,6 @@ public class DidwwResourceConverter {
         return mapper;
     }
 
-    public static ResourceConverter create() {
-        return create(createObjectMapper());
-    }
-
     public static ResourceConverter create(ObjectMapper objectMapper) {
         ResourceConverter converter = new ResourceConverter(objectMapper, ALL_RESOURCE_CLASSES);
         converter.enableDeserializationOption(com.github.jasminb.jsonapi.DeserializationFeature.ALLOW_UNKNOWN_INCLUSIONS);

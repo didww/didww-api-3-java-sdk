@@ -2,7 +2,6 @@ package com.didww.sdk.repository;
 
 import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
-import com.didww.sdk.http.JsonApiMediaType;
 import com.didww.sdk.http.QueryParams;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +50,7 @@ public class ReadOnlyRepository<T> {
             JSONAPIDocument<List<T>> document = converter.readDocumentCollection(body, resourceClass);
             Map<String, Object> meta = extractMeta(document);
             return new ApiResponse<>(document.get(), meta);
-        } catch (DidwwApiException e) {
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new DidwwClientException("Failed to list " + endpoint, e);
@@ -72,7 +71,7 @@ public class ReadOnlyRepository<T> {
             JSONAPIDocument<T> document = converter.readDocument(body, resourceClass);
             Map<String, Object> meta = extractMeta(document);
             return new ApiResponse<>(document.get(), meta);
-        } catch (DidwwApiException e) {
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new DidwwClientException("Failed to find " + endpoint + "/" + id, e);

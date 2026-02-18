@@ -1,6 +1,5 @@
 package com.didww.sdk.repository;
 
-import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.QueryParams;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +30,7 @@ public class SingletonRepository<T> extends ReadOnlyRepository<T> {
             byte[] body = getResponseBody(response);
             JSONAPIDocument<T> document = converter.readDocument(body, resourceClass);
             return new ApiResponse<>(document.get(), extractMeta(document));
-        } catch (DidwwApiException e) {
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new DidwwClientException("Failed to find " + endpoint, e);
