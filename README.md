@@ -21,23 +21,35 @@ This SDK targets DIDWW API v3 documentation version:
 
 ```kotlin
 repositories {
-    mavenCentral()
     maven("https://jitpack.io")
 }
 
 dependencies {
-    implementation("com.didww:didww-api-java-sdk:1.0.0")
+    // branch
+    implementation("com.github.didww:didww-api-3-java-sdk:main-SNAPSHOT")
+
+    // or exact commit
+    // implementation("com.github.didww:didww-api-3-java-sdk:<commit-hash>")
 }
 ```
 
 ### Maven
 
 ```xml
-<dependency>
-    <groupId>com.didww</groupId>
-    <artifactId>didww-api-java-sdk</artifactId>
-    <version>1.0.0</version>
-</dependency>
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github.didww</groupId>
+        <artifactId>didww-api-3-java-sdk</artifactId>
+        <version>main-SNAPSHOT</version>
+    </dependency>
+</dependencies>
 ```
 
 ### JitPack (no release required)
