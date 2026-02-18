@@ -1,0 +1,51 @@
+{
+  "data": {
+    "id": "e96ae7d1-11d5-42bc-a5c5-211f3c3788ae",
+    "type": "identities",
+    "attributes": {
+      "first_name": "Jake",
+      "last_name": "Johnson",
+      "phone_number": "1111111",
+      "id_number": "CED4321",
+      "birth_date": "1979-01-01",
+      "company_name": "Some Company Limited",
+      "company_reg_number": "1222776",
+      "vat_id": "GB1235",
+      "description": "test",
+      "personal_tax_id": "983217654",
+      "identity_type": "Business",
+      "created_at": "2021-04-01T14:56:34.637Z",
+      "external_reference_id": "112",
+      "verified": false
+    },
+    "relationships": {
+      "country": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/relationships/country",
+          "related": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/country"
+        }
+      },
+      "proofs": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/relationships/proofs",
+          "related": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/proofs"
+        }
+      },
+      "addresses": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/relationships/addresses",
+          "related": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/addresses"
+        }
+      },
+      "permanent_documents": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/relationships/permanent_documents",
+          "related": "https://sandbox-api.didww.com/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae/permanent_documents"
+        }
+      }
+    }
+  },
+  "meta": {
+    "api_version": "2021-04-19"
+  }
+}

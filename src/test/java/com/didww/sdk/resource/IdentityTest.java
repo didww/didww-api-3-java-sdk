@@ -1,0 +1,63 @@
+package com.didww.sdk.resource;
+
+import com.didww.sdk.BaseTest;
+import com.didww.sdk.repository.ApiResponse;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class IdentityTest extends BaseTest {
+
+    @Test
+    void testListIdentities() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/identities"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("identities/index.json"))));
+
+        ApiResponse<List<Identity>> response = client.identities().list();
+        List<Identity> identities = response.getData();
+
+        assertThat(identities).isNotEmpty();
+        assertThat(identities).hasSize(2);
+        assertThat(identities.get(0).getId()).isEqualTo("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
+        assertThat(identities.get(0).getFirstName()).isEqualTo("John");
+        assertThat(identities.get(0).getLastName()).isEqualTo("Doe");
+        assertThat(identities.get(0).getIdentityType()).isEqualTo("Personal");
+    }
+
+    @Test
+    void testCreateIdentity() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/identities"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("identities/create.json"))));
+
+        Identity identity = new Identity();
+        identity.setFirstName("John");
+        identity.setLastName("Doe");
+        identity.setPhoneNumber("123456789");
+        identity.setIdNumber("ABC1234");
+        identity.setBirthDate("1970-01-01");
+        identity.setCompanyName("Test Company Limited");
+        identity.setIdentityType("Business");
+
+        ApiResponse<Identity> response = client.identities().create(identity);
+        Identity created = response.getData();
+
+        assertThat(created.getId()).isEqualTo("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
+        assertThat(created.getFirstName()).isEqualTo("John");
+        assertThat(created.getLastName()).isEqualTo("Doe");
+        assertThat(created.getPhoneNumber()).isEqualTo("123456789");
+        assertThat(created.getIdNumber()).isEqualTo("ABC1234");
+        assertThat(created.getBirthDate()).isEqualTo("1970-01-01");
+        assertThat(created.getCompanyName()).isEqualTo("Test Company Limited");
+        assertThat(created.getIdentityType()).isEqualTo("Business");
+        assertThat(created.getVerified()).isFalse();
+    }
+}

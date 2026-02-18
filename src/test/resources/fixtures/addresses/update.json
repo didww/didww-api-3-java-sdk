@@ -1,0 +1,37 @@
+{
+  "data": {
+    "id": "bf69bc70-e1c2-442c-9f30-335ee299b663",
+    "type": "addresses",
+    "attributes": {
+      "city_name": "Chicago",
+      "postal_code": "1234",
+      "address": "Main street",
+      "description": "some address",
+      "created_at": "2021-04-01T14:59:47.128Z",
+      "verified": false
+    },
+    "relationships": {
+      "identity": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/addresses/bf69bc70-e1c2-442c-9f30-335ee299b663/relationships/identity",
+          "related": "https://sandbox-api.didww.com/v3/addresses/bf69bc70-e1c2-442c-9f30-335ee299b663/identity"
+        }
+      },
+      "country": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/addresses/bf69bc70-e1c2-442c-9f30-335ee299b663/relationships/country",
+          "related": "https://sandbox-api.didww.com/v3/addresses/bf69bc70-e1c2-442c-9f30-335ee299b663/country"
+        }
+      },
+      "proofs": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/addresses/bf69bc70-e1c2-442c-9f30-335ee299b663/relationships/proofs",
+          "related": "https://sandbox-api.didww.com/v3/addresses/bf69bc70-e1c2-442c-9f30-335ee299b663/proofs"
+        }
+      }
+    }
+  },
+  "meta": {
+    "api_version": "2021-04-19"
+  }
+}

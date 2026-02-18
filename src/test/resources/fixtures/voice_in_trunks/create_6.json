@@ -1,0 +1,48 @@
+{
+  "data": {
+    "id": "c6fbfd81-094a-4c5b-8447-e68cfe9d711e",
+    "type": "voice_in_trunks",
+    "attributes": {
+      "priority": 1,
+      "capacity_limit": null,
+      "weight": 65535,
+      "name": "hello, test h323 trunk",
+      "cli_format": "e164",
+      "cli_prefix": null,
+      "description": null,
+      "ringing_timeout": null,
+      "configuration": {
+        "type": "iax2_configurations",
+        "attributes": {
+          "dst": "558540420024",
+          "host": "example.com",
+          "port": 4569,
+          "auth_user": null,
+          "auth_password": null,
+          "codec_ids": [
+            9,
+            10,
+            8,
+            7,
+            6
+          ]
+        }
+      },
+      "created_at": "2018-12-29T10:13:56.189Z"
+    },
+    "relationships": {
+      "voice_in_trunk_group": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/c6fbfd81-094a-4c5b-8447-e68cfe9d711e/relationships/voice_in_trunk_group",
+          "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/c6fbfd81-094a-4c5b-8447-e68cfe9d711e/voice_in_trunk_group"
+        }
+      },
+      "pop": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/c6fbfd81-094a-4c5b-8447-e68cfe9d711e/relationships/pop",
+          "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/c6fbfd81-094a-4c5b-8447-e68cfe9d711e/pop"
+        }
+      }
+    }
+  }
+}

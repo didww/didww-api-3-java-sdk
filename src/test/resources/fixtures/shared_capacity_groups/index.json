@@ -1,0 +1,107 @@
+{
+  "data": [
+    {
+      "id": "89f987e2-0862-4bf4-a3f4-cdc89af0d875",
+      "type": "shared_capacity_groups",
+      "attributes": {
+        "name": "didww",
+        "shared_channels_count": 19,
+        "created_at": "2018-06-19T11:41:21.644Z",
+        "metered_channels_count": 0
+      },
+      "relationships": {
+        "capacity_pool": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/relationships/capacity_pool",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/capacity_pool"
+          }
+        },
+        "dids": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/relationships/dids",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/dids"
+          }
+        }
+      }
+    },
+    {
+      "id": "206881de-7a92-4415-aa32-b05458c79623",
+      "type": "shared_capacity_groups",
+      "attributes": {
+        "name": "Pay Per Minute",
+        "shared_channels_count": 0,
+        "created_at": "2018-06-19T11:41:21.644Z",
+        "metered_channels_count": 100
+      },
+      "relationships": {
+        "capacity_pool": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/206881de-7a92-4415-aa32-b05458c79623/relationships/capacity_pool",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/206881de-7a92-4415-aa32-b05458c79623/capacity_pool"
+          }
+        },
+        "dids": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/206881de-7a92-4415-aa32-b05458c79623/relationships/dids",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/206881de-7a92-4415-aa32-b05458c79623/dids"
+          }
+        }
+      }
+    },
+    {
+      "id": "e67b7be7-0698-41eb-9aca-7217903bf0e8",
+      "type": "shared_capacity_groups",
+      "attributes": {
+        "name": "test",
+        "shared_channels_count": 5,
+        "created_at": "2018-06-19T12:26:48.938Z",
+        "metered_channels_count": 5
+      },
+      "relationships": {
+        "capacity_pool": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/e67b7be7-0698-41eb-9aca-7217903bf0e8/relationships/capacity_pool",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/e67b7be7-0698-41eb-9aca-7217903bf0e8/capacity_pool"
+          }
+        },
+        "dids": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/e67b7be7-0698-41eb-9aca-7217903bf0e8/relationships/dids",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/e67b7be7-0698-41eb-9aca-7217903bf0e8/dids"
+          }
+        }
+      }
+    },
+    {
+      "id": "ea258df5-702f-40a9-91a2-4f713945e472",
+      "type": "shared_capacity_groups",
+      "attributes": {
+        "name": "ttt",
+        "shared_channels_count": 1,
+        "created_at": "2018-06-19T11:41:21.644Z",
+        "metered_channels_count": 0
+      },
+      "relationships": {
+        "capacity_pool": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/ea258df5-702f-40a9-91a2-4f713945e472/relationships/capacity_pool",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/ea258df5-702f-40a9-91a2-4f713945e472/capacity_pool"
+          }
+        },
+        "dids": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/ea258df5-702f-40a9-91a2-4f713945e472/relationships/dids",
+            "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/ea258df5-702f-40a9-91a2-4f713945e472/dids"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "total_records": 4
+  },
+  "links": {
+    "first": "https://sandbox-api.didww.com/v3/shared_capacity_groups?page%5Bnumber%5D=1&page%5Bsize%5D=50",
+    "last": "https://sandbox-api.didww.com/v3/shared_capacity_groups?page%5Bnumber%5D=1&page%5Bsize%5D=50"
+  }
+}

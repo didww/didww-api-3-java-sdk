@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "title": "Param not allowed",
+      "detail": "capacity_pools_id is not allowed.",
+      "code": "105",
+      "status": "400"
+    }
+  ]
+}

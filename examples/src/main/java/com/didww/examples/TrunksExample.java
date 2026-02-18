@@ -1,0 +1,60 @@
+package com.didww.examples;
+
+import com.didww.sdk.DidwwClient;
+import com.didww.sdk.http.QueryParams;
+import com.didww.sdk.resource.Pop;
+import com.didww.sdk.resource.VoiceInTrunk;
+import com.didww.sdk.resource.configuration.SipConfiguration;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class TrunksExample {
+
+    public static void main(String[] args) {
+        DidwwClient client = ExampleClientFactory.fromEnv();
+
+        // List voice in trunks with included relationships
+        QueryParams params = QueryParams.builder()
+                .include("pop", "voice_in_trunk_group")
+                .page(1, 10)
+                .build();
+        List<VoiceInTrunk> trunks = client.voiceInTrunks().list(params).getData();
+        for (VoiceInTrunk trunk : trunks) {
+            System.out.println(trunk.getName() + " [" + trunk.getConfiguration().getType() + "]");
+        }
+
+        // Create a SIP trunk
+        VoiceInTrunk newTrunk = new VoiceInTrunk();
+        newTrunk.setName("My SIP Trunk");
+        newTrunk.setPriority(1);
+        newTrunk.setWeight(100);
+        newTrunk.setCliFormat("e164");
+        newTrunk.setRingingTimeout(30);
+        newTrunk.setCapacityLimit(10);
+
+        SipConfiguration sip = new SipConfiguration();
+        sip.setHost("sip.example.com");
+        sip.setPort(5060);
+        sip.setCodecIds(Arrays.asList(9, 10));
+        sip.setTransportProtocolId(1);
+        newTrunk.setConfiguration(sip);
+
+        // Set POP relationship
+        Pop pop = new Pop();
+        pop.setId("pop-uuid-here");
+        newTrunk.setPop(pop);
+
+        VoiceInTrunk created = client.voiceInTrunks().create(newTrunk).getData();
+        System.out.println("Created trunk: " + created.getId() + " - " + created.getName());
+
+        // Update trunk
+        created.setDescription("Updated description");
+        VoiceInTrunk updated = client.voiceInTrunks().update(created).getData();
+        System.out.println("Updated trunk: " + updated.getDescription());
+
+        // Delete trunk
+        client.voiceInTrunks().delete(created.getId());
+        System.out.println("Trunk deleted");
+    }
+}

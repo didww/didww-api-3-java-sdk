@@ -1,0 +1,53 @@
+{
+  "data": [
+    {
+      "id": "d6530a8c-924c-469a-98c0-9525602e6192",
+      "type": "did_group_types",
+      "attributes": {
+        "name": "Global"
+      }
+    },
+    {
+      "id": "994ea201-4a4d-4b27-ac4b-b5916ac969a3",
+      "type": "did_group_types",
+      "attributes": {
+        "name": "Local"
+      }
+    },
+    {
+      "id": "6bba60f1-e724-4d12-9ea4-a3a64705800f",
+      "type": "did_group_types",
+      "attributes": {
+        "name": "Mobile"
+      }
+    },
+    {
+      "id": "2c165e9d-c6f5-4fe1-ad0e-bacf5bab3d86",
+      "type": "did_group_types",
+      "attributes": {
+        "name": "National"
+      }
+    },
+    {
+      "id": "e95378ee-e93f-459e-a2f6-9056c064f529",
+      "type": "did_group_types",
+      "attributes": {
+        "name": "Shared Cost"
+      }
+    },
+    {
+      "id": "ec95e831-fc36-489a-a531-0fd1984ab6e8",
+      "type": "did_group_types",
+      "attributes": {
+        "name": "Toll-free"
+      }
+    }
+  ],
+  "meta": {
+    "total_records": 6
+  },
+  "links": {
+    "first": "https://sandbox-api.didww.com/v3/did_group_types?page%5Bnumber%5D=1&page%5Bsize%5D=50",
+    "last": "https://sandbox-api.didww.com/v3/did_group_types?page%5Bnumber%5D=1&page%5Bsize%5D=50"
+  }
+}

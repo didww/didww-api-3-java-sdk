@@ -1,0 +1,43 @@
+{
+  "data": {
+    "id": "ab2adc18-7c94-42d9-bdde-b28dfc373a22",
+    "type": "areas",
+    "attributes": {
+      "name": "Tuscany"
+    },
+    "relationships": {
+      "country": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/areas/ab2adc18-7c94-42d9-bdde-b28dfc373a22/relationships/country",
+          "related": "https://sandbox-api.didww.com/v3/areas/ab2adc18-7c94-42d9-bdde-b28dfc373a22/country"
+        },
+        "data": {
+          "type": "countries",
+          "id": "05baebb6-4053-4870-acd6-8491eb200e0b"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "05baebb6-4053-4870-acd6-8491eb200e0b",
+      "type": "countries",
+      "attributes": {
+        "name": "Italy",
+        "prefix": "39",
+        "iso": "IT"
+      },
+      "relationships": {
+        "regions": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/countries/05baebb6-4053-4870-acd6-8491eb200e0b/relationships/regions",
+            "related": "https://sandbox-api.didww.com/v3/countries/05baebb6-4053-4870-acd6-8491eb200e0b/regions"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "api_version": "2021-04-19"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "data": {
+    "id": "9b9f2121-8d9e-4aa8-9754-dbaf6f695fd6",
+    "type": "orders",
+    "attributes": {
+      "amount": "0.19",
+      "status": "Pending",
+      "created_at": "2018-12-27T16:44:05.511Z",
+      "description": "DID",
+      "reference": "YGA-665789",
+      "items": [
+        {
+          "type": "did_order_items",
+          "attributes": {
+            "qty": 1,
+            "nrc": "0.0",
+            "mrc": "0.19",
+            "prorated_mrc": false,
+            "billed_from": null,
+            "billed_to": null,
+            "setup_price": "0.0",
+            "monthly_price": "0.19",
+            "did_group_id": "7156eea4-09af-4f82-a43e-3b572f9927d8"
+          }
+        }
+      ],
+      "callback_url": null,
+      "callback_method": null
+    }
+  }
+}

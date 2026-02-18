@@ -1,0 +1,13 @@
+{
+  "data": {
+    "id": "371eafbd-ac6a-485c-aadf-9e3c5da37eb4",
+    "type": "encrypted_files",
+    "attributes": {
+      "description": null,
+      "expire_at": "2021-04-06T16:38:34.437Z"
+    }
+  },
+  "meta": {
+    "api_version": "2021-04-19"
+  }
+}

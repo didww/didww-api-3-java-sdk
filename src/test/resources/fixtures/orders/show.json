@@ -1,0 +1,26 @@
+{
+  "data": {
+    "id": "9df11dac-9d83-448c-8866-19c998be33db",
+    "type": "orders",
+    "attributes": {
+      "amount": "25.07",
+      "status": "Completed",
+      "created_at": "2018-08-17T09:48:48.440Z",
+      "description": "Payment processing fee",
+      "reference": "SPT-474057",
+      "items": [
+        {
+          "type": "generic_order_items",
+          "attributes": {
+            "qty": 1,
+            "nrc": "25.07",
+            "mrc": "0.0",
+            "prorated_mrc": false,
+            "billed_from": "2018-08-17",
+            "billed_to": "2018-09-16"
+          }
+        }
+      ]
+    }
+  }
+}

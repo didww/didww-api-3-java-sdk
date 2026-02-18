@@ -1,0 +1,13 @@
+{
+  "errors": [
+    {
+      "title": "is invalid",
+      "detail": "voice_in_trunk_group - is invalid",
+      "code": "100",
+      "source": {
+        "pointer": "/data/attributes/voice_in_trunk_group_id"
+      },
+      "status": "422"
+    }
+  ]
+}

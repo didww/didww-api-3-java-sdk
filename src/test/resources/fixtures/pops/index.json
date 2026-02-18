@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "id": "29dbdddf-3026-4e82-a2d6-5d8b3b2e0ad9",
+      "type": "pops",
+      "attributes": {
+        "name": "New York, NY, USA"
+      }
+    },
+    {
+      "id": "5fbb9593-de83-441f-8144-4b7b88547e22",
+      "type": "pops",
+      "attributes": {
+        "name": "Los Angeles, CA, USA"
+      }
+    }
+  ],
+  "meta": {
+    "total_records": 2
+  }
+}

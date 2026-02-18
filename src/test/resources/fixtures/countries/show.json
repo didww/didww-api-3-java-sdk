@@ -1,0 +1,11 @@
+{
+  "data": {
+    "id": "7eda11bb-0e66-4146-98e7-57a5281f56c8",
+    "type": "countries",
+    "attributes": {
+      "name": "United Kingdom",
+      "prefix": "44",
+      "iso": "GB"
+    }
+  }
+}

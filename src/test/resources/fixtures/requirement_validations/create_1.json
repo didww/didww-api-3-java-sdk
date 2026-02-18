@@ -1,0 +1,31 @@
+{
+  "errors": [
+    {
+      "title": "Identity Place of Birth must be Belgium",
+      "detail": "Identity Place of Birth must be Belgium",
+      "code": "100",
+      "source": {
+        "pointer": "/data"
+      },
+      "status": "422"
+    },
+    {
+      "title": "Following Supporting Document(s) required (Belgium Registration Form)",
+      "detail": "Following Supporting Document(s) required (Belgium Registration Form)",
+      "code": "100",
+      "source": {
+        "pointer": "/data"
+      },
+      "status": "422"
+    },
+    {
+      "title": "Address in Belgium required",
+      "detail": "Address in Belgium required",
+      "code": "100",
+      "source": {
+        "pointer": "/data"
+      },
+      "status": "422"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": "5fc59e7e-79eb-498a-8779-800416b5c68a",
+    "type": "voice_out_trunk_regenerate_credentials"
+  },
+  "meta": {
+    "api_version": "2021-12-15"
+  }
+}

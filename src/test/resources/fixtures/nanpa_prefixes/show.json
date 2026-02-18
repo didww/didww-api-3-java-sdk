@@ -1,0 +1,50 @@
+{
+  "data": {
+    "id": "6c16d51d-d376-4395-91c4-012321317e48",
+    "type": "nanpa_prefixes",
+    "attributes": {
+      "npa": "864",
+      "nxx": "920"
+    },
+    "relationships": {
+      "country": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/nanpa_prefixes/6c16d51d-d376-4395-91c4-012321317e48/relationships/country",
+          "related": "https://sandbox-api.didww.com/v3/nanpa_prefixes/6c16d51d-d376-4395-91c4-012321317e48/country"
+        },
+        "data": {
+          "type": "countries",
+          "id": "e5b6999c-aba0-4ae4-b9f9-3dcf744a0ed1"
+        }
+      },
+      "region": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/nanpa_prefixes/6c16d51d-d376-4395-91c4-012321317e48/relationships/region",
+          "related": "https://sandbox-api.didww.com/v3/nanpa_prefixes/6c16d51d-d376-4395-91c4-012321317e48/region"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "e5b6999c-aba0-4ae4-b9f9-3dcf744a0ed1",
+      "type": "countries",
+      "attributes": {
+        "name": "United States",
+        "prefix": "1",
+        "iso": "US"
+      },
+      "relationships": {
+        "regions": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/countries/e5b6999c-aba0-4ae4-b9f9-3dcf744a0ed1/relationships/regions",
+            "related": "https://sandbox-api.didww.com/v3/countries/e5b6999c-aba0-4ae4-b9f9-3dcf744a0ed1/regions"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "api_version": "2022-05-09"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "data": {
+    "id": "368bf92f-c36e-473f-96fc-d53ed1b4028b",
+    "type": "cities",
+    "attributes": {
+      "name": "New York"
+    },
+    "relationships": {
+      "country": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/cities/368bf92f-c36e-473f-96fc-d53ed1b4028b/relationships/country",
+          "related": "https://sandbox-api.didww.com/v3/cities/368bf92f-c36e-473f-96fc-d53ed1b4028b/country"
+        },
+        "data": {
+          "type": "countries",
+          "id": "1f6fc2bd-f081-4202-9b1a-d9cb88d942b9"
+        }
+      },
+      "region": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/cities/368bf92f-c36e-473f-96fc-d53ed1b4028b/relationships/region",
+          "related": "https://sandbox-api.didww.com/v3/cities/368bf92f-c36e-473f-96fc-d53ed1b4028b/region"
+        },
+        "data": {
+          "type": "regions",
+          "id": "ab7e83bc-814b-4cfa-a14c-d2df3de2a545"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "1f6fc2bd-f081-4202-9b1a-d9cb88d942b9",
+      "type": "countries",
+      "attributes": {
+        "name": "United States",
+        "prefix": "1",
+        "iso": "US"
+      }
+    },
+    {
+      "id": "ab7e83bc-814b-4cfa-a14c-d2df3de2a545",
+      "type": "regions",
+      "attributes": {
+        "name": "New York"
+      },
+      "relationships": {
+        "country": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/regions/ab7e83bc-814b-4cfa-a14c-d2df3de2a545/relationships/country",
+            "related": "https://sandbox-api.didww.com/v3/regions/ab7e83bc-814b-4cfa-a14c-d2df3de2a545/country"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "data": {
+    "id": "5da18706-be9f-49b0-aeec-0480aacd49ad",
+    "type": "orders",
+    "attributes": {
+      "amount": "5.98",
+      "status": "Pending",
+      "created_at": "2018-12-29T12:16:45.813Z",
+      "description": "DID",
+      "reference": "JXK-923618",
+      "items": [
+        {
+          "type": "did_order_items",
+          "attributes": {
+            "qty": 1,
+            "nrc": "0.0",
+            "mrc": "5.6",
+            "prorated_mrc": false,
+            "billed_from": null,
+            "billed_to": null,
+            "setup_price": "0.0",
+            "monthly_price": "5.6",
+            "did_group_id": "899f0119-b4e9-47d0-9b2c-8a9f282fcbe2"
+          }
+        },
+        {
+          "type": "did_order_items",
+          "attributes": {
+            "qty": 2,
+            "nrc": "0.0",
+            "mrc": "0.19",
+            "prorated_mrc": false,
+            "billed_from": null,
+            "billed_to": null,
+            "setup_price": "0.0",
+            "monthly_price": "0.19",
+            "did_group_id": "7156eea4-09af-4f82-a43e-3b572f9927d8"
+          }
+        }
+      ],
+      "callback_url": null,
+      "callback_method": null
+    }
+  }
+}

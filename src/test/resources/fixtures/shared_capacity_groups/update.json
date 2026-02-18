@@ -1,0 +1,26 @@
+{
+  "data": {
+    "id": "89f987e2-0862-4bf4-a3f4-cdc89af0d875",
+    "type": "shared_capacity_groups",
+    "attributes": {
+      "name": "didww1",
+      "shared_channels_count": 10,
+      "created_at": "2018-06-19T11:41:21.644Z",
+      "metered_channels_count": 2
+    },
+    "relationships": {
+      "capacity_pool": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/relationships/capacity_pool",
+          "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/capacity_pool"
+        }
+      },
+      "dids": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/relationships/dids",
+          "related": "https://sandbox-api.didww.com/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875/dids"
+        }
+      }
+    }
+  }
+}
