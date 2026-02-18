@@ -14,7 +14,7 @@ public class SharedCapacityGroupsExample {
 
         // Create a shared capacity group
         SharedCapacityGroup group = new SharedCapacityGroup();
-        group.setName("My Channel Group");
+        group.setName("My Channel Group " + System.currentTimeMillis());
         group.setMeteredChannelsCount(10);
         group.setSharedChannelsCount(1);
         group.setCapacityPool(capacityPool);
