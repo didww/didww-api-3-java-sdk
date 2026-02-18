@@ -55,4 +55,15 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(created.getId()).isEqualTo("41b94706-325e-4704-a433-d65105758836");
         assertThat(created.getName()).isEqualTo("hello, test pstn trunk");
     }
+
+    @Test
+    void testDeleteVoiceInTrunk() {
+        String id = "41b94706-325e-4704-a433-d65105758836";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.voiceInTrunks().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_in_trunks/" + id)));
+    }
 }

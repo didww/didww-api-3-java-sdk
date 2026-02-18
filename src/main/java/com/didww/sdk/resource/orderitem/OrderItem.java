@@ -13,8 +13,6 @@ public abstract class OrderItem {
     static {
         Map<String, Class<? extends OrderItem>> map = new HashMap<>();
         map.put("did_order_items", DidOrderItem.class);
-        map.put("available_did_order_items", AvailableDidOrderItem.class);
-        map.put("reservation_did_order_items", ReservationDidOrderItem.class);
         map.put("capacity_order_items", CapacityOrderItem.class);
         map.put("generic_order_items", GenericOrderItem.class);
         TYPE_MAP = Collections.unmodifiableMap(map);

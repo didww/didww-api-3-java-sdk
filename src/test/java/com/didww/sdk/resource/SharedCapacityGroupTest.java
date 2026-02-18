@@ -55,4 +55,15 @@ class SharedCapacityGroupTest extends BaseTest {
         assertThat(created.getName()).isEqualTo("php-sdk");
         assertThat(created.getSharedChannelsCount()).isEqualTo(5);
     }
+
+    @Test
+    void testDeleteSharedCapacityGroup() {
+        String id = "3688a9c3-354f-4e16-b458-1d2df9f02547";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/shared_capacity_groups/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.sharedCapacityGroups().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/shared_capacity_groups/" + id)));
+    }
 }

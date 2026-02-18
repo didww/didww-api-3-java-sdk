@@ -1,0 +1,26 @@
+{
+  "data": {
+    "type": "requirement_validations",
+    "attributes": {},
+    "relationships": {
+      "identity": {
+        "data": {
+          "type": "identities",
+          "id": "5e9df058-50d2-4e34-b0d4-d1746b86f41a"
+        }
+      },
+      "address": {
+        "data": {
+          "type": "addresses",
+          "id": "d3414687-40f4-4346-a267-c2c65117d28c"
+        }
+      },
+      "requirement": {
+        "data": {
+          "type": "requirements",
+          "id": "2efc3427-8ba6-4d50-875d-f2de4a068de8"
+        }
+      }
+    }
+  }
+}

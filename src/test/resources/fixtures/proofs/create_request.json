@@ -1,0 +1,22 @@
+{
+  "data": {
+    "type": "proofs",
+    "attributes": {},
+    "relationships": {
+      "proof_type": {
+        "data": {
+          "type": "proof_types",
+          "id": "19cd7b22-559b-41d4-99c9-7ad7ad63d5d1"
+        }
+      },
+      "files": {
+        "data": [
+          {
+            "type": "encrypted_files",
+            "id": "254b3c2d-c40c-4ff7-93b1-a677aee7fa10"
+          }
+        ]
+      }
+    }
+  }
+}

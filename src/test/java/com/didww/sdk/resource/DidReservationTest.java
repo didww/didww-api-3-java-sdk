@@ -61,4 +61,15 @@ class DidReservationTest extends BaseTest {
         assertThat(didReservation.getId()).isEqualTo("fd38d3ff-80cf-4e67-a605-609a2884a5c4");
         assertThat(didReservation.getDescription()).isEqualTo("DIDWW");
     }
+
+    @Test
+    void testDeleteDidReservation() {
+        String id = "fd38d3ff-80cf-4e67-a605-609a2884a5c4";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/did_reservations/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.didReservations().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/did_reservations/" + id)));
+    }
 }
