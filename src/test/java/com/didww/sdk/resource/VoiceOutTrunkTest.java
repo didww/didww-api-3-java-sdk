@@ -77,4 +77,15 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(created.getName()).isEqualTo("php-test");
         assertThat(created.getStatus()).isEqualTo("active");
     }
+
+    @Test
+    void testDeleteVoiceOutTrunk() {
+        String id = "b60201c1-21f0-4d9a-aafa-0e6d1e12f22e";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.voiceOutTrunks().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_out_trunks/" + id)));
+    }
 }

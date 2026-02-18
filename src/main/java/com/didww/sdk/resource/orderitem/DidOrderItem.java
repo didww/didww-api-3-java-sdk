@@ -26,6 +26,12 @@ public class DidOrderItem extends OrderItem {
     @JsonProperty("prorated_mrc")
     private Boolean proratedMrc;
 
+    @JsonProperty("nanpa_prefix_id")
+    private String nanpaPrefixId;
+
+    @JsonProperty("billing_cycles_count")
+    private Integer billingCyclesCount;
+
     @JsonProperty("did_group_id")
     private String didGroupId;
 
@@ -69,6 +75,22 @@ public class DidOrderItem extends OrderItem {
 
     public Boolean getProratedMrc() {
         return proratedMrc;
+    }
+
+    public String getNanpaPrefixId() {
+        return nanpaPrefixId;
+    }
+
+    public void setNanpaPrefixId(String nanpaPrefixId) {
+        this.nanpaPrefixId = nanpaPrefixId;
+    }
+
+    public Integer getBillingCyclesCount() {
+        return billingCyclesCount;
+    }
+
+    public void setBillingCyclesCount(Integer billingCyclesCount) {
+        this.billingCyclesCount = billingCyclesCount;
     }
 
     public String getDidGroupId() {

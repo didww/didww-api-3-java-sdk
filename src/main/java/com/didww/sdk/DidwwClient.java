@@ -8,10 +8,14 @@ import com.didww.sdk.repository.ReadOnlyRepository;
 import com.didww.sdk.repository.Repository;
 import com.didww.sdk.repository.SingletonRepository;
 import com.didww.sdk.resource.*;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jasminb.jsonapi.ResourceConverter;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.io.IOException;
@@ -19,7 +23,10 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class DidwwClient {
     private final DidwwCredentials credentials;
@@ -176,6 +183,67 @@ public class DidwwClient {
 
     public Repository<RequirementValidation> requirementValidations() {
         return new Repository<>(httpClient, converter, baseUrl, "requirement_validations", RequirementValidation.class, objectMapper);
+    }
+
+    /**
+     * Uploads one encrypted file to /encrypted_files as multipart/form-data.
+     * Returns encrypted file IDs provided by API response.
+     */
+    public List<String> uploadEncryptedFile(byte[] encryptedData,
+                                            String fileName,
+                                            String fingerprint,
+                                            String description) {
+        Objects.requireNonNull(encryptedData, "encryptedData must not be null");
+        Objects.requireNonNull(fileName, "fileName must not be null");
+        Objects.requireNonNull(fingerprint, "fingerprint must not be null");
+
+        RequestBody body = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("encrypted_files[encryption_fingerprint]", fingerprint)
+                .addFormDataPart("encrypted_files[items][][description]", description != null ? description : "")
+                .addFormDataPart(
+                        "encrypted_files[items][][file]",
+                        fileName,
+                        RequestBody.create(encryptedData, MediaType.parse("application/octet-stream"))
+                )
+                .build();
+
+        Request request = new Request.Builder()
+                .url(baseUrl + "/encrypted_files")
+                .post(body)
+                .header("Api-Key", credentials.getApiKey())
+                .header("Accept", "application/json")
+                .build();
+
+        // Dedicated client without JSON:API interceptor, preserving timeouts from main client.
+        OkHttpClient uploadClient = new OkHttpClient.Builder()
+                .connectTimeout(httpClient.connectTimeoutMillis(), TimeUnit.MILLISECONDS)
+                .readTimeout(httpClient.readTimeoutMillis(), TimeUnit.MILLISECONDS)
+                .writeTimeout(httpClient.writeTimeoutMillis(), TimeUnit.MILLISECONDS)
+                .build();
+
+        try (Response response = uploadClient.newCall(request).execute()) {
+            String responseBody = response.body() != null ? response.body().string() : "";
+            if (!response.isSuccessful()) {
+                throw new DidwwClientException("Failed to upload encrypted file: HTTP " + response.code() + " " + responseBody);
+            }
+
+            JsonNode root = objectMapper.readTree(responseBody);
+            JsonNode idsNode = root.get("ids");
+            if (idsNode == null || !idsNode.isArray()) {
+                throw new DidwwClientException("Unexpected encrypted_files upload response: " + responseBody);
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (JsonNode idNode : idsNode) {
+                ids.add(idNode.asText());
+            }
+            return ids;
+        } catch (DidwwClientException e) {
+            throw e;
+        } catch (IOException e) {
+            throw new DidwwClientException("Failed to upload encrypted file", e);
+        }
     }
 
     /**

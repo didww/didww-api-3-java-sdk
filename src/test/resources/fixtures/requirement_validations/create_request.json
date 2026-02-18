@@ -1,0 +1,20 @@
+{
+  "data": {
+    "type": "requirement_validations",
+    "attributes": {},
+    "relationships": {
+      "address": {
+        "data": {
+          "type": "addresses",
+          "id": "d3414687-40f4-4346-a267-c2c65117d28c"
+        }
+      },
+      "requirement": {
+        "data": {
+          "type": "requirements",
+          "id": "aea92b24-a044-4864-9740-89d3e15b65c7"
+        }
+      }
+    }
+  }
+}

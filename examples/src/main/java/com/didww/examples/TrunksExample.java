@@ -41,8 +41,11 @@ public class TrunksExample {
         newTrunk.setConfiguration(sip);
 
         // Set POP relationship
-        Pop pop = new Pop();
-        pop.setId("pop-uuid-here");
+        List<Pop> pops = client.pops().list().getData();
+        if (pops.isEmpty()) {
+            throw new IllegalStateException("No POPs found");
+        }
+        Pop pop = pops.get(0);
         newTrunk.setPop(pop);
 
         VoiceInTrunk created = client.voiceInTrunks().create(newTrunk).getData();

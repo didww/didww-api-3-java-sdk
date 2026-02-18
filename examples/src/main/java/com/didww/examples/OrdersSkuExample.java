@@ -1,20 +1,33 @@
 package com.didww.examples;
 
 import com.didww.sdk.DidwwClient;
+import com.didww.sdk.http.QueryParams;
+import com.didww.sdk.resource.DidGroup;
 import com.didww.sdk.resource.Order;
 import com.didww.sdk.resource.orderitem.DidOrderItem;
 import com.didww.sdk.resource.orderitem.OrderItem;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class OrdersSkuExample {
 
     public static void main(String[] args) {
         DidwwClient client = ExampleClientFactory.fromEnv();
 
-        // To get different sku_id see DidGroupsExample
+        QueryParams params = QueryParams.builder()
+                .include("stock_keeping_units")
+                .page(1, 1)
+                .build();
+        List<DidGroup> didGroups = client.didGroups().list(params).getData();
+        if (didGroups.isEmpty()
+                || didGroups.get(0).getStockKeepingUnits() == null
+                || didGroups.get(0).getStockKeepingUnits().isEmpty()) {
+            throw new IllegalStateException("No DID group with stock_keeping_units found");
+        }
+
         DidOrderItem didItem = new DidOrderItem();
-        didItem.setSkuId("82460535-2b3f-43a6-bcdd-62f3da0d9fa6");
+        didItem.setSkuId(didGroups.get(0).getStockKeepingUnits().get(0).getId());
         didItem.setQty(2);
 
         Order order = new Order();

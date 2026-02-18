@@ -41,4 +41,15 @@ class EncryptedFileTest extends BaseTest {
         assertThat(file.getId()).isEqualTo("6eed102c-66a9-4a9b-a95f-4312d70ec12a");
         assertThat(file.getDescription()).isEqualTo("some description");
     }
+
+    @Test
+    void testDeleteEncryptedFile() {
+        String id = "6eed102c-66a9-4a9b-a95f-4312d70ec12a";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/encrypted_files/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.encryptedFiles().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/encrypted_files/" + id)));
+    }
 }

@@ -57,4 +57,15 @@ class VoiceInTrunkGroupTest extends BaseTest {
         assertThat(created.getName()).isEqualTo("trunk group sample with 2 trunks");
         assertThat(created.getCapacityLimit()).isEqualTo(1000);
     }
+
+    @Test
+    void testDeleteVoiceInTrunkGroup() {
+        String id = "b2319703-ce6c-480d-bb53-614e7abcfc96";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/voice_in_trunk_groups/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.voiceInTrunkGroups().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_in_trunk_groups/" + id)));
+    }
 }

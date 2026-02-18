@@ -36,7 +36,12 @@ public class OrdersReservationDidsExample {
         // Purchase reserved DID
         ReservationDidOrderItem orderItem = new ReservationDidOrderItem();
         orderItem.setDidReservationId(created.getId());
-        orderItem.setSkuId("sku-uuid-here"); // Get from did_group.stock_keeping_units
+        if (availableDid.getDidGroup() == null
+                || availableDid.getDidGroup().getStockKeepingUnits() == null
+                || availableDid.getDidGroup().getStockKeepingUnits().isEmpty()) {
+            throw new IllegalStateException("No stock_keeping_units found in included did_group");
+        }
+        orderItem.setSkuId(availableDid.getDidGroup().getStockKeepingUnits().get(0).getId());
 
         Order order = new Order();
         order.setItems(Arrays.asList(orderItem));

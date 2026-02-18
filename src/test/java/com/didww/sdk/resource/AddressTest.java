@@ -64,4 +64,15 @@ class AddressTest extends BaseTest {
         assertThat(created.getDescription()).isEqualTo("test address");
         assertThat(created.getVerified()).isFalse();
     }
+
+    @Test
+    void testDeleteAddress() {
+        String id = "bf69bc70-e1c2-442c-9f30-335ee299b663";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/addresses/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.addresses().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/addresses/" + id)));
+    }
 }

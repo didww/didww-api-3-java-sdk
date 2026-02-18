@@ -66,4 +66,15 @@ class IdentityTest extends BaseTest {
         assertThat(created.getIdentityType()).isEqualTo("Business");
         assertThat(created.getVerified()).isFalse();
     }
+
+    @Test
+    void testDeleteIdentity() {
+        String id = "e96ae7d1-11d5-42bc-a5c5-211f3c3788ae";
+        wireMock.stubFor(delete(urlPathEqualTo("/v3/identities/" + id))
+                .willReturn(aResponse().withStatus(204)));
+
+        client.identities().delete(id);
+
+        wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/identities/" + id)));
+    }
 }

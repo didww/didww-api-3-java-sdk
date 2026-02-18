@@ -29,6 +29,12 @@ public class Order extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
+    @JsonProperty("callback_url")
+    private String callbackUrl;
+
+    @JsonProperty("callback_method")
+    private String callbackMethod;
+
     @JsonProperty("allow_back_ordering")
     private Boolean allowBackOrdering;
 
@@ -55,6 +61,22 @@ public class Order extends BaseResource {
 
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
+
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl;
+    }
+
+    public String getCallbackMethod() {
+        return callbackMethod;
+    }
+
+    public void setCallbackMethod(String callbackMethod) {
+        this.callbackMethod = callbackMethod;
     }
 
     public Boolean getAllowBackOrdering() {
