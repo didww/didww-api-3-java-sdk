@@ -8,6 +8,9 @@ The DIDWW API v3 is a fully compliant implementation of the [JSON API specificat
 
 Read more https://doc.didww.com/api
 
+This SDK targets DIDWW API v3 documentation version:
+[https://doc.didww.com/api3/2022-05-10/index.html](https://doc.didww.com/api3/2022-05-10/index.html)
+
 ## Requirements
 
 - Java 11+
