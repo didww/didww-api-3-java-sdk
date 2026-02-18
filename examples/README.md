@@ -6,7 +6,7 @@ All examples now read the API key from the `DIDWW_API_KEY` environment variable.
 
 - Java 11+
 - Gradle wrapper (`./gradlew`)
-- DIDWW API key for sandbox or production account
+- DIDWW API key for sandbox account
 
 ## Environment variables
 
