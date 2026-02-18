@@ -39,6 +39,9 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/create.json"))));
 
+        Country country = new Country();
+        country.setId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+
         Identity identity = new Identity();
         identity.setFirstName("John");
         identity.setLastName("Doe");
@@ -46,7 +49,13 @@ class IdentityTest extends BaseTest {
         identity.setIdNumber("ABC1234");
         identity.setBirthDate("1970-01-01");
         identity.setCompanyName("Test Company Limited");
+        identity.setCompanyRegNumber("543221");
+        identity.setVatId("GB1234");
+        identity.setDescription("test identity");
+        identity.setPersonalTaxId("987654321");
         identity.setIdentityType("Business");
+        identity.setExternalReferenceId("111");
+        identity.setCountry(country);
 
         ApiResponse<Identity> response = client.identities().create(identity);
         Identity created = response.getData();

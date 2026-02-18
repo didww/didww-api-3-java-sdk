@@ -2,7 +2,7 @@ package com.didww.sdk.repository;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.exception.DidwwClientException;
-import com.didww.sdk.resource.HasId;
+import com.didww.sdk.resource.BaseResource;
 import com.didww.sdk.resource.VoiceInTrunk;
 import com.didww.sdk.resource.VoiceInTrunkGroup;
 import com.didww.sdk.resource.Did;
@@ -26,20 +26,20 @@ class RepositoryTest extends BaseTest {
     }
 
     @Test
-    void testCrudResourcesImplementHasId() {
-        assertThat(new VoiceInTrunk()).isInstanceOf(HasId.class);
-        assertThat(new VoiceInTrunkGroup()).isInstanceOf(HasId.class);
-        assertThat(new Did()).isInstanceOf(HasId.class);
-        assertThat(new Order()).isInstanceOf(HasId.class);
+    void testAllResourcesExtendBaseResource() {
+        assertThat(new VoiceInTrunk()).isInstanceOf(BaseResource.class);
+        assertThat(new VoiceInTrunkGroup()).isInstanceOf(BaseResource.class);
+        assertThat(new Did()).isInstanceOf(BaseResource.class);
+        assertThat(new Order()).isInstanceOf(BaseResource.class);
     }
 
     @Test
-    void testGetIdViaHasIdInterface() {
+    void testGetIdViaBaseResource() {
         VoiceInTrunk trunk = new VoiceInTrunk();
         trunk.setId("test-uuid-123");
 
-        HasId hasId = trunk;
-        assertThat(hasId.getId()).isEqualTo("test-uuid-123");
+        BaseResource resource = trunk;
+        assertThat(resource.getId()).isEqualTo("test-uuid-123");
     }
 
     @Test

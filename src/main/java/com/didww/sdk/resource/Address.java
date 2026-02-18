@@ -1,7 +1,6 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,10 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("addresses")
-public class Address implements HasId {
-
-    @Id
-    private String id;
+public class Address extends BaseResource {
 
     @JsonProperty("city_name")
     private String cityName;
@@ -46,14 +42,6 @@ public class Address implements HasId {
 
     @Relationship("city")
     private City city;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getCityName() {
         return cityName;

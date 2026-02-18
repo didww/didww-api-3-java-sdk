@@ -1,7 +1,6 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,10 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("shared_capacity_groups")
-public class SharedCapacityGroup implements HasId {
-
-    @Id
-    private String id;
+public class SharedCapacityGroup extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -31,14 +27,6 @@ public class SharedCapacityGroup implements HasId {
 
     @Relationship("dids")
     private List<Did> dids;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

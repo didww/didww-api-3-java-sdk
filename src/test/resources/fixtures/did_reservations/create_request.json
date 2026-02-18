@@ -1,1 +1,1 @@
-{"data":{"type":"did_reservations","attributes":{"description":"DIDWW"}}}
+{"data":{"type":"did_reservations","attributes":{"description":"DIDWW"},"relationships":{"available_did":{"data":{"type":"available_dids","id":"857d1462-5f43-4238-b007-ff05f282e41b"}}}}}

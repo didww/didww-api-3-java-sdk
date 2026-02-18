@@ -4,6 +4,7 @@ import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -38,9 +39,17 @@ class AddressVerificationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("address_verifications/create.json"))));
 
+        Address address = new Address();
+        address.setId("d3414687-40f4-4346-a267-c2c65117d28c");
+
+        Did did = new Did();
+        did.setId("a9d64c02-4486-4acb-a9a1-be4c81ff0659");
+
         AddressVerification verification = new AddressVerification();
         verification.setCallbackUrl("http://example.com");
         verification.setCallbackMethod("GET");
+        verification.setAddress(address);
+        verification.setDids(Collections.singletonList(did));
 
         ApiResponse<AddressVerification> response = client.addressVerifications().create(verification);
         AddressVerification created = response.getData();

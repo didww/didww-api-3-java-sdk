@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.configuration.PstnConfiguration;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -41,8 +42,12 @@ class VoiceInTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_in_trunks/create.json"))));
 
+        PstnConfiguration config = new PstnConfiguration();
+        config.setDst("558540420024");
+
         VoiceInTrunk trunk = new VoiceInTrunk();
         trunk.setName("hello, test pstn trunk");
+        trunk.setConfiguration(config);
 
         ApiResponse<VoiceInTrunk> response = client.voiceInTrunks().create(trunk);
         VoiceInTrunk created = response.getData();

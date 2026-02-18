@@ -1,14 +1,10 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 @Type("countries")
-public class Country {
-
-    @Id
-    private String id;
+public class Country extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -18,10 +14,6 @@ public class Country {
 
     @JsonProperty("iso")
     private String iso;
-
-    public String getId() {
-        return id;
-    }
 
     public String getName() {
         return name;

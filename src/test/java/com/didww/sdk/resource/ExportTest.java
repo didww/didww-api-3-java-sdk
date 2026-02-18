@@ -4,7 +4,9 @@ import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,8 +41,14 @@ class ExportTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("exports/create.json"))));
 
+        Map<String, Object> filters = new LinkedHashMap<>();
+        filters.put("did_number", "1234556789");
+        filters.put("year", "2019");
+        filters.put("month", "01");
+
         Export export = new Export();
         export.setExportType("cdr_in");
+        export.setFilters(filters);
 
         ApiResponse<Export> response = client.exports().create(export);
         Export created = response.getData();

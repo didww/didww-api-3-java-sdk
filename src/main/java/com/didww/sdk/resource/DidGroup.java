@@ -1,17 +1,13 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.util.List;
 
 @Type("did_groups")
-public class DidGroup {
-
-    @Id
-    private String id;
+public class DidGroup extends BaseResource {
 
     @JsonProperty("area_name")
     private String areaName;
@@ -45,10 +41,6 @@ public class DidGroup {
 
     @Relationship("did_group_type")
     private DidGroupType didGroupType;
-
-    public String getId() {
-        return id;
-    }
 
     public String getAreaName() {
         return areaName;

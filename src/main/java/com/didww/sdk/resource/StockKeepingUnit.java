@@ -1,14 +1,10 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 @Type("stock_keeping_units")
-public class StockKeepingUnit {
-
-    @Id
-    private String id;
+public class StockKeepingUnit extends BaseResource {
 
     @JsonProperty("setup_price")
     private Double setupPrice;
@@ -18,10 +14,6 @@ public class StockKeepingUnit {
 
     @JsonProperty("channels_included_count")
     private Integer channelsIncludedCount;
-
-    public String getId() {
-        return id;
-    }
 
     public Double getSetupPrice() {
         return setupPrice;

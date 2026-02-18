@@ -1,1 +1,1 @@
-{"data":{"type":"shared_capacity_groups","attributes":{"name":"php-sdk","shared_channels_count":5}}}
+{"data":{"type":"shared_capacity_groups","attributes":{"name":"php-sdk","shared_channels_count":5,"metered_channels_count":0},"relationships":{"capacity_pool":{"data":{"type":"capacity_pools","id":"f288d07c-e2fc-4ae6-9837-b18fb469c324"}}}}}

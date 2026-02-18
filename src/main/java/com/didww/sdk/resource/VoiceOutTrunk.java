@@ -1,7 +1,6 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,10 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("voice_out_trunks")
-public class VoiceOutTrunk implements HasId {
-
-    @Id
-    private String id;
+public class VoiceOutTrunk extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -76,14 +72,6 @@ public class VoiceOutTrunk implements HasId {
 
     @Relationship("voice_in_trunk_group")
     private VoiceInTrunkGroup voiceInTrunkGroup;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

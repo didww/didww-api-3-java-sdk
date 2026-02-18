@@ -1,15 +1,11 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 @Type("nanpa_prefixes")
-public class NanpaPrefix {
-
-    @Id
-    private String id;
+public class NanpaPrefix extends BaseResource {
 
     @JsonProperty("npa")
     private String npa;
@@ -22,10 +18,6 @@ public class NanpaPrefix {
 
     @Relationship("region")
     private Region region;
-
-    public String getId() {
-        return id;
-    }
 
     public String getNpa() {
         return npa;

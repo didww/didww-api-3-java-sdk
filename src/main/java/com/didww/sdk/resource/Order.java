@@ -6,17 +6,13 @@ import com.didww.sdk.resource.orderitem.OrderItem;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("orders")
-public class Order implements HasId {
-
-    @Id
-    private String id;
+public class Order extends BaseResource {
 
     @JsonProperty("amount")
     private Double amount;
@@ -40,14 +36,6 @@ public class Order implements HasId {
     @JsonDeserialize(using = OrderItemDeserializer.class)
     @JsonSerialize(using = OrderItemSerializer.class)
     private List<OrderItem> items;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Double getAmount() {
         return amount;

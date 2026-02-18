@@ -1,17 +1,13 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.util.List;
 
 @Type("requirements")
-public class Requirement {
-
-    @Id
-    private String id;
+public class Requirement extends BaseResource {
 
     @JsonProperty("identity_type")
     private String identityType;
@@ -72,10 +68,6 @@ public class Requirement {
 
     @Relationship("address_proof_types")
     private List<ProofType> addressProofTypes;
-
-    public String getId() {
-        return id;
-    }
 
     public String getIdentityType() {
         return identityType;

@@ -1,7 +1,6 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,10 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("identities")
-public class Identity implements HasId {
-
-    @Id
-    private String id;
+public class Identity extends BaseResource {
 
     @JsonProperty("first_name")
     private String firstName;
@@ -67,14 +63,6 @@ public class Identity implements HasId {
 
     @Relationship("permanent_documents")
     private List<PermanentSupportingDocument> permanentDocuments;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;

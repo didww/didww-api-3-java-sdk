@@ -4,6 +4,8 @@ import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -59,8 +61,15 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/create.json"))));
 
+        Did did = new Did();
+        did.setId("7a028c32-e6b6-4c86-bf01-90f901b37012");
+
         VoiceOutTrunk trunk = new VoiceOutTrunk();
         trunk.setName("php-test");
+        trunk.setAllowedSipIps(Collections.singletonList("0.0.0.0/0"));
+        trunk.setOnCliMismatchAction("replace_cli");
+        trunk.setDefaultDid(did);
+        trunk.setDids(Collections.singletonList(did));
 
         ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().create(trunk);
         VoiceOutTrunk created = response.getData();

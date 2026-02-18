@@ -1,14 +1,10 @@
 package com.didww.sdk.resource;
 
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 @Type("requirement_validations")
-public class RequirementValidation implements HasId {
-
-    @Id
-    private String id;
+public class RequirementValidation extends BaseResource {
 
     @Relationship("requirement")
     private Requirement requirement;
@@ -18,14 +14,6 @@ public class RequirementValidation implements HasId {
 
     @Relationship("identity")
     private Identity identity;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Requirement getRequirement() {
         return requirement;

@@ -1,17 +1,13 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Type("exports")
-public class Export implements HasId {
-
-    @Id
-    private String id;
+public class Export extends BaseResource {
 
     @JsonProperty("export_type")
     private String exportType;
@@ -33,14 +29,6 @@ public class Export implements HasId {
 
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getExportType() {
         return exportType;

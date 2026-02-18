@@ -1,7 +1,6 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,10 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("proofs")
-public class Proof implements HasId {
-
-    @Id
-    private String id;
+public class Proof extends BaseResource {
 
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
@@ -22,14 +18,6 @@ public class Proof implements HasId {
 
     @Relationship("files")
     private List<EncryptedFile> files;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public OffsetDateTime getCreatedAt() {
         return createdAt;
