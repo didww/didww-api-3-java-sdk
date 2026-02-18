@@ -4,6 +4,8 @@ import com.didww.sdk.DidwwClient;
 import com.didww.sdk.resource.CapacityPool;
 import com.didww.sdk.resource.SharedCapacityGroup;
 
+import java.util.UUID;
+
 public class SharedCapacityGroupsExample {
 
     public static void main(String[] args) {
@@ -14,7 +16,8 @@ public class SharedCapacityGroupsExample {
 
         // Create a shared capacity group
         SharedCapacityGroup group = new SharedCapacityGroup();
-        group.setName("My Channel Group " + System.currentTimeMillis());
+        String suffix = UUID.randomUUID().toString().substring(0, 8);
+        group.setName("My Channel Group " + suffix);
         group.setMeteredChannelsCount(10);
         group.setSharedChannelsCount(1);
         group.setCapacityPool(capacityPool);

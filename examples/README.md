@@ -23,19 +23,21 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 
 ## Available example classes
 
-- `com.didww.examples.BalanceExample`
-- `com.didww.examples.CountriesExample`
-- `com.didww.examples.RegionsExample`
-- `com.didww.examples.DidGroupsExample`
-- `com.didww.examples.DidsExample`
-- `com.didww.examples.TrunksExample`
-- `com.didww.examples.SharedCapacityGroupsExample`
-- `com.didww.examples.OrdersExample`
-- `com.didww.examples.OrdersSkuExample`
-- `com.didww.examples.OrdersCapacityExample`
-- `com.didww.examples.OrdersAvailableDidsExample`
-- `com.didww.examples.OrdersReservationDidsExample`
-- `com.didww.examples.UploadFileExample`
+| Class | Description |
+|---|---|
+| [`com.didww.examples.BalanceExample`](src/main/java/com/didww/examples/BalanceExample.java) | Fetches and prints current account balance and credit. |
+| [`com.didww.examples.CountriesExample`](src/main/java/com/didww/examples/CountriesExample.java) | Lists countries, demonstrates filtering, and fetches one country by ID. |
+| [`com.didww.examples.RegionsExample`](src/main/java/com/didww/examples/RegionsExample.java) | Lists regions with filters/includes and fetches a specific region. |
+| [`com.didww.examples.DidGroupsExample`](src/main/java/com/didww/examples/DidGroupsExample.java) | Fetches DID groups with included SKUs and shows group details. |
+| [`com.didww.examples.DidsExample`](src/main/java/com/didww/examples/DidsExample.java) | Updates DID routing/capacity by assigning trunk and capacity pool. |
+| [`com.didww.examples.TrunksExample`](src/main/java/com/didww/examples/TrunksExample.java) | Lists trunks, creates SIP trunk, updates it, then deletes it. |
+| [`com.didww.examples.SharedCapacityGroupsExample`](src/main/java/com/didww/examples/SharedCapacityGroupsExample.java) | Creates a shared capacity group in a capacity pool. |
+| [`com.didww.examples.OrdersExample`](src/main/java/com/didww/examples/OrdersExample.java) | Lists orders and creates/cancels a DID order using live SKU lookup. |
+| [`com.didww.examples.OrdersSkuExample`](src/main/java/com/didww/examples/OrdersSkuExample.java) | Creates a DID order by SKU resolved from DID groups. |
+| [`com.didww.examples.OrdersCapacityExample`](src/main/java/com/didww/examples/OrdersCapacityExample.java) | Purchases capacity by creating a capacity order item. |
+| [`com.didww.examples.OrdersAvailableDidsExample`](src/main/java/com/didww/examples/OrdersAvailableDidsExample.java) | Orders an available DID using included DID group SKU. |
+| [`com.didww.examples.OrdersReservationDidsExample`](src/main/java/com/didww/examples/OrdersReservationDidsExample.java) | Reserves a DID and then places an order from that reservation. |
+| [`com.didww.examples.UploadFileExample`](src/main/java/com/didww/examples/UploadFileExample.java) | Creates (or reads) a file, encrypts it, and uploads to `encrypted_files`. |
 
 ## Upload file example
 
