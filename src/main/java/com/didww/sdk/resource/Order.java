@@ -14,19 +14,19 @@ import java.util.List;
 @Type("orders")
 public class Order extends BaseResource {
 
-    @JsonProperty("amount")
+    @JsonProperty(value = "amount", access = JsonProperty.Access.WRITE_ONLY)
     private Double amount;
 
-    @JsonProperty("status")
+    @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private String status;
 
-    @JsonProperty("description")
+    @JsonProperty(value = "description", access = JsonProperty.Access.WRITE_ONLY)
     private String description;
 
-    @JsonProperty("reference")
+    @JsonProperty(value = "reference", access = JsonProperty.Access.WRITE_ONLY)
     private String reference;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @JsonProperty("allow_back_ordering")

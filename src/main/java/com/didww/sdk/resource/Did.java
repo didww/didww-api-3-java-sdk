@@ -9,13 +9,13 @@ import java.time.OffsetDateTime;
 @Type("dids")
 public class Did extends BaseResource {
 
-    @JsonProperty("number")
+    @JsonProperty(value = "number", access = JsonProperty.Access.WRITE_ONLY)
     private String number;
 
-    @JsonProperty("blocked")
+    @JsonProperty(value = "blocked", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean blocked;
 
-    @JsonProperty("awaiting_registration")
+    @JsonProperty(value = "awaiting_registration", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean awaitingRegistration;
 
     @JsonProperty("terminated")
@@ -33,10 +33,10 @@ public class Did extends BaseResource {
     @JsonProperty("dedicated_channels_count")
     private Integer dedicatedChannelsCount;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    @JsonProperty("expires_at")
+    @JsonProperty(value = "expires_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime expiresAt;
 
     @Relationship("order")

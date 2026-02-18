@@ -19,7 +19,7 @@ public class SharedCapacityGroup extends BaseResource {
     @JsonProperty("metered_channels_count")
     private Integer meteredChannelsCount;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @Relationship("capacity_pool")

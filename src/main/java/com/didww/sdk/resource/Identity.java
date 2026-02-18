@@ -46,10 +46,10 @@ public class Identity extends BaseResource {
     @JsonProperty("external_reference_id")
     private String externalReferenceId;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    @JsonProperty("verified")
+    @JsonProperty(value = "verified", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean verified;
 
     @Relationship("country")

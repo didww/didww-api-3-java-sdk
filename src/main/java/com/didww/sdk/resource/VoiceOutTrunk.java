@@ -52,16 +52,16 @@ public class VoiceOutTrunk extends BaseResource {
     @JsonProperty("callback_url")
     private String callbackUrl;
 
-    @JsonProperty("username")
+    @JsonProperty(value = "username", access = JsonProperty.Access.WRITE_ONLY)
     private String username;
 
-    @JsonProperty("password")
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @JsonProperty("threshold_reached")
+    @JsonProperty(value = "threshold_reached", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean thresholdReached;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @Relationship("dids")

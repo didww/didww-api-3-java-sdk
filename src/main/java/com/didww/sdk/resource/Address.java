@@ -22,10 +22,10 @@ public class Address extends BaseResource {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    @JsonProperty("verified")
+    @JsonProperty(value = "verified", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean verified;
 
     @Relationship("country")

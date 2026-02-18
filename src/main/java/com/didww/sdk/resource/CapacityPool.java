@@ -9,31 +9,31 @@ import java.util.List;
 @Type("capacity_pools")
 public class CapacityPool extends BaseResource {
 
-    @JsonProperty("name")
+    @JsonProperty(value = "name", access = JsonProperty.Access.WRITE_ONLY)
     private String name;
 
-    @JsonProperty("renew_date")
+    @JsonProperty(value = "renew_date", access = JsonProperty.Access.WRITE_ONLY)
     private String renewDate;
 
     @JsonProperty("total_channels_count")
     private Integer totalChannelsCount;
 
-    @JsonProperty("assigned_channels_count")
+    @JsonProperty(value = "assigned_channels_count", access = JsonProperty.Access.WRITE_ONLY)
     private Integer assignedChannelsCount;
 
-    @JsonProperty("minimum_limit")
+    @JsonProperty(value = "minimum_limit", access = JsonProperty.Access.WRITE_ONLY)
     private Integer minimumLimit;
 
-    @JsonProperty("minimum_qty_per_order")
+    @JsonProperty(value = "minimum_qty_per_order", access = JsonProperty.Access.WRITE_ONLY)
     private Integer minimumQtyPerOrder;
 
-    @JsonProperty("setup_price")
+    @JsonProperty(value = "setup_price", access = JsonProperty.Access.WRITE_ONLY)
     private Double setupPrice;
 
-    @JsonProperty("monthly_price")
+    @JsonProperty(value = "monthly_price", access = JsonProperty.Access.WRITE_ONLY)
     private Double monthlyPrice;
 
-    @JsonProperty("metered_rate")
+    @JsonProperty(value = "metered_rate", access = JsonProperty.Access.WRITE_ONLY)
     private Double meteredRate;
 
     @Relationship("countries")

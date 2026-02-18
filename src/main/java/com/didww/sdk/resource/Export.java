@@ -12,7 +12,7 @@ public class Export extends BaseResource {
     @JsonProperty("export_type")
     private String exportType;
 
-    @JsonProperty("url")
+    @JsonProperty(value = "url", access = JsonProperty.Access.WRITE_ONLY)
     private String url;
 
     @JsonProperty("callback_url")
@@ -21,13 +21,13 @@ public class Export extends BaseResource {
     @JsonProperty("callback_method")
     private String callbackMethod;
 
-    @JsonProperty("status")
+    @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private String status;
 
     @JsonProperty("filters")
     private Map<String, Object> filters;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     public String getExportType() {

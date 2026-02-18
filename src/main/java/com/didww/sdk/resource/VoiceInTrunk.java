@@ -38,7 +38,7 @@ public class VoiceInTrunk extends BaseResource {
     @JsonProperty("capacity_limit")
     private Integer capacityLimit;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @JsonProperty("configuration")

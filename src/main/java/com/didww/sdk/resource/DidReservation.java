@@ -12,10 +12,10 @@ public class DidReservation extends BaseResource {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("expire_at")
+    @JsonProperty(value = "expire_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime expireAt;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @Relationship("available_did")
