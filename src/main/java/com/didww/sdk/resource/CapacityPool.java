@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Type("capacity_pools")
@@ -13,7 +14,7 @@ public class CapacityPool extends BaseResource {
     private String name;
 
     @JsonProperty(value = "renew_date", access = JsonProperty.Access.WRITE_ONLY)
-    private String renewDate;
+    private LocalDate renewDate;
 
     @JsonProperty("total_channels_count")
     private Integer totalChannelsCount;
@@ -49,7 +50,7 @@ public class CapacityPool extends BaseResource {
         return name;
     }
 
-    public String getRenewDate() {
+    public LocalDate getRenewDate() {
         return renewDate;
     }
 

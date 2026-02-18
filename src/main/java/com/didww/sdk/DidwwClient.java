@@ -194,8 +194,6 @@ public class DidwwClient {
             try (OutputStream out = Files.newOutputStream(destination)) {
                 out.write(response.body().bytes());
             }
-        } catch (DidwwClientException e) {
-            throw e;
         } catch (IOException e) {
             throw new DidwwClientException("Failed to download export", e);
         }

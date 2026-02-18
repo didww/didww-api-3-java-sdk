@@ -3,6 +3,7 @@ package com.didww.sdk.callback;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -61,8 +62,8 @@ public class RequestValidator {
     private static String hmacSha1(String data, String key) {
         try {
             Mac mac = Mac.getInstance("HmacSHA1");
-            mac.init(new SecretKeySpec(key.getBytes("UTF-8"), "HmacSHA1"));
-            byte[] rawHmac = mac.doFinal(data.getBytes("UTF-8"));
+            mac.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
+            byte[] rawHmac = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             for (byte b : rawHmac) {
                 sb.append(String.format("%02x", b));

@@ -4,6 +4,7 @@ import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -47,7 +48,7 @@ class IdentityTest extends BaseTest {
         identity.setLastName("Doe");
         identity.setPhoneNumber("123456789");
         identity.setIdNumber("ABC1234");
-        identity.setBirthDate("1970-01-01");
+        identity.setBirthDate(LocalDate.of(1970, 1, 1));
         identity.setCompanyName("Test Company Limited");
         identity.setCompanyRegNumber("543221");
         identity.setVatId("GB1234");

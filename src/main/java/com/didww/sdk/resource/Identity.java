@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Identity extends BaseResource {
     private String idNumber;
 
     @JsonProperty("birth_date")
-    private String birthDate;
+    private LocalDate birthDate;
 
     @JsonProperty("company_name")
     private String companyName;
@@ -96,11 +97,11 @@ public class Identity extends BaseResource {
         this.idNumber = idNumber;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
