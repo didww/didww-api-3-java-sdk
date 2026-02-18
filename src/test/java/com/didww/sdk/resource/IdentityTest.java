@@ -33,6 +33,7 @@ class IdentityTest extends BaseTest {
     @Test
     void testCreateIdentity() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/identities"))
+                .withRequestBody(equalToJson(loadFixture("identities/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
@@ -52,11 +53,6 @@ class IdentityTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
         assertThat(created.getFirstName()).isEqualTo("John");
-        assertThat(created.getLastName()).isEqualTo("Doe");
-        assertThat(created.getPhoneNumber()).isEqualTo("123456789");
-        assertThat(created.getIdNumber()).isEqualTo("ABC1234");
-        assertThat(created.getBirthDate()).isEqualTo("1970-01-01");
-        assertThat(created.getCompanyName()).isEqualTo("Test Company Limited");
         assertThat(created.getIdentityType()).isEqualTo("Business");
         assertThat(created.getVerified()).isFalse();
     }

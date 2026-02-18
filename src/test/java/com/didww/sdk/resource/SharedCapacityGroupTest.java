@@ -33,6 +33,7 @@ class SharedCapacityGroupTest extends BaseTest {
     @Test
     void testCreateSharedCapacityGroup() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/shared_capacity_groups"))
+                .withRequestBody(equalToJson(loadFixture("shared_capacity_groups/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")

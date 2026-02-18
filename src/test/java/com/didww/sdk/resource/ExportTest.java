@@ -33,6 +33,7 @@ class ExportTest extends BaseTest {
     @Test
     void testCreateExport() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/exports"))
+                .withRequestBody(equalToJson(loadFixture("exports/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")

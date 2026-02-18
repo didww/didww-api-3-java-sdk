@@ -30,6 +30,7 @@ class OrderTest extends BaseTest {
     @Test
     void testCreateOrder() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/orders"))
+                .withRequestBody(equalToJson(loadFixture("orders/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")

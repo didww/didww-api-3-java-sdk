@@ -1,13 +1,13 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
-import com.didww.sdk.resource.*;
 import com.didww.sdk.repository.ApiResponse;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DidReservationTest extends BaseTest {
 
@@ -42,6 +42,7 @@ class DidReservationTest extends BaseTest {
     @Test
     void testCreateDidReservation() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/did_reservations"))
+                .withRequestBody(equalToJson(loadFixture("did_reservations/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")

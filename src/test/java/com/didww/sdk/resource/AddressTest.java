@@ -34,6 +34,7 @@ class AddressTest extends BaseTest {
     @Test
     void testCreateAddress() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/addresses"))
+                .withRequestBody(equalToJson(loadFixture("addresses/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")

@@ -35,6 +35,7 @@ class VoiceInTrunkTest extends BaseTest {
     @Test
     void testCreateVoiceInTrunk() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunks"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
