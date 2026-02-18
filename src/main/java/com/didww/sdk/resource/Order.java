@@ -6,31 +6,27 @@ import com.didww.sdk.resource.orderitem.OrderItem;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("orders")
-public class Order implements HasId {
+public class Order extends BaseResource {
 
-    @Id
-    private String id;
-
-    @JsonProperty("amount")
+    @JsonProperty(value = "amount", access = JsonProperty.Access.WRITE_ONLY)
     private Double amount;
 
-    @JsonProperty("status")
+    @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private String status;
 
-    @JsonProperty("description")
+    @JsonProperty(value = "description", access = JsonProperty.Access.WRITE_ONLY)
     private String description;
 
-    @JsonProperty("reference")
+    @JsonProperty(value = "reference", access = JsonProperty.Access.WRITE_ONLY)
     private String reference;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @JsonProperty("allow_back_ordering")
@@ -40,14 +36,6 @@ public class Order implements HasId {
     @JsonDeserialize(using = OrderItemDeserializer.class)
     @JsonSerialize(using = OrderItemSerializer.class)
     private List<OrderItem> items;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Double getAmount() {
         return amount;

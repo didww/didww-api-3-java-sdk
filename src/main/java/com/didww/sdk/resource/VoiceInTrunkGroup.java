@@ -1,17 +1,13 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.util.List;
 
 @Type("voice_in_trunk_groups")
-public class VoiceInTrunkGroup implements HasId {
-
-    @Id
-    private String id;
+public class VoiceInTrunkGroup extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -21,14 +17,6 @@ public class VoiceInTrunkGroup implements HasId {
 
     @Relationship("voice_in_trunks")
     private List<VoiceInTrunk> voiceInTrunks;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

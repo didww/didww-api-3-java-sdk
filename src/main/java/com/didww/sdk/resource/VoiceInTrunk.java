@@ -6,17 +6,13 @@ import com.didww.sdk.resource.configuration.TrunkConfiguration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.time.OffsetDateTime;
 
 @Type("voice_in_trunks")
-public class VoiceInTrunk implements HasId {
-
-    @Id
-    private String id;
+public class VoiceInTrunk extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -42,7 +38,7 @@ public class VoiceInTrunk implements HasId {
     @JsonProperty("capacity_limit")
     private Integer capacityLimit;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @JsonProperty("configuration")
@@ -55,14 +51,6 @@ public class VoiceInTrunk implements HasId {
 
     @Relationship("voice_in_trunk_group")
     private VoiceInTrunkGroup voiceInTrunkGroup;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

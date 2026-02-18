@@ -1,37 +1,25 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.time.OffsetDateTime;
 
 @Type("did_reservations")
-public class DidReservation implements HasId {
-
-    @Id
-    private String id;
+public class DidReservation extends BaseResource {
 
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("expire_at")
+    @JsonProperty(value = "expire_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime expireAt;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @Relationship("available_did")
     private AvailableDid availableDid;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;

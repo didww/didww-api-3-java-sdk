@@ -1,14 +1,10 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 @Type("qty_based_pricings")
-public class QtyBasedPricing {
-
-    @Id
-    private String id;
+public class QtyBasedPricing extends BaseResource {
 
     @JsonProperty("qty")
     private Integer qty;
@@ -18,10 +14,6 @@ public class QtyBasedPricing {
 
     @JsonProperty("monthly_price")
     private Double monthlyPrice;
-
-    public String getId() {
-        return id;
-    }
 
     public Integer getQty() {
         return qty;

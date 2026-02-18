@@ -33,14 +33,20 @@ class SharedCapacityGroupTest extends BaseTest {
     @Test
     void testCreateSharedCapacityGroup() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/shared_capacity_groups"))
+                .withRequestBody(equalToJson(loadFixture("shared_capacity_groups/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("shared_capacity_groups/create_6.json"))));
 
+        CapacityPool pool = new CapacityPool();
+        pool.setId("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+
         SharedCapacityGroup group = new SharedCapacityGroup();
         group.setName("php-sdk");
         group.setSharedChannelsCount(5);
+        group.setMeteredChannelsCount(0);
+        group.setCapacityPool(pool);
 
         ApiResponse<SharedCapacityGroup> response = client.sharedCapacityGroups().create(group);
         SharedCapacityGroup created = response.getData();

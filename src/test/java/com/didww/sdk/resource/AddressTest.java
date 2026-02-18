@@ -34,16 +34,25 @@ class AddressTest extends BaseTest {
     @Test
     void testCreateAddress() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/addresses"))
+                .withRequestBody(equalToJson(loadFixture("addresses/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("addresses/create.json"))));
+
+        Country country = new Country();
+        country.setId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+
+        Identity identity = new Identity();
+        identity.setId("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
 
         Address address = new Address();
         address.setCityName("New York");
         address.setPostalCode("123");
         address.setAddress("some street");
         address.setDescription("test address");
+        address.setCountry(country);
+        address.setIdentity(identity);
 
         ApiResponse<Address> response = client.addresses().create(address);
         Address created = response.getData();

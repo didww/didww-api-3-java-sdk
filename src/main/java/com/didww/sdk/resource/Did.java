@@ -1,25 +1,21 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.time.OffsetDateTime;
 
 @Type("dids")
-public class Did implements HasId {
+public class Did extends BaseResource {
 
-    @Id
-    private String id;
-
-    @JsonProperty("number")
+    @JsonProperty(value = "number", access = JsonProperty.Access.WRITE_ONLY)
     private String number;
 
-    @JsonProperty("blocked")
+    @JsonProperty(value = "blocked", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean blocked;
 
-    @JsonProperty("awaiting_registration")
+    @JsonProperty(value = "awaiting_registration", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean awaitingRegistration;
 
     @JsonProperty("terminated")
@@ -37,10 +33,10 @@ public class Did implements HasId {
     @JsonProperty("dedicated_channels_count")
     private Integer dedicatedChannelsCount;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    @JsonProperty("expires_at")
+    @JsonProperty(value = "expires_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime expiresAt;
 
     @Relationship("order")
@@ -60,14 +56,6 @@ public class Did implements HasId {
 
     @Relationship("shared_capacity_group")
     private SharedCapacityGroup sharedCapacityGroup;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getNumber() {
         return number;

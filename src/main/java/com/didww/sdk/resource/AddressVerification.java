@@ -1,7 +1,6 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,10 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("address_verifications")
-public class AddressVerification implements HasId {
-
-    @Id
-    private String id;
+public class AddressVerification extends BaseResource {
 
     @JsonProperty("service_description")
     private String serviceDescription;
@@ -23,13 +19,13 @@ public class AddressVerification implements HasId {
     @JsonProperty("callback_method")
     private String callbackMethod;
 
-    @JsonProperty("status")
+    @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private String status;
 
-    @JsonProperty("reject_reasons")
+    @JsonProperty(value = "reject_reasons", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> rejectReasons;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @Relationship("address")
@@ -37,14 +33,6 @@ public class AddressVerification implements HasId {
 
     @Relationship("dids")
     private List<Did> dids;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getServiceDescription() {
         return serviceDescription;

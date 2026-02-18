@@ -4,6 +4,7 @@ import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -32,14 +33,22 @@ class VoiceInTrunkGroupTest extends BaseTest {
     @Test
     void testCreateVoiceInTrunkGroup() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunk_groups"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunk_groups/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_in_trunk_groups/create.json"))));
 
+        VoiceInTrunk trunk1 = new VoiceInTrunk();
+        trunk1.setId("7c15bca2-7f17-46fb-9486-7e2a17158c7e");
+
+        VoiceInTrunk trunk2 = new VoiceInTrunk();
+        trunk2.setId("b07a4cab-48c6-4b3a-9670-11b90b81bdef");
+
         VoiceInTrunkGroup group = new VoiceInTrunkGroup();
         group.setName("trunk group sample with 2 trunks");
         group.setCapacityLimit(1000);
+        group.setVoiceInTrunks(Arrays.asList(trunk1, trunk2));
 
         ApiResponse<VoiceInTrunkGroup> response = client.voiceInTrunkGroups().create(group);
         VoiceInTrunkGroup created = response.getData();

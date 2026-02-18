@@ -1,0 +1,1 @@
+{"data":{"type":"address_verifications","attributes":{"callback_url":"http://example.com","callback_method":"GET"},"relationships":{"address":{"data":{"type":"addresses","id":"d3414687-40f4-4346-a267-c2c65117d28c"}},"dids":{"data":[{"type":"dids","id":"a9d64c02-4486-4acb-a9a1-be4c81ff0659"}]}}}}

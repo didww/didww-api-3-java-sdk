@@ -1,0 +1,1 @@
+{"data":{"type":"voice_in_trunk_groups","attributes":{"name":"trunk group sample with 2 trunks","capacity_limit":1000},"relationships":{"voice_in_trunks":{"data":[{"type":"voice_in_trunks","id":"7c15bca2-7f17-46fb-9486-7e2a17158c7e"},{"type":"voice_in_trunks","id":"b07a4cab-48c6-4b3a-9670-11b90b81bdef"}]}}}}

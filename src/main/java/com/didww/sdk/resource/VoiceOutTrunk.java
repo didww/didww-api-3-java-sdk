@@ -1,7 +1,6 @@
 package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Id;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -9,10 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("voice_out_trunks")
-public class VoiceOutTrunk implements HasId {
-
-    @Id
-    private String id;
+public class VoiceOutTrunk extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -56,16 +52,16 @@ public class VoiceOutTrunk implements HasId {
     @JsonProperty("callback_url")
     private String callbackUrl;
 
-    @JsonProperty("username")
+    @JsonProperty(value = "username", access = JsonProperty.Access.WRITE_ONLY)
     private String username;
 
-    @JsonProperty("password")
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @JsonProperty("threshold_reached")
+    @JsonProperty(value = "threshold_reached", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean thresholdReached;
 
-    @JsonProperty("created_at")
+    @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
     @Relationship("dids")
@@ -76,14 +72,6 @@ public class VoiceOutTrunk implements HasId {
 
     @Relationship("voice_in_trunk_group")
     private VoiceInTrunkGroup voiceInTrunkGroup;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

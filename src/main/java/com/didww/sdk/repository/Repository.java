@@ -4,7 +4,7 @@ import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.JsonApiMediaType;
 import com.didww.sdk.http.QueryParams;
-import com.didww.sdk.resource.HasId;
+import com.didww.sdk.resource.BaseResource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.github.jasminb.jsonapi.ResourceConverter;
@@ -13,7 +13,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class Repository<T extends HasId> extends ReadOnlyRepository<T> {
+public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
 
     public Repository(OkHttpClient httpClient, ResourceConverter converter,
                       String baseUrl, String endpoint, Class<T> resourceClass,

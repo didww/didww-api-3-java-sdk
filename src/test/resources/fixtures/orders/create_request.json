@@ -1,0 +1,1 @@
+{"data":{"type":"orders","attributes":{"items":[{"type":"did_order_items","attributes":{"sku_id":"acc46374-0b34-4912-9f67-8340339db1e5","qty":2}},{"type":"did_order_items","attributes":{"sku_id":"f36d2812-2195-4385-85e8-e59c3484a8bc","qty":1}}],"allow_back_ordering":true}}}

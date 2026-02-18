@@ -1,13 +1,13 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
-import com.didww.sdk.resource.*;
 import com.didww.sdk.repository.ApiResponse;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
-import static org.assertj.core.api.Assertions.assertThat;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DidReservationTest extends BaseTest {
 
@@ -42,13 +42,18 @@ class DidReservationTest extends BaseTest {
     @Test
     void testCreateDidReservation() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/did_reservations"))
+                .withRequestBody(equalToJson(loadFixture("did_reservations/create_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("did_reservations/create.json"))));
 
+        AvailableDid availableDid = new AvailableDid();
+        availableDid.setId("857d1462-5f43-4238-b007-ff05f282e41b");
+
         DidReservation newReservation = new DidReservation();
         newReservation.setDescription("DIDWW");
+        newReservation.setAvailableDid(availableDid);
 
         ApiResponse<DidReservation> response = client.didReservations().create(newReservation);
         DidReservation didReservation = response.getData();
