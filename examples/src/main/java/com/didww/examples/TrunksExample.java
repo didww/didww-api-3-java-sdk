@@ -8,6 +8,7 @@ import com.didww.sdk.resource.configuration.SipConfiguration;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class TrunksExample {
 
@@ -26,7 +27,8 @@ public class TrunksExample {
 
         // Create a SIP trunk
         VoiceInTrunk newTrunk = new VoiceInTrunk();
-        newTrunk.setName("My SIP Trunk");
+        String suffix = UUID.randomUUID().toString().substring(0, 8);
+        newTrunk.setName("My SIP Trunk " + suffix);
         newTrunk.setPriority(1);
         newTrunk.setWeight(100);
         newTrunk.setCliFormat("e164");

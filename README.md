@@ -99,6 +99,11 @@ For more examples visit [examples](examples/src/main/java/com/didww/examples/).
 
 For details on obtaining your API key please visit https://doc.didww.com/api#introduction-api-keys
 
+## Examples
+
+- Source code: [examples/src/main/java/com/didww/examples](examples/src/main/java/com/didww/examples)
+- How to run: [examples/README.md](examples/README.md)
+
 ## Configuration
 
 ```java
