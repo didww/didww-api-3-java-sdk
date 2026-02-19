@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.IdentityType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,7 +26,7 @@ class RequirementTest extends BaseTest {
         assertThat(requirements).isNotEmpty();
         assertThat(requirements).hasSize(5);
         assertThat(requirements.get(0).getId()).isEqualTo("b6c80acb-3952-4d53-9e62-fe2348c0636b");
-        assertThat(requirements.get(0).getIdentityType()).isEqualTo("Any");
+        assertThat(requirements.get(0).getIdentityType()).isEqualTo(IdentityType.ANY);
     }
 
     @Test
@@ -40,7 +41,7 @@ class RequirementTest extends BaseTest {
         Requirement requirement = response.getData();
 
         assertThat(requirement.getId()).isEqualTo("25d12afe-1ec6-4fe3-9621-b250dd1fb959");
-        assertThat(requirement.getIdentityType()).isEqualTo("Any");
+        assertThat(requirement.getIdentityType()).isEqualTo(IdentityType.ANY);
         assertThat(requirement.getPersonalAreaLevel()).isEqualTo("WorldWide");
         assertThat(requirement.getPersonalProofQty()).isEqualTo(1);
         assertThat(requirement.getServiceDescriptionRequired()).isTrue();

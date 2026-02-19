@@ -2,6 +2,8 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.CallbackMethod;
+import com.didww.sdk.resource.enums.OrderStatus;
 import com.didww.sdk.resource.orderitem.AvailableDidOrderItem;
 import com.didww.sdk.resource.orderitem.CapacityOrderItem;
 import com.didww.sdk.resource.orderitem.DidOrderItem;
@@ -28,7 +30,7 @@ class OrderTest extends BaseTest {
         Order order = response.getData();
 
         assertThat(order.getId()).isEqualTo("9df11dac-9d83-448c-8866-19c998be33db");
-        assertThat(order.getStatus()).isEqualTo("Completed");
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
         assertThat(order.getDescription()).isEqualTo("Payment processing fee");
         assertThat(order.getReference()).isEqualTo("SPT-474057");
         assertThat(order.getItems()).isNotEmpty();
@@ -59,7 +61,7 @@ class OrderTest extends BaseTest {
         Order created = response.getData();
 
         assertThat(created.getId()).isEqualTo("5da18706-be9f-49b0-aeec-0480aacd49ad");
-        assertThat(created.getStatus()).isEqualTo("Pending");
+        assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(2);
     }
@@ -86,7 +88,7 @@ class OrderTest extends BaseTest {
         Order created = response.getData();
 
         assertThat(created.getId()).isEqualTo("9b9f2121-8d9e-4aa8-9754-dbaf6f695fd6");
-        assertThat(created.getStatus()).isEqualTo("Pending");
+        assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(1);
     }
@@ -111,7 +113,7 @@ class OrderTest extends BaseTest {
         Order created = response.getData();
 
         assertThat(created.getId()).isEqualTo("9b9f2121-8d9e-4aa8-9754-dbaf6f695fd6");
-        assertThat(created.getStatus()).isEqualTo("Pending");
+        assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(1);
         assertThat(created.getItems().get(0)).isInstanceOf(DidOrderItem.class);
@@ -137,7 +139,7 @@ class OrderTest extends BaseTest {
         Order created = response.getData();
 
         assertThat(created.getId()).isEqualTo("a9a7ff2d-d634-4545-bf28-dfda92d1c723");
-        assertThat(created.getStatus()).isEqualTo("Pending");
+        assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(1);
         assertThat(created.getItems().get(0)).isInstanceOf(DidOrderItem.class);
@@ -163,7 +165,7 @@ class OrderTest extends BaseTest {
         Order created = response.getData();
 
         assertThat(created.getId()).isEqualTo("68a46dd5-d405-4283-b7a5-62503267e9f8");
-        assertThat(created.getStatus()).isEqualTo("Completed");
+        assertThat(created.getStatus()).isEqualTo(OrderStatus.COMPLETED);
         assertThat(created.getDescription()).isEqualTo("Capacity");
         assertThat(created.getItems()).hasSize(1);
         assertThat(created.getItems().get(0)).isInstanceOf(CapacityOrderItem.class);
@@ -191,7 +193,7 @@ class OrderTest extends BaseTest {
         Order created = response.getData();
 
         assertThat(created.getId()).isEqualTo("c617f0ff-f819-477f-a17b-a8d248c4443e");
-        assertThat(created.getStatus()).isEqualTo("Pending");
+        assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(1);
     }
@@ -212,16 +214,16 @@ class OrderTest extends BaseTest {
         Order order = new Order();
         order.setAllowBackOrdering(true);
         order.setCallbackUrl("https://example.com/callback");
-        order.setCallbackMethod("POST");
+        order.setCallbackMethod(CallbackMethod.POST);
         order.setItems(Collections.singletonList(item));
 
         ApiResponse<Order> response = client.orders().create(order);
         Order created = response.getData();
 
         assertThat(created.getId()).isEqualTo("5da18706-be9f-49b0-aeec-0480aacd49ad");
-        assertThat(created.getStatus()).isEqualTo("Pending");
+        assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
         assertThat(created.getCallbackUrl()).isEqualTo("https://example.com/callback");
-        assertThat(created.getCallbackMethod()).isEqualTo("POST");
+        assertThat(created.getCallbackMethod()).isEqualTo(CallbackMethod.POST);
         assertThat(created.getItems()).hasSize(1);
     }
 }

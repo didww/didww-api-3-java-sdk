@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.configuration.PstnConfiguration;
+import com.didww.sdk.resource.enums.CliFormat;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -30,7 +31,7 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(first.getName()).isEqualTo("iax2 trunk sample");
         assertThat(first.getPriority()).isEqualTo(1);
         assertThat(first.getWeight()).isEqualTo(65535);
-        assertThat(first.getCliFormat()).isEqualTo("e164");
+        assertThat(first.getCliFormat()).isEqualTo(CliFormat.E164);
     }
 
     @Test

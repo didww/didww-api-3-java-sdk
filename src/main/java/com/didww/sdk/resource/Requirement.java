@@ -1,5 +1,6 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.IdentityType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -10,7 +11,7 @@ import java.util.List;
 public class Requirement extends BaseResource {
 
     @JsonProperty("identity_type")
-    private String identityType;
+    private IdentityType identityType;
 
     @JsonProperty("personal_area_level")
     private String personalAreaLevel;
@@ -69,7 +70,7 @@ public class Requirement extends BaseResource {
     @Relationship("address_proof_types")
     private List<ProofType> addressProofTypes;
 
-    public String getIdentityType() {
+    public IdentityType getIdentityType() {
         return identityType;
     }
 

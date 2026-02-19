@@ -2,6 +2,10 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.DefaultDstAction;
+import com.didww.sdk.resource.enums.MediaEncryptionMode;
+import com.didww.sdk.resource.enums.OnCliMismatchAction;
+import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -38,12 +42,12 @@ class VoiceOutTrunkTest extends BaseTest {
         VoiceOutTrunk trunk = response.getData();
 
         assertThat(trunk.getName()).isEqualTo("test");
-        assertThat(trunk.getStatus()).isEqualTo("blocked");
+        assertThat(trunk.getStatus()).isEqualTo(VoiceOutTrunkStatus.BLOCKED);
         assertThat(trunk.getCapacityLimit()).isEqualTo(123);
         assertThat(trunk.getAllowAnyDidAsCli()).isFalse();
-        assertThat(trunk.getOnCliMismatchAction()).isEqualTo("replace_cli");
-        assertThat(trunk.getMediaEncryptionMode()).isEqualTo("srtp_sdes");
-        assertThat(trunk.getDefaultDstAction()).isEqualTo("reject_all");
+        assertThat(trunk.getOnCliMismatchAction()).isEqualTo(OnCliMismatchAction.REPLACE_CLI);
+        assertThat(trunk.getMediaEncryptionMode()).isEqualTo(MediaEncryptionMode.SRTP_SDES);
+        assertThat(trunk.getDefaultDstAction()).isEqualTo(DefaultDstAction.REJECT_ALL);
         assertThat(trunk.getForceSymmetricRtp()).isTrue();
         assertThat(trunk.getRtpPing()).isTrue();
         assertThat(trunk.getThresholdReached()).isFalse();
@@ -66,7 +70,7 @@ class VoiceOutTrunkTest extends BaseTest {
         VoiceOutTrunk trunk = new VoiceOutTrunk();
         trunk.setName("php-test");
         trunk.setAllowedSipIps(Collections.singletonList("0.0.0.0/0"));
-        trunk.setOnCliMismatchAction("replace_cli");
+        trunk.setOnCliMismatchAction(OnCliMismatchAction.REPLACE_CLI);
         trunk.setDefaultDid(did);
         trunk.setDids(Collections.singletonList(did));
 
@@ -75,7 +79,7 @@ class VoiceOutTrunkTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("b60201c1-21f0-4d9a-aafa-0e6d1e12f22e");
         assertThat(created.getName()).isEqualTo("php-test");
-        assertThat(created.getStatus()).isEqualTo("active");
+        assertThat(created.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
     }
 
     @Test

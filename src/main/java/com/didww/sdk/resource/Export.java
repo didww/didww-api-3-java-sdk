@@ -1,5 +1,8 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.CallbackMethod;
+import com.didww.sdk.resource.enums.ExportStatus;
+import com.didww.sdk.resource.enums.ExportType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -10,7 +13,7 @@ import java.util.Map;
 public class Export extends BaseResource {
 
     @JsonProperty("export_type")
-    private String exportType;
+    private ExportType exportType;
 
     @JsonProperty(value = "url", access = JsonProperty.Access.WRITE_ONLY)
     private String url;
@@ -19,10 +22,10 @@ public class Export extends BaseResource {
     private String callbackUrl;
 
     @JsonProperty("callback_method")
-    private String callbackMethod;
+    private CallbackMethod callbackMethod;
 
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
-    private String status;
+    private ExportStatus status;
 
     @JsonProperty("filters")
     private Map<String, Object> filters;
@@ -30,11 +33,11 @@ public class Export extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    public String getExportType() {
+    public ExportType getExportType() {
         return exportType;
     }
 
-    public void setExportType(String exportType) {
+    public void setExportType(ExportType exportType) {
         this.exportType = exportType;
     }
 
@@ -50,15 +53,15 @@ public class Export extends BaseResource {
         this.callbackUrl = callbackUrl;
     }
 
-    public String getCallbackMethod() {
+    public CallbackMethod getCallbackMethod() {
         return callbackMethod;
     }
 
-    public void setCallbackMethod(String callbackMethod) {
+    public void setCallbackMethod(CallbackMethod callbackMethod) {
         this.callbackMethod = callbackMethod;
     }
 
-    public String getStatus() {
+    public ExportStatus getStatus() {
         return status;
     }
 

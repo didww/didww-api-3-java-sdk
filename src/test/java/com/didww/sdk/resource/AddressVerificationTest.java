@@ -2,6 +2,8 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.AddressVerificationStatus;
+import com.didww.sdk.resource.enums.CallbackMethod;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -26,8 +28,8 @@ class AddressVerificationTest extends BaseTest {
         assertThat(verifications).isNotEmpty();
         assertThat(verifications.get(0).getId()).isEqualTo("aaf2180a-3f2b-4427-888f-3d00f872014e");
         assertThat(verifications.get(0).getCallbackUrl()).isEqualTo("http://example.com");
-        assertThat(verifications.get(0).getCallbackMethod()).isEqualTo("GET");
-        assertThat(verifications.get(0).getStatus()).isEqualTo("Pending");
+        assertThat(verifications.get(0).getCallbackMethod()).isEqualTo(CallbackMethod.GET);
+        assertThat(verifications.get(0).getStatus()).isEqualTo(AddressVerificationStatus.PENDING);
     }
 
     @Test
@@ -47,7 +49,7 @@ class AddressVerificationTest extends BaseTest {
 
         AddressVerification verification = new AddressVerification();
         verification.setCallbackUrl("http://example.com");
-        verification.setCallbackMethod("GET");
+        verification.setCallbackMethod(CallbackMethod.GET);
         verification.setAddress(address);
         verification.setDids(Collections.singletonList(did));
 
@@ -56,7 +58,7 @@ class AddressVerificationTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("78182ef2-8377-41cd-89e1-26e8266c9c94");
         assertThat(created.getCallbackUrl()).isEqualTo("http://example.com");
-        assertThat(created.getCallbackMethod()).isEqualTo("GET");
-        assertThat(created.getStatus()).isEqualTo("Pending");
+        assertThat(created.getCallbackMethod()).isEqualTo(CallbackMethod.GET);
+        assertThat(created.getStatus()).isEqualTo(AddressVerificationStatus.PENDING);
     }
 }

@@ -1,5 +1,9 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.DefaultDstAction;
+import com.didww.sdk.resource.enums.MediaEncryptionMode;
+import com.didww.sdk.resource.enums.OnCliMismatchAction;
+import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -17,7 +21,7 @@ public class VoiceOutTrunk extends BaseResource {
     private List<String> allowedSipIps;
 
     @JsonProperty("on_cli_mismatch_action")
-    private String onCliMismatchAction;
+    private OnCliMismatchAction onCliMismatchAction;
 
     @JsonProperty("allowed_rtp_ips")
     private List<String> allowedRtpIps;
@@ -26,7 +30,7 @@ public class VoiceOutTrunk extends BaseResource {
     private Boolean allowAnyDidAsCli;
 
     @JsonProperty("status")
-    private String status;
+    private VoiceOutTrunkStatus status;
 
     @JsonProperty("capacity_limit")
     private Integer capacityLimit;
@@ -35,10 +39,10 @@ public class VoiceOutTrunk extends BaseResource {
     private String thresholdAmount;
 
     @JsonProperty("media_encryption_mode")
-    private String mediaEncryptionMode;
+    private MediaEncryptionMode mediaEncryptionMode;
 
     @JsonProperty("default_dst_action")
-    private String defaultDstAction;
+    private DefaultDstAction defaultDstAction;
 
     @JsonProperty("dst_prefixes")
     private List<String> dstPrefixes;
@@ -86,11 +90,11 @@ public class VoiceOutTrunk extends BaseResource {
         this.allowedSipIps = allowedSipIps;
     }
 
-    public String getOnCliMismatchAction() {
+    public OnCliMismatchAction getOnCliMismatchAction() {
         return onCliMismatchAction;
     }
 
-    public void setOnCliMismatchAction(String onCliMismatchAction) {
+    public void setOnCliMismatchAction(OnCliMismatchAction onCliMismatchAction) {
         this.onCliMismatchAction = onCliMismatchAction;
     }
 
@@ -110,7 +114,7 @@ public class VoiceOutTrunk extends BaseResource {
         this.allowAnyDidAsCli = allowAnyDidAsCli;
     }
 
-    public String getStatus() {
+    public VoiceOutTrunkStatus getStatus() {
         return status;
     }
 
@@ -130,19 +134,19 @@ public class VoiceOutTrunk extends BaseResource {
         this.thresholdAmount = thresholdAmount;
     }
 
-    public String getMediaEncryptionMode() {
+    public MediaEncryptionMode getMediaEncryptionMode() {
         return mediaEncryptionMode;
     }
 
-    public void setMediaEncryptionMode(String mediaEncryptionMode) {
+    public void setMediaEncryptionMode(MediaEncryptionMode mediaEncryptionMode) {
         this.mediaEncryptionMode = mediaEncryptionMode;
     }
 
-    public String getDefaultDstAction() {
+    public DefaultDstAction getDefaultDstAction() {
         return defaultDstAction;
     }
 
-    public void setDefaultDstAction(String defaultDstAction) {
+    public void setDefaultDstAction(DefaultDstAction defaultDstAction) {
         this.defaultDstAction = defaultDstAction;
     }
 

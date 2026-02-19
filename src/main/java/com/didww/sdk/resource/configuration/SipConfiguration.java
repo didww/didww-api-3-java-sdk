@@ -1,5 +1,6 @@
 package com.didww.sdk.resource.configuration;
 
+import com.didww.sdk.resource.enums.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,13 +18,13 @@ public class SipConfiguration extends TrunkConfiguration {
     private Integer port;
 
     @JsonProperty("codec_ids")
-    private List<Integer> codecIds;
+    private List<Codec> codecIds;
 
     @JsonProperty("rx_dtmf_format_id")
-    private Integer rxDtmfFormatId;
+    private RxDtmfFormat rxDtmfFormatId;
 
     @JsonProperty("tx_dtmf_format_id")
-    private Integer txDtmfFormatId;
+    private TxDtmfFormat txDtmfFormatId;
 
     @JsonProperty("resolve_ruri")
     private Boolean resolveRuri;
@@ -59,7 +60,7 @@ public class SipConfiguration extends TrunkConfiguration {
     private Integer sstSessionExpires;
 
     @JsonProperty("sst_refresh_method_id")
-    private Integer sstRefreshMethodId;
+    private SstRefreshMethod sstRefreshMethodId;
 
     @JsonProperty("sip_timer_b")
     private Integer sipTimerB;
@@ -77,7 +78,13 @@ public class SipConfiguration extends TrunkConfiguration {
     private List<Integer> reroutingDisconnectCodeIds;
 
     @JsonProperty("transport_protocol_id")
-    private Integer transportProtocolId;
+    private TransportProtocol transportProtocolId;
+
+    @JsonProperty("media_encryption_mode")
+    private MediaEncryptionMode mediaEncryptionMode;
+
+    @JsonProperty("stir_shaken_mode")
+    private StirShakenMode stirShakenMode;
 
     @JsonProperty("max_transfers")
     private Integer maxTransfers;
@@ -115,27 +122,27 @@ public class SipConfiguration extends TrunkConfiguration {
         this.port = port;
     }
 
-    public List<Integer> getCodecIds() {
+    public List<Codec> getCodecIds() {
         return codecIds;
     }
 
-    public void setCodecIds(List<Integer> codecIds) {
+    public void setCodecIds(List<Codec> codecIds) {
         this.codecIds = codecIds;
     }
 
-    public Integer getRxDtmfFormatId() {
+    public RxDtmfFormat getRxDtmfFormatId() {
         return rxDtmfFormatId;
     }
 
-    public void setRxDtmfFormatId(Integer rxDtmfFormatId) {
+    public void setRxDtmfFormatId(RxDtmfFormat rxDtmfFormatId) {
         this.rxDtmfFormatId = rxDtmfFormatId;
     }
 
-    public Integer getTxDtmfFormatId() {
+    public TxDtmfFormat getTxDtmfFormatId() {
         return txDtmfFormatId;
     }
 
-    public void setTxDtmfFormatId(Integer txDtmfFormatId) {
+    public void setTxDtmfFormatId(TxDtmfFormat txDtmfFormatId) {
         this.txDtmfFormatId = txDtmfFormatId;
     }
 
@@ -227,11 +234,11 @@ public class SipConfiguration extends TrunkConfiguration {
         this.sstSessionExpires = sstSessionExpires;
     }
 
-    public Integer getSstRefreshMethodId() {
+    public SstRefreshMethod getSstRefreshMethodId() {
         return sstRefreshMethodId;
     }
 
-    public void setSstRefreshMethodId(Integer sstRefreshMethodId) {
+    public void setSstRefreshMethodId(SstRefreshMethod sstRefreshMethodId) {
         this.sstRefreshMethodId = sstRefreshMethodId;
     }
 
@@ -275,12 +282,28 @@ public class SipConfiguration extends TrunkConfiguration {
         this.reroutingDisconnectCodeIds = reroutingDisconnectCodeIds;
     }
 
-    public Integer getTransportProtocolId() {
+    public TransportProtocol getTransportProtocolId() {
         return transportProtocolId;
     }
 
-    public void setTransportProtocolId(Integer transportProtocolId) {
+    public void setTransportProtocolId(TransportProtocol transportProtocolId) {
         this.transportProtocolId = transportProtocolId;
+    }
+
+    public MediaEncryptionMode getMediaEncryptionMode() {
+        return mediaEncryptionMode;
+    }
+
+    public void setMediaEncryptionMode(MediaEncryptionMode mediaEncryptionMode) {
+        this.mediaEncryptionMode = mediaEncryptionMode;
+    }
+
+    public StirShakenMode getStirShakenMode() {
+        return stirShakenMode;
+    }
+
+    public void setStirShakenMode(StirShakenMode stirShakenMode) {
+        this.stirShakenMode = stirShakenMode;
     }
 
     public Integer getMaxTransfers() {

@@ -1,5 +1,6 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.IdentityType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -42,7 +43,7 @@ public class Identity extends BaseResource implements ProofEntity {
     private String personalTaxId;
 
     @JsonProperty("identity_type")
-    private String identityType;
+    private IdentityType identityType;
 
     @JsonProperty("external_reference_id")
     private String externalReferenceId;
@@ -148,11 +149,11 @@ public class Identity extends BaseResource implements ProofEntity {
         this.personalTaxId = personalTaxId;
     }
 
-    public String getIdentityType() {
+    public IdentityType getIdentityType() {
         return identityType;
     }
 
-    public void setIdentityType(String identityType) {
+    public void setIdentityType(IdentityType identityType) {
         this.identityType = identityType;
     }
 

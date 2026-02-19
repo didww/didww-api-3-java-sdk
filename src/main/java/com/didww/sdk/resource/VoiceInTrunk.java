@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.converter.TrunkConfigurationDeserializer;
 import com.didww.sdk.converter.TrunkConfigurationSerializer;
 import com.didww.sdk.resource.configuration.TrunkConfiguration;
+import com.didww.sdk.resource.enums.CliFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -24,7 +25,7 @@ public class VoiceInTrunk extends BaseResource {
     private Integer weight;
 
     @JsonProperty("cli_format")
-    private String cliFormat;
+    private CliFormat cliFormat;
 
     @JsonProperty("cli_prefix")
     private String cliPrefix;
@@ -76,11 +77,11 @@ public class VoiceInTrunk extends BaseResource {
         this.weight = weight;
     }
 
-    public String getCliFormat() {
+    public CliFormat getCliFormat() {
         return cliFormat;
     }
 
-    public void setCliFormat(String cliFormat) {
+    public void setCliFormat(CliFormat cliFormat) {
         this.cliFormat = cliFormat;
     }
 
