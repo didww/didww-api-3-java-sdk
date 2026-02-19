@@ -11,7 +11,7 @@ public class EncryptedFile extends BaseResource {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty("expire_at")
+    @JsonProperty(value = "expire_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime expireAt;
 
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
@@ -27,10 +27,6 @@ public class EncryptedFile extends BaseResource {
 
     public OffsetDateTime getExpireAt() {
         return expireAt;
-    }
-
-    public void setExpireAt(OffsetDateTime expireAt) {
-        this.expireAt = expireAt;
     }
 
     public OffsetDateTime getCreatedAt() {

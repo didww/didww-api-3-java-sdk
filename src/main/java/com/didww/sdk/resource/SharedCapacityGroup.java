@@ -67,4 +67,8 @@ public class SharedCapacityGroup extends BaseResource {
     public List<Did> getDids() {
         return dids;
     }
+
+    public void setDids(List<Did> dids) {
+        this.dids = dids;
+    }
 }

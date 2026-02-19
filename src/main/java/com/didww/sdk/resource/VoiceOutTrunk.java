@@ -70,9 +70,6 @@ public class VoiceOutTrunk extends BaseResource {
     @Relationship("default_did")
     private Did defaultDid;
 
-    @Relationship("voice_in_trunk_group")
-    private VoiceInTrunkGroup voiceInTrunkGroup;
-
     public String getName() {
         return name;
     }
@@ -213,11 +210,4 @@ public class VoiceOutTrunk extends BaseResource {
         this.defaultDid = defaultDid;
     }
 
-    public VoiceInTrunkGroup getVoiceInTrunkGroup() {
-        return voiceInTrunkGroup;
-    }
-
-    public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {
-        this.voiceInTrunkGroup = voiceInTrunkGroup;
-    }
 }

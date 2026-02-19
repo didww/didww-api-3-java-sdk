@@ -10,11 +10,18 @@ public class Region extends BaseResource {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("iso")
+    private String iso;
+
     @Relationship("country")
     private Country country;
 
     public String getName() {
         return name;
+    }
+
+    public String getIso() {
+        return iso;
     }
 
     public Country getCountry() {

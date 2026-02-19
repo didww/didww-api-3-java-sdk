@@ -15,9 +15,6 @@ public class DidGroup extends BaseResource {
     @JsonProperty("prefix")
     private String prefix;
 
-    @JsonProperty("local_prefix")
-    private String localPrefix;
-
     @JsonProperty("features")
     private List<String> features;
 
@@ -48,10 +45,6 @@ public class DidGroup extends BaseResource {
 
     public String getPrefix() {
         return prefix;
-    }
-
-    public String getLocalPrefix() {
-        return localPrefix;
     }
 
     public List<String> getFeatures() {
