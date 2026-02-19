@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("addresses")
-public class Address extends BaseResource {
+public class Address extends BaseResource implements ProofEntity {
 
     @JsonProperty("city_name")
     private String cityName;

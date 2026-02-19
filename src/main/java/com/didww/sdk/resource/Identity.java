@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("identities")
-public class Identity extends BaseResource {
+public class Identity extends BaseResource implements ProofEntity {
 
     @JsonProperty("first_name")
     private String firstName;
@@ -46,6 +46,9 @@ public class Identity extends BaseResource {
 
     @JsonProperty("external_reference_id")
     private String externalReferenceId;
+
+    @JsonProperty("contact_email")
+    private String contactEmail;
 
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
@@ -159,6 +162,14 @@ public class Identity extends BaseResource {
 
     public void setExternalReferenceId(String externalReferenceId) {
         this.externalReferenceId = externalReferenceId;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
     }
 
     public OffsetDateTime getCreatedAt() {

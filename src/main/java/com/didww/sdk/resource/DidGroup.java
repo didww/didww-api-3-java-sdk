@@ -39,6 +39,9 @@ public class DidGroup extends BaseResource {
     @Relationship("did_group_type")
     private DidGroupType didGroupType;
 
+    @Relationship("requirement")
+    private Requirement requirement;
+
     public String getAreaName() {
         return areaName;
     }
@@ -77,5 +80,9 @@ public class DidGroup extends BaseResource {
 
     public DidGroupType getDidGroupType() {
         return didGroupType;
+    }
+
+    public Requirement getRequirement() {
+        return requirement;
     }
 }

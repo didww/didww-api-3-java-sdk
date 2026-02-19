@@ -23,7 +23,10 @@ public class AddressVerification extends BaseResource {
     private String status;
 
     @JsonProperty(value = "reject_reasons", access = JsonProperty.Access.WRITE_ONLY)
-    private List<String> rejectReasons;
+    private String rejectReasons;
+
+    @JsonProperty(value = "reference", access = JsonProperty.Access.WRITE_ONLY)
+    private String reference;
 
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
@@ -62,8 +65,12 @@ public class AddressVerification extends BaseResource {
         return status;
     }
 
-    public List<String> getRejectReasons() {
+    public String getRejectReasons() {
         return rejectReasons;
+    }
+
+    public String getReference() {
+        return reference;
     }
 
     public OffsetDateTime getCreatedAt() {
