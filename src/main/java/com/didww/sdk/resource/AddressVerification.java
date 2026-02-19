@@ -1,5 +1,7 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.AddressVerificationStatus;
+import com.didww.sdk.resource.enums.CallbackMethod;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -17,10 +19,10 @@ public class AddressVerification extends BaseResource {
     private String callbackUrl;
 
     @JsonProperty("callback_method")
-    private String callbackMethod;
+    private CallbackMethod callbackMethod;
 
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
-    private String status;
+    private AddressVerificationStatus status;
 
     @JsonProperty(value = "reject_reasons", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> rejectReasons;
@@ -50,15 +52,15 @@ public class AddressVerification extends BaseResource {
         this.callbackUrl = callbackUrl;
     }
 
-    public String getCallbackMethod() {
+    public CallbackMethod getCallbackMethod() {
         return callbackMethod;
     }
 
-    public void setCallbackMethod(String callbackMethod) {
+    public void setCallbackMethod(CallbackMethod callbackMethod) {
         this.callbackMethod = callbackMethod;
     }
 
-    public String getStatus() {
+    public AddressVerificationStatus getStatus() {
         return status;
     }
 

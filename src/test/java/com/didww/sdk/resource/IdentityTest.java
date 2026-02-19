@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.IdentityType;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ class IdentityTest extends BaseTest {
         assertThat(identities.get(0).getId()).isEqualTo("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
         assertThat(identities.get(0).getFirstName()).isEqualTo("John");
         assertThat(identities.get(0).getLastName()).isEqualTo("Doe");
-        assertThat(identities.get(0).getIdentityType()).isEqualTo("Personal");
+        assertThat(identities.get(0).getIdentityType()).isEqualTo(IdentityType.PERSONAL);
     }
 
     @Test
@@ -54,7 +55,7 @@ class IdentityTest extends BaseTest {
         identity.setVatId("GB1234");
         identity.setDescription("test identity");
         identity.setPersonalTaxId("987654321");
-        identity.setIdentityType("Business");
+        identity.setIdentityType(IdentityType.BUSINESS);
         identity.setExternalReferenceId("111");
         identity.setCountry(country);
 
@@ -63,7 +64,7 @@ class IdentityTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
         assertThat(created.getFirstName()).isEqualTo("John");
-        assertThat(created.getIdentityType()).isEqualTo("Business");
+        assertThat(created.getIdentityType()).isEqualTo(IdentityType.BUSINESS);
         assertThat(created.getVerified()).isFalse();
     }
 

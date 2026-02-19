@@ -1,5 +1,6 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.Feature;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -16,7 +17,7 @@ public class DidGroup extends BaseResource {
     private String prefix;
 
     @JsonProperty("features")
-    private List<String> features;
+    private List<Feature> features;
 
     @JsonProperty("is_metered")
     private Boolean isMetered;
@@ -47,7 +48,7 @@ public class DidGroup extends BaseResource {
         return prefix;
     }
 
-    public List<String> getFeatures() {
+    public List<Feature> getFeatures() {
         return features;
     }
 

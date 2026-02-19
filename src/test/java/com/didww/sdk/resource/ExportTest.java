@@ -2,6 +2,8 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.ExportStatus;
+import com.didww.sdk.resource.enums.ExportType;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -28,8 +30,8 @@ class ExportTest extends BaseTest {
 
         Export first = exports.get(0);
         assertThat(first.getId()).isEqualTo("da15f006-5da4-45ca-b0df-735baeadf423");
-        assertThat(first.getStatus()).isEqualTo("Completed");
-        assertThat(first.getExportType()).isEqualTo("cdr_in");
+        assertThat(first.getStatus()).isEqualTo(ExportStatus.COMPLETED);
+        assertThat(first.getExportType()).isEqualTo(ExportType.CDR_IN);
     }
 
     @Test
@@ -47,14 +49,14 @@ class ExportTest extends BaseTest {
         filters.put("month", "01");
 
         Export export = new Export();
-        export.setExportType("cdr_in");
+        export.setExportType(ExportType.CDR_IN);
         export.setFilters(filters);
 
         ApiResponse<Export> response = client.exports().create(export);
         Export created = response.getData();
 
         assertThat(created.getId()).isEqualTo("da15f006-5da4-45ca-b0df-735baeadf423");
-        assertThat(created.getStatus()).isEqualTo("Pending");
-        assertThat(created.getExportType()).isEqualTo("cdr_in");
+        assertThat(created.getStatus()).isEqualTo(ExportStatus.PENDING);
+        assertThat(created.getExportType()).isEqualTo(ExportType.CDR_IN);
     }
 }

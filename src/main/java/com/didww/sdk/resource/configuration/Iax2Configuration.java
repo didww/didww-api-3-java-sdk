@@ -1,5 +1,6 @@
 package com.didww.sdk.resource.configuration;
 
+import com.didww.sdk.resource.enums.Codec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,7 +18,7 @@ public class Iax2Configuration extends TrunkConfiguration {
     private Integer port;
 
     @JsonProperty("codec_ids")
-    private List<Integer> codecIds;
+    private List<Codec> codecIds;
 
     @JsonProperty("auth_user")
     private String authUser;
@@ -55,11 +56,11 @@ public class Iax2Configuration extends TrunkConfiguration {
         this.port = port;
     }
 
-    public List<Integer> getCodecIds() {
+    public List<Codec> getCodecIds() {
         return codecIds;
     }
 
-    public void setCodecIds(List<Integer> codecIds) {
+    public void setCodecIds(List<Codec> codecIds) {
         this.codecIds = codecIds;
     }
 

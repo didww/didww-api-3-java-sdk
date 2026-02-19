@@ -1,5 +1,7 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.CallbackMethod;
+import com.didww.sdk.resource.enums.OrderStatus;
 import com.didww.sdk.converter.OrderItemDeserializer;
 import com.didww.sdk.converter.OrderItemSerializer;
 import com.didww.sdk.resource.orderitem.OrderItem;
@@ -18,7 +20,7 @@ public class Order extends BaseResource {
     private Double amount;
 
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
-    private String status;
+    private OrderStatus status;
 
     @JsonProperty(value = "description", access = JsonProperty.Access.WRITE_ONLY)
     private String description;
@@ -33,7 +35,7 @@ public class Order extends BaseResource {
     private String callbackUrl;
 
     @JsonProperty("callback_method")
-    private String callbackMethod;
+    private CallbackMethod callbackMethod;
 
     @JsonProperty("allow_back_ordering")
     private Boolean allowBackOrdering;
@@ -47,7 +49,7 @@ public class Order extends BaseResource {
         return amount;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
@@ -71,11 +73,11 @@ public class Order extends BaseResource {
         this.callbackUrl = callbackUrl;
     }
 
-    public String getCallbackMethod() {
+    public CallbackMethod getCallbackMethod() {
         return callbackMethod;
     }
 
-    public void setCallbackMethod(String callbackMethod) {
+    public void setCallbackMethod(CallbackMethod callbackMethod) {
         this.callbackMethod = callbackMethod;
     }
 
