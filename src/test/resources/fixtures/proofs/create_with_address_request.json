@@ -1,0 +1,28 @@
+{
+  "data": {
+    "type": "proofs",
+    "attributes": {},
+    "relationships": {
+      "files": {
+        "data": [
+          {
+            "type": "encrypted_files",
+            "id": "cc52b6b3-0627-47d3-a1c9-b54d3de42813"
+          }
+        ]
+      },
+      "proof_type": {
+        "data": {
+          "type": "proof_types",
+          "id": "d2c1b3fb-29f7-46ca-ba82-b617f4630b78"
+        }
+      },
+      "entity": {
+        "data": {
+          "type": "addresses",
+          "id": "54c92d8e-f135-4b55-ac48-748d44437509"
+        }
+      }
+    }
+  }
+}

@@ -16,6 +16,9 @@ public class Proof extends BaseResource {
     @JsonProperty("expires_at")
     private OffsetDateTime expiresAt;
 
+    @Relationship("entity")
+    private ProofEntity entity;
+
     @Relationship("proof_type")
     private ProofType proofType;
 
@@ -28,6 +31,14 @@ public class Proof extends BaseResource {
 
     public OffsetDateTime getExpiresAt() {
         return expiresAt;
+    }
+
+    public ProofEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(ProofEntity entity) {
+        this.entity = entity;
     }
 
     public ProofType getProofType() {
