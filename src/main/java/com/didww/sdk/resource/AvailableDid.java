@@ -13,11 +13,18 @@ public class AvailableDid extends BaseResource {
     @Relationship("did_group")
     private DidGroup didGroup;
 
+    @Relationship("nanpa_prefix")
+    private NanpaPrefix nanpaPrefix;
+
     public String getNumber() {
         return number;
     }
 
     public DidGroup getDidGroup() {
         return didGroup;
+    }
+
+    public NanpaPrefix getNanpaPrefix() {
+        return nanpaPrefix;
     }
 }
