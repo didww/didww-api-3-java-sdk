@@ -16,6 +16,9 @@ public class City extends BaseResource {
     @Relationship("region")
     private Region region;
 
+    @Relationship("area")
+    private Area area;
+
     public String getName() {
         return name;
     }
@@ -26,5 +29,9 @@ public class City extends BaseResource {
 
     public Region getRegion() {
         return region;
+    }
+
+    public Area getArea() {
+        return area;
     }
 }

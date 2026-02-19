@@ -13,6 +13,9 @@ public class Proof extends BaseResource {
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
 
+    @JsonProperty("expires_at")
+    private OffsetDateTime expiresAt;
+
     @Relationship("proof_type")
     private ProofType proofType;
 
@@ -21,6 +24,10 @@ public class Proof extends BaseResource {
 
     public OffsetDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public OffsetDateTime getExpiresAt() {
+        return expiresAt;
     }
 
     public ProofType getProofType() {
