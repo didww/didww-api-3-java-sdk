@@ -39,6 +39,12 @@ public class Did extends BaseResource {
     @JsonProperty(value = "expires_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime expiresAt;
 
+    @JsonProperty("billing_cycles_count")
+    private Integer billingCyclesCount;
+
+    @JsonProperty(value = "channels_included_count", access = JsonProperty.Access.WRITE_ONLY)
+    private Integer channelsIncludedCount;
+
     @Relationship("order")
     private Order order;
 
@@ -56,6 +62,9 @@ public class Did extends BaseResource {
 
     @Relationship("shared_capacity_group")
     private SharedCapacityGroup sharedCapacityGroup;
+
+    @Relationship("address_verification")
+    private AddressVerification addressVerification;
 
     public String getNumber() {
         return number;
@@ -117,6 +126,18 @@ public class Did extends BaseResource {
         return expiresAt;
     }
 
+    public Integer getBillingCyclesCount() {
+        return billingCyclesCount;
+    }
+
+    public void setBillingCyclesCount(Integer billingCyclesCount) {
+        this.billingCyclesCount = billingCyclesCount;
+    }
+
+    public Integer getChannelsIncludedCount() {
+        return channelsIncludedCount;
+    }
+
     public Order getOrder() {
         return order;
     }
@@ -155,5 +176,9 @@ public class Did extends BaseResource {
 
     public void setSharedCapacityGroup(SharedCapacityGroup sharedCapacityGroup) {
         this.sharedCapacityGroup = sharedCapacityGroup;
+    }
+
+    public AddressVerification getAddressVerification() {
+        return addressVerification;
     }
 }
