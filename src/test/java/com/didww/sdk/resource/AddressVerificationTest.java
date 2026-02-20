@@ -33,6 +33,22 @@ class AddressVerificationTest extends BaseTest {
     }
 
     @Test
+    void testFindAddressVerification() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("address_verifications/show.json"))));
+
+        ApiResponse<AddressVerification> response = client.addressVerifications().find("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
+        AddressVerification av = response.getData();
+
+        assertThat(av.getId()).isEqualTo("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
+        assertThat(av.getStatus()).isEqualTo("Approved");
+        assertThat(av.getReference()).isEqualTo("SHB-485120");
+    }
+
+    @Test
     void testCreateAddressVerification() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/address_verifications"))
                 .withRequestBody(equalToJson(loadFixture("address_verifications/create_request.json"), true, false))
