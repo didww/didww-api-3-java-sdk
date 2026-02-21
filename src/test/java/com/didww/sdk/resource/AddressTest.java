@@ -33,6 +33,7 @@ class AddressTest extends BaseTest {
         assertThat(addresses.get(0).getAddress()).isEqualTo("literurna 12");
         assertThat(addresses.get(0).getDescription()).isEqualTo("1");
         assertThat(addresses.get(0).getVerified()).isFalse();
+        assertThat(addresses.get(0).getCountry()).isNotNull();
     }
 
     @Test
@@ -67,6 +68,7 @@ class AddressTest extends BaseTest {
         assertThat(created.getAddress()).isEqualTo("some street");
         assertThat(created.getDescription()).isEqualTo("test address");
         assertThat(created.getVerified()).isFalse();
+        assertThat(created.getCountry()).isNotNull();
     }
 
     @Test

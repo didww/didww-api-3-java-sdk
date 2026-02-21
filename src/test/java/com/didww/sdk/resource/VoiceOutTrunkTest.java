@@ -61,6 +61,8 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(trunk.getCallbackUrl()).isNull();
         assertThat(trunk.getDstPrefixes()).containsExactly("370");
         assertThat(trunk.getAllowedRtpIps()).isNull();
+        assertThat(trunk.getDids()).hasSize(2);
+        assertThat(trunk.getDefaultDid()).isNotNull();
     }
 
     @Test

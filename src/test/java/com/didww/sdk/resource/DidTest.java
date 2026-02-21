@@ -25,6 +25,7 @@ class DidTest extends BaseTest {
         List<Did> dids = response.getData();
 
         assertThat(dids).isNotEmpty();
+        assertThat(dids.get(0).getOrder()).isNotNull();
     }
 
     @Test

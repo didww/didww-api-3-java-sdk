@@ -47,5 +47,7 @@ class NanpaPrefixTest extends BaseTest {
         assertThat(prefix.getId()).isEqualTo("6c16d51d-d376-4395-91c4-012321317e48");
         assertThat(prefix.getNpa()).isEqualTo("864");
         assertThat(prefix.getNxx()).isEqualTo("920");
+        assertThat(prefix.getCountry()).isNotNull();
+        assertThat(prefix.getCountry().getName()).isEqualTo("United States");
     }
 }

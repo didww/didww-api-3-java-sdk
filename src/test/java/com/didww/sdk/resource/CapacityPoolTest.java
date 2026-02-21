@@ -48,6 +48,9 @@ class CapacityPoolTest extends BaseTest {
 
         assertThat(pool.getName()).isEqualTo("Standard");
         assertThat(pool.getRenewDate()).isEqualTo("2019-01-21");
+        assertThat(pool.getCountries()).hasSizeGreaterThanOrEqualTo(43);
+        assertThat(pool.getSharedCapacityGroups()).hasSize(3);
+        assertThat(pool.getQtyBasedPricings()).hasSize(3);
     }
 
     @Test

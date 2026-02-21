@@ -39,5 +39,8 @@ class AvailableDidTest extends BaseTest {
         AvailableDid availableDid = response.getData();
 
         assertThat(availableDid.getNumber()).isEqualTo("16169886810");
+        assertThat(availableDid.getDidGroup()).isNotNull();
+        assertThat(availableDid.getDidGroup().getPrefix()).isEqualTo("616");
+        assertThat(availableDid.getDidGroup().getStockKeepingUnits()).hasSize(2);
     }
 }

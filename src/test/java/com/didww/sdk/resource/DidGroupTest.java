@@ -41,5 +41,13 @@ class DidGroupTest extends BaseTest {
         assertThat(didGroup.getPrefix()).isEqualTo("241");
         assertThat(didGroup.getAreaName()).isEqualTo("Aachen");
         assertThat(didGroup.getIsMetered()).isEqualTo(false);
+        assertThat(didGroup.getCountry()).isNotNull();
+        assertThat(didGroup.getCountry().getName()).isEqualTo("Germany");
+        assertThat(didGroup.getCity()).isNotNull();
+        assertThat(didGroup.getCity().getName()).isEqualTo("Aachen");
+        assertThat(didGroup.getDidGroupType()).isNotNull();
+        assertThat(didGroup.getDidGroupType().getName()).isEqualTo("Local");
+        assertThat(didGroup.getRegion()).isNull();
+        assertThat(didGroup.getStockKeepingUnits()).hasSize(2);
     }
 }

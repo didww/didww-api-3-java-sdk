@@ -39,5 +39,9 @@ class CityTest extends BaseTest {
         City city = response.getData();
 
         assertThat(city.getName()).isEqualTo("New York");
+        assertThat(city.getCountry()).isNotNull();
+        assertThat(city.getCountry().getName()).isEqualTo("United States");
+        assertThat(city.getRegion()).isNotNull();
+        assertThat(city.getRegion().getName()).isEqualTo("New York");
     }
 }

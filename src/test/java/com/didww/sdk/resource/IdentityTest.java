@@ -34,6 +34,7 @@ class IdentityTest extends BaseTest {
         assertThat(identities.get(0).getFirstName()).isEqualTo("John");
         assertThat(identities.get(0).getLastName()).isEqualTo("Doe");
         assertThat(identities.get(0).getIdentityType()).isEqualTo(IdentityType.PERSONAL);
+        assertThat(identities.get(0).getCountry()).isNotNull();
     }
 
     @Test
@@ -72,6 +73,7 @@ class IdentityTest extends BaseTest {
         assertThat(created.getFirstName()).isEqualTo("John");
         assertThat(created.getIdentityType()).isEqualTo(IdentityType.BUSINESS);
         assertThat(created.getVerified()).isFalse();
+        assertThat(created.getCountry()).isNotNull();
     }
 
     @Test

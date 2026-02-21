@@ -32,6 +32,25 @@ class SharedCapacityGroupTest extends BaseTest {
     }
 
     @Test
+    void testFindSharedCapacityGroup() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("shared_capacity_groups/show.json"))));
+
+        QueryParams params = QueryParams.builder()
+                .include("dids", "capacity_pool")
+                .build();
+        ApiResponse<SharedCapacityGroup> response = client.sharedCapacityGroups().find("89f987e2-0862-4bf4-a3f4-cdc89af0d875", params);
+        SharedCapacityGroup scg = response.getData();
+
+        assertThat(scg.getCapacityPool()).isNotNull();
+        assertThat(scg.getCapacityPool().getName()).isEqualTo("Standard");
+        assertThat(scg.getDids()).hasSize(18);
+    }
+
+    @Test
     void testCreateSharedCapacityGroup() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/shared_capacity_groups"))
                 .withRequestBody(equalToJson(loadFixture("shared_capacity_groups/create_request.json"), true, false))

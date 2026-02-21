@@ -57,6 +57,7 @@ class VoiceInTrunkGroupTest extends BaseTest {
         assertThat(created.getId()).isEqualTo("b2319703-ce6c-480d-bb53-614e7abcfc96");
         assertThat(created.getName()).isEqualTo("trunk group sample with 2 trunks");
         assertThat(created.getCapacityLimit()).isEqualTo(1000);
+        assertThat(created.getVoiceInTrunks()).hasSize(2);
     }
 
     @Test

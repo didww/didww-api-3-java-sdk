@@ -44,5 +44,8 @@ class AreaTest extends BaseTest {
 
         assertThat(area.getId()).isEqualTo("ab2adc18-7c94-42d9-bdde-b28dfc373a22");
         assertThat(area.getName()).isEqualTo("Tuscany");
+        assertThat(area.getCountry()).isNotNull();
+        assertThat(area.getCountry().getName()).isEqualTo("Italy");
+        assertThat(area.getCountry().getIso()).isEqualTo("IT");
     }
 }
