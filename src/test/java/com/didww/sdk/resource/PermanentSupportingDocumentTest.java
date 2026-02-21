@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,10 @@ class PermanentSupportingDocumentTest extends BaseTest {
         doc.setTemplate(template);
         doc.setFiles(Collections.singletonList(encryptedFile));
 
-        ApiResponse<PermanentSupportingDocument> response = client.permanentSupportingDocuments().create(doc);
+        QueryParams createParams = QueryParams.builder()
+                .include("template")
+                .build();
+        ApiResponse<PermanentSupportingDocument> response = client.permanentSupportingDocuments().create(doc, createParams);
         PermanentSupportingDocument created = response.getData();
 
         assertThat(created.getId()).isEqualTo("19510da3-c07e-4fa9-a696-6b9ab89cc172");

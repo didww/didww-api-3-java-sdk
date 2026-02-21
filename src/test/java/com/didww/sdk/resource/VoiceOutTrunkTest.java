@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
@@ -38,7 +39,10 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/show.json"))));
 
-        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().find("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+        QueryParams params = QueryParams.builder()
+                .include("dids", "default_did")
+                .build();
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().find("425ce763-a3a9-49b4-af5b-ada1a65c8864", params);
         VoiceOutTrunk trunk = response.getData();
 
         assertThat(trunk.getName()).isEqualTo("test");

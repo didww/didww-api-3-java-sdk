@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,10 @@ class DidReservationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("did_reservations/show.json"))));
 
-        ApiResponse<DidReservation> response = client.didReservations().find("fd38d3ff-80cf-4e67-a605-609a2884a5c4");
+        QueryParams params = QueryParams.builder()
+                .include("available_did.did_group.stock_keeping_units")
+                .build();
+        ApiResponse<DidReservation> response = client.didReservations().find("fd38d3ff-80cf-4e67-a605-609a2884a5c4", params);
         DidReservation didReservation = response.getData();
 
         assertThat(didReservation.getDescription()).isEqualTo("DIDWW");

@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -31,7 +32,10 @@ class RegionTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("regions/show.json"))));
 
-        ApiResponse<Region> response = client.regions().find("c11b1f34-16cf-4ba6-8497-f305b53d5b01");
+        QueryParams params = QueryParams.builder()
+                .include("country")
+                .build();
+        ApiResponse<Region> response = client.regions().find("c11b1f34-16cf-4ba6-8497-f305b53d5b01", params);
         Region region = response.getData();
 
         assertThat(region.getName()).isEqualTo("California");

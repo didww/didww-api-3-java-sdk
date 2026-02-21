@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.IdentityType;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,10 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/index.json"))));
 
-        ApiResponse<List<Identity>> response = client.identities().list();
+        QueryParams params = QueryParams.builder()
+                .include("country", "addresses", "proofs", "permanent_documents")
+                .build();
+        ApiResponse<List<Identity>> response = client.identities().list(params);
         List<Identity> identities = response.getData();
 
         assertThat(identities).isNotEmpty();
@@ -58,7 +62,10 @@ class IdentityTest extends BaseTest {
         identity.setExternalReferenceId("111");
         identity.setCountry(country);
 
-        ApiResponse<Identity> response = client.identities().create(identity);
+        QueryParams createParams = QueryParams.builder()
+                .include("country")
+                .build();
+        ApiResponse<Identity> response = client.identities().create(identity, createParams);
         Identity created = response.getData();
 
         assertThat(created.getId()).isEqualTo("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");

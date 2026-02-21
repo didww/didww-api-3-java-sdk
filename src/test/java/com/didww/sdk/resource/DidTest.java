@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -17,7 +18,10 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/index.json"))));
 
-        ApiResponse<List<Did>> response = client.dids().list();
+        QueryParams params = QueryParams.builder()
+                .include("order")
+                .build();
+        ApiResponse<List<Did>> response = client.dids().list(params);
         List<Did> dids = response.getData();
 
         assertThat(dids).isNotEmpty();

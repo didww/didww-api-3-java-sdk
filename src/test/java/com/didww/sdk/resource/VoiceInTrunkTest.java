@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
@@ -30,7 +31,10 @@ class VoiceInTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_in_trunks/index.json"))));
 
-        ApiResponse<List<VoiceInTrunk>> response = client.voiceInTrunks().list();
+        QueryParams params = QueryParams.builder()
+                .include("trunk_group", "pop")
+                .build();
+        ApiResponse<List<VoiceInTrunk>> response = client.voiceInTrunks().list(params);
         List<VoiceInTrunk> trunks = response.getData();
 
         assertThat(trunks).isNotEmpty();

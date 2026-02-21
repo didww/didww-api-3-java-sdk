@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,10 @@ class NanpaPrefixTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("nanpa_prefixes/show.json"))));
 
-        ApiResponse<NanpaPrefix> response = client.nanpaPrefixes().find("6c16d51d-d376-4395-91c4-012321317e48");
+        QueryParams params = QueryParams.builder()
+                .include("country")
+                .build();
+        ApiResponse<NanpaPrefix> response = client.nanpaPrefixes().find("6c16d51d-d376-4395-91c4-012321317e48", params);
         NanpaPrefix prefix = response.getData();
 
         assertThat(prefix.getId()).isEqualTo("6c16d51d-d376-4395-91c4-012321317e48");

@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,10 @@ class ProofTest extends BaseTest {
         proof.setProofType(proofType);
         proof.setFiles(Collections.singletonList(encryptedFile));
 
-        ApiResponse<Proof> response = client.proofs().create(proof);
+        QueryParams createParams = QueryParams.builder()
+                .include("proof_type")
+                .build();
+        ApiResponse<Proof> response = client.proofs().create(proof, createParams);
         Proof created = response.getData();
 
         assertThat(created.getId()).isEqualTo("ed46925b-a830-482d-917d-015858cf7ab9");

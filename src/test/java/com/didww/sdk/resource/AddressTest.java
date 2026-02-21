@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,10 @@ class AddressTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("addresses/index.json"))));
 
-        ApiResponse<List<Address>> response = client.addresses().list();
+        QueryParams params = QueryParams.builder()
+                .include("country", "identity", "proofs", "area", "city")
+                .build();
+        ApiResponse<List<Address>> response = client.addresses().list(params);
         List<Address> addresses = response.getData();
 
         assertThat(addresses).isNotEmpty();
@@ -51,7 +55,10 @@ class AddressTest extends BaseTest {
         address.setCountry(country);
         address.setIdentity(identity);
 
-        ApiResponse<Address> response = client.addresses().create(address);
+        QueryParams createParams = QueryParams.builder()
+                .include("country")
+                .build();
+        ApiResponse<Address> response = client.addresses().create(address, createParams);
         Address created = response.getData();
 
         assertThat(created.getId()).isEqualTo("bf69bc70-e1c2-442c-9f30-335ee299b663");

@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +40,10 @@ class CapacityPoolTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("capacity_pools/show.json"))));
 
-        ApiResponse<CapacityPool> response = client.capacityPools().find("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+        QueryParams params = QueryParams.builder()
+                .include("countries", "shared_capacity_groups", "qty_based_pricings")
+                .build();
+        ApiResponse<CapacityPool> response = client.capacityPools().find("f288d07c-e2fc-4ae6-9837-b18fb469c324", params);
         CapacityPool pool = response.getData();
 
         assertThat(pool.getName()).isEqualTo("Standard");

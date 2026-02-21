@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +48,10 @@ class VoiceInTrunkGroupTest extends BaseTest {
                 VoiceInTrunk.build("b07a4cab-48c6-4b3a-9670-11b90b81bdef")
         ));
 
-        ApiResponse<VoiceInTrunkGroup> response = client.voiceInTrunkGroups().create(group);
+        QueryParams params = QueryParams.builder()
+                .include("trunks")
+                .build();
+        ApiResponse<VoiceInTrunkGroup> response = client.voiceInTrunkGroups().create(group, params);
         VoiceInTrunkGroup created = response.getData();
 
         assertThat(created.getId()).isEqualTo("b2319703-ce6c-480d-bb53-614e7abcfc96");

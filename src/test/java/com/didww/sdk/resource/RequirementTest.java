@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.AreaLevel;
 import com.didww.sdk.resource.enums.IdentityType;
@@ -38,7 +39,13 @@ class RequirementTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("requirements/show.json"))));
 
-        ApiResponse<Requirement> response = client.requirements().find("25d12afe-1ec6-4fe3-9621-b250dd1fb959");
+        QueryParams params = QueryParams.builder()
+                .include("country", "did_group_type", "personal_permanent_document",
+                        "business_permanent_document", "personal_onetime_document",
+                        "business_onetime_document", "personal_proof_types",
+                        "business_proof_types", "address_proof_types")
+                .build();
+        ApiResponse<Requirement> response = client.requirements().find("25d12afe-1ec6-4fe3-9621-b250dd1fb959", params);
         Requirement requirement = response.getData();
 
         assertThat(requirement.getId()).isEqualTo("25d12afe-1ec6-4fe3-9621-b250dd1fb959");
