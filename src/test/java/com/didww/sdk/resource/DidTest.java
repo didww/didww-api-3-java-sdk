@@ -26,6 +26,7 @@ class DidTest extends BaseTest {
 
         assertThat(dids).isNotEmpty();
         assertThat(dids.get(0).getOrder()).isNotNull();
+        assertThat(dids.get(0).getOrder().getReference()).isEqualTo("TZO-560180");
     }
 
     @Test

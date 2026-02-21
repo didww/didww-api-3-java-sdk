@@ -46,6 +46,7 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(first.getWeight()).isEqualTo(65535);
         assertThat(first.getCliFormat()).isEqualTo(CliFormat.E164);
         assertThat(first.getVoiceInTrunkGroup()).isNotNull();
+        assertThat(first.getVoiceInTrunkGroup().getName()).isEqualTo("sample trunk group");
     }
 
     @Test

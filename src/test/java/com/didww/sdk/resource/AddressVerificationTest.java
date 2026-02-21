@@ -35,6 +35,7 @@ class AddressVerificationTest extends BaseTest {
         assertThat(verifications.get(0).getCallbackMethod()).isEqualTo(CallbackMethod.GET);
         assertThat(verifications.get(0).getStatus()).isEqualTo(AddressVerificationStatus.PENDING);
         assertThat(verifications.get(0).getAddress()).isNotNull();
+        assertThat(verifications.get(0).getAddress().getCityName()).isEqualTo("Chicago");
     }
 
     @Test
@@ -82,5 +83,6 @@ class AddressVerificationTest extends BaseTest {
         assertThat(created.getCallbackMethod()).isEqualTo(CallbackMethod.GET);
         assertThat(created.getStatus()).isEqualTo(AddressVerificationStatus.PENDING);
         assertThat(created.getAddress()).isNotNull();
+        assertThat(created.getAddress().getCityName()).isEqualTo("Chicago");
     }
 }

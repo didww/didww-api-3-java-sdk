@@ -34,6 +34,8 @@ class AddressTest extends BaseTest {
         assertThat(addresses.get(0).getDescription()).isEqualTo("1");
         assertThat(addresses.get(0).getVerified()).isFalse();
         assertThat(addresses.get(0).getCountry()).isNotNull();
+        assertThat(addresses.get(0).getCountry().getName()).isEqualTo("Ukraine");
+        assertThat(addresses.get(0).getCountry().getIso()).isEqualTo("UA");
     }
 
     @Test
@@ -69,6 +71,8 @@ class AddressTest extends BaseTest {
         assertThat(created.getDescription()).isEqualTo("test address");
         assertThat(created.getVerified()).isFalse();
         assertThat(created.getCountry()).isNotNull();
+        assertThat(created.getCountry().getName()).isEqualTo("United States");
+        assertThat(created.getCountry().getIso()).isEqualTo("US");
     }
 
     @Test

@@ -63,6 +63,7 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(trunk.getAllowedRtpIps()).isNull();
         assertThat(trunk.getDids()).hasSize(2);
         assertThat(trunk.getDefaultDid()).isNotNull();
+        assertThat(trunk.getDefaultDid().getNumber()).isEqualTo("37061498222");
     }
 
     @Test
