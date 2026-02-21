@@ -53,6 +53,10 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(trunk.getThresholdReached()).isFalse();
         assertThat(trunk.getThresholdAmount()).isEqualTo("200.0");
         assertThat(trunk.getUsername()).isEqualTo("dpjgwbbac9");
+        assertThat(trunk.getPassword()).isEqualTo("z0hshvbcy7");
+        assertThat(trunk.getCallbackUrl()).isNull();
+        assertThat(trunk.getDstPrefixes()).containsExactly("370");
+        assertThat(trunk.getAllowedRtpIps()).isNull();
     }
 
     @Test
