@@ -4,6 +4,8 @@ import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
+import com.didww.sdk.resource.configuration.SipConfiguration;
+import com.didww.sdk.resource.configuration.TrunkConfiguration;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -32,6 +34,54 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(first.getPriority()).isEqualTo(1);
         assertThat(first.getWeight()).isEqualTo(65535);
         assertThat(first.getCliFormat()).isEqualTo(CliFormat.E164);
+    }
+
+    @Test
+    void testListSipConfigurationAttributes() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_in_trunks"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/index.json"))));
+
+        ApiResponse<List<VoiceInTrunk>> response = client.voiceInTrunks().list();
+        List<VoiceInTrunk> trunks = response.getData();
+
+        // Find the SIP trunk in the list
+        VoiceInTrunk sipTrunk = null;
+        for (VoiceInTrunk t : trunks) {
+            if (t.getConfiguration() instanceof SipConfiguration) {
+                sipTrunk = t;
+                break;
+            }
+        }
+        assertThat(sipTrunk).isNotNull();
+        SipConfiguration config = (SipConfiguration) sipTrunk.getConfiguration();
+        assertThat(config.getUsername()).isEqualTo("username");
+        assertThat(config.getHost()).isEqualTo("216.58.215.78");
+        assertThat(config.getPort()).isEqualTo(8060);
+        assertThat(config.getCodecIds()).containsExactly(9, 10, 8);
+        assertThat(config.getTransportProtocolId()).isEqualTo(1);
+        assertThat(config.getAuthEnabled()).isTrue();
+        assertThat(config.getAuthUser()).isEqualTo("auth_user");
+        assertThat(config.getAuthPassword()).isEqualTo("auth_password");
+        assertThat(config.getResolveRuri()).isTrue();
+        assertThat(config.getRxDtmfFormatId()).isEqualTo(1);
+        assertThat(config.getTxDtmfFormatId()).isEqualTo(1);
+        assertThat(config.getSstEnabled()).isFalse();
+        assertThat(config.getSstMinTimer()).isEqualTo(600);
+        assertThat(config.getSstMaxTimer()).isEqualTo(900);
+        assertThat(config.getSstAccept501()).isTrue();
+        assertThat(config.getSstRefreshMethodId()).isEqualTo(1);
+        assertThat(config.getSipTimerB()).isEqualTo(8000);
+        assertThat(config.getDnsSrvFailoverTimer()).isEqualTo(2000);
+        assertThat(config.getRtpPing()).isFalse();
+        assertThat(config.getForceSymmetricRtp()).isFalse();
+        assertThat(config.getMaxTransfers()).isEqualTo(2);
+        assertThat(config.getMax30xRedirects()).isEqualTo(5);
+        assertThat(config.getMediaEncryptionMode()).isEqualTo("disabled");
+        assertThat(config.getStirShakenMode()).isEqualTo("disabled");
+        assertThat(config.getAllowedRtpIps()).isNull();
     }
 
     @Test
