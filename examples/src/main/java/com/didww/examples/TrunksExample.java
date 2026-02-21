@@ -4,6 +4,7 @@ import com.didww.sdk.DidwwClient;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.resource.Pop;
 import com.didww.sdk.resource.VoiceInTrunk;
+import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.configuration.SipConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
 import com.didww.sdk.resource.enums.Codec;
@@ -63,6 +64,24 @@ public class TrunksExample {
 
         // Delete trunk
         client.voiceInTrunks().delete(created.getId());
-        System.out.println("Trunk deleted");
+        System.out.println("SIP trunk deleted");
+
+        // --- Create a PSTN trunk ---
+        VoiceInTrunk pstnTrunk = new VoiceInTrunk();
+        pstnTrunk.setName("My PSTN Trunk " + UUID.randomUUID().toString().substring(0, 8));
+        pstnTrunk.setRingingTimeout(30);
+
+        PstnConfiguration pstn = new PstnConfiguration();
+        pstn.setDst("12125551234");
+        pstnTrunk.setConfiguration(pstn);
+
+        VoiceInTrunk createdPstn = client.voiceInTrunks().create(pstnTrunk).getData();
+        System.out.println("Created PSTN trunk: " + createdPstn.getId() + " - " + createdPstn.getName());
+        System.out.println("  Config type: " + createdPstn.getConfiguration().getType());
+        System.out.println("  DST: " + ((PstnConfiguration) createdPstn.getConfiguration()).getDst());
+
+        // Delete PSTN trunk
+        client.voiceInTrunks().delete(createdPstn.getId());
+        System.out.println("PSTN trunk deleted");
     }
 }
