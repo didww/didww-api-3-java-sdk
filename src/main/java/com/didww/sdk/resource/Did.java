@@ -159,6 +159,7 @@ public class Did extends BaseResource {
 
     public void setVoiceInTrunk(VoiceInTrunk voiceInTrunk) {
         this.voiceInTrunk = voiceInTrunk;
+        this.voiceInTrunkGroup = null;
     }
 
     public VoiceInTrunkGroup getVoiceInTrunkGroup() {
@@ -167,6 +168,7 @@ public class Did extends BaseResource {
 
     public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {
         this.voiceInTrunkGroup = voiceInTrunkGroup;
+        this.voiceInTrunk = null;
     }
 
     public CapacityPool getCapacityPool() {
