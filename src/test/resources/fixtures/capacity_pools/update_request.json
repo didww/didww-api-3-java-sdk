@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": "f288d07c-e2fc-4ae6-9837-b18fb469c324",
+    "type": "capacity_pools",
+    "attributes": {
+      "total_channels_count": 25
+    }
+  }
+}

@@ -45,4 +45,26 @@ class CapacityPoolTest extends BaseTest {
         assertThat(pool.getName()).isEqualTo("Standard");
         assertThat(pool.getRenewDate()).isEqualTo("2019-01-21");
     }
+
+    @Test
+    void testUpdateCapacityPool() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/capacity_pools/f288d07c-e2fc-4ae6-9837-b18fb469c324"))
+                .withRequestBody(equalToJson(loadFixture("capacity_pools/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("capacity_pools/update.json"))));
+
+        CapacityPool pool = new CapacityPool();
+        pool.setId("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+        pool.setTotalChannelsCount(25);
+
+        ApiResponse<CapacityPool> response = client.capacityPools().update(pool);
+        CapacityPool updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+        assertThat(updated.getName()).isEqualTo("Standard");
+        assertThat(updated.getTotalChannelsCount()).isEqualTo(25);
+        assertThat(updated.getAssignedChannelsCount()).isEqualTo(24);
+    }
 }
