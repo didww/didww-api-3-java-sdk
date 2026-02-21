@@ -5,6 +5,9 @@ import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.resource.Pop;
 import com.didww.sdk.resource.VoiceInTrunk;
 import com.didww.sdk.resource.configuration.SipConfiguration;
+import com.didww.sdk.resource.enums.CliFormat;
+import com.didww.sdk.resource.enums.Codec;
+import com.didww.sdk.resource.enums.TransportProtocol;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,15 +34,15 @@ public class TrunksExample {
         newTrunk.setName("My SIP Trunk " + suffix);
         newTrunk.setPriority(1);
         newTrunk.setWeight(100);
-        newTrunk.setCliFormat("e164");
+        newTrunk.setCliFormat(CliFormat.E164);
         newTrunk.setRingingTimeout(30);
         newTrunk.setCapacityLimit(10);
 
         SipConfiguration sip = new SipConfiguration();
         sip.setHost("sip.example.com");
         sip.setPort(5060);
-        sip.setCodecIds(Arrays.asList(9, 10));
-        sip.setTransportProtocolId(1);
+        sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
+        sip.setTransportProtocolId(TransportProtocol.UDP);
         newTrunk.setConfiguration(sip);
 
         // Set POP relationship
