@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -17,10 +18,15 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/index.json"))));
 
-        ApiResponse<List<Did>> response = client.dids().list();
+        QueryParams params = QueryParams.builder()
+                .include("order")
+                .build();
+        ApiResponse<List<Did>> response = client.dids().list(params);
         List<Did> dids = response.getData();
 
         assertThat(dids).isNotEmpty();
+        assertThat(dids.get(0).getOrder()).isNotNull();
+        assertThat(dids.get(0).getOrder().getReference()).isEqualTo("TZO-560180");
     }
 
     @Test
@@ -35,8 +41,13 @@ class DidTest extends BaseTest {
         Did did = response.getData();
 
         assertThat(did.getNumber()).isEqualTo("16091609123456797");
-        assertThat(did.getBlocked()).isEqualTo(false);
+        assertThat(did.getBlocked()).isFalse();
         assertThat(did.getCapacityLimit()).isEqualTo(2);
         assertThat(did.getDescription()).isEqualTo("something");
+        assertThat(did.getTerminated()).isFalse();
+        assertThat(did.getAwaitingRegistration()).isFalse();
+        assertThat(did.getPendingRemoval()).isFalse();
+        assertThat(did.getChannelsIncludedCount()).isEqualTo(0);
+        assertThat(did.getDedicatedChannelsCount()).isEqualTo(0);
     }
 }

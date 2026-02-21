@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -39,23 +40,24 @@ class VoiceInTrunkGroupTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_in_trunk_groups/create.json"))));
 
-        VoiceInTrunk trunk1 = new VoiceInTrunk();
-        trunk1.setId("7c15bca2-7f17-46fb-9486-7e2a17158c7e");
-
-        VoiceInTrunk trunk2 = new VoiceInTrunk();
-        trunk2.setId("b07a4cab-48c6-4b3a-9670-11b90b81bdef");
-
         VoiceInTrunkGroup group = new VoiceInTrunkGroup();
         group.setName("trunk group sample with 2 trunks");
         group.setCapacityLimit(1000);
-        group.setVoiceInTrunks(Arrays.asList(trunk1, trunk2));
+        group.setVoiceInTrunks(Arrays.asList(
+                VoiceInTrunk.build("7c15bca2-7f17-46fb-9486-7e2a17158c7e"),
+                VoiceInTrunk.build("b07a4cab-48c6-4b3a-9670-11b90b81bdef")
+        ));
 
-        ApiResponse<VoiceInTrunkGroup> response = client.voiceInTrunkGroups().create(group);
+        QueryParams params = QueryParams.builder()
+                .include("trunks")
+                .build();
+        ApiResponse<VoiceInTrunkGroup> response = client.voiceInTrunkGroups().create(group, params);
         VoiceInTrunkGroup created = response.getData();
 
         assertThat(created.getId()).isEqualTo("b2319703-ce6c-480d-bb53-614e7abcfc96");
         assertThat(created.getName()).isEqualTo("trunk group sample with 2 trunks");
         assertThat(created.getCapacityLimit()).isEqualTo(1000);
+        assertThat(created.getVoiceInTrunks()).hasSize(2);
     }
 
     @Test

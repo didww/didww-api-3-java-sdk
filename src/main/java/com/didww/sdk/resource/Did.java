@@ -9,6 +9,10 @@ import java.time.OffsetDateTime;
 @Type("dids")
 public class Did extends BaseResource {
 
+    public static Did build(String id) {
+        return BaseResource.build(Did.class, id);
+    }
+
     @JsonProperty(value = "number", access = JsonProperty.Access.WRITE_ONLY)
     private String number;
 
@@ -30,6 +34,9 @@ public class Did extends BaseResource {
     @JsonProperty("capacity_limit")
     private Integer capacityLimit;
 
+    @JsonProperty(value = "channels_included_count", access = JsonProperty.Access.WRITE_ONLY)
+    private Integer channelsIncludedCount;
+
     @JsonProperty("dedicated_channels_count")
     private Integer dedicatedChannelsCount;
 
@@ -41,9 +48,6 @@ public class Did extends BaseResource {
 
     @JsonProperty("billing_cycles_count")
     private Integer billingCyclesCount;
-
-    @JsonProperty(value = "channels_included_count", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer channelsIncludedCount;
 
     @Relationship("order")
     private Order order;
@@ -110,6 +114,10 @@ public class Did extends BaseResource {
         this.capacityLimit = capacityLimit;
     }
 
+    public Integer getChannelsIncludedCount() {
+        return channelsIncludedCount;
+    }
+
     public Integer getDedicatedChannelsCount() {
         return dedicatedChannelsCount;
     }
@@ -134,10 +142,6 @@ public class Did extends BaseResource {
         this.billingCyclesCount = billingCyclesCount;
     }
 
-    public Integer getChannelsIncludedCount() {
-        return channelsIncludedCount;
-    }
-
     public Order getOrder() {
         return order;
     }
@@ -152,6 +156,7 @@ public class Did extends BaseResource {
 
     public void setVoiceInTrunk(VoiceInTrunk voiceInTrunk) {
         this.voiceInTrunk = voiceInTrunk;
+        this.voiceInTrunkGroup = null;
     }
 
     public VoiceInTrunkGroup getVoiceInTrunkGroup() {
@@ -160,6 +165,7 @@ public class Did extends BaseResource {
 
     public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {
         this.voiceInTrunkGroup = voiceInTrunkGroup;
+        this.voiceInTrunk = null;
     }
 
     public CapacityPool getCapacityPool() {

@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.IdentityType;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,10 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/index.json"))));
 
-        ApiResponse<List<Identity>> response = client.identities().list();
+        QueryParams params = QueryParams.builder()
+                .include("country", "addresses", "proofs", "permanent_documents")
+                .build();
+        ApiResponse<List<Identity>> response = client.identities().list(params);
         List<Identity> identities = response.getData();
 
         assertThat(identities).isNotEmpty();
@@ -30,6 +34,9 @@ class IdentityTest extends BaseTest {
         assertThat(identities.get(0).getFirstName()).isEqualTo("John");
         assertThat(identities.get(0).getLastName()).isEqualTo("Doe");
         assertThat(identities.get(0).getIdentityType()).isEqualTo(IdentityType.PERSONAL);
+        assertThat(identities.get(0).getCountry()).isNotNull();
+        assertThat(identities.get(0).getCountry().getName()).isEqualTo("United States");
+        assertThat(identities.get(0).getCountry().getIso()).isEqualTo("US");
     }
 
     @Test
@@ -41,8 +48,7 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/create.json"))));
 
-        Country country = new Country();
-        country.setId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
 
         Identity identity = new Identity();
         identity.setFirstName("John");
@@ -59,13 +65,19 @@ class IdentityTest extends BaseTest {
         identity.setExternalReferenceId("111");
         identity.setCountry(country);
 
-        ApiResponse<Identity> response = client.identities().create(identity);
+        QueryParams createParams = QueryParams.builder()
+                .include("country")
+                .build();
+        ApiResponse<Identity> response = client.identities().create(identity, createParams);
         Identity created = response.getData();
 
         assertThat(created.getId()).isEqualTo("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
         assertThat(created.getFirstName()).isEqualTo("John");
         assertThat(created.getIdentityType()).isEqualTo(IdentityType.BUSINESS);
         assertThat(created.getVerified()).isFalse();
+        assertThat(created.getCountry()).isNotNull();
+        assertThat(created.getCountry().getName()).isEqualTo("United States");
+        assertThat(created.getCountry().getIso()).isEqualTo("US");
     }
 
     @Test

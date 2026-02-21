@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,10 @@ class AddressTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("addresses/index.json"))));
 
-        ApiResponse<List<Address>> response = client.addresses().list();
+        QueryParams params = QueryParams.builder()
+                .include("country", "identity", "proofs", "area", "city")
+                .build();
+        ApiResponse<List<Address>> response = client.addresses().list(params);
         List<Address> addresses = response.getData();
 
         assertThat(addresses).isNotEmpty();
@@ -29,6 +33,9 @@ class AddressTest extends BaseTest {
         assertThat(addresses.get(0).getAddress()).isEqualTo("literurna 12");
         assertThat(addresses.get(0).getDescription()).isEqualTo("1");
         assertThat(addresses.get(0).getVerified()).isFalse();
+        assertThat(addresses.get(0).getCountry()).isNotNull();
+        assertThat(addresses.get(0).getCountry().getName()).isEqualTo("Ukraine");
+        assertThat(addresses.get(0).getCountry().getIso()).isEqualTo("UA");
     }
 
     @Test
@@ -40,11 +47,8 @@ class AddressTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("addresses/create.json"))));
 
-        Country country = new Country();
-        country.setId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
-
-        Identity identity = new Identity();
-        identity.setId("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
+        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+        Identity identity = Identity.build("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
 
         Address address = new Address();
         address.setCityName("New York");
@@ -54,7 +58,10 @@ class AddressTest extends BaseTest {
         address.setCountry(country);
         address.setIdentity(identity);
 
-        ApiResponse<Address> response = client.addresses().create(address);
+        QueryParams createParams = QueryParams.builder()
+                .include("country")
+                .build();
+        ApiResponse<Address> response = client.addresses().create(address, createParams);
         Address created = response.getData();
 
         assertThat(created.getId()).isEqualTo("bf69bc70-e1c2-442c-9f30-335ee299b663");
@@ -63,6 +70,9 @@ class AddressTest extends BaseTest {
         assertThat(created.getAddress()).isEqualTo("some street");
         assertThat(created.getDescription()).isEqualTo("test address");
         assertThat(created.getVerified()).isFalse();
+        assertThat(created.getCountry()).isNotNull();
+        assertThat(created.getCountry().getName()).isEqualTo("United States");
+        assertThat(created.getCountry().getIso()).isEqualTo("US");
     }
 
     @Test

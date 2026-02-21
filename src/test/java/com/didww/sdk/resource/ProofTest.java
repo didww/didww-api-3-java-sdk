@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -20,17 +21,17 @@ class ProofTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("proofs/create.json"))));
 
-        ProofType proofType = new ProofType();
-        proofType.setId("19cd7b22-559b-41d4-99c9-7ad7ad63d5d1");
-
-        EncryptedFile encryptedFile = new EncryptedFile();
-        encryptedFile.setId("254b3c2d-c40c-4ff7-93b1-a677aee7fa10");
+        ProofType proofType = ProofType.build("19cd7b22-559b-41d4-99c9-7ad7ad63d5d1");
+        EncryptedFile encryptedFile = EncryptedFile.build("254b3c2d-c40c-4ff7-93b1-a677aee7fa10");
 
         Proof proof = new Proof();
         proof.setProofType(proofType);
         proof.setFiles(Collections.singletonList(encryptedFile));
 
-        ApiResponse<Proof> response = client.proofs().create(proof);
+        QueryParams createParams = QueryParams.builder()
+                .include("proof_type")
+                .build();
+        ApiResponse<Proof> response = client.proofs().create(proof, createParams);
         Proof created = response.getData();
 
         assertThat(created.getId()).isEqualTo("ed46925b-a830-482d-917d-015858cf7ab9");

@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -35,10 +36,16 @@ class AreaTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("areas/show.json"))));
 
-        ApiResponse<Area> response = client.areas().find("ab2adc18-7c94-42d9-bdde-b28dfc373a22");
+        QueryParams params = QueryParams.builder()
+                .include("country")
+                .build();
+        ApiResponse<Area> response = client.areas().find("ab2adc18-7c94-42d9-bdde-b28dfc373a22", params);
         Area area = response.getData();
 
         assertThat(area.getId()).isEqualTo("ab2adc18-7c94-42d9-bdde-b28dfc373a22");
         assertThat(area.getName()).isEqualTo("Tuscany");
+        assertThat(area.getCountry()).isNotNull();
+        assertThat(area.getCountry().getName()).isEqualTo("Italy");
+        assertThat(area.getCountry().getIso()).isEqualTo("IT");
     }
 }

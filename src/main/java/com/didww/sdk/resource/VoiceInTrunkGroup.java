@@ -10,6 +10,10 @@ import java.util.List;
 @Type("voice_in_trunk_groups")
 public class VoiceInTrunkGroup extends BaseResource {
 
+    public static VoiceInTrunkGroup build(String id) {
+        return BaseResource.build(VoiceInTrunkGroup.class, id);
+    }
+
     @JsonProperty("name")
     private String name;
 

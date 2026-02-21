@@ -14,6 +14,10 @@ import java.util.List;
 @Type("voice_out_trunks")
 public class VoiceOutTrunk extends BaseResource {
 
+    public static VoiceOutTrunk build(String id) {
+        return BaseResource.build(VoiceOutTrunk.class, id);
+    }
+
     @JsonProperty("name")
     private String name;
 

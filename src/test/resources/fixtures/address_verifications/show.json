@@ -1,0 +1,32 @@
+{
+  "data": {
+    "id": "c8e004b0-87ec-4987-b4fb-ee89db099f0e",
+    "type": "address_verifications",
+    "attributes": {
+      "service_description": null,
+      "callback_url": null,
+      "callback_method": null,
+      "status": "Approved",
+      "reject_reasons": null,
+      "created_at": "2020-09-15T06:38:12.650Z",
+      "reference": "SHB-485120"
+    },
+    "relationships": {
+      "dids": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e/relationships/dids",
+          "related": "https://sandbox-api.didww.com/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e/dids"
+        }
+      },
+      "address": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e/relationships/address",
+          "related": "https://sandbox-api.didww.com/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e/address"
+        }
+      }
+    }
+  },
+  "meta": {
+    "api_version": "2022-05-10"
+  }
+}

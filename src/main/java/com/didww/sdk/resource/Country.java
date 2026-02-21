@@ -6,6 +6,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("countries")
 public class Country extends BaseResource {
 
+    public static Country build(String id) {
+        return BaseResource.build(Country.class, id);
+    }
+
     @JsonProperty("name")
     private String name;
 

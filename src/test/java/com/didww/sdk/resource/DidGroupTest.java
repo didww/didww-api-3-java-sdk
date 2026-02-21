@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -31,11 +32,22 @@ class DidGroupTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("did_groups/show.json"))));
 
-        ApiResponse<DidGroup> response = client.didGroups().find("2187c36d-28fb-436f-8861-5a0f5b5a3ee1");
+        QueryParams params = QueryParams.builder()
+                .include("country", "region", "city", "did_group_type", "stock_keeping_units")
+                .build();
+        ApiResponse<DidGroup> response = client.didGroups().find("2187c36d-28fb-436f-8861-5a0f5b5a3ee1", params);
         DidGroup didGroup = response.getData();
 
         assertThat(didGroup.getPrefix()).isEqualTo("241");
         assertThat(didGroup.getAreaName()).isEqualTo("Aachen");
         assertThat(didGroup.getIsMetered()).isEqualTo(false);
+        assertThat(didGroup.getCountry()).isNotNull();
+        assertThat(didGroup.getCountry().getName()).isEqualTo("Germany");
+        assertThat(didGroup.getCity()).isNotNull();
+        assertThat(didGroup.getCity().getName()).isEqualTo("Aachen");
+        assertThat(didGroup.getDidGroupType()).isNotNull();
+        assertThat(didGroup.getDidGroupType().getName()).isEqualTo("Local");
+        assertThat(didGroup.getRegion()).isNull();
+        assertThat(didGroup.getStockKeepingUnits()).hasSize(2);
     }
 }

@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -33,10 +34,15 @@ class DidReservationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("did_reservations/show.json"))));
 
-        ApiResponse<DidReservation> response = client.didReservations().find("fd38d3ff-80cf-4e67-a605-609a2884a5c4");
+        QueryParams params = QueryParams.builder()
+                .include("available_did.did_group.stock_keeping_units")
+                .build();
+        ApiResponse<DidReservation> response = client.didReservations().find("fd38d3ff-80cf-4e67-a605-609a2884a5c4", params);
         DidReservation didReservation = response.getData();
 
         assertThat(didReservation.getDescription()).isEqualTo("DIDWW");
+        assertThat(didReservation.getAvailableDid()).isNotNull();
+        assertThat(didReservation.getAvailableDid().getNumber()).isEqualTo("19492033398");
     }
 
     @Test
@@ -48,8 +54,7 @@ class DidReservationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("did_reservations/create.json"))));
 
-        AvailableDid availableDid = new AvailableDid();
-        availableDid.setId("857d1462-5f43-4238-b007-ff05f282e41b");
+        AvailableDid availableDid = AvailableDid.build("857d1462-5f43-4238-b007-ff05f282e41b");
 
         DidReservation newReservation = new DidReservation();
         newReservation.setDescription("DIDWW");

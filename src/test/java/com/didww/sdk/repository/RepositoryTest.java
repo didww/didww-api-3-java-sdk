@@ -35,8 +35,7 @@ class RepositoryTest extends BaseTest {
 
     @Test
     void testGetIdViaBaseResource() {
-        VoiceInTrunk trunk = new VoiceInTrunk();
-        trunk.setId("test-uuid-123");
+        VoiceInTrunk trunk = VoiceInTrunk.build("test-uuid-123");
 
         BaseResource resource = trunk;
         assertThat(resource.getId()).isEqualTo("test-uuid-123");
@@ -53,8 +52,7 @@ class RepositoryTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(fixture)));
 
-        VoiceInTrunk trunk = new VoiceInTrunk();
-        trunk.setId(id);
+        VoiceInTrunk trunk = VoiceInTrunk.build(id);
         trunk.setName("updated");
 
         VoiceInTrunk updated = client.voiceInTrunks().update(trunk).getData();

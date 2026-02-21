@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 
@@ -20,21 +21,19 @@ class PermanentSupportingDocumentTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("permanent_supporting_documents/create.json"))));
 
-        Identity identity = new Identity();
-        identity.setId("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
-
-        SupportingDocumentTemplate template = new SupportingDocumentTemplate();
-        template.setId("4199435f-646e-4e9d-a143-8f3b972b10c5");
-
-        EncryptedFile encryptedFile = new EncryptedFile();
-        encryptedFile.setId("254b3c2d-c40c-4ff7-93b1-a677aee7fa10");
+        Identity identity = Identity.build("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
+        SupportingDocumentTemplate template = SupportingDocumentTemplate.build("4199435f-646e-4e9d-a143-8f3b972b10c5");
+        EncryptedFile encryptedFile = EncryptedFile.build("254b3c2d-c40c-4ff7-93b1-a677aee7fa10");
 
         PermanentSupportingDocument doc = new PermanentSupportingDocument();
         doc.setIdentity(identity);
         doc.setTemplate(template);
         doc.setFiles(Collections.singletonList(encryptedFile));
 
-        ApiResponse<PermanentSupportingDocument> response = client.permanentSupportingDocuments().create(doc);
+        QueryParams createParams = QueryParams.builder()
+                .include("template")
+                .build();
+        ApiResponse<PermanentSupportingDocument> response = client.permanentSupportingDocuments().create(doc, createParams);
         PermanentSupportingDocument created = response.getData();
 
         assertThat(created.getId()).isEqualTo("19510da3-c07e-4fa9-a696-6b9ab89cc172");

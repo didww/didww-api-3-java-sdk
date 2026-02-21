@@ -12,6 +12,10 @@ import java.util.Map;
 @Type("exports")
 public class Export extends BaseResource {
 
+    public static Export build(String id) {
+        return BaseResource.build(Export.class, id);
+    }
+
     @JsonProperty("export_type")
     private ExportType exportType;
 

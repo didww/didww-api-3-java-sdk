@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
 import java.util.List;
@@ -31,9 +32,15 @@ class AvailableDidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("available_dids/show.json"))));
 
-        ApiResponse<AvailableDid> response = client.availableDids().find("0b76223b-9625-412f-b0f3-330551473e7e");
+        QueryParams params = QueryParams.builder()
+                .include("did_group.stock_keeping_units")
+                .build();
+        ApiResponse<AvailableDid> response = client.availableDids().find("0b76223b-9625-412f-b0f3-330551473e7e", params);
         AvailableDid availableDid = response.getData();
 
         assertThat(availableDid.getNumber()).isEqualTo("16169886810");
+        assertThat(availableDid.getDidGroup()).isNotNull();
+        assertThat(availableDid.getDidGroup().getPrefix()).isEqualTo("616");
+        assertThat(availableDid.getDidGroup().getStockKeepingUnits()).hasSize(2);
     }
 }

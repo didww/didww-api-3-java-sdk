@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.AddressVerificationStatus;
 import com.didww.sdk.resource.enums.CallbackMethod;
@@ -22,7 +23,10 @@ class AddressVerificationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("address_verifications/index.json"))));
 
-        ApiResponse<List<AddressVerification>> response = client.addressVerifications().list();
+        QueryParams params = QueryParams.builder()
+                .include("address", "dids")
+                .build();
+        ApiResponse<List<AddressVerification>> response = client.addressVerifications().list(params);
         List<AddressVerification> verifications = response.getData();
 
         assertThat(verifications).isNotEmpty();
@@ -30,6 +34,24 @@ class AddressVerificationTest extends BaseTest {
         assertThat(verifications.get(0).getCallbackUrl()).isEqualTo("http://example.com");
         assertThat(verifications.get(0).getCallbackMethod()).isEqualTo(CallbackMethod.GET);
         assertThat(verifications.get(0).getStatus()).isEqualTo(AddressVerificationStatus.PENDING);
+        assertThat(verifications.get(0).getAddress()).isNotNull();
+        assertThat(verifications.get(0).getAddress().getCityName()).isEqualTo("Chicago");
+    }
+
+    @Test
+    void testFindAddressVerification() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("address_verifications/show.json"))));
+
+        ApiResponse<AddressVerification> response = client.addressVerifications().find("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
+        AddressVerification av = response.getData();
+
+        assertThat(av.getId()).isEqualTo("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
+        assertThat(av.getStatus()).isEqualTo(AddressVerificationStatus.APPROVED);
+        assertThat(av.getReference()).isEqualTo("SHB-485120");
     }
 
     @Test
@@ -41,11 +63,8 @@ class AddressVerificationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("address_verifications/create.json"))));
 
-        Address address = new Address();
-        address.setId("d3414687-40f4-4346-a267-c2c65117d28c");
-
-        Did did = new Did();
-        did.setId("a9d64c02-4486-4acb-a9a1-be4c81ff0659");
+        Address address = Address.build("d3414687-40f4-4346-a267-c2c65117d28c");
+        Did did = Did.build("a9d64c02-4486-4acb-a9a1-be4c81ff0659");
 
         AddressVerification verification = new AddressVerification();
         verification.setCallbackUrl("http://example.com");
@@ -53,12 +72,17 @@ class AddressVerificationTest extends BaseTest {
         verification.setAddress(address);
         verification.setDids(Collections.singletonList(did));
 
-        ApiResponse<AddressVerification> response = client.addressVerifications().create(verification);
+        QueryParams createParams = QueryParams.builder()
+                .include("address")
+                .build();
+        ApiResponse<AddressVerification> response = client.addressVerifications().create(verification, createParams);
         AddressVerification created = response.getData();
 
         assertThat(created.getId()).isEqualTo("78182ef2-8377-41cd-89e1-26e8266c9c94");
         assertThat(created.getCallbackUrl()).isEqualTo("http://example.com");
         assertThat(created.getCallbackMethod()).isEqualTo(CallbackMethod.GET);
         assertThat(created.getStatus()).isEqualTo(AddressVerificationStatus.PENDING);
+        assertThat(created.getAddress()).isNotNull();
+        assertThat(created.getAddress().getCityName()).isEqualTo("Chicago");
     }
 }

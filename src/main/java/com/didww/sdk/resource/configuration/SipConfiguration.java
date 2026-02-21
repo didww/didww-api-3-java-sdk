@@ -92,6 +92,9 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonProperty("max_30x_redirects")
     private Integer max30xRedirects;
 
+    @JsonProperty("allowed_rtp_ips")
+    private List<String> allowedRtpIps;
+
     @Override
     @JsonIgnore
     public String getType() {
@@ -320,5 +323,13 @@ public class SipConfiguration extends TrunkConfiguration {
 
     public void setMax30xRedirects(Integer max30xRedirects) {
         this.max30xRedirects = max30xRedirects;
+    }
+
+    public List<String> getAllowedRtpIps() {
+        return allowedRtpIps;
+    }
+
+    public void setAllowedRtpIps(List<String> allowedRtpIps) {
+        this.allowedRtpIps = allowedRtpIps;
     }
 }

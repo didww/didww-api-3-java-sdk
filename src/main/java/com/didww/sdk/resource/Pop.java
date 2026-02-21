@@ -6,6 +6,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("pops")
 public class Pop extends BaseResource {
 
+    public static Pop build(String id) {
+        return BaseResource.build(Pop.class, id);
+    }
+
     @JsonProperty("name")
     private String name;
 

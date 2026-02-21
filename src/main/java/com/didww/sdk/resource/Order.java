@@ -16,6 +16,10 @@ import java.util.List;
 @Type("orders")
 public class Order extends BaseResource {
 
+    public static Order build(String id) {
+        return BaseResource.build(Order.class, id);
+    }
+
     @JsonProperty(value = "amount", access = JsonProperty.Access.WRITE_ONLY)
     private Double amount;
 

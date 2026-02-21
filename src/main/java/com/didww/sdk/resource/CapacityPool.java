@@ -10,6 +10,10 @@ import java.util.List;
 @Type("capacity_pools")
 public class CapacityPool extends BaseResource {
 
+    public static CapacityPool build(String id) {
+        return BaseResource.build(CapacityPool.class, id);
+    }
+
     @JsonProperty(value = "name", access = JsonProperty.Access.WRITE_ONLY)
     private String name;
 

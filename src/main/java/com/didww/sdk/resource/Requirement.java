@@ -1,5 +1,6 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.AreaLevel;
 import com.didww.sdk.resource.enums.IdentityType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
@@ -10,17 +11,21 @@ import java.util.List;
 @Type("requirements")
 public class Requirement extends BaseResource {
 
+    public static Requirement build(String id) {
+        return BaseResource.build(Requirement.class, id);
+    }
+
     @JsonProperty("identity_type")
     private IdentityType identityType;
 
     @JsonProperty("personal_area_level")
-    private String personalAreaLevel;
+    private AreaLevel personalAreaLevel;
 
     @JsonProperty("business_area_level")
-    private String businessAreaLevel;
+    private AreaLevel businessAreaLevel;
 
     @JsonProperty("address_area_level")
-    private String addressAreaLevel;
+    private AreaLevel addressAreaLevel;
 
     @JsonProperty("personal_proof_qty")
     private Integer personalProofQty;
@@ -74,15 +79,15 @@ public class Requirement extends BaseResource {
         return identityType;
     }
 
-    public String getPersonalAreaLevel() {
+    public AreaLevel getPersonalAreaLevel() {
         return personalAreaLevel;
     }
 
-    public String getBusinessAreaLevel() {
+    public AreaLevel getBusinessAreaLevel() {
         return businessAreaLevel;
     }
 
-    public String getAddressAreaLevel() {
+    public AreaLevel getAddressAreaLevel() {
         return addressAreaLevel;
     }
 

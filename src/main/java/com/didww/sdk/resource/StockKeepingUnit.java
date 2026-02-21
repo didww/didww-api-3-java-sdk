@@ -6,6 +6,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("stock_keeping_units")
 public class StockKeepingUnit extends BaseResource {
 
+    public static StockKeepingUnit build(String id) {
+        return BaseResource.build(StockKeepingUnit.class, id);
+    }
+
     @JsonProperty("setup_price")
     private Double setupPrice;
 

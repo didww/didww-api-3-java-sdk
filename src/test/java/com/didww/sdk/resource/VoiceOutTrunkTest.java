@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
@@ -38,7 +39,10 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/show.json"))));
 
-        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().find("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+        QueryParams params = QueryParams.builder()
+                .include("dids", "default_did")
+                .build();
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().find("425ce763-a3a9-49b4-af5b-ada1a65c8864", params);
         VoiceOutTrunk trunk = response.getData();
 
         assertThat(trunk.getName()).isEqualTo("test");
@@ -53,6 +57,13 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(trunk.getThresholdReached()).isFalse();
         assertThat(trunk.getThresholdAmount()).isEqualTo("200.0");
         assertThat(trunk.getUsername()).isEqualTo("dpjgwbbac9");
+        assertThat(trunk.getPassword()).isEqualTo("z0hshvbcy7");
+        assertThat(trunk.getCallbackUrl()).isNull();
+        assertThat(trunk.getDstPrefixes()).containsExactly("370");
+        assertThat(trunk.getAllowedRtpIps()).isNull();
+        assertThat(trunk.getDids()).hasSize(2);
+        assertThat(trunk.getDefaultDid()).isNotNull();
+        assertThat(trunk.getDefaultDid().getNumber()).isEqualTo("37061498222");
     }
 
     @Test
@@ -64,8 +75,7 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/create.json"))));
 
-        Did did = new Did();
-        did.setId("7a028c32-e6b6-4c86-bf01-90f901b37012");
+        Did did = Did.build("7a028c32-e6b6-4c86-bf01-90f901b37012");
 
         VoiceOutTrunk trunk = new VoiceOutTrunk();
         trunk.setName("php-test");
