@@ -44,7 +44,7 @@ class AddressVerificationTest extends BaseTest {
         AddressVerification av = response.getData();
 
         assertThat(av.getId()).isEqualTo("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
-        assertThat(av.getStatus()).isEqualTo("Approved");
+        assertThat(av.getStatus()).isEqualTo(AddressVerificationStatus.APPROVED);
         assertThat(av.getReference()).isEqualTo("SHB-485120");
     }
 

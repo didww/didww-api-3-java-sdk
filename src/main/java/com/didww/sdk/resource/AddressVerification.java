@@ -37,9 +37,6 @@ public class AddressVerification extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    @JsonProperty(value = "reference", access = JsonProperty.Access.WRITE_ONLY)
-    private String reference;
-
     @Relationship("address")
     private Address address;
 
@@ -84,10 +81,6 @@ public class AddressVerification extends BaseResource {
 
     public OffsetDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public String getReference() {
-        return reference;
     }
 
     public Address getAddress() {

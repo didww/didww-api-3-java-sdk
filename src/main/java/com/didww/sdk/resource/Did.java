@@ -49,9 +49,6 @@ public class Did extends BaseResource {
     @JsonProperty("billing_cycles_count")
     private Integer billingCyclesCount;
 
-    @JsonProperty(value = "channels_included_count", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer channelsIncludedCount;
-
     @Relationship("order")
     private Order order;
 
@@ -143,10 +140,6 @@ public class Did extends BaseResource {
 
     public void setBillingCyclesCount(Integer billingCyclesCount) {
         this.billingCyclesCount = billingCyclesCount;
-    }
-
-    public Integer getChannelsIncludedCount() {
-        return channelsIncludedCount;
     }
 
     public Order getOrder() {
