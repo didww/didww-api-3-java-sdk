@@ -17,6 +17,11 @@ This SDK targets DIDWW API v3 documentation version:
 
 ## Installation
 
+This SDK is distributed via [JitPack](https://jitpack.io/#didww/didww-api-3-java-sdk). JitPack builds the library directly from GitHub, so no manual publishing is required.
+
+Browse all available versions (tags, branches, commits):
+[https://jitpack.io/#didww/didww-api-3-java-sdk](https://jitpack.io/#didww/didww-api-3-java-sdk)
+
 ### Gradle
 
 ```kotlin
@@ -25,11 +30,7 @@ repositories {
 }
 
 dependencies {
-    // branch
-    implementation("com.github.didww:didww-api-3-java-sdk:main-SNAPSHOT")
-
-    // or exact commit
-    // implementation("com.github.didww:didww-api-3-java-sdk:<commit-hash>")
+    implementation("com.github.didww:didww-api-3-java-sdk:1.1.0")
 }
 ```
 
@@ -47,27 +48,21 @@ dependencies {
     <dependency>
         <groupId>com.github.didww</groupId>
         <artifactId>didww-api-3-java-sdk</artifactId>
-        <version>main-SNAPSHOT</version>
+        <version>1.1.0</version>
     </dependency>
 </dependencies>
 ```
 
-### JitPack (no release required)
+### Using a branch or commit
 
-You can consume the SDK directly from GitHub branch/commit via JitPack.
-
-Gradle:
+You can also consume the SDK from a specific branch or commit via JitPack:
 
 ```kotlin
-repositories {
-    maven("https://jitpack.io")
-}
-
 dependencies {
-    // branch
+    // specific branch (append -SNAPSHOT)
     implementation("com.github.didww:didww-api-3-java-sdk:main-SNAPSHOT")
 
-    // or exact commit
+    // specific commit hash
     // implementation("com.github.didww:didww-api-3-java-sdk:<commit-hash>")
 }
 ```
@@ -304,7 +299,9 @@ SharedCapacityGroup created = client.sharedCapacityGroups().create(scg).getData(
 Identity identity = new Identity();
 identity.setFirstName("John");
 identity.setLastName("Doe");
+identity.setPhoneNumber("12125551234");
 identity.setIdentityType("Personal");
+identity.setCountry(country);
 Identity created = client.identities().create(identity).getData();
 ```
 
@@ -315,6 +312,8 @@ Address address = new Address();
 address.setCityName("New York");
 address.setPostalCode("10001");
 address.setAddress("123 Main St");
+address.setIdentity(identity);
+address.setCountry(country);
 Address created = client.addresses().create(address).getData();
 ```
 
@@ -334,6 +333,7 @@ import java.nio.file.Path;
 
 Export export = new Export();
 export.setExportType("cdr_in");
+export.setFilters(Map.of("year", 2025, "month", 1));
 Export created = client.exports().create(export).getData();
 
 // Download the export when completed
@@ -349,7 +349,7 @@ QueryParams params = QueryParams.builder()
     .filter("country.id", "uuid")
     .filter("name", "Arizona")
     .include("country")
-    .sort("-created_at")
+    .sort("name")
     .page(1, 25)
     .build();
 
