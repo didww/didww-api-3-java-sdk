@@ -35,8 +35,13 @@ class DidTest extends BaseTest {
         Did did = response.getData();
 
         assertThat(did.getNumber()).isEqualTo("16091609123456797");
-        assertThat(did.getBlocked()).isEqualTo(false);
+        assertThat(did.getBlocked()).isFalse();
         assertThat(did.getCapacityLimit()).isEqualTo(2);
         assertThat(did.getDescription()).isEqualTo("something");
+        assertThat(did.getTerminated()).isFalse();
+        assertThat(did.getAwaitingRegistration()).isFalse();
+        assertThat(did.getPendingRemoval()).isFalse();
+        assertThat(did.getChannelsIncludedCount()).isEqualTo(0);
+        assertThat(did.getDedicatedChannelsCount()).isEqualTo(0);
     }
 }

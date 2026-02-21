@@ -30,6 +30,9 @@ public class Did extends BaseResource {
     @JsonProperty("capacity_limit")
     private Integer capacityLimit;
 
+    @JsonProperty(value = "channels_included_count", access = JsonProperty.Access.WRITE_ONLY)
+    private Integer channelsIncludedCount;
+
     @JsonProperty("dedicated_channels_count")
     private Integer dedicatedChannelsCount;
 
@@ -108,6 +111,10 @@ public class Did extends BaseResource {
 
     public void setCapacityLimit(Integer capacityLimit) {
         this.capacityLimit = capacityLimit;
+    }
+
+    public Integer getChannelsIncludedCount() {
+        return channelsIncludedCount;
     }
 
     public Integer getDedicatedChannelsCount() {
