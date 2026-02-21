@@ -92,6 +92,15 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonProperty("max_30x_redirects")
     private Integer max30xRedirects;
 
+    @JsonProperty("media_encryption_mode")
+    private String mediaEncryptionMode;
+
+    @JsonProperty("stir_shaken_mode")
+    private String stirShakenMode;
+
+    @JsonProperty("allowed_rtp_ips")
+    private List<String> allowedRtpIps;
+
     @Override
     @JsonIgnore
     public String getType() {
@@ -320,5 +329,29 @@ public class SipConfiguration extends TrunkConfiguration {
 
     public void setMax30xRedirects(Integer max30xRedirects) {
         this.max30xRedirects = max30xRedirects;
+    }
+
+    public String getMediaEncryptionMode() {
+        return mediaEncryptionMode;
+    }
+
+    public void setMediaEncryptionMode(String mediaEncryptionMode) {
+        this.mediaEncryptionMode = mediaEncryptionMode;
+    }
+
+    public String getStirShakenMode() {
+        return stirShakenMode;
+    }
+
+    public void setStirShakenMode(String stirShakenMode) {
+        this.stirShakenMode = stirShakenMode;
+    }
+
+    public List<String> getAllowedRtpIps() {
+        return allowedRtpIps;
+    }
+
+    public void setAllowedRtpIps(List<String> allowedRtpIps) {
+        this.allowedRtpIps = allowedRtpIps;
     }
 }
