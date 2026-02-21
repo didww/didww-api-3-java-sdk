@@ -12,6 +12,10 @@ import java.util.List;
 @Type("identities")
 public class Identity extends BaseResource implements ProofEntity {
 
+    public static Identity build(String id) {
+        return BaseResource.build(Identity.class, id);
+    }
+
     @JsonProperty("first_name")
     private String firstName;
 

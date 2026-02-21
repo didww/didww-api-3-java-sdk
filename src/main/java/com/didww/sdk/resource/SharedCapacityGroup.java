@@ -10,6 +10,10 @@ import java.util.List;
 @Type("shared_capacity_groups")
 public class SharedCapacityGroup extends BaseResource {
 
+    public static SharedCapacityGroup build(String id) {
+        return BaseResource.build(SharedCapacityGroup.class, id);
+    }
+
     @JsonProperty("name")
     private String name;
 

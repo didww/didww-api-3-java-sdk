@@ -55,8 +55,7 @@ class CapacityPoolTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("capacity_pools/update.json"))));
 
-        CapacityPool pool = new CapacityPool();
-        pool.setId("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+        CapacityPool pool = CapacityPool.build("f288d07c-e2fc-4ae6-9837-b18fb469c324");
         pool.setTotalChannelsCount(25);
 
         ApiResponse<CapacityPool> response = client.capacityPools().update(pool);

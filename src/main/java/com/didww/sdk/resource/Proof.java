@@ -10,6 +10,10 @@ import java.util.List;
 @Type("proofs")
 public class Proof extends BaseResource {
 
+    public static Proof build(String id) {
+        return BaseResource.build(Proof.class, id);
+    }
+
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
 

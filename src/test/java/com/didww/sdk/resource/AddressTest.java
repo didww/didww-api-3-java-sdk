@@ -40,11 +40,8 @@ class AddressTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("addresses/create.json"))));
 
-        Country country = new Country();
-        country.setId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
-
-        Identity identity = new Identity();
-        identity.setId("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
+        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+        Identity identity = Identity.build("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
 
         Address address = new Address();
         address.setCityName("New York");

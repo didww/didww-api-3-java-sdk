@@ -7,6 +7,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("areas")
 public class Area extends BaseResource {
 
+    public static Area build(String id) {
+        return BaseResource.build(Area.class, id);
+    }
+
     @JsonProperty("name")
     private String name;
 

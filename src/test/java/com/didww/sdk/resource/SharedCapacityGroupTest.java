@@ -39,8 +39,7 @@ class SharedCapacityGroupTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("shared_capacity_groups/create_6.json"))));
 
-        CapacityPool pool = new CapacityPool();
-        pool.setId("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+        CapacityPool pool = CapacityPool.build("f288d07c-e2fc-4ae6-9837-b18fb469c324");
 
         SharedCapacityGroup group = new SharedCapacityGroup();
         group.setName("php-sdk");

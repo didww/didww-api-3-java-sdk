@@ -6,6 +6,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("requirement_validations")
 public class RequirementValidation extends BaseResource {
 
+    public static RequirementValidation build(String id) {
+        return BaseResource.build(RequirementValidation.class, id);
+    }
+
     @Relationship("requirement")
     private Requirement requirement;
 

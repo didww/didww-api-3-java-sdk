@@ -20,15 +20,9 @@ class RequirementValidationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("requirement_validations/create.json"))));
 
-        Address address = new Address();
-        address.setId("d3414687-40f4-4346-a267-c2c65117d28c");
-
-        Requirement requirement = new Requirement();
-        requirement.setId("aea92b24-a044-4864-9740-89d3e15b65c7");
-
         RequirementValidation validation = new RequirementValidation();
-        validation.setAddress(address);
-        validation.setRequirement(requirement);
+        validation.setAddress(Address.build("d3414687-40f4-4346-a267-c2c65117d28c"));
+        validation.setRequirement(Requirement.build("aea92b24-a044-4864-9740-89d3e15b65c7"));
 
         ApiResponse<RequirementValidation> response = client.requirementValidations().create(validation);
         RequirementValidation created = response.getData();
@@ -45,19 +39,10 @@ class RequirementValidationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("requirement_validations/create_1.json"))));
 
-        Identity identity = new Identity();
-        identity.setId("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
-
-        Address address = new Address();
-        address.setId("d3414687-40f4-4346-a267-c2c65117d28c");
-
-        Requirement requirement = new Requirement();
-        requirement.setId("2efc3427-8ba6-4d50-875d-f2de4a068de8");
-
         RequirementValidation validation = new RequirementValidation();
-        validation.setIdentity(identity);
-        validation.setAddress(address);
-        validation.setRequirement(requirement);
+        validation.setIdentity(Identity.build("5e9df058-50d2-4e34-b0d4-d1746b86f41a"));
+        validation.setAddress(Address.build("d3414687-40f4-4346-a267-c2c65117d28c"));
+        validation.setRequirement(Requirement.build("2efc3427-8ba6-4d50-875d-f2de4a068de8"));
 
         assertThatThrownBy(() -> client.requirementValidations().create(validation))
                 .isInstanceOf(DidwwApiException.class)

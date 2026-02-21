@@ -7,6 +7,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("available_dids")
 public class AvailableDid extends BaseResource {
 
+    public static AvailableDid build(String id) {
+        return BaseResource.build(AvailableDid.class, id);
+    }
+
     @JsonProperty("number")
     private String number;
 

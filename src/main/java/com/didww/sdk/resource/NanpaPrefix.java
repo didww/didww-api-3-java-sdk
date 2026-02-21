@@ -7,6 +7,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("nanpa_prefixes")
 public class NanpaPrefix extends BaseResource {
 
+    public static NanpaPrefix build(String id) {
+        return BaseResource.build(NanpaPrefix.class, id);
+    }
+
     @JsonProperty("npa")
     private String npa;
 

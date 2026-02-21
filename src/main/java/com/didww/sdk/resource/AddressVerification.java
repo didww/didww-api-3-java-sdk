@@ -12,6 +12,10 @@ import java.util.List;
 @Type("address_verifications")
 public class AddressVerification extends BaseResource {
 
+    public static AddressVerification build(String id) {
+        return BaseResource.build(AddressVerification.class, id);
+    }
+
     @JsonProperty("service_description")
     private String serviceDescription;
 

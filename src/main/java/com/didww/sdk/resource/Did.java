@@ -9,6 +9,10 @@ import java.time.OffsetDateTime;
 @Type("dids")
 public class Did extends BaseResource {
 
+    public static Did build(String id) {
+        return BaseResource.build(Did.class, id);
+    }
+
     @JsonProperty(value = "number", access = JsonProperty.Access.WRITE_ONLY)
     private String number;
 

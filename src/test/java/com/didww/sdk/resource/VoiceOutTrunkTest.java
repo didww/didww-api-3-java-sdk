@@ -68,8 +68,7 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/create.json"))));
 
-        Did did = new Did();
-        did.setId("7a028c32-e6b6-4c86-bf01-90f901b37012");
+        Did did = Did.build("7a028c32-e6b6-4c86-bf01-90f901b37012");
 
         VoiceOutTrunk trunk = new VoiceOutTrunk();
         trunk.setName("php-test");

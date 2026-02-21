@@ -9,6 +9,10 @@ import java.time.OffsetDateTime;
 @Type("did_reservations")
 public class DidReservation extends BaseResource {
 
+    public static DidReservation build(String id) {
+        return BaseResource.build(DidReservation.class, id);
+    }
+
     @JsonProperty("description")
     private String description;
 

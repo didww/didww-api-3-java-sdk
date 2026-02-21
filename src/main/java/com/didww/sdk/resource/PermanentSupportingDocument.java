@@ -10,6 +10,10 @@ import java.util.List;
 @Type("permanent_supporting_documents")
 public class PermanentSupportingDocument extends BaseResource {
 
+    public static PermanentSupportingDocument build(String id) {
+        return BaseResource.build(PermanentSupportingDocument.class, id);
+    }
+
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
 

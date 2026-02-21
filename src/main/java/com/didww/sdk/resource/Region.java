@@ -7,6 +7,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("regions")
 public class Region extends BaseResource {
 
+    public static Region build(String id) {
+        return BaseResource.build(Region.class, id);
+    }
+
     @JsonProperty("name")
     private String name;
 

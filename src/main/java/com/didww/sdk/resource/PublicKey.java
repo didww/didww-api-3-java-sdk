@@ -6,6 +6,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("public_keys")
 public class PublicKey extends BaseResource {
 
+    public static PublicKey build(String id) {
+        return BaseResource.build(PublicKey.class, id);
+    }
+
     @JsonProperty("key")
     private String key;
 

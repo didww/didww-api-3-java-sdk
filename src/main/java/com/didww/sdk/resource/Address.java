@@ -10,6 +10,10 @@ import java.util.List;
 @Type("addresses")
 public class Address extends BaseResource implements ProofEntity {
 
+    public static Address build(String id) {
+        return BaseResource.build(Address.class, id);
+    }
+
     @JsonProperty("city_name")
     private String cityName;
 

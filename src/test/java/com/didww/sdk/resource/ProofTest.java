@@ -20,11 +20,8 @@ class ProofTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("proofs/create.json"))));
 
-        ProofType proofType = new ProofType();
-        proofType.setId("19cd7b22-559b-41d4-99c9-7ad7ad63d5d1");
-
-        EncryptedFile encryptedFile = new EncryptedFile();
-        encryptedFile.setId("254b3c2d-c40c-4ff7-93b1-a677aee7fa10");
+        ProofType proofType = ProofType.build("19cd7b22-559b-41d4-99c9-7ad7ad63d5d1");
+        EncryptedFile encryptedFile = EncryptedFile.build("254b3c2d-c40c-4ff7-93b1-a677aee7fa10");
 
         Proof proof = new Proof();
         proof.setProofType(proofType);

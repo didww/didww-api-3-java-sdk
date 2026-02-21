@@ -48,8 +48,7 @@ class DidReservationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("did_reservations/create.json"))));
 
-        AvailableDid availableDid = new AvailableDid();
-        availableDid.setId("857d1462-5f43-4238-b007-ff05f282e41b");
+        AvailableDid availableDid = AvailableDid.build("857d1462-5f43-4238-b007-ff05f282e41b");
 
         DidReservation newReservation = new DidReservation();
         newReservation.setDescription("DIDWW");

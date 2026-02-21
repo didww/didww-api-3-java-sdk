@@ -10,6 +10,10 @@ import java.util.List;
 @Type("did_groups")
 public class DidGroup extends BaseResource {
 
+    public static DidGroup build(String id) {
+        return BaseResource.build(DidGroup.class, id);
+    }
+
     @JsonProperty("area_name")
     private String areaName;
 

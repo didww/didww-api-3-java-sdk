@@ -41,8 +41,7 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/create.json"))));
 
-        Country country = new Country();
-        country.setId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
 
         Identity identity = new Identity();
         identity.setFirstName("John");

@@ -6,6 +6,10 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("qty_based_pricings")
 public class QtyBasedPricing extends BaseResource {
 
+    public static QtyBasedPricing build(String id) {
+        return BaseResource.build(QtyBasedPricing.class, id);
+    }
+
     @JsonProperty("qty")
     private Integer qty;
 
