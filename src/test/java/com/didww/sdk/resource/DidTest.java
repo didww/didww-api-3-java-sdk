@@ -46,7 +46,7 @@ class DidTest extends BaseTest {
         assertThat(did.getDescription()).isEqualTo("something");
         assertThat(did.getTerminated()).isFalse();
         assertThat(did.getAwaitingRegistration()).isFalse();
-        assertThat(did.getPendingRemoval()).isFalse();
+        assertThat(did.getBillingCyclesCount()).isNull();
         assertThat(did.getChannelsIncludedCount()).isEqualTo(0);
         assertThat(did.getDedicatedChannelsCount()).isEqualTo(0);
     }

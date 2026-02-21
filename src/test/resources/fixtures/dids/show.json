@@ -12,7 +12,7 @@
       "number": "16091609123456797",
       "expires_at": "2019-11-27T10:00:04.755Z",
       "channels_included_count": 0,
-      "pending_removal": false,
+      "billing_cycles_count": null,
       "dedicated_channels_count": 0
     },
     "relationships": {

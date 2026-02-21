@@ -25,9 +25,6 @@ public class Did extends BaseResource {
     @JsonProperty("terminated")
     private Boolean terminated;
 
-    @JsonProperty("pending_removal")
-    private Boolean pendingRemoval;
-
     @JsonProperty("description")
     private String description;
 
@@ -88,14 +85,6 @@ public class Did extends BaseResource {
 
     public void setTerminated(Boolean terminated) {
         this.terminated = terminated;
-    }
-
-    public Boolean getPendingRemoval() {
-        return pendingRemoval;
-    }
-
-    public void setPendingRemoval(Boolean pendingRemoval) {
-        this.pendingRemoval = pendingRemoval;
     }
 
     public String getDescription() {
