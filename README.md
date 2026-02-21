@@ -128,6 +128,14 @@ DidwwClient client = DidwwClient.builder()
 ### Read-Only Resources
 
 ```java
+import com.didww.sdk.*;
+import com.didww.sdk.resource.*;
+import com.didww.sdk.http.QueryParams;
+
+DidwwClient client = DidwwClient.builder()
+    .credentials(new DidwwCredentials("YOUR_API_KEY", DidwwEnvironment.SANDBOX))
+    .build();
+
 // Countries
 List<Country> countries = client.countries().list().getData();
 Country country = client.countries().find("uuid").getData();
@@ -150,11 +158,13 @@ List<Pop> pops = client.pops().list().getData();
 // DID Group Types
 List<DidGroupType> types = client.didGroupTypes().list().getData();
 
-// DID Groups
-List<DidGroup> groups = client.didGroups().list().getData();
+// DID Groups (with stock keeping units)
+QueryParams dgParams = QueryParams.builder().include("stock_keeping_units").build();
+List<DidGroup> groups = client.didGroups().list(dgParams).getData();
 
-// Available DIDs
-List<AvailableDid> available = client.availableDids().list().getData();
+// Available DIDs (with DID group and stock keeping units)
+QueryParams adParams = QueryParams.builder().include("did_group.stock_keeping_units").build();
+List<AvailableDid> available = client.availableDids().list(adParams).getData();
 
 // Proof Types
 List<ProofType> proofTypes = client.proofTypes().list().getData();
@@ -190,20 +200,21 @@ client.dids().update(did);
 
 ```java
 import com.didww.sdk.resource.configuration.*;
+import com.didww.sdk.resource.enums.*;
 
 // Create SIP trunk
 VoiceInTrunk trunk = new VoiceInTrunk();
 trunk.setName("My SIP Trunk");
 trunk.setPriority(1);
 trunk.setWeight(100);
-trunk.setCliFormat("e164");
+trunk.setCliFormat(CliFormat.E164);
 trunk.setRingingTimeout(30);
 
 SipConfiguration sip = new SipConfiguration();
 sip.setHost("sip.example.com");
 sip.setPort(5060);
-sip.setCodecIds(Arrays.asList(9, 10));
-sip.setTransportProtocolId(1);
+sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
+sip.setTransportProtocolId(TransportProtocol.UDP);
 trunk.setConfiguration(sip);
 
 VoiceInTrunk created = client.voiceInTrunks().create(trunk).getData();
