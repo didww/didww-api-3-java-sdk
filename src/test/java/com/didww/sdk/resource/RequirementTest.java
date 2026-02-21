@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.AreaLevel;
 import com.didww.sdk.resource.enums.IdentityType;
 import org.junit.jupiter.api.Test;
 
@@ -42,12 +43,12 @@ class RequirementTest extends BaseTest {
 
         assertThat(requirement.getId()).isEqualTo("25d12afe-1ec6-4fe3-9621-b250dd1fb959");
         assertThat(requirement.getIdentityType()).isEqualTo(IdentityType.ANY);
-        assertThat(requirement.getPersonalAreaLevel()).isEqualTo("WorldWide");
+        assertThat(requirement.getPersonalAreaLevel()).isEqualTo(AreaLevel.WORLDWIDE);
         assertThat(requirement.getPersonalProofQty()).isEqualTo(1);
         assertThat(requirement.getServiceDescriptionRequired()).isTrue();
-        assertThat(requirement.getPersonalAreaLevel()).isEqualTo("WorldWide");
-        assertThat(requirement.getBusinessAreaLevel()).isEqualTo("WorldWide");
-        assertThat(requirement.getAddressAreaLevel()).isEqualTo("WorldWide");
+        assertThat(requirement.getPersonalAreaLevel()).isEqualTo(AreaLevel.WORLDWIDE);
+        assertThat(requirement.getBusinessAreaLevel()).isEqualTo(AreaLevel.WORLDWIDE);
+        assertThat(requirement.getAddressAreaLevel()).isEqualTo(AreaLevel.WORLDWIDE);
         assertThat(requirement.getPersonalProofQty()).isEqualTo(1);
         assertThat(requirement.getBusinessProofQty()).isEqualTo(1);
         assertThat(requirement.getAddressProofQty()).isEqualTo(1);
