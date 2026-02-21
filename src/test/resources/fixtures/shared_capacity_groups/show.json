@@ -150,7 +150,7 @@
         "number": "18082068798",
         "expires_at": "2019-01-27T16:44:06.207Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -205,7 +205,7 @@
         "number": "18082068794",
         "expires_at": "2019-01-27T16:45:15.957Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -260,7 +260,7 @@
         "number": "542323629641",
         "expires_at": "2019-01-27T16:43:05.192Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -315,7 +315,7 @@
         "number": "542323629643",
         "expires_at": "2019-01-27T16:43:05.159Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -370,7 +370,7 @@
         "number": "18082068799",
         "expires_at": "2019-01-27T16:45:15.958Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -425,7 +425,7 @@
         "number": "14057782140",
         "expires_at": "2019-01-28T10:41:04.529Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -480,7 +480,7 @@
         "number": "16091609123456799",
         "expires_at": "2019-01-27T10:00:04.659Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -535,7 +535,7 @@
         "number": "16091609123456798",
         "expires_at": "2019-01-27T10:00:04.715Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -590,7 +590,7 @@
         "number": "16091609123456795",
         "expires_at": "2019-01-27T09:57:02.119Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -645,7 +645,7 @@
         "number": "16091609123456794",
         "expires_at": "2019-01-27T09:57:02.150Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -700,7 +700,7 @@
         "number": "16091234567",
         "expires_at": "2019-01-27T09:56:02.662Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -755,7 +755,7 @@
         "number": "16091609123456789",
         "expires_at": "2019-01-27T09:56:02.627Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -810,7 +810,7 @@
         "number": "16091609123456790",
         "expires_at": "2019-01-27T09:56:02.559Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -865,7 +865,7 @@
         "number": "16091609123456791",
         "expires_at": "2019-01-27T09:56:02.821Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -920,7 +920,7 @@
         "number": "16091609123456792",
         "expires_at": "2019-01-27T09:56:02.792Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -975,7 +975,7 @@
         "number": "16091609123456793",
         "expires_at": "2019-01-27T09:56:02.759Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -1030,7 +1030,7 @@
         "number": "16091609123456796",
         "expires_at": "2019-01-27T09:57:02.026Z",
         "channels_included_count": 2,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
@@ -1085,7 +1085,7 @@
         "number": "380442213578",
         "expires_at": "2017-06-24T08:04:41.603Z",
         "channels_included_count": 0,
-        "pending_removal": false,
+        "billing_cycles_count": null,
         "dedicated_channels_count": 0
       },
       "relationships": {
