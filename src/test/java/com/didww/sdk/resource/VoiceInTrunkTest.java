@@ -40,13 +40,12 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(trunks).isNotEmpty();
 
         VoiceInTrunk first = trunks.get(0);
-        assertThat(first.getId()).isEqualTo("9cbadd6f-0665-46bc-b3aa-687d22157808");
-        assertThat(first.getName()).isEqualTo("iax2 trunk sample");
+        assertThat(first.getId()).isEqualTo("2b4b1fcf-fe6a-4de9-8a58-7df46820ba13");
+        assertThat(first.getName()).isEqualTo("sample trunk pstn");
         assertThat(first.getPriority()).isEqualTo(1);
         assertThat(first.getWeight()).isEqualTo(65535);
         assertThat(first.getCliFormat()).isEqualTo(CliFormat.E164);
-        assertThat(first.getVoiceInTrunkGroup()).isNotNull();
-        assertThat(first.getVoiceInTrunkGroup().getName()).isEqualTo("sample trunk group");
+        assertThat(first.getVoiceInTrunkGroup()).isNull();
     }
 
     @Test
