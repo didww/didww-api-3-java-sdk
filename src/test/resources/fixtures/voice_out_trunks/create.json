@@ -10,7 +10,7 @@
       "allow_any_did_as_cli": false,
       "status": "active",
       "on_cli_mismatch_action": "replace_cli",
-      "name": "php-test",
+      "name": "java-test",
       "capacity_limit": null,
       "username": "qkut5v4xwm",
       "password": "np34mftrrq",

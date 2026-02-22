@@ -78,7 +78,7 @@ class VoiceOutTrunkTest extends BaseTest {
         Did did = Did.build("7a028c32-e6b6-4c86-bf01-90f901b37012");
 
         VoiceOutTrunk trunk = new VoiceOutTrunk();
-        trunk.setName("php-test");
+        trunk.setName("java-test");
         trunk.setAllowedSipIps(Collections.singletonList("0.0.0.0/0"));
         trunk.setOnCliMismatchAction(OnCliMismatchAction.REPLACE_CLI);
         trunk.setDefaultDid(did);
@@ -88,7 +88,7 @@ class VoiceOutTrunkTest extends BaseTest {
         VoiceOutTrunk created = response.getData();
 
         assertThat(created.getId()).isEqualTo("b60201c1-21f0-4d9a-aafa-0e6d1e12f22e");
-        assertThat(created.getName()).isEqualTo("php-test");
+        assertThat(created.getName()).isEqualTo("java-test");
         assertThat(created.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
     }
 
