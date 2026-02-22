@@ -6,7 +6,7 @@
       "attributes": {
         "prefix": "241",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Aachen",
@@ -56,7 +56,7 @@
       "attributes": {
         "prefix": "334",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Abbeville",
@@ -106,7 +106,7 @@
       "attributes": {
         "prefix": "1224",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Aberdeen",
@@ -156,7 +156,7 @@
       "attributes": {
         "prefix": "744",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Acapulco",
@@ -206,7 +206,7 @@
       "attributes": {
         "prefix": "881",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "A Coruna",
@@ -256,7 +256,7 @@
       "attributes": {
         "prefix": "322",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Adana",
@@ -306,7 +306,7 @@
       "attributes": {
         "prefix": "87",
         "features": [
-          "voice",
+          "voice_in",
           "voice_out"
         ],
         "is_metered": false,
@@ -357,7 +357,7 @@
       "attributes": {
         "prefix": "787",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Aguadilla",
@@ -407,7 +407,7 @@
       "attributes": {
         "prefix": "449",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Aguascalientes",
@@ -457,7 +457,7 @@
       "attributes": {
         "prefix": "289",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Ajax-Pickering",
@@ -507,7 +507,7 @@
       "attributes": {
         "prefix": "63",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Akershus",
@@ -557,7 +557,7 @@
       "attributes": {
         "prefix": "330",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Akron",
@@ -607,7 +607,7 @@
       "attributes": {
         "prefix": "96",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alacant",
@@ -657,7 +657,7 @@
       "attributes": {
         "prefix": "86",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alacant",
@@ -707,7 +707,7 @@
       "attributes": {
         "prefix": "945",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alava",
@@ -757,7 +757,7 @@
       "attributes": {
         "prefix": "967",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Albacete",
@@ -807,7 +807,7 @@
       "attributes": {
         "prefix": "518",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Albany",
@@ -857,7 +857,7 @@
       "attributes": {
         "prefix": "505",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Albuqurque",
@@ -907,7 +907,7 @@
       "attributes": {
         "prefix": "318",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alexandria",
@@ -957,7 +957,7 @@
       "attributes": {
         "prefix": "224",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Algonquin",
@@ -1007,7 +1007,7 @@
       "attributes": {
         "prefix": "626",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alhambra",
@@ -1057,7 +1057,7 @@
       "attributes": {
         "prefix": "303",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Allens Park Lyons",
@@ -1107,7 +1107,7 @@
       "attributes": {
         "prefix": "610",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Allentown",
@@ -1157,7 +1157,7 @@
       "attributes": {
         "prefix": "484",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Allentown",
@@ -1207,7 +1207,7 @@
       "attributes": {
         "prefix": "581",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alma",
@@ -1257,7 +1257,7 @@
       "attributes": {
         "prefix": "36",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Almere",
@@ -1307,7 +1307,7 @@
       "attributes": {
         "prefix": "950",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Almeria",
@@ -1357,7 +1357,7 @@
       "attributes": {
         "prefix": "618",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alton",
@@ -1407,7 +1407,7 @@
       "attributes": {
         "prefix": "1420",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alton",
@@ -1457,7 +1457,7 @@
       "attributes": {
         "prefix": "6560",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Alushta",
@@ -1507,7 +1507,7 @@
       "attributes": {
         "prefix": "20",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Amsterdam",
@@ -1557,7 +1557,7 @@
       "attributes": {
         "prefix": "714",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Anaheim",
@@ -1607,7 +1607,7 @@
       "attributes": {
         "prefix": "289",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Ancaster",
@@ -1657,7 +1657,7 @@
       "attributes": {
         "prefix": "765",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Anderson",
@@ -1707,7 +1707,7 @@
       "attributes": {
         "prefix": "864",
         "features": [
-          "voice",
+          "voice_in",
           "t38"
         ],
         "is_metered": false,
@@ -1758,7 +1758,7 @@
       "attributes": {
         "prefix": "312",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Ankara",
@@ -1808,7 +1808,7 @@
       "attributes": {
         "prefix": "734",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Ann Arbor",
@@ -1858,7 +1858,7 @@
       "attributes": {
         "prefix": "242",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Antalya",
@@ -1908,7 +1908,7 @@
       "attributes": {
         "prefix": "552",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Antofagasta",
@@ -1958,7 +1958,7 @@
       "attributes": {
         "prefix": "3",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Antwerp",
@@ -2008,7 +2008,7 @@
       "attributes": {
         "prefix": "55",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Apeldoorn",
@@ -2058,7 +2058,7 @@
       "attributes": {
         "prefix": "920",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Appleton",
@@ -2108,7 +2108,7 @@
       "attributes": {
         "prefix": "831",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Aptos",
@@ -2158,7 +2158,7 @@
       "attributes": {
         "prefix": "357",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Arad",
@@ -2208,7 +2208,7 @@
       "attributes": {
         "prefix": "787",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Arecibo",
@@ -2258,7 +2258,7 @@
       "attributes": {
         "prefix": "54",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Arequipa",
@@ -2308,7 +2308,7 @@
       "attributes": {
         "prefix": "582",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Arica",
@@ -2358,7 +2358,7 @@
       "attributes": {
         "prefix": "682",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Arlington",
@@ -2408,7 +2408,7 @@
       "attributes": {
         "prefix": "817",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Arlington",
@@ -2458,7 +2458,7 @@
       "attributes": {
         "prefix": "224",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Arlington Heights",

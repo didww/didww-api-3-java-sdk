@@ -47,7 +47,7 @@
         "prefix": "949",
         "local_prefix": "",
         "features": [
-          "voice"
+          "voice_in"
         ],
         "is_metered": false,
         "area_name": "Saddleback Valley",

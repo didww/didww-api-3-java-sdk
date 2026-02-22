@@ -6,7 +6,7 @@
       "prefix": "241",
       "local_prefix": "",
       "features": [
-        "voice"
+        "voice_in"
       ],
       "is_metered": false,
       "area_name": "Aachen",

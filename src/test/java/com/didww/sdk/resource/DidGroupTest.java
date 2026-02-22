@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.Feature;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +23,7 @@ class DidGroupTest extends BaseTest {
         List<DidGroup> didGroups = response.getData();
 
         assertThat(didGroups).isNotEmpty();
+        assertThat(didGroups.get(0).getFeatures()).containsExactly(Feature.VOICE_IN, Feature.SMS_IN, Feature.T38);
     }
 
     @Test
@@ -39,6 +41,7 @@ class DidGroupTest extends BaseTest {
         DidGroup didGroup = response.getData();
 
         assertThat(didGroup.getPrefix()).isEqualTo("241");
+        assertThat(didGroup.getFeatures()).containsExactly(Feature.VOICE_IN);
         assertThat(didGroup.getAreaName()).isEqualTo("Aachen");
         assertThat(didGroup.getIsMetered()).isEqualTo(false);
         assertThat(didGroup.getCountry()).isNotNull();
