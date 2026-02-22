@@ -41,7 +41,7 @@ class DidGroupTest extends BaseTest {
         DidGroup didGroup = response.getData();
 
         assertThat(didGroup.getPrefix()).isEqualTo("241");
-        assertThat(didGroup.getFeatures()).containsExactly(Feature.VOICE);
+        assertThat(didGroup.getFeatures()).containsExactly(Feature.VOICE_IN);
         assertThat(didGroup.getAreaName()).isEqualTo("Aachen");
         assertThat(didGroup.getIsMetered()).isEqualTo(false);
         assertThat(didGroup.getCountry()).isNotNull();
