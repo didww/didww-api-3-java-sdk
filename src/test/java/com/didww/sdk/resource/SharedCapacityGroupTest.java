@@ -62,7 +62,7 @@ class SharedCapacityGroupTest extends BaseTest {
         CapacityPool pool = CapacityPool.build("f288d07c-e2fc-4ae6-9837-b18fb469c324");
 
         SharedCapacityGroup group = new SharedCapacityGroup();
-        group.setName("php-sdk");
+        group.setName("java-sdk");
         group.setSharedChannelsCount(5);
         group.setMeteredChannelsCount(0);
         group.setCapacityPool(pool);
@@ -71,7 +71,7 @@ class SharedCapacityGroupTest extends BaseTest {
         SharedCapacityGroup created = response.getData();
 
         assertThat(created.getId()).isEqualTo("3688a9c3-354f-4e16-b458-1d2df9f02547");
-        assertThat(created.getName()).isEqualTo("php-sdk");
+        assertThat(created.getName()).isEqualTo("java-sdk");
         assertThat(created.getSharedChannelsCount()).isEqualTo(5);
     }
 

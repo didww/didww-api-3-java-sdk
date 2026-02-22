@@ -56,7 +56,7 @@
         "allow_any_did_as_cli": false,
         "status": "active",
         "on_cli_mismatch_action": "send_original_cli",
-        "name": "php-sdk",
+        "name": "java-sdk",
         "capacity_limit": null,
         "username": "50fb4hugfv",
         "password": "evhwkcfjm5",
