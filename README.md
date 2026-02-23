@@ -425,8 +425,6 @@ try {
 | Type | Class |
 |------|-------|
 | SIP | `SipConfiguration` |
-| H.323 | `H323Configuration` |
-| IAX2 | `Iax2Configuration` |
 | PSTN | `PstnConfiguration` |
 
 ## Order Item Types

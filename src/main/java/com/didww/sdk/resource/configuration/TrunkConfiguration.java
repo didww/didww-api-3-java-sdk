@@ -13,8 +13,6 @@ public abstract class TrunkConfiguration {
     static {
         Map<String, Class<? extends TrunkConfiguration>> map = new HashMap<>();
         map.put("sip_configurations", SipConfiguration.class);
-        map.put("h323_configurations", H323Configuration.class);
-        map.put("iax2_configurations", Iax2Configuration.class);
         map.put("pstn_configurations", PstnConfiguration.class);
         TYPE_MAP = Collections.unmodifiableMap(map);
     }
