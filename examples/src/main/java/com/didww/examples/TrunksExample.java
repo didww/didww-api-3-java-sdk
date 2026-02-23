@@ -8,6 +8,7 @@ import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.configuration.SipConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
 import com.didww.sdk.resource.enums.Codec;
+import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.TransportProtocol;
 
 import java.util.Arrays;
@@ -44,6 +45,10 @@ public class TrunksExample {
         sip.setPort(5060);
         sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
         sip.setTransportProtocolId(TransportProtocol.UDP);
+        sip.setReroutingDisconnectCodeIds(Arrays.asList(
+                ReroutingDisconnectCode.SIP_480_TEMPORARILY_UNAVAILABLE,
+                ReroutingDisconnectCode.SIP_503_SERVICE_UNAVAILABLE
+        ));
         newTrunk.setConfiguration(sip);
 
         // Set POP relationship

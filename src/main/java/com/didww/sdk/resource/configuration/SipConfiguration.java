@@ -75,7 +75,7 @@ public class SipConfiguration extends TrunkConfiguration {
     private Boolean forceSymmetricRtp;
 
     @JsonProperty("rerouting_disconnect_code_ids")
-    private List<Integer> reroutingDisconnectCodeIds;
+    private List<ReroutingDisconnectCode> reroutingDisconnectCodeIds;
 
     @JsonProperty("transport_protocol_id")
     private TransportProtocol transportProtocolId;
@@ -277,11 +277,11 @@ public class SipConfiguration extends TrunkConfiguration {
         this.forceSymmetricRtp = forceSymmetricRtp;
     }
 
-    public List<Integer> getReroutingDisconnectCodeIds() {
+    public List<ReroutingDisconnectCode> getReroutingDisconnectCodeIds() {
         return reroutingDisconnectCodeIds;
     }
 
-    public void setReroutingDisconnectCodeIds(List<Integer> reroutingDisconnectCodeIds) {
+    public void setReroutingDisconnectCodeIds(List<ReroutingDisconnectCode> reroutingDisconnectCodeIds) {
         this.reroutingDisconnectCodeIds = reroutingDisconnectCodeIds;
     }
 
