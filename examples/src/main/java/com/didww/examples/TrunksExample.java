@@ -27,7 +27,8 @@ public class TrunksExample {
                 .build();
         List<VoiceInTrunk> trunks = client.voiceInTrunks().list(params).getData();
         for (VoiceInTrunk trunk : trunks) {
-            System.out.println(trunk.getName() + " [" + trunk.getConfiguration().getType() + "]");
+            String configType = trunk.getConfiguration() != null ? trunk.getConfiguration().getType() : "unknown";
+            System.out.println(trunk.getName() + " [" + configType + "]");
         }
 
         // Create a SIP trunk

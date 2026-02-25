@@ -233,12 +233,18 @@ VoiceInTrunkGroup created = client.voiceInTrunkGroups().create(group).getData();
 
 ### Voice Out Trunks
 
+> **Note:** Voice Out Trunks require additional account configuration. Contact DIDWW support to enable.
+> The `REPLACE_CLI` and `RANDOMIZE_CLI` values of `OnCliMismatchAction` also require account configuration.
+
 ```java
+import com.didww.sdk.resource.enums.DefaultDstAction;
+import com.didww.sdk.resource.enums.OnCliMismatchAction;
+
 VoiceOutTrunk voTrunk = new VoiceOutTrunk();
 voTrunk.setName("My Outbound Trunk");
 voTrunk.setAllowedSipIps(Arrays.asList("0.0.0.0/0"));
-voTrunk.setDefaultDstAction("allow_all");
-voTrunk.setOnCliMismatchAction("replace_cli");
+voTrunk.setDefaultDstAction(DefaultDstAction.ALLOW_ALL);
+voTrunk.setOnCliMismatchAction(OnCliMismatchAction.REJECT_CALL);
 VoiceOutTrunk created = client.voiceOutTrunks().create(voTrunk).getData();
 ```
 
@@ -472,6 +478,22 @@ try {
 | PermanentSupportingDocument | `client.permanentSupportingDocuments()` | create |
 | Proof | `client.proofs()` | create |
 | RequirementValidation | `client.requirementValidations()` | create |
+| StockKeepingUnit | include on `didGroups` | — |
+| QtyBasedPricing | include on `capacityPools` | — |
+
+> **Note:** `StockKeepingUnit` and `QtyBasedPricing` have no standalone API endpoints.
+> Access them via `include` on `didGroups` and `capacityPools` respectively.
+
+## Enums
+
+The SDK provides enum classes in `com.didww.sdk.resource.enums`:
+
+`CallbackMethod`, `IdentityType`, `OrderStatus`, `ExportType`, `ExportStatus`, `CliFormat`,
+`OnCliMismatchAction`\*, `MediaEncryptionMode`, `DefaultDstAction`, `VoiceOutTrunkStatus`,
+`TransportProtocol`, `Codec`, `RxDtmfFormat`, `TxDtmfFormat`, `SstRefreshMethod`,
+`ReroutingDisconnectCode`, `Feature`, `AreaLevel`, `AddressVerificationStatus`, `StirShakenMode`
+
+\* `REPLACE_CLI` and `RANDOMIZE_CLI` require account configuration.
 
 ## Contributing
 
