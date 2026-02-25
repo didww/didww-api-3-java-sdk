@@ -40,6 +40,12 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 | [`com.didww.examples.OrdersAllItemTypesExample`](src/main/java/com/didww/examples/OrdersAllItemTypesExample.java) | Creates a DID order with all item types: by SKU, by available DID, and by reservation. Fetches ordered DIDs. |
 | [`com.didww.examples.UploadFileExample`](src/main/java/com/didww/examples/UploadFileExample.java) | Creates (or reads) a file, encrypts it, and uploads to `encrypted_files`. |
 | [`com.didww.examples.IdentityAddressProofsExample`](src/main/java/com/didww/examples/IdentityAddressProofsExample.java) | Creates identity and address, encrypts and uploads files, attaches proofs to both. |
+| [`com.didww.examples.VoiceInTrunkGroupsExample`](src/main/java/com/didww/examples/VoiceInTrunkGroupsExample.java) | CRUD for trunk groups with trunk relationships. |
+| [`com.didww.examples.VoiceOutTrunksExample`](src/main/java/com/didww/examples/VoiceOutTrunksExample.java) | CRUD for voice out trunks (requires account config). |
+| [`com.didww.examples.DidTrunkAssignmentExample`](src/main/java/com/didww/examples/DidTrunkAssignmentExample.java) | Demonstrates exclusive trunk/trunk group assignment on DIDs. |
+| [`com.didww.examples.DidReservationsExample`](src/main/java/com/didww/examples/DidReservationsExample.java) | Creates, lists, finds and deletes DID reservations. |
+| [`com.didww.examples.ExportsExample`](src/main/java/com/didww/examples/ExportsExample.java) | Creates and lists CDR exports. |
+| [`com.didww.examples.CapacityPoolsExample`](src/main/java/com/didww/examples/CapacityPoolsExample.java) | Lists capacity pools with included shared capacity groups. |
 
 ## Upload file example
 

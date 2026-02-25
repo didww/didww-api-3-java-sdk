@@ -20,7 +20,7 @@ class PolymorphicJsonHelper {
 
         Class<? extends T> clazz = typeMap.get(type);
         if (clazz == null) {
-            throw new IOException("Unknown " + entityName + " type: " + type);
+            return null;
         }
 
         JsonNode attributes = node.get("attributes");
