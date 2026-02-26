@@ -111,6 +111,26 @@ DidwwClient client = DidwwClient.builder()
     .build();
 ```
 
+### Custom HTTP Client (Proxy, SSL, etc.)
+
+You can pass a custom `OkHttpClient.Builder` for advanced configuration such as proxy support:
+
+```java
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import okhttp3.OkHttpClient;
+
+OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
+    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy.example.com", 8080)));
+
+DidwwClient client = DidwwClient.builder()
+    .credentials(new DidwwCredentials("YOUR_API_KEY", DidwwEnvironment.PRODUCTION))
+    .httpClientBuilder(httpBuilder)
+    .build();
+```
+
+The API key interceptor is added automatically. Any other OkHttp settings (timeouts, SSL, interceptors, connection pools) can be configured on the builder.
+
 ### Environments
 
 | Environment | Base URL |
