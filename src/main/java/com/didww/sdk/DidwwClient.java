@@ -41,8 +41,12 @@ public class DidwwClient {
         this.objectMapper = DidwwResourceConverter.createObjectMapper();
         this.converter = DidwwResourceConverter.create(objectMapper);
 
-        OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
-                .addInterceptor(new ApiKeyInterceptor(credentials.getApiKey()));
+        // Copy via build().newBuilder() to avoid mutating the caller's builder
+        OkHttpClient.Builder httpBuilder = builder.httpClientBuilder != null
+                ? builder.httpClientBuilder.build().newBuilder()
+                : new OkHttpClient.Builder();
+
+        httpBuilder.addInterceptor(new ApiKeyInterceptor(credentials.getApiKey()));
 
         if (builder.connectTimeout != null) {
             httpBuilder.connectTimeout(builder.connectTimeout);
@@ -275,11 +279,17 @@ public class DidwwClient {
         return baseUrl;
     }
 
+    // Package-private for testing
+    OkHttpClient getHttpClient() {
+        return httpClient;
+    }
+
     public static class Builder {
         private DidwwCredentials credentials;
         private Duration connectTimeout;
         private Duration readTimeout;
         private String baseUrl;
+        private OkHttpClient.Builder httpClientBuilder;
 
         public Builder credentials(DidwwCredentials credentials) {
             this.credentials = credentials;
@@ -301,6 +311,15 @@ public class DidwwClient {
          */
         public Builder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
+            return this;
+        }
+
+        /**
+         * Sets a custom OkHttpClient.Builder for advanced configuration such as proxy,
+         * SSL, interceptors, etc. The API key interceptor will be added automatically.
+         */
+        public Builder httpClientBuilder(OkHttpClient.Builder httpClientBuilder) {
+            this.httpClientBuilder = httpClientBuilder;
             return this;
         }
 

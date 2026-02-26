@@ -26,5 +26,8 @@ class PublicKeyTest extends BaseTest {
         assertThat(keys).hasSize(2);
         assertThat(keys.get(0).getId()).isEqualTo("dcf2bfcb-a1d0-3b58-bbf0-3ec22a510ba8");
         assertThat(keys.get(0).getKey()).startsWith("-----BEGIN PUBLIC KEY-----");
+
+        wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/public_keys"))
+                .withoutHeader("Api-Key"));
     }
 }

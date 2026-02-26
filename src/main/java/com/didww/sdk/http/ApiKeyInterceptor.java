@@ -16,12 +16,15 @@ public class ApiKeyInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
-        Request request = original.newBuilder()
-                .header("Api-Key", apiKey)
+        Request.Builder builder = original.newBuilder()
                 .header("Content-Type", JsonApiMediaType.VALUE)
                 .header("Accept", JsonApiMediaType.VALUE)
-                .header("User-Agent", "didww-java-sdk/1.0.0")
-                .build();
-        return chain.proceed(request);
+                .header("User-Agent", "didww-java-sdk/1.0.0");
+
+        if (!original.url().pathSegments().contains("public_keys")) {
+            builder.header("Api-Key", apiKey);
+        }
+
+        return chain.proceed(builder.build());
     }
 }
