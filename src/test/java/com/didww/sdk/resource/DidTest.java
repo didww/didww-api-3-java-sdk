@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.AddressVerificationStatus;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,5 +50,35 @@ class DidTest extends BaseTest {
         assertThat(did.getBillingCyclesCount()).isNull();
         assertThat(did.getChannelsIncludedCount()).isEqualTo(0);
         assertThat(did.getDedicatedChannelsCount()).isEqualTo(0);
+    }
+
+    @Test
+    void testFindDidWithAddressVerificationAndDidGroup() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/show_with_address_verification_and_did_group.json"))));
+
+        QueryParams params = QueryParams.builder()
+                .include("address_verification", "did_group")
+                .build();
+        ApiResponse<Did> response = client.dids().find("21d0b02c-b556-4d3e-acbf-504b78295dbe", params);
+        Did did = response.getData();
+
+        assertThat(did.getNumber()).isEqualTo("61488943592");
+
+        AddressVerification addressVerification = did.getAddressVerification();
+        assertThat(addressVerification).isNotNull();
+        assertThat(addressVerification.getId()).isEqualTo("75dc8d39-5e17-4470-a6f3-df42642c975f");
+        assertThat(addressVerification.getStatus()).isEqualTo(AddressVerificationStatus.APPROVED);
+
+        DidGroup didGroup = did.getDidGroup();
+        assertThat(didGroup).isNotNull();
+        assertThat(didGroup.getId()).isEqualTo("2b60bb9a-d382-4d35-84c6-61689f45f2f5");
+        assertThat(didGroup.getPrefix()).isEqualTo("4");
+        assertThat(didGroup.getAreaName()).isEqualTo("Mobile");
+        assertThat(didGroup.getIsMetered()).isFalse();
+        assertThat(didGroup.getAllowAdditionalChannels()).isFalse();
     }
 }
