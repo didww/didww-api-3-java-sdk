@@ -39,5 +39,8 @@ class RegionTest extends BaseTest {
         Region region = response.getData();
 
         assertThat(region.getName()).isEqualTo("California");
+        assertThat(region.getCountry()).isNotNull();
+        assertThat(region.getCountry().getName()).isEqualTo("United States");
+        assertThat(region.getCountry().getIso()).isEqualTo("US");
     }
 }

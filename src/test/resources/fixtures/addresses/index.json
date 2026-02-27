@@ -66,8 +66,8 @@
       "id": "b4fe0262-a79e-4c1f-a313-bd32739c44e5",
       "type": "identities",
       "attributes": {
-        "first_name": "Denis",
-        "last_name": "Talakevich",
+        "first_name": "John",
+        "last_name": "Doe",
         "phone_number": "12345678",
         "id_number": null,
         "birth_date": "1987-01-02",

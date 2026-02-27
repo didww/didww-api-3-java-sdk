@@ -43,5 +43,6 @@ class CityTest extends BaseTest {
         assertThat(city.getCountry().getName()).isEqualTo("United States");
         assertThat(city.getRegion()).isNotNull();
         assertThat(city.getRegion().getName()).isEqualTo("New York");
+        assertThat(city.getArea()).isNull();
     }
 }
