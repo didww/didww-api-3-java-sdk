@@ -81,6 +81,74 @@ class IdentityTest extends BaseTest {
     }
 
     @Test
+    void testCreatePersonalIdentity() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/identities"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("identities/create_personal.json"))));
+
+        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+
+        Identity identity = new Identity();
+        identity.setFirstName("John");
+        identity.setLastName("Doe");
+        identity.setPhoneNumber("123456789");
+        identity.setIdNumber("ABC1234");
+        identity.setBirthDate(LocalDate.of(1970, 1, 1));
+        identity.setDescription("test identity");
+        identity.setPersonalTaxId("987654321");
+        identity.setIdentityType(IdentityType.PERSONAL);
+        identity.setExternalReferenceId("111");
+        identity.setCountry(country);
+
+        ApiResponse<Identity> response = client.identities().create(identity);
+        Identity created = response.getData();
+
+        assertThat(created.getId()).isEqualTo("9728ea13-cb5d-41fb-8a7f-796a005b0a13");
+        assertThat(created.getFirstName()).isEqualTo("John");
+        assertThat(created.getIdentityType()).isEqualTo(IdentityType.PERSONAL);
+        assertThat(created.getCompanyName()).isNull();
+        assertThat(created.getVerified()).isFalse();
+    }
+
+    @Test
+    void testUpdateIdentity() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/identities/e96ae7d1-11d5-42bc-a5c5-211f3c3788ae"))
+                .withRequestBody(equalToJson(loadFixture("identities/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("identities/update.json"))));
+
+        Identity identity = Identity.build("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
+        identity.setFirstName("Jake");
+        identity.setLastName("Johnson");
+        identity.setPhoneNumber("1111111");
+        identity.setIdNumber("CED4321");
+        identity.setBirthDate(LocalDate.of(1979, 1, 1));
+        identity.setCompanyName("Some Company Limited");
+        identity.setCompanyRegNumber("1222776");
+        identity.setVatId("GB1235");
+        identity.setDescription("test");
+        identity.setPersonalTaxId("983217654");
+        identity.setIdentityType(IdentityType.BUSINESS);
+        identity.setExternalReferenceId("112");
+
+        ApiResponse<Identity> response = client.identities().update(identity);
+        Identity updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
+        assertThat(updated.getFirstName()).isEqualTo("Jake");
+        assertThat(updated.getLastName()).isEqualTo("Johnson");
+        assertThat(updated.getPhoneNumber()).isEqualTo("1111111");
+        assertThat(updated.getIdentityType()).isEqualTo(IdentityType.BUSINESS);
+        assertThat(updated.getCompanyName()).isEqualTo("Some Company Limited");
+        assertThat(updated.getExternalReferenceId()).isEqualTo("112");
+        assertThat(updated.getVerified()).isFalse();
+    }
+
+    @Test
     void testDeleteIdentity() {
         String id = "e96ae7d1-11d5-42bc-a5c5-211f3c3788ae";
         wireMock.stubFor(delete(urlPathEqualTo("/v3/identities/" + id))

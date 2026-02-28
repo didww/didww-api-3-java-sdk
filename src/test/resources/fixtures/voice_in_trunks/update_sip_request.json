@@ -1,0 +1,23 @@
+{
+  "data": {
+    "id": "a80006b6-4183-4865-8b99-7ebbd359a762",
+    "type": "voice_in_trunks",
+    "attributes": {
+      "name": "hello, updated test sip trunk",
+      "description": "just a description",
+      "configuration": {
+        "type": "sip_configurations",
+        "attributes": {
+          "username": "new-username",
+          "host": "216.58.215.110",
+          "port": 5060,
+          "codec_ids": [9, 10, 8, 7, 6],
+          "sst_refresh_method_id": 1,
+          "media_encryption_mode": "zrtp",
+          "stir_shaken_mode": "pai",
+          "allowed_rtp_ips": ["127.0.0.1"]
+        }
+      }
+    }
+  }
+}

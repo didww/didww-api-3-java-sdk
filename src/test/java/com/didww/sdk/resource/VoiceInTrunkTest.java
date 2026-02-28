@@ -107,11 +107,11 @@ class VoiceInTrunkTest extends BaseTest {
     @Test
     void testCreateSipTrunkWithReroutingDisconnectCodes() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunks"))
-                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_10_request.json"), true, false))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_sip_with_rerouting_request.json"), true, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("voice_in_trunks/create_10.json"))));
+                        .withBody(loadFixture("voice_in_trunks/create_sip_with_rerouting.json"))));
 
         SipConfiguration sipConfig = new SipConfiguration();
         sipConfig.setUsername("username");
@@ -207,6 +207,71 @@ class VoiceInTrunkTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("41b94706-325e-4704-a433-d65105758836");
         assertThat(created.getName()).isEqualTo("hello, test pstn trunk");
+    }
+
+    @Test
+    void testUpdatePstnTrunk() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/41b94706-325e-4704-a433-d65105758836"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/update_pstn_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/update_pstn.json"))));
+
+        PstnConfiguration config = new PstnConfiguration();
+        config.setDst("558540420025");
+
+        VoiceInTrunk trunk = VoiceInTrunk.build("41b94706-325e-4704-a433-d65105758836");
+        trunk.setName("hello, updated test pstn trunk");
+        trunk.setConfiguration(config);
+
+        ApiResponse<VoiceInTrunk> response = client.voiceInTrunks().update(trunk);
+        VoiceInTrunk updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("41b94706-325e-4704-a433-d65105758836");
+        assertThat(updated.getName()).isEqualTo("hello, updated test pstn trunk");
+        assertThat(updated.getConfiguration()).isInstanceOf(PstnConfiguration.class);
+        PstnConfiguration updatedConfig = (PstnConfiguration) updated.getConfiguration();
+        assertThat(updatedConfig.getDst()).isEqualTo("558540420025");
+    }
+
+    @Test
+    void testUpdateSipTrunk() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/a80006b6-4183-4865-8b99-7ebbd359a762"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/update_sip_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/update_sip.json"))));
+
+        SipConfiguration sipConfig = new SipConfiguration();
+        sipConfig.setUsername("new-username");
+        sipConfig.setHost("216.58.215.110");
+        sipConfig.setPort(5060);
+        sipConfig.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA, Codec.G729, Codec.G723, Codec.TELEPHONE_EVENT));
+        sipConfig.setSstRefreshMethodId(SstRefreshMethod.INVITE);
+        sipConfig.setMediaEncryptionMode(MediaEncryptionMode.ZRTP);
+        sipConfig.setStirShakenMode(StirShakenMode.PAI);
+        sipConfig.setAllowedRtpIps(Arrays.asList("127.0.0.1"));
+
+        VoiceInTrunk trunk = VoiceInTrunk.build("a80006b6-4183-4865-8b99-7ebbd359a762");
+        trunk.setName("hello, updated test sip trunk");
+        trunk.setDescription("just a description");
+        trunk.setConfiguration(sipConfig);
+
+        ApiResponse<VoiceInTrunk> response = client.voiceInTrunks().update(trunk);
+        VoiceInTrunk updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("a80006b6-4183-4865-8b99-7ebbd359a762");
+        assertThat(updated.getName()).isEqualTo("hello, updated test sip trunk");
+        assertThat(updated.getDescription()).isEqualTo("just a description");
+        assertThat(updated.getConfiguration()).isInstanceOf(SipConfiguration.class);
+        SipConfiguration updatedSipConfig = (SipConfiguration) updated.getConfiguration();
+        assertThat(updatedSipConfig.getUsername()).isEqualTo("new-username");
+        assertThat(updatedSipConfig.getMediaEncryptionMode()).isEqualTo(MediaEncryptionMode.ZRTP);
+        assertThat(updatedSipConfig.getStirShakenMode()).isEqualTo(StirShakenMode.PAI);
+        assertThat(updatedSipConfig.getAllowedRtpIps()).containsExactly("127.0.0.1");
+        assertThat(updatedSipConfig.getReroutingDisconnectCodeIds()).hasSize(45);
     }
 
     @Test
