@@ -12,6 +12,51 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 class DidTest extends BaseTest {
 
     @Test
+    void testUpdateDid() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update.json"))));
+
+        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setCapacityLimit(2);
+        did.setDescription("something");
+
+        ApiResponse<Did> response = client.dids().update(did);
+        Did updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        assertThat(updated.getNumber()).isEqualTo("16091609123456797");
+        assertThat(updated.getBlocked()).isFalse();
+        assertThat(updated.getCapacityLimit()).isEqualTo(2);
+        assertThat(updated.getDescription()).isEqualTo("something");
+        assertThat(updated.getTerminated()).isFalse();
+    }
+
+    @Test
+    void testUpdateDidTerminated() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_terminated_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update_terminated.json"))));
+
+        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setTerminated(true);
+
+        ApiResponse<Did> response = client.dids().update(did);
+        Did updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        assertThat(updated.getBlocked()).isTrue();
+        assertThat(updated.getTerminated()).isTrue();
+        assertThat(updated.getBillingCyclesCount()).isEqualTo(0);
+    }
+
+    @Test
     void testListDids() {
         wireMock.stubFor(get(urlPathEqualTo("/v3/dids"))
                 .willReturn(aResponse()

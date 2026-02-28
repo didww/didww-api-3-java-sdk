@@ -1,0 +1,10 @@
+{
+  "data": {
+    "id": "b2319703-ce6c-480d-bb53-614e7abcfc96",
+    "type": "voice_in_trunk_groups",
+    "attributes": {
+      "name": "trunk group sample updated with 2 trunks",
+      "capacity_limit": 500
+    }
+  }
+}

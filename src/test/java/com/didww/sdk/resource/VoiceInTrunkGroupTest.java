@@ -61,6 +61,27 @@ class VoiceInTrunkGroupTest extends BaseTest {
     }
 
     @Test
+    void testUpdateVoiceInTrunkGroup() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunk_groups/b2319703-ce6c-480d-bb53-614e7abcfc96"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunk_groups/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunk_groups/update.json"))));
+
+        VoiceInTrunkGroup group = VoiceInTrunkGroup.build("b2319703-ce6c-480d-bb53-614e7abcfc96");
+        group.setName("trunk group sample updated with 2 trunks");
+        group.setCapacityLimit(500);
+
+        ApiResponse<VoiceInTrunkGroup> response = client.voiceInTrunkGroups().update(group);
+        VoiceInTrunkGroup updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("b2319703-ce6c-480d-bb53-614e7abcfc96");
+        assertThat(updated.getName()).isEqualTo("trunk group sample updated with 2 trunks");
+        assertThat(updated.getCapacityLimit()).isEqualTo(500);
+    }
+
+    @Test
     void testDeleteVoiceInTrunkGroup() {
         String id = "b2319703-ce6c-480d-bb53-614e7abcfc96";
         wireMock.stubFor(delete(urlPathEqualTo("/v3/voice_in_trunk_groups/" + id))

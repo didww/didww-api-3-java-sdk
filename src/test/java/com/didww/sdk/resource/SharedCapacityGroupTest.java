@@ -57,7 +57,7 @@ class SharedCapacityGroupTest extends BaseTest {
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("shared_capacity_groups/create_6.json"))));
+                        .withBody(loadFixture("shared_capacity_groups/create.json"))));
 
         CapacityPool pool = CapacityPool.build("f288d07c-e2fc-4ae6-9837-b18fb469c324");
 
@@ -73,6 +73,53 @@ class SharedCapacityGroupTest extends BaseTest {
         assertThat(created.getId()).isEqualTo("3688a9c3-354f-4e16-b458-1d2df9f02547");
         assertThat(created.getName()).isEqualTo("java-sdk");
         assertThat(created.getSharedChannelsCount()).isEqualTo(5);
+    }
+
+    @Test
+    void testUpdateSharedCapacityGroup() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875"))
+                .withRequestBody(equalToJson(loadFixture("shared_capacity_groups/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("shared_capacity_groups/update.json"))));
+
+        SharedCapacityGroup group = SharedCapacityGroup.build("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
+        group.setName("didww1");
+        group.setSharedChannelsCount(10);
+        group.setMeteredChannelsCount(2);
+
+        ApiResponse<SharedCapacityGroup> response = client.sharedCapacityGroups().update(group);
+        SharedCapacityGroup updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
+        assertThat(updated.getName()).isEqualTo("didww1");
+        assertThat(updated.getSharedChannelsCount()).isEqualTo(10);
+        assertThat(updated.getMeteredChannelsCount()).isEqualTo(2);
+    }
+
+    @Test
+    void testUpdateSharedCapacityGroupWithDids() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("shared_capacity_groups/update_with_dids.json"))));
+
+        SharedCapacityGroup group = SharedCapacityGroup.build("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
+        group.setName("didww1");
+        group.setSharedChannelsCount(10);
+        group.setMeteredChannelsCount(2);
+
+        QueryParams params = QueryParams.builder()
+                .include("dids")
+                .build();
+        ApiResponse<SharedCapacityGroup> response = client.sharedCapacityGroups().update(group, params);
+        SharedCapacityGroup updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
+        assertThat(updated.getName()).isEqualTo("didww1");
+        assertThat(updated.getDids()).hasSize(1);
     }
 
     @Test

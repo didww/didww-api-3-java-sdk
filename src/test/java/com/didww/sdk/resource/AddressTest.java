@@ -86,6 +86,32 @@ class AddressTest extends BaseTest {
     }
 
     @Test
+    void testUpdateAddress() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/addresses/bf69bc70-e1c2-442c-9f30-335ee299b663"))
+                .withRequestBody(equalToJson(loadFixture("addresses/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("addresses/update.json"))));
+
+        Address address = Address.build("bf69bc70-e1c2-442c-9f30-335ee299b663");
+        address.setCityName("Chicago");
+        address.setPostalCode("1234");
+        address.setAddress("Main street");
+        address.setDescription("some address");
+
+        ApiResponse<Address> response = client.addresses().update(address);
+        Address updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("bf69bc70-e1c2-442c-9f30-335ee299b663");
+        assertThat(updated.getCityName()).isEqualTo("Chicago");
+        assertThat(updated.getPostalCode()).isEqualTo("1234");
+        assertThat(updated.getAddress()).isEqualTo("Main street");
+        assertThat(updated.getDescription()).isEqualTo("some address");
+        assertThat(updated.getVerified()).isFalse();
+    }
+
+    @Test
     void testDeleteAddress() {
         String id = "bf69bc70-e1c2-442c-9f30-335ee299b663";
         wireMock.stubFor(delete(urlPathEqualTo("/v3/addresses/" + id))

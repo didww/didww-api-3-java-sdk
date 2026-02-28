@@ -93,6 +93,39 @@ class VoiceOutTrunkTest extends BaseTest {
     }
 
     @Test
+    void testUpdateVoiceOutTrunk() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/425ce763-a3a9-49b4-af5b-ada1a65c8864"))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/update.json"))));
+
+        VoiceOutTrunk trunk = VoiceOutTrunk.build("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+        trunk.setName("test");
+        trunk.setCapacityLimit(123);
+        trunk.setOnCliMismatchAction(OnCliMismatchAction.REPLACE_CLI);
+        trunk.setDefaultDstAction(DefaultDstAction.REJECT_ALL);
+        trunk.setDstPrefixes(Collections.singletonList("370"));
+        trunk.setForceSymmetricRtp(true);
+        trunk.setRtpPing(true);
+        trunk.setAllowedSipIps(Collections.singletonList("10.11.12.13/32"));
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().update(trunk);
+        VoiceOutTrunk updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+        assertThat(updated.getName()).isEqualTo("test");
+        assertThat(updated.getStatus()).isEqualTo(VoiceOutTrunkStatus.BLOCKED);
+        assertThat(updated.getCapacityLimit()).isEqualTo(123);
+        assertThat(updated.getOnCliMismatchAction()).isEqualTo(OnCliMismatchAction.REPLACE_CLI);
+        assertThat(updated.getDefaultDstAction()).isEqualTo(DefaultDstAction.REJECT_ALL);
+        assertThat(updated.getDstPrefixes()).containsExactly("370");
+        assertThat(updated.getForceSymmetricRtp()).isTrue();
+        assertThat(updated.getRtpPing()).isTrue();
+    }
+
+    @Test
     void testDeleteVoiceOutTrunk() {
         String id = "b60201c1-21f0-4d9a-aafa-0e6d1e12f22e";
         wireMock.stubFor(delete(urlPathEqualTo("/v3/voice_out_trunks/" + id))

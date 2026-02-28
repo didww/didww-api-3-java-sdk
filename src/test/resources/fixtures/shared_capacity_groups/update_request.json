@@ -1,0 +1,11 @@
+{
+  "data": {
+    "id": "89f987e2-0862-4bf4-a3f4-cdc89af0d875",
+    "type": "shared_capacity_groups",
+    "attributes": {
+      "name": "didww1",
+      "shared_channels_count": 10,
+      "metered_channels_count": 2
+    }
+  }
+}

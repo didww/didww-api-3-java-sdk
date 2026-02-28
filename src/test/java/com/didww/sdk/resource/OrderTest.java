@@ -7,6 +7,7 @@ import com.didww.sdk.resource.enums.OrderStatus;
 import com.didww.sdk.resource.orderitem.AvailableDidOrderItem;
 import com.didww.sdk.resource.orderitem.CapacityOrderItem;
 import com.didww.sdk.resource.orderitem.DidOrderItem;
+import com.didww.sdk.resource.orderitem.GenericOrderItem;
 import com.didww.sdk.resource.orderitem.ReservationDidOrderItem;
 import org.junit.jupiter.api.Test;
 
@@ -73,7 +74,7 @@ class OrderTest extends BaseTest {
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("orders/create_5.json"))));
+                        .withBody(loadFixture("orders/create_billing_cycles.json"))));
 
         DidOrderItem item = new DidOrderItem();
         item.setSkuId("f36d2812-2195-4385-85e8-e59c3484a8bc");
@@ -100,7 +101,7 @@ class OrderTest extends BaseTest {
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("orders/create_3.json"))));
+                        .withBody(loadFixture("orders/create_available_did.json"))));
 
         AvailableDidOrderItem item = new AvailableDidOrderItem();
         item.setSkuId("acc46374-0b34-4912-9f67-8340339db1e5");
@@ -126,7 +127,7 @@ class OrderTest extends BaseTest {
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("orders/create_1.json"))));
+                        .withBody(loadFixture("orders/create_reservation.json"))));
 
         ReservationDidOrderItem item = new ReservationDidOrderItem();
         item.setSkuId("32840f64-5c3f-4278-8c8d-887fbe2f03f4");
@@ -152,7 +153,7 @@ class OrderTest extends BaseTest {
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("orders/create_2.json"))));
+                        .withBody(loadFixture("orders/create_capacity.json"))));
 
         CapacityOrderItem item = new CapacityOrderItem();
         item.setCapacityPoolId("b7522a31-4bf3-4c23-81e8-e7a14b23663f");
@@ -178,7 +179,7 @@ class OrderTest extends BaseTest {
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("orders/create_6.json"))));
+                        .withBody(loadFixture("orders/create_nanpa.json"))));
 
         DidOrderItem item = new DidOrderItem();
         item.setSkuId("fe77889c-f05a-40ad-a845-96aca3c28054");
@@ -196,6 +197,24 @@ class OrderTest extends BaseTest {
         assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(1);
+    }
+
+    @Test
+    void testFindOrderWithGenericItem() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/orders/9df11dac-9d83-448c-8866-19c998be33db"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("orders/show_generic_item.json"))));
+
+        ApiResponse<Order> response = client.orders().find("9df11dac-9d83-448c-8866-19c998be33db");
+        Order order = response.getData();
+
+        assertThat(order.getId()).isEqualTo("9df11dac-9d83-448c-8866-19c998be33db");
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(order.getDescription()).isEqualTo("Payment processing fee");
+        assertThat(order.getItems()).hasSize(1);
+        assertThat(order.getItems().get(0)).isInstanceOf(GenericOrderItem.class);
     }
 
     @Test

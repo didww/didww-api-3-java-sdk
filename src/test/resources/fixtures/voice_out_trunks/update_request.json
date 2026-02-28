@@ -1,0 +1,16 @@
+{
+  "data": {
+    "id": "425ce763-a3a9-49b4-af5b-ada1a65c8864",
+    "type": "voice_out_trunks",
+    "attributes": {
+      "name": "test",
+      "capacity_limit": 123,
+      "on_cli_mismatch_action": "replace_cli",
+      "default_dst_action": "reject_all",
+      "dst_prefixes": ["370"],
+      "force_symmetric_rtp": true,
+      "rtp_ping": true,
+      "allowed_sip_ips": ["10.11.12.13/32"]
+    }
+  }
+}
