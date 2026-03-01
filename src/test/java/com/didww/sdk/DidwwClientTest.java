@@ -78,7 +78,8 @@ class DidwwClientTest {
 
             wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/countries"))
                     .withHeader("X-Custom-Header", equalTo("custom-value"))
-                    .withHeader("Api-Key", equalTo("test-key")));
+                    .withHeader("Api-Key", equalTo("test-key"))
+                    .withHeader("X-DIDWW-API-Version", equalTo("2022-05-10")));
         } finally {
             wireMock.stop();
         }
@@ -141,7 +142,8 @@ class DidwwClientTest {
             assertThat(response.getData()).isEmpty();
 
             wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/public_keys"))
-                    .withoutHeader("Api-Key"));
+                    .withoutHeader("Api-Key")
+                    .withHeader("X-DIDWW-API-Version", equalTo("2022-05-10")));
         } finally {
             wireMock.stop();
         }
@@ -167,7 +169,8 @@ class DidwwClientTest {
             assertThat(response.getData()).isEmpty();
 
             wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/countries"))
-                    .withHeader("Api-Key", equalTo("test-key")));
+                    .withHeader("Api-Key", equalTo("test-key"))
+                    .withHeader("X-DIDWW-API-Version", equalTo("2022-05-10")));
         } finally {
             wireMock.stop();
         }

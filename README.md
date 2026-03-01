@@ -11,6 +11,8 @@ Read more https://doc.didww.com/api
 This SDK targets DIDWW API v3 documentation version:
 [https://doc.didww.com/api3/2022-05-10/index.html](https://doc.didww.com/api3/2022-05-10/index.html)
 
+The client sends the `X-DIDWW-API-Version: 2022-05-10` header with each request.
+
 ## Requirements
 
 - Java 11+
@@ -92,7 +94,7 @@ List<DidGroup> didGroups = client.didGroups().list(params).getData();
 
 For more examples visit [examples](examples/src/main/java/com/didww/examples/).
 
-For details on obtaining your API key please visit https://doc.didww.com/api#introduction-api-keys
+For details on obtaining your API key please visit https://doc.didww.com/api3/configuration.html
 
 ## Examples
 
