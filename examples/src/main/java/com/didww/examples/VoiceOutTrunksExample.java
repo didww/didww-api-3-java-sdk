@@ -7,6 +7,7 @@ import com.didww.sdk.resource.enums.OnCliMismatchAction;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Voice Out Trunks: CRUD operations.
@@ -18,10 +19,11 @@ public class VoiceOutTrunksExample {
 
     public static void main(String[] args) {
         DidwwClient client = ExampleClientFactory.fromEnv();
+        String uniqueSuffix = UUID.randomUUID().toString().substring(0, 8);
 
         // Create a voice out trunk
         VoiceOutTrunk trunk = new VoiceOutTrunk();
-        trunk.setName("My Outbound Trunk");
+        trunk.setName("My Outbound Trunk " + uniqueSuffix);
         trunk.setAllowedSipIps(Arrays.asList("0.0.0.0/0"));
         trunk.setDefaultDstAction(DefaultDstAction.ALLOW_ALL);
         trunk.setOnCliMismatchAction(OnCliMismatchAction.REJECT_CALL);
@@ -41,7 +43,7 @@ public class VoiceOutTrunksExample {
         }
 
         // Update
-        created.setName("Updated Outbound Trunk");
+        created.setName("Updated Outbound Trunk " + uniqueSuffix);
         created.setAllowedSipIps(Arrays.asList("10.0.0.0/8"));
         VoiceOutTrunk updated = client.voiceOutTrunks().update(created).getData();
         System.out.println("\nUpdated name: " + updated.getName());

@@ -43,7 +43,7 @@ public class DidsExample {
                 .orElse(capacityPools.get(0));
 
         did.setCapacityPool(pool);
-        did.setDedicatedChannelsCount(1);
+        did.setDedicatedChannelsCount(0);
         did.setCapacityLimit(5);
         did.setDescription("Hi");
 

@@ -1,6 +1,7 @@
 package com.didww.sdk;
 
 import com.didww.sdk.exception.DidwwClientException;
+import com.didww.sdk.http.ApiKeyInterceptor;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -32,6 +33,7 @@ class EncryptedFileUploadTest extends BaseTest {
 
         wireMock.verify(postRequestedFor(urlPathEqualTo("/v3/encrypted_files"))
                 .withHeader("Api-Key", equalTo("test-api-key"))
+                .withHeader(ApiKeyInterceptor.API_VERSION_HEADER, equalTo(ApiKeyInterceptor.API_VERSION))
                 .withRequestBody(containing("encrypted_files[encryption_fingerprint]"))
                 .withRequestBody(containing("fingerprint-123"))
                 .withRequestBody(containing("encrypted_files[items][][description]"))

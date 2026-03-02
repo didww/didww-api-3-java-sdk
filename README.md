@@ -11,7 +11,7 @@ Read more https://doc.didww.com/api
 This SDK targets DIDWW API v3 documentation version:
 [https://doc.didww.com/api3/2022-05-10/index.html](https://doc.didww.com/api3/2022-05-10/index.html)
 
-The client sends the `X-DIDWW-API-Version: 2022-05-10` header with each request.
+The client sends the `X-DIDWW-API-Version` header with each request.
 
 ## Requirements
 

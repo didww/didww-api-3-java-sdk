@@ -3,6 +3,7 @@ package com.didww.sdk;
 import com.didww.sdk.resource.Country;
 import com.didww.sdk.resource.PublicKey;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.http.ApiKeyInterceptor;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import okhttp3.OkHttpClient;
@@ -79,7 +80,7 @@ class DidwwClientTest {
             wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/countries"))
                     .withHeader("X-Custom-Header", equalTo("custom-value"))
                     .withHeader("Api-Key", equalTo("test-key"))
-                    .withHeader("X-DIDWW-API-Version", equalTo("2022-05-10")));
+                    .withHeader(ApiKeyInterceptor.API_VERSION_HEADER, equalTo(ApiKeyInterceptor.API_VERSION)));
         } finally {
             wireMock.stop();
         }
@@ -143,7 +144,7 @@ class DidwwClientTest {
 
             wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/public_keys"))
                     .withoutHeader("Api-Key")
-                    .withHeader("X-DIDWW-API-Version", equalTo("2022-05-10")));
+                    .withHeader(ApiKeyInterceptor.API_VERSION_HEADER, equalTo(ApiKeyInterceptor.API_VERSION)));
         } finally {
             wireMock.stop();
         }
@@ -170,7 +171,7 @@ class DidwwClientTest {
 
             wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/countries"))
                     .withHeader("Api-Key", equalTo("test-key"))
-                    .withHeader("X-DIDWW-API-Version", equalTo("2022-05-10")));
+                    .withHeader(ApiKeyInterceptor.API_VERSION_HEADER, equalTo(ApiKeyInterceptor.API_VERSION)));
         } finally {
             wireMock.stop();
         }

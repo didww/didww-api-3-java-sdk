@@ -216,6 +216,7 @@ public class DidwwClient {
                 .url(baseUrl + "/encrypted_files")
                 .post(body)
                 .header("Api-Key", credentials.getApiKey())
+                .header(ApiKeyInterceptor.API_VERSION_HEADER, ApiKeyInterceptor.API_VERSION)
                 .header("Accept", "application/json")
                 .build();
 
