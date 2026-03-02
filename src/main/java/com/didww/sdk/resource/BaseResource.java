@@ -43,7 +43,6 @@ public abstract class BaseResource {
         if (fieldName == null || fieldName.isEmpty()) {
             return;
         }
-        dirtyFields.add(fieldName);
         dirtyFields.add(toSnakeCase(fieldName));
     }
 
@@ -52,9 +51,7 @@ public abstract class BaseResource {
         if (fieldName == null || fieldName.isEmpty()) {
             return false;
         }
-        return dirtyFields.contains(fieldName)
-                || dirtyFields.contains(toCamelCase(fieldName))
-                || dirtyFields.contains(toSnakeCase(fieldName));
+        return dirtyFields.contains(toSnakeCase(fieldName));
     }
 
     @JsonIgnore
@@ -78,22 +75,4 @@ public abstract class BaseResource {
         return snakeCase.toString();
     }
 
-    private String toCamelCase(String fieldName) {
-        StringBuilder camelCase = new StringBuilder();
-        boolean upperCaseNext = false;
-        for (int i = 0; i < fieldName.length(); i++) {
-            char current = fieldName.charAt(i);
-            if (current == '_') {
-                upperCaseNext = true;
-                continue;
-            }
-            if (upperCaseNext) {
-                camelCase.append(Character.toUpperCase(current));
-                upperCaseNext = false;
-            } else {
-                camelCase.append(current);
-            }
-        }
-        return camelCase.toString();
-    }
 }
