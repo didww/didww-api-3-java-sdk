@@ -78,7 +78,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = markDirty("firstName", firstName);
     }
 
     public String getLastName() {
@@ -86,7 +86,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = markDirty("lastName", lastName);
     }
 
     public String getPhoneNumber() {
@@ -94,7 +94,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = markDirty("phoneNumber", phoneNumber);
     }
 
     public String getIdNumber() {
@@ -102,7 +102,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+        this.idNumber = markDirty("idNumber", idNumber);
     }
 
     public LocalDate getBirthDate() {
@@ -110,7 +110,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+        this.birthDate = markDirty("birthDate", birthDate);
     }
 
     public String getCompanyName() {
@@ -118,7 +118,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+        this.companyName = markDirty("companyName", companyName);
     }
 
     public String getCompanyRegNumber() {
@@ -126,7 +126,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setCompanyRegNumber(String companyRegNumber) {
-        this.companyRegNumber = companyRegNumber;
+        this.companyRegNumber = markDirty("companyRegNumber", companyRegNumber);
     }
 
     public String getVatId() {
@@ -134,7 +134,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setVatId(String vatId) {
-        this.vatId = vatId;
+        this.vatId = markDirty("vatId", vatId);
     }
 
     public String getDescription() {
@@ -142,7 +142,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = markDirty("description", description);
     }
 
     public String getPersonalTaxId() {
@@ -150,7 +150,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setPersonalTaxId(String personalTaxId) {
-        this.personalTaxId = personalTaxId;
+        this.personalTaxId = markDirty("personalTaxId", personalTaxId);
     }
 
     public IdentityType getIdentityType() {
@@ -158,7 +158,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setIdentityType(IdentityType identityType) {
-        this.identityType = identityType;
+        this.identityType = markDirty("identityType", identityType);
     }
 
     public String getExternalReferenceId() {
@@ -166,7 +166,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setExternalReferenceId(String externalReferenceId) {
-        this.externalReferenceId = externalReferenceId;
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 
     public String getContactEmail() {
@@ -174,7 +174,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
+        this.contactEmail = markDirty("contactEmail", contactEmail);
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -190,7 +190,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setCountry(Country country) {
-        this.country = country;
+        this.country = markDirty("country", country);
     }
 
     public List<Proof> getProofs() {
@@ -198,7 +198,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setProofs(List<Proof> proofs) {
-        this.proofs = proofs;
+        this.proofs = markDirty("proofs", proofs);
     }
 
     public List<Address> getAddresses() {
@@ -206,7 +206,7 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+        this.addresses = markDirty("addresses", addresses);
     }
 
     public List<PermanentSupportingDocument> getPermanentDocuments() {
@@ -214,6 +214,6 @@ public class Identity extends BaseResource implements ProofEntity {
     }
 
     public void setPermanentDocuments(List<PermanentSupportingDocument> permanentDocuments) {
-        this.permanentDocuments = permanentDocuments;
+        this.permanentDocuments = markDirty("permanentDocuments", permanentDocuments);
     }
 }

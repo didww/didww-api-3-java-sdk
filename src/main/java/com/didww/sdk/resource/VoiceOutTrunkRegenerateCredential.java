@@ -18,6 +18,6 @@ public class VoiceOutTrunkRegenerateCredential extends BaseResource {
     }
 
     public void setVoiceOutTrunk(VoiceOutTrunk voiceOutTrunk) {
-        this.voiceOutTrunk = voiceOutTrunk;
+        this.voiceOutTrunk = markDirty("voiceOutTrunk", voiceOutTrunk);
     }
 }

@@ -26,7 +26,7 @@ public class EncryptedFile extends BaseResource {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = markDirty("description", description);
     }
 
     public OffsetDateTime getExpireAt() {

@@ -3,6 +3,7 @@ package com.didww.sdk.repository;
 import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.QueryParams;
+import com.didww.sdk.resource.BaseResource;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jasminb.jsonapi.JSONAPIDocument;
@@ -49,7 +50,9 @@ public class ReadOnlyRepository<T> {
             byte[] body = getResponseBody(response);
             JSONAPIDocument<List<T>> document = converter.readDocumentCollection(body, resourceClass);
             Map<String, Object> meta = extractMeta(document);
-            return new ApiResponse<>(document.get(), meta);
+            List<T> data = document.get();
+            clearDirtyFlags(data);
+            return new ApiResponse<>(data, meta);
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -70,7 +73,9 @@ public class ReadOnlyRepository<T> {
             byte[] body = getResponseBody(response);
             JSONAPIDocument<T> document = converter.readDocument(body, resourceClass);
             Map<String, Object> meta = extractMeta(document);
-            return new ApiResponse<>(document.get(), meta);
+            T data = document.get();
+            clearDirtyFlags(data);
+            return new ApiResponse<>(data, meta);
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -116,5 +121,20 @@ public class ReadOnlyRepository<T> {
             return (Map<String, Object>) meta;
         }
         return null;
+    }
+
+    protected void clearDirtyFlags(T resource) {
+        if (resource instanceof BaseResource) {
+            ((BaseResource) resource).clearDirtyFields();
+        }
+    }
+
+    protected void clearDirtyFlags(List<T> resources) {
+        if (resources == null) {
+            return;
+        }
+        for (T resource : resources) {
+            clearDirtyFlags(resource);
+        }
     }
 }

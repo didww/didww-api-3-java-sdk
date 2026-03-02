@@ -52,7 +52,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setCityName(String cityName) {
-        this.cityName = cityName;
+        this.cityName = markDirty("cityName", cityName);
     }
 
     public String getPostalCode() {
@@ -60,7 +60,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+        this.postalCode = markDirty("postalCode", postalCode);
     }
 
     public String getAddress() {
@@ -68,7 +68,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.address = markDirty("address", address);
     }
 
     public String getDescription() {
@@ -76,7 +76,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = markDirty("description", description);
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -92,7 +92,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setCountry(Country country) {
-        this.country = country;
+        this.country = markDirty("country", country);
     }
 
     public Identity getIdentity() {
@@ -100,7 +100,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setIdentity(Identity identity) {
-        this.identity = identity;
+        this.identity = markDirty("identity", identity);
     }
 
     public List<Proof> getProofs() {
@@ -108,7 +108,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setProofs(List<Proof> proofs) {
-        this.proofs = proofs;
+        this.proofs = markDirty("proofs", proofs);
     }
 
     public Area getArea() {
@@ -116,7 +116,7 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setArea(Area area) {
-        this.area = area;
+        this.area = markDirty("area", area);
     }
 
     public City getCity() {
@@ -124,6 +124,6 @@ public class Address extends BaseResource implements ProofEntity {
     }
 
     public void setCity(City city) {
-        this.city = city;
+        this.city = markDirty("city", city);
     }
 }

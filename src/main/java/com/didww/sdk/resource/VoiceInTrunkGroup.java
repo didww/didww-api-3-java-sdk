@@ -31,7 +31,7 @@ public class VoiceInTrunkGroup extends BaseResource {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = markDirty("name", name);
     }
 
     public Integer getCapacityLimit() {
@@ -39,7 +39,7 @@ public class VoiceInTrunkGroup extends BaseResource {
     }
 
     public void setCapacityLimit(Integer capacityLimit) {
-        this.capacityLimit = capacityLimit;
+        this.capacityLimit = markDirty("capacityLimit", capacityLimit);
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -51,6 +51,6 @@ public class VoiceInTrunkGroup extends BaseResource {
     }
 
     public void setVoiceInTrunks(List<VoiceInTrunk> voiceInTrunks) {
-        this.voiceInTrunks = voiceInTrunks;
+        this.voiceInTrunks = markDirty("voiceInTrunks", voiceInTrunks);
     }
 }

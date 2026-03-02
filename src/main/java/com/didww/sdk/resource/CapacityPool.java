@@ -63,7 +63,7 @@ public class CapacityPool extends BaseResource {
     }
 
     public void setTotalChannelsCount(Integer totalChannelsCount) {
-        this.totalChannelsCount = totalChannelsCount;
+        this.totalChannelsCount = markDirty("totalChannelsCount", totalChannelsCount);
     }
 
     public Integer getAssignedChannelsCount() {

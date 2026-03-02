@@ -24,7 +24,7 @@ public class RequirementValidation extends BaseResource {
     }
 
     public void setRequirement(Requirement requirement) {
-        this.requirement = requirement;
+        this.requirement = markDirty("requirement", requirement);
     }
 
     public Address getAddress() {
@@ -32,7 +32,7 @@ public class RequirementValidation extends BaseResource {
     }
 
     public void setAddress(Address address) {
-        this.address = address;
+        this.address = markDirty("address", address);
     }
 
     public Identity getIdentity() {
@@ -40,6 +40,6 @@ public class RequirementValidation extends BaseResource {
     }
 
     public void setIdentity(Identity identity) {
-        this.identity = identity;
+        this.identity = markDirty("identity", identity);
     }
 }
