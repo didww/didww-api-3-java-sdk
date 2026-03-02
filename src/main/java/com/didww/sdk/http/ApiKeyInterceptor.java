@@ -7,6 +7,8 @@ import okhttp3.Response;
 import java.io.IOException;
 
 public class ApiKeyInterceptor implements Interceptor {
+    public static final String API_VERSION_HEADER = "X-DIDWW-API-Version";
+    public static final String API_VERSION = "2022-05-10";
     private final String apiKey;
 
     public ApiKeyInterceptor(String apiKey) {
@@ -19,7 +21,8 @@ public class ApiKeyInterceptor implements Interceptor {
         Request.Builder builder = original.newBuilder()
                 .header("Content-Type", JsonApiMediaType.VALUE)
                 .header("Accept", JsonApiMediaType.VALUE)
-                .header("User-Agent", "didww-java-sdk/1.0.0");
+                .header("User-Agent", "didww-java-sdk/1.0.0")
+                .header(API_VERSION_HEADER, API_VERSION);
 
         if (!original.url().pathSegments().contains("public_keys")) {
             builder.header("Api-Key", apiKey);
