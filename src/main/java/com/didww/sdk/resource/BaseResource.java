@@ -30,8 +30,8 @@ public abstract class BaseResource {
     public static <T extends BaseResource> T build(Class<T> type, String id) {
         try {
             T instance = type.getDeclaredConstructor().newInstance();
-            instance.enableDirtyTracking();
             instance.setId(id);
+            instance.enableDirtyTracking();
             return instance;
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Failed to build " + type.getSimpleName(), e);

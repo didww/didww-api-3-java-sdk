@@ -42,6 +42,15 @@ class RepositoryTest extends BaseTest {
     }
 
     @Test
+    void testBuildDoesNotMarkIdAsDirty() {
+        VoiceInTrunk trunk = VoiceInTrunk.build("test-uuid-123");
+
+        assertThat(trunk.getId()).isEqualTo("test-uuid-123");
+        assertThat(trunk.hasDirtyFields()).isFalse();
+        assertThat(trunk.isFieldDirty("id")).isFalse();
+    }
+
+    @Test
     void testUpdateUsesIdFromResource() {
         String id = "41b94706-325e-4704-a433-d65105758836";
         String fixture = loadFixture("voice_in_trunks/create.json");
