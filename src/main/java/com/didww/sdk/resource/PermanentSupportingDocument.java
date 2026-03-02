@@ -35,7 +35,7 @@ public class PermanentSupportingDocument extends BaseResource {
     }
 
     public void setIdentity(Identity identity) {
-        this.identity = identity;
+        this.identity = markDirty("identity", identity);
     }
 
     public SupportingDocumentTemplate getTemplate() {
@@ -43,7 +43,7 @@ public class PermanentSupportingDocument extends BaseResource {
     }
 
     public void setTemplate(SupportingDocumentTemplate template) {
-        this.template = template;
+        this.template = markDirty("template", template);
     }
 
     public List<EncryptedFile> getFiles() {
@@ -51,6 +51,6 @@ public class PermanentSupportingDocument extends BaseResource {
     }
 
     public void setFiles(List<EncryptedFile> files) {
-        this.files = files;
+        this.files = markDirty("files", files);
     }
 }

@@ -83,7 +83,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = markDirty("name", name);
     }
 
     public List<String> getAllowedSipIps() {
@@ -91,7 +91,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setAllowedSipIps(List<String> allowedSipIps) {
-        this.allowedSipIps = allowedSipIps;
+        this.allowedSipIps = markDirty("allowedSipIps", allowedSipIps);
     }
 
     public OnCliMismatchAction getOnCliMismatchAction() {
@@ -99,7 +99,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setOnCliMismatchAction(OnCliMismatchAction onCliMismatchAction) {
-        this.onCliMismatchAction = onCliMismatchAction;
+        this.onCliMismatchAction = markDirty("onCliMismatchAction", onCliMismatchAction);
     }
 
     public List<String> getAllowedRtpIps() {
@@ -107,7 +107,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setAllowedRtpIps(List<String> allowedRtpIps) {
-        this.allowedRtpIps = allowedRtpIps;
+        this.allowedRtpIps = markDirty("allowedRtpIps", allowedRtpIps);
     }
 
     public Boolean getAllowAnyDidAsCli() {
@@ -115,7 +115,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setAllowAnyDidAsCli(Boolean allowAnyDidAsCli) {
-        this.allowAnyDidAsCli = allowAnyDidAsCli;
+        this.allowAnyDidAsCli = markDirty("allowAnyDidAsCli", allowAnyDidAsCli);
     }
 
     public VoiceOutTrunkStatus getStatus() {
@@ -127,7 +127,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setCapacityLimit(Integer capacityLimit) {
-        this.capacityLimit = capacityLimit;
+        this.capacityLimit = markDirty("capacityLimit", capacityLimit);
     }
 
     public String getThresholdAmount() {
@@ -135,7 +135,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setThresholdAmount(String thresholdAmount) {
-        this.thresholdAmount = thresholdAmount;
+        this.thresholdAmount = markDirty("thresholdAmount", thresholdAmount);
     }
 
     public MediaEncryptionMode getMediaEncryptionMode() {
@@ -143,7 +143,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setMediaEncryptionMode(MediaEncryptionMode mediaEncryptionMode) {
-        this.mediaEncryptionMode = mediaEncryptionMode;
+        this.mediaEncryptionMode = markDirty("mediaEncryptionMode", mediaEncryptionMode);
     }
 
     public DefaultDstAction getDefaultDstAction() {
@@ -151,7 +151,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setDefaultDstAction(DefaultDstAction defaultDstAction) {
-        this.defaultDstAction = defaultDstAction;
+        this.defaultDstAction = markDirty("defaultDstAction", defaultDstAction);
     }
 
     public List<String> getDstPrefixes() {
@@ -159,7 +159,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setDstPrefixes(List<String> dstPrefixes) {
-        this.dstPrefixes = dstPrefixes;
+        this.dstPrefixes = markDirty("dstPrefixes", dstPrefixes);
     }
 
     public Boolean getForceSymmetricRtp() {
@@ -167,7 +167,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setForceSymmetricRtp(Boolean forceSymmetricRtp) {
-        this.forceSymmetricRtp = forceSymmetricRtp;
+        this.forceSymmetricRtp = markDirty("forceSymmetricRtp", forceSymmetricRtp);
     }
 
     public Boolean getRtpPing() {
@@ -175,7 +175,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setRtpPing(Boolean rtpPing) {
-        this.rtpPing = rtpPing;
+        this.rtpPing = markDirty("rtpPing", rtpPing);
     }
 
     public String getCallbackUrl() {
@@ -183,7 +183,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
+        this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
     public String getUsername() {
@@ -207,7 +207,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setDids(List<Did> dids) {
-        this.dids = dids;
+        this.dids = markDirty("dids", dids);
     }
 
     public Did getDefaultDid() {
@@ -215,7 +215,7 @@ public class VoiceOutTrunk extends BaseResource {
     }
 
     public void setDefaultDid(Did defaultDid) {
-        this.defaultDid = defaultDid;
+        this.defaultDid = markDirty("defaultDid", defaultDid);
     }
 
 }

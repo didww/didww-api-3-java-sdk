@@ -37,7 +37,7 @@ public class SharedCapacityGroup extends BaseResource {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = markDirty("name", name);
     }
 
     public Integer getSharedChannelsCount() {
@@ -45,7 +45,7 @@ public class SharedCapacityGroup extends BaseResource {
     }
 
     public void setSharedChannelsCount(Integer sharedChannelsCount) {
-        this.sharedChannelsCount = sharedChannelsCount;
+        this.sharedChannelsCount = markDirty("sharedChannelsCount", sharedChannelsCount);
     }
 
     public Integer getMeteredChannelsCount() {
@@ -53,7 +53,7 @@ public class SharedCapacityGroup extends BaseResource {
     }
 
     public void setMeteredChannelsCount(Integer meteredChannelsCount) {
-        this.meteredChannelsCount = meteredChannelsCount;
+        this.meteredChannelsCount = markDirty("meteredChannelsCount", meteredChannelsCount);
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -65,7 +65,7 @@ public class SharedCapacityGroup extends BaseResource {
     }
 
     public void setCapacityPool(CapacityPool capacityPool) {
-        this.capacityPool = capacityPool;
+        this.capacityPool = markDirty("capacityPool", capacityPool);
     }
 
     public List<Did> getDids() {
@@ -73,6 +73,6 @@ public class SharedCapacityGroup extends BaseResource {
     }
 
     public void setDids(List<Did> dids) {
-        this.dids = dids;
+        this.dids = markDirty("dids", dids);
     }
 }

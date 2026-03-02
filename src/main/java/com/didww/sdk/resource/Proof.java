@@ -42,7 +42,7 @@ public class Proof extends BaseResource {
     }
 
     public void setEntity(ProofEntity entity) {
-        this.entity = entity;
+        this.entity = markDirty("entity", entity);
     }
 
     public ProofType getProofType() {
@@ -50,7 +50,7 @@ public class Proof extends BaseResource {
     }
 
     public void setProofType(ProofType proofType) {
-        this.proofType = proofType;
+        this.proofType = markDirty("proofType", proofType);
     }
 
     public List<EncryptedFile> getFiles() {
@@ -58,6 +58,6 @@ public class Proof extends BaseResource {
     }
 
     public void setFiles(List<EncryptedFile> files) {
-        this.files = files;
+        this.files = markDirty("files", files);
     }
 }

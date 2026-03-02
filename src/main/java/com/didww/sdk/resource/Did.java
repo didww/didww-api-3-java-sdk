@@ -84,7 +84,7 @@ public class Did extends BaseResource {
     }
 
     public void setTerminated(Boolean terminated) {
-        this.terminated = terminated;
+        this.terminated = markDirty("terminated", terminated);
     }
 
     public String getDescription() {
@@ -92,7 +92,7 @@ public class Did extends BaseResource {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = markDirty("description", description);
     }
 
     public Integer getCapacityLimit() {
@@ -100,7 +100,7 @@ public class Did extends BaseResource {
     }
 
     public void setCapacityLimit(Integer capacityLimit) {
-        this.capacityLimit = capacityLimit;
+        this.capacityLimit = markDirty("capacityLimit", capacityLimit);
     }
 
     public Integer getChannelsIncludedCount() {
@@ -112,7 +112,7 @@ public class Did extends BaseResource {
     }
 
     public void setDedicatedChannelsCount(Integer dedicatedChannelsCount) {
-        this.dedicatedChannelsCount = dedicatedChannelsCount;
+        this.dedicatedChannelsCount = markDirty("dedicatedChannelsCount", dedicatedChannelsCount);
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -128,7 +128,7 @@ public class Did extends BaseResource {
     }
 
     public void setBillingCyclesCount(Integer billingCyclesCount) {
-        this.billingCyclesCount = billingCyclesCount;
+        this.billingCyclesCount = markDirty("billingCyclesCount", billingCyclesCount);
     }
 
     public Order getOrder() {
@@ -144,8 +144,8 @@ public class Did extends BaseResource {
     }
 
     public void setVoiceInTrunk(VoiceInTrunk voiceInTrunk) {
-        this.voiceInTrunk = voiceInTrunk;
-        this.voiceInTrunkGroup = null;
+        this.voiceInTrunk = markDirty("voiceInTrunk", voiceInTrunk);
+        this.voiceInTrunkGroup = markDirty("voiceInTrunkGroup", null);
     }
 
     public VoiceInTrunkGroup getVoiceInTrunkGroup() {
@@ -153,8 +153,8 @@ public class Did extends BaseResource {
     }
 
     public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {
-        this.voiceInTrunkGroup = voiceInTrunkGroup;
-        this.voiceInTrunk = null;
+        this.voiceInTrunkGroup = markDirty("voiceInTrunkGroup", voiceInTrunkGroup);
+        this.voiceInTrunk = markDirty("voiceInTrunk", null);
     }
 
     public CapacityPool getCapacityPool() {
@@ -162,7 +162,7 @@ public class Did extends BaseResource {
     }
 
     public void setCapacityPool(CapacityPool capacityPool) {
-        this.capacityPool = capacityPool;
+        this.capacityPool = markDirty("capacityPool", capacityPool);
     }
 
     public SharedCapacityGroup getSharedCapacityGroup() {
@@ -170,7 +170,7 @@ public class Did extends BaseResource {
     }
 
     public void setSharedCapacityGroup(SharedCapacityGroup sharedCapacityGroup) {
-        this.sharedCapacityGroup = sharedCapacityGroup;
+        this.sharedCapacityGroup = markDirty("sharedCapacityGroup", sharedCapacityGroup);
     }
 
     public AddressVerification getAddressVerification() {

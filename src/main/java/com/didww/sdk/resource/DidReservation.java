@@ -30,7 +30,7 @@ public class DidReservation extends BaseResource {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = markDirty("description", description);
     }
 
     public OffsetDateTime getExpireAt() {
@@ -46,6 +46,6 @@ public class DidReservation extends BaseResource {
     }
 
     public void setAvailableDid(AvailableDid availableDid) {
-        this.availableDid = availableDid;
+        this.availableDid = markDirty("availableDid", availableDid);
     }
 }

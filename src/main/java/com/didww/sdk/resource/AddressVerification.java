@@ -48,7 +48,7 @@ public class AddressVerification extends BaseResource {
     }
 
     public void setServiceDescription(String serviceDescription) {
-        this.serviceDescription = serviceDescription;
+        this.serviceDescription = markDirty("serviceDescription", serviceDescription);
     }
 
     public String getCallbackUrl() {
@@ -56,7 +56,7 @@ public class AddressVerification extends BaseResource {
     }
 
     public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
+        this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
     public CallbackMethod getCallbackMethod() {
@@ -64,7 +64,7 @@ public class AddressVerification extends BaseResource {
     }
 
     public void setCallbackMethod(CallbackMethod callbackMethod) {
-        this.callbackMethod = callbackMethod;
+        this.callbackMethod = markDirty("callbackMethod", callbackMethod);
     }
 
     public AddressVerificationStatus getStatus() {
@@ -88,7 +88,7 @@ public class AddressVerification extends BaseResource {
     }
 
     public void setAddress(Address address) {
-        this.address = address;
+        this.address = markDirty("address", address);
     }
 
     public List<Did> getDids() {
@@ -96,6 +96,6 @@ public class AddressVerification extends BaseResource {
     }
 
     public void setDids(List<Did> dids) {
-        this.dids = dids;
+        this.dids = markDirty("dids", dids);
     }
 }

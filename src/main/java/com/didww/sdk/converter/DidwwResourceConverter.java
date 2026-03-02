@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.jasminb.jsonapi.ResourceConverter;
 
@@ -57,6 +58,10 @@ public class DidwwResourceConverter {
         mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper.setFilterProvider(new SimpleFilterProvider()
+                .addFilter("dirtyNullFilter", new DirtyNullFieldFilter())
+                .setFailOnUnknownId(false));
+        mapper.addMixIn(BaseResource.class, DirtyNullFilterMixIn.class);
         mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         return mapper;
     }

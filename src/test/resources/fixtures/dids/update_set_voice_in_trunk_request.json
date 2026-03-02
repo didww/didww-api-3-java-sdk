@@ -1,0 +1,19 @@
+{
+  "data": {
+    "id": "9df99644-f1a5-4a3c-99a4-559d758eb96b",
+    "type": "dids",
+    "attributes": {
+    },
+    "relationships": {
+      "voice_in_trunk": {
+        "data": {
+          "type": "voice_in_trunks",
+          "id": "41b94706-325e-4704-a433-d65105758836"
+        }
+      },
+      "voice_in_trunk_group": {
+        "data": null
+      }
+    }
+  }
+}

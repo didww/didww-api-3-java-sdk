@@ -74,7 +74,7 @@ public class Order extends BaseResource {
     }
 
     public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
+        this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
     public CallbackMethod getCallbackMethod() {
@@ -82,7 +82,7 @@ public class Order extends BaseResource {
     }
 
     public void setCallbackMethod(CallbackMethod callbackMethod) {
-        this.callbackMethod = callbackMethod;
+        this.callbackMethod = markDirty("callbackMethod", callbackMethod);
     }
 
     public Boolean getAllowBackOrdering() {
@@ -90,7 +90,7 @@ public class Order extends BaseResource {
     }
 
     public void setAllowBackOrdering(Boolean allowBackOrdering) {
-        this.allowBackOrdering = allowBackOrdering;
+        this.allowBackOrdering = markDirty("allowBackOrdering", allowBackOrdering);
     }
 
     public List<OrderItem> getItems() {
@@ -98,6 +98,6 @@ public class Order extends BaseResource {
     }
 
     public void setItems(List<OrderItem> items) {
-        this.items = items;
+        this.items = markDirty("items", items);
     }
 }

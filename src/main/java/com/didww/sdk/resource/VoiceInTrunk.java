@@ -62,7 +62,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = markDirty("name", name);
     }
 
     public Integer getPriority() {
@@ -70,7 +70,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setPriority(Integer priority) {
-        this.priority = priority;
+        this.priority = markDirty("priority", priority);
     }
 
     public Integer getWeight() {
@@ -78,7 +78,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setWeight(Integer weight) {
-        this.weight = weight;
+        this.weight = markDirty("weight", weight);
     }
 
     public CliFormat getCliFormat() {
@@ -86,7 +86,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setCliFormat(CliFormat cliFormat) {
-        this.cliFormat = cliFormat;
+        this.cliFormat = markDirty("cliFormat", cliFormat);
     }
 
     public String getCliPrefix() {
@@ -94,7 +94,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setCliPrefix(String cliPrefix) {
-        this.cliPrefix = cliPrefix;
+        this.cliPrefix = markDirty("cliPrefix", cliPrefix);
     }
 
     public String getDescription() {
@@ -102,7 +102,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = markDirty("description", description);
     }
 
     public Integer getRingingTimeout() {
@@ -110,7 +110,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setRingingTimeout(Integer ringingTimeout) {
-        this.ringingTimeout = ringingTimeout;
+        this.ringingTimeout = markDirty("ringingTimeout", ringingTimeout);
     }
 
     public Integer getCapacityLimit() {
@@ -118,7 +118,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setCapacityLimit(Integer capacityLimit) {
-        this.capacityLimit = capacityLimit;
+        this.capacityLimit = markDirty("capacityLimit", capacityLimit);
     }
 
     public OffsetDateTime getCreatedAt() {
@@ -130,7 +130,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setConfiguration(TrunkConfiguration configuration) {
-        this.configuration = configuration;
+        this.configuration = markDirty("configuration", configuration);
     }
 
     public Pop getPop() {
@@ -138,7 +138,7 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setPop(Pop pop) {
-        this.pop = pop;
+        this.pop = markDirty("pop", pop);
     }
 
     public VoiceInTrunkGroup getVoiceInTrunkGroup() {
@@ -146,6 +146,6 @@ public class VoiceInTrunk extends BaseResource {
     }
 
     public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {
-        this.voiceInTrunkGroup = voiceInTrunkGroup;
+        this.voiceInTrunkGroup = markDirty("voiceInTrunkGroup", voiceInTrunkGroup);
     }
 }

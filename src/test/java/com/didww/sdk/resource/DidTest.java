@@ -57,6 +57,97 @@ class DidTest extends BaseTest {
     }
 
     @Test
+    void testUpdateDidWithExplicitNullAttribute() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_clear_description_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update.json"))));
+
+        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setDescription(null);
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidBuiltResourceSendsOnlyDirtyAttributes() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_built_single_attr_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update.json"))));
+
+        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setDescription("a");
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidSetVoiceInTrunkClearsVoiceInTrunkGroup() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_set_voice_in_trunk_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update.json"))));
+
+        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setVoiceInTrunk(VoiceInTrunk.build("41b94706-325e-4704-a433-d65105758836"));
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidSetVoiceInTrunkGroupClearsVoiceInTrunk() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_set_voice_in_trunk_group_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update.json"))));
+
+        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setVoiceInTrunkGroup(VoiceInTrunkGroup.build("b2319703-ce6c-480d-bb53-614e7abcfc96"));
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidFromLoadedResourceSendsOnlyDirtyAttributes() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/show.json"))));
+
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_from_loaded_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update.json"))));
+
+        Did did = client.dids().find("9df99644-f1a5-4a3c-99a4-559d758eb96b").getData();
+        did.setDescription("patched from loaded resource");
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getDescription()).isEqualTo("something");
+    }
+
+    @Test
     void testListDids() {
         wireMock.stubFor(get(urlPathEqualTo("/v3/dids"))
                 .willReturn(aResponse()
@@ -95,6 +186,27 @@ class DidTest extends BaseTest {
         assertThat(did.getBillingCyclesCount()).isNull();
         assertThat(did.getChannelsIncludedCount()).isEqualTo(0);
         assertThat(did.getDedicatedChannelsCount()).isEqualTo(0);
+    }
+
+    @Test
+    void testFindDidWithIncludedRelationshipsHasNoDirtyFlags() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/show_with_address_verification_and_did_group.json"))));
+
+        QueryParams params = QueryParams.builder()
+                .include("address_verification", "did_group")
+                .build();
+        ApiResponse<Did> response = client.dids().find("21d0b02c-b556-4d3e-acbf-504b78295dbe", params);
+        Did did = response.getData();
+
+        // Dirty tracking is disabled during deserialization and enabled after,
+        // so no resources (top-level or included) should have dirty flags
+        assertThat(did.hasDirtyFields()).isFalse();
+        assertThat(did.getAddressVerification().hasDirtyFields()).isFalse();
+        assertThat(did.getDidGroup().hasDirtyFields()).isFalse();
     }
 
     @Test

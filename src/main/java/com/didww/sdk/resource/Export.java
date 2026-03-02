@@ -42,7 +42,7 @@ public class Export extends BaseResource {
     }
 
     public void setExportType(ExportType exportType) {
-        this.exportType = exportType;
+        this.exportType = markDirty("exportType", exportType);
     }
 
     public String getUrl() {
@@ -54,7 +54,7 @@ public class Export extends BaseResource {
     }
 
     public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
+        this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
     public CallbackMethod getCallbackMethod() {
@@ -62,7 +62,7 @@ public class Export extends BaseResource {
     }
 
     public void setCallbackMethod(CallbackMethod callbackMethod) {
-        this.callbackMethod = callbackMethod;
+        this.callbackMethod = markDirty("callbackMethod", callbackMethod);
     }
 
     public ExportStatus getStatus() {
@@ -74,7 +74,7 @@ public class Export extends BaseResource {
     }
 
     public void setFilters(Map<String, Object> filters) {
-        this.filters = filters;
+        this.filters = markDirty("filters", filters);
     }
 
     public OffsetDateTime getCreatedAt() {
