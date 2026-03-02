@@ -1,13 +1,11 @@
 package com.didww.sdk.resource;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.jasminb.jsonapi.annotations.Id;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@JsonFilter("dirtyNullFilter")
 public abstract class BaseResource {
 
     @Id

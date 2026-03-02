@@ -8,15 +8,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.github.jasminb.jsonapi.ResourceConverter;
+import com.github.jasminb.jsonapi.annotations.Relationship;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ReadOnlyRepository<T> {
     protected final OkHttpClient httpClient;
@@ -125,7 +131,8 @@ public class ReadOnlyRepository<T> {
 
     protected void enableDirtyTracking(T resource) {
         if (resource instanceof BaseResource) {
-            ((BaseResource) resource).enableDirtyTracking();
+            enableDirtyTrackingRecursive((BaseResource) resource,
+                    java.util.Collections.newSetFromMap(new IdentityHashMap<>()));
         }
     }
 
@@ -133,8 +140,40 @@ public class ReadOnlyRepository<T> {
         if (resources == null) {
             return;
         }
+        Set<BaseResource> visited = java.util.Collections.newSetFromMap(new IdentityHashMap<>());
         for (T resource : resources) {
-            enableDirtyTracking(resource);
+            if (resource instanceof BaseResource) {
+                enableDirtyTrackingRecursive((BaseResource) resource, visited);
+            }
+        }
+    }
+
+    private void enableDirtyTrackingRecursive(BaseResource resource, Set<BaseResource> visited) {
+        if (!visited.add(resource)) {
+            return;
+        }
+        resource.enableDirtyTracking();
+        for (Class<?> type = resource.getClass(); type != null && BaseResource.class.isAssignableFrom(type);
+             type = type.getSuperclass()) {
+            for (Field field : type.getDeclaredFields()) {
+                if (field.getAnnotation(Relationship.class) == null) {
+                    continue;
+                }
+                field.setAccessible(true);
+                try {
+                    Object value = field.get(resource);
+                    if (value instanceof BaseResource) {
+                        enableDirtyTrackingRecursive((BaseResource) value, visited);
+                    } else if (value instanceof Collection) {
+                        for (Object item : (Collection<?>) value) {
+                            if (item instanceof BaseResource) {
+                                enableDirtyTrackingRecursive((BaseResource) item, visited);
+                            }
+                        }
+                    }
+                } catch (IllegalAccessException ignored) {
+                }
+            }
         }
     }
 }

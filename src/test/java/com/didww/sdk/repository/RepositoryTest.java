@@ -51,6 +51,26 @@ class RepositoryTest extends BaseTest {
     }
 
     @Test
+    void testIncludedResourceHasDirtyTrackingEnabled() {
+        String didId = "21d0b02c-b556-4d3e-acbf-504b78295dbe";
+        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/" + didId))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/show_with_included_trunk.json"))));
+
+        Did did = client.dids().find(didId).getData();
+        VoiceInTrunk includedTrunk = did.getVoiceInTrunk();
+        assertThat(includedTrunk).isNotNull();
+        assertThat(includedTrunk.hasDirtyFields()).isFalse();
+
+        // Included resource should have dirty tracking enabled
+        // so that mutations are tracked for subsequent updates
+        includedTrunk.setName("changed");
+        assertThat(includedTrunk.isFieldDirty("name")).isTrue();
+    }
+
+    @Test
     void testUpdateUsesIdFromResource() {
         String id = "41b94706-325e-4704-a433-d65105758836";
         String fixture = loadFixture("voice_in_trunks/create.json");

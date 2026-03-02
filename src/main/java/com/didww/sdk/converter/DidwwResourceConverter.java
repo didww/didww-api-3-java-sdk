@@ -3,6 +3,7 @@ package com.didww.sdk.converter;
 import com.didww.sdk.resource.*;
 import com.didww.sdk.resource.configuration.*;
 import com.didww.sdk.resource.orderitem.*;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -61,6 +62,7 @@ public class DidwwResourceConverter {
         mapper.setFilterProvider(new SimpleFilterProvider()
                 .addFilter("dirtyNullFilter", new DirtyNullFieldFilter())
                 .setFailOnUnknownId(false));
+        mapper.addMixIn(BaseResource.class, DirtyNullFilterMixIn.class);
         mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         return mapper;
     }

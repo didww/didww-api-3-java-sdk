@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 class DirtyNullFieldFilterTest {
 
@@ -58,6 +59,18 @@ class DirtyNullFieldFilterTest {
         assertThat(node.has("name")).isTrue();
         assertThat(node.has("description")).isFalse();
         assertThat(node.has("cli_format")).isFalse();
+    }
+
+    @Test
+    void testSerializableWithExternalObjectMapper() {
+        VoiceInTrunk trunk = VoiceInTrunk.build("test-id");
+        trunk.setName("test");
+
+        // SDK consumers may serialize resources with their own ObjectMapper
+        // (for logging, caching, etc.) — this should not throw
+        ObjectMapper externalMapper = new ObjectMapper();
+        assertThatCode(() -> externalMapper.writeValueAsString(trunk))
+                .doesNotThrowAnyException();
     }
 
     @Test

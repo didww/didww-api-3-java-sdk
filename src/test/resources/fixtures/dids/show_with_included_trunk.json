@@ -1,0 +1,50 @@
+{
+  "data": {
+    "id": "21d0b02c-b556-4d3e-acbf-504b78295dbe",
+    "type": "dids",
+    "attributes": {
+      "blocked": false,
+      "capacity_limit": null,
+      "description": null,
+      "terminated": false,
+      "awaiting_registration": false,
+      "created_at": "2026-02-25T15:01:06.000Z",
+      "billing_cycles_count": null,
+      "number": "61488943592",
+      "expires_at": "2026-03-27T13:48:55.974Z",
+      "channels_included_count": 2,
+      "dedicated_channels_count": 0
+    },
+    "relationships": {
+      "voice_in_trunk": {
+        "data": {
+          "type": "voice_in_trunks",
+          "id": "41b94706-325e-4704-a433-d65105758836"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "41b94706-325e-4704-a433-d65105758836",
+      "type": "voice_in_trunks",
+      "attributes": {
+        "name": "hello, test pstn trunk",
+        "priority": 1,
+        "weight": 65535,
+        "cli_format": "e164",
+        "cli_prefix": "",
+        "description": "",
+        "ringing_timeout": null,
+        "capacity_limit": null,
+        "configuration": {
+          "type": "pstn_configurations",
+          "attributes": {
+            "dst": "558540420024"
+          }
+        },
+        "created_at": "2018-12-28T15:03:48.751Z"
+      }
+    }
+  ]
+}
