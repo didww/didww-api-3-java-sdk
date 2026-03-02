@@ -189,6 +189,27 @@ class DidTest extends BaseTest {
     }
 
     @Test
+    void testFindDidWithIncludedRelationshipsHasNoDirtyFlags() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/show_with_address_verification_and_did_group.json"))));
+
+        QueryParams params = QueryParams.builder()
+                .include("address_verification", "did_group")
+                .build();
+        ApiResponse<Did> response = client.dids().find("21d0b02c-b556-4d3e-acbf-504b78295dbe", params);
+        Did did = response.getData();
+
+        // Dirty tracking is disabled during deserialization and enabled after,
+        // so no resources (top-level or included) should have dirty flags
+        assertThat(did.hasDirtyFields()).isFalse();
+        assertThat(did.getAddressVerification().hasDirtyFields()).isFalse();
+        assertThat(did.getDidGroup().hasDirtyFields()).isFalse();
+    }
+
+    @Test
     void testFindDidWithAddressVerificationAndDidGroup() {
         wireMock.stubFor(get(urlPathEqualTo("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe"))
                 .willReturn(aResponse()

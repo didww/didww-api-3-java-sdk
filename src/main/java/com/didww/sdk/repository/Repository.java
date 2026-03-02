@@ -17,6 +17,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
 
@@ -48,7 +49,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
             byte[] responseBody = getResponseBody(response);
             JSONAPIDocument<T> responseDoc = converter.readDocument(responseBody, resourceClass);
             T data = responseDoc.get();
-            clearDirtyFlags(data);
+            enableDirtyTracking(data);
             return new ApiResponse<>(data, extractMeta(responseDoc));
         } catch (RuntimeException e) {
             throw e;
@@ -84,7 +85,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
             byte[] responseBody = getResponseBody(response);
             JSONAPIDocument<T> responseDoc = converter.readDocument(responseBody, resourceClass);
             T data = responseDoc.get();
-            clearDirtyFlags(data);
+            enableDirtyTracking(data);
             return new ApiResponse<>(data, extractMeta(responseDoc));
         } catch (RuntimeException e) {
             throw e;
@@ -137,7 +138,11 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
                     Object value = field.get(resource);
                     if (value == null) {
                         ObjectNode relNode = relationshipsNode.putObject(relationship.value());
-                        relNode.putNull("data");
+                        if (Collection.class.isAssignableFrom(field.getType())) {
+                            relNode.putArray("data");
+                        } else {
+                            relNode.putNull("data");
+                        }
                         changed = true;
                     }
                 }

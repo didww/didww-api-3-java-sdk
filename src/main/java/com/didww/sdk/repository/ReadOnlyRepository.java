@@ -51,7 +51,7 @@ public class ReadOnlyRepository<T> {
             JSONAPIDocument<List<T>> document = converter.readDocumentCollection(body, resourceClass);
             Map<String, Object> meta = extractMeta(document);
             List<T> data = document.get();
-            clearDirtyFlags(data);
+            enableDirtyTracking(data);
             return new ApiResponse<>(data, meta);
         } catch (RuntimeException e) {
             throw e;
@@ -74,7 +74,7 @@ public class ReadOnlyRepository<T> {
             JSONAPIDocument<T> document = converter.readDocument(body, resourceClass);
             Map<String, Object> meta = extractMeta(document);
             T data = document.get();
-            clearDirtyFlags(data);
+            enableDirtyTracking(data);
             return new ApiResponse<>(data, meta);
         } catch (RuntimeException e) {
             throw e;
@@ -123,18 +123,18 @@ public class ReadOnlyRepository<T> {
         return null;
     }
 
-    protected void clearDirtyFlags(T resource) {
+    protected void enableDirtyTracking(T resource) {
         if (resource instanceof BaseResource) {
-            ((BaseResource) resource).clearDirtyFields();
+            ((BaseResource) resource).enableDirtyTracking();
         }
     }
 
-    protected void clearDirtyFlags(List<T> resources) {
+    protected void enableDirtyTracking(List<T> resources) {
         if (resources == null) {
             return;
         }
         for (T resource : resources) {
-            clearDirtyFlags(resource);
+            enableDirtyTracking(resource);
         }
     }
 }

@@ -16,6 +16,9 @@ public abstract class BaseResource {
     @JsonIgnore
     private final Set<String> dirtyFields = new HashSet<>();
 
+    @JsonIgnore
+    private boolean dirtyTrackingEnabled = false;
+
     public String getId() {
         return id;
     }
@@ -27,6 +30,7 @@ public abstract class BaseResource {
     public static <T extends BaseResource> T build(Class<T> type, String id) {
         try {
             T instance = type.getDeclaredConstructor().newInstance();
+            instance.enableDirtyTracking();
             instance.setId(id);
             return instance;
         } catch (ReflectiveOperationException e) {
@@ -40,7 +44,7 @@ public abstract class BaseResource {
     }
 
     protected void markDirty(String fieldName) {
-        if (fieldName == null || fieldName.isEmpty()) {
+        if (!dirtyTrackingEnabled || fieldName == null || fieldName.isEmpty()) {
             return;
         }
         dirtyFields.add(toSnakeCase(fieldName));
@@ -55,8 +59,13 @@ public abstract class BaseResource {
     }
 
     @JsonIgnore
-    public void clearDirtyFields() {
-        dirtyFields.clear();
+    public boolean hasDirtyFields() {
+        return !dirtyFields.isEmpty();
+    }
+
+    @JsonIgnore
+    public void enableDirtyTracking() {
+        dirtyTrackingEnabled = true;
     }
 
     private String toSnakeCase(String fieldName) {
