@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,7 +170,10 @@ public class ReadOnlyRepository<T> {
                             }
                         }
                     }
-                } catch (IllegalAccessException ignored) {
+                } catch (IllegalAccessException e) {
+                    throw new DidwwClientException(
+                            "Failed to enable dirty tracking for field '"
+                                    + field.getName() + "' on " + resource.getClass().getName(), e);
                 }
             }
         }
