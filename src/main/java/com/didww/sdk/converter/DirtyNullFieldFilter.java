@@ -20,7 +20,7 @@ public class DirtyNullFieldFilter extends SimpleBeanPropertyFilter {
         boolean dirtyOnlyMode = DirtySerializationContext.isDirtyOnlyModeEnabled();
         boolean dirty = resource.isFieldDirty(writer.getName());
 
-        if (dirtyOnlyMode && !dirty) {
+        if (dirtyOnlyMode && !dirty && !"id".equals(writer.getName())) {
             if (!jgen.canOmitFields()) {
                 writer.serializeAsOmittedField(pojo, jgen, provider);
             }
