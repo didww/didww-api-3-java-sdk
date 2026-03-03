@@ -368,6 +368,65 @@ Export created = client.exports().create(export).getData();
 client.downloadExport(created.getUrl(), Path.of("/tmp/export.csv"));
 ```
 
+## Dirty PATCH Serialization
+
+The SDK tracks which fields have been modified and sends only those fields in PATCH requests. This avoids overwriting server-side values that your code hasn't touched.
+
+### Updating a fetched resource
+
+When you fetch a resource and modify it, only the changed fields are sent:
+
+```java
+Did did = client.dids().find("uuid").getData();
+did.setDescription("Updated description");
+// PATCH payload includes only "description", not all attributes
+client.dids().update(did);
+```
+
+### Building a resource for update
+
+Use `build(id)` to create a lightweight resource for PATCH without fetching first:
+
+```java
+VoiceInTrunk trunk = VoiceInTrunk.build("trunk-uuid");
+trunk.setName("New name");
+// PATCH payload includes only "name"
+client.voiceInTrunks().update(trunk);
+```
+
+### Clearing a field with explicit null
+
+Calling a setter with `null` marks the field as dirty and includes an explicit `null` in the payload, which clears the server-side value:
+
+```java
+Did did = Did.build("uuid");
+did.setDescription(null);
+// PATCH payload includes "description": null
+client.dids().update(did);
+```
+
+### Clearing a relationship
+
+Calling a relationship setter with `null` sends `"data": null` for to-one or `"data": []` for to-many relationships:
+
+```java
+Did did = Did.build("uuid");
+did.setVoiceInTrunk(null);
+// PATCH payload includes: "relationships": { "voice_in_trunk": { "data": null } }
+client.dids().update(did);
+```
+
+### Included resources
+
+Dirty tracking is automatically enabled on included (sideloaded) resources, so you can fetch with includes and update a related resource directly:
+
+```java
+Did did = client.dids().find("uuid", QueryParams.builder().include("voice_in_trunk").build()).getData();
+VoiceInTrunk trunk = did.getVoiceInTrunk();
+trunk.setDescription("Updated via include");
+client.voiceInTrunks().update(trunk);
+```
+
 ## Filtering, Sorting, and Pagination
 
 ```java
