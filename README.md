@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.didww:didww-api-3-java-sdk:1.1.0")
+    implementation("com.github.didww:didww-api-3-java-sdk:2.4.0")
 }
 ```
 
@@ -54,7 +54,7 @@ dependencies {
     <dependency>
         <groupId>com.github.didww</groupId>
         <artifactId>didww-api-3-java-sdk</artifactId>
-        <version>1.1.0</version>
+        <version>2.4.0</version>
     </dependency>
 </dependencies>
 ```
