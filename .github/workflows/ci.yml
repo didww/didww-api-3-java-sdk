@@ -79,6 +79,31 @@ jobs:
             echo "| Branch | $BRANCH_COVERED | $BRANCH_TOTAL | $BRANCH_PERCENT% |"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Generate badge.json
+        if: always()
+        run: |
+          REPORT="build/reports/jacoco/test/jacocoTestReport.xml"
+          HTML_DIR="build/reports/jacoco/test/html"
+          mkdir -p "$HTML_DIR"
+          if [ ! -f "$REPORT" ]; then
+            echo '{"schemaVersion":1,"label":"coverage","message":"unknown","color":"lightgrey"}' > "$HTML_DIR/badge.json"
+            exit 0
+          fi
+          LINE_VALUES=$(awk -F'"' '/<counter type="LINE"/ {print $4" "$6; exit}' "$REPORT")
+          LINE_MISSED=$(echo "$LINE_VALUES" | awk '{print $1+0}')
+          LINE_COVERED=$(echo "$LINE_VALUES" | awk '{print $2+0}')
+          LINE_TOTAL=$((LINE_MISSED + LINE_COVERED))
+          if [ "$LINE_TOTAL" -eq 0 ]; then
+            PERCENT="0"
+          else
+            PERCENT=$(awk -v c="$LINE_COVERED" -v t="$LINE_TOTAL" 'BEGIN { printf "%.1f", (c*100)/t }')
+          fi
+          if [ "$(echo "$PERCENT >= 90" | bc)" -eq 1 ]; then COLOR="brightgreen"
+          elif [ "$(echo "$PERCENT >= 75" | bc)" -eq 1 ]; then COLOR="green"
+          elif [ "$(echo "$PERCENT >= 60" | bc)" -eq 1 ]; then COLOR="yellow"
+          else COLOR="red"; fi
+          echo "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"${PERCENT}%\",\"color\":\"${COLOR}\"}" > "$HTML_DIR/badge.json"
+
       - name: Upload coverage HTML report
         if: always()
         uses: actions/upload-artifact@v4
