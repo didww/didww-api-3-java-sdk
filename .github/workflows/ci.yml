@@ -42,8 +42,8 @@ jobs:
             exit 0
           fi
 
-          LINE_VALUES=$(awk -F'"' '/<counter type="LINE"/ {print $4" "$6; exit}' "$REPORT")
-          BRANCH_VALUES=$(awk -F'"' '/<counter type="BRANCH"/ {print $4" "$6; exit}' "$REPORT")
+          LINE_VALUES=$(awk -F'"' '/<counter type="LINE"/ {m=$4; c=$6} END {print m" "c}' "$REPORT")
+          BRANCH_VALUES=$(awk -F'"' '/<counter type="BRANCH"/ {m=$4; c=$6} END {print m" "c}' "$REPORT")
 
           LINE_MISSED=$(echo "$LINE_VALUES" | awk '{print $1+0}')
           LINE_COVERED=$(echo "$LINE_VALUES" | awk '{print $2+0}')
@@ -89,7 +89,7 @@ jobs:
             echo '{"schemaVersion":1,"label":"coverage","message":"unknown","color":"lightgrey"}' > "$HTML_DIR/badge.json"
             exit 0
           fi
-          LINE_VALUES=$(awk -F'"' '/<counter type="LINE"/ {print $4" "$6; exit}' "$REPORT")
+          LINE_VALUES=$(awk -F'"' '/<counter type="LINE"/ {m=$4; c=$6} END {print m" "c}' "$REPORT")
           LINE_MISSED=$(echo "$LINE_VALUES" | awk '{print $1+0}')
           LINE_COVERED=$(echo "$LINE_VALUES" | awk '{print $2+0}')
           LINE_TOTAL=$((LINE_MISSED + LINE_COVERED))
