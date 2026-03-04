@@ -1,5 +1,9 @@
 Java client for DIDWW API v3.
 
+![Tests](https://github.com/didww/didww-api-3-java-sdk/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://didww.github.io/didww-api-3-java-sdk/badge.json)
+![Java](https://img.shields.io/badge/java-11%2B-blue)
+
 ## About DIDWW API v3
 
 The DIDWW API provides a simple yet powerful interface that allows you to fully integrate your own applications with DIDWW services. An extensive set of actions may be performed using this API, such as ordering and configuring phone numbers, setting capacity, creating SIP trunks and retrieving CDRs and other operational data.
