@@ -1,5 +1,6 @@
 package com.didww.sdk.http;
 
+import com.didww.sdk.SdkVersion;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -21,7 +22,7 @@ public class ApiKeyInterceptor implements Interceptor {
         Request.Builder builder = original.newBuilder()
                 .header("Content-Type", JsonApiMediaType.VALUE)
                 .header("Accept", JsonApiMediaType.VALUE)
-                .header("User-Agent", "didww-java-sdk/1.0.0")
+                .header("User-Agent", SdkVersion.userAgent())
                 .header(API_VERSION_HEADER, API_VERSION);
 
         if (!original.url().pathSegments().contains("public_keys")) {

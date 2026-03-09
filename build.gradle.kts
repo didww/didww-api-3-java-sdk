@@ -40,6 +40,18 @@ val examples by sourceSets.creating {
 configurations[examples.implementationConfigurationName].extendsFrom(configurations["implementation"])
 configurations[examples.runtimeOnlyConfigurationName].extendsFrom(configurations["runtimeOnly"])
 
+val generateVersionProperties by tasks.registering {
+    val outputDir = layout.buildDirectory.dir("generated/resources/version")
+    outputs.dir(outputDir)
+    doLast {
+        val dir = outputDir.get().asFile
+        dir.mkdirs()
+        dir.resolve("didww-sdk-version.properties").writeText("version=${project.version}\n")
+    }
+}
+
+sourceSets["main"].resources.srcDir(generateVersionProperties.map { it.outputs.files.singleFile })
+
 tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
