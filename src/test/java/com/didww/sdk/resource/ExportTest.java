@@ -6,9 +6,13 @@ import com.didww.sdk.resource.enums.ExportStatus;
 import com.didww.sdk.resource.enums.ExportType;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPOutputStream;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,7 +33,7 @@ class ExportTest extends BaseTest {
         assertThat(export.getId()).isEqualTo("da15f006-5da4-45ca-b0df-735baeadf423");
         assertThat(export.getStatus()).isEqualTo(ExportStatus.COMPLETED);
         assertThat(export.getExportType()).isEqualTo(ExportType.CDR_IN);
-        assertThat(export.getUrl()).isEqualTo("https://sandbox-api.didww.com/v3/exports/e5352384-6f64-4132-bba1-cda18fbc5896.csv");
+        assertThat(export.getUrl()).isEqualTo("https://sandbox-api.didww.com/v3/exports/e5352384-6f64-4132-bba1-cda18fbc5896.csv.gz");
     }
 
     @Test
@@ -94,5 +98,58 @@ class ExportTest extends BaseTest {
         assertThat(created.getId()).isEqualTo("da15f006-5da4-45ca-b0df-735baeadf423");
         assertThat(created.getStatus()).isEqualTo(ExportStatus.PENDING);
         assertThat(created.getExportType()).isEqualTo(ExportType.CDR_IN);
+    }
+
+    @Test
+    void testDownloadExport() throws Exception {
+        String csvContent = "col1,col2\nval1,val2\n";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
+            gzos.write(csvContent.getBytes());
+        }
+        byte[] gzData = baos.toByteArray();
+
+        wireMock.stubFor(get(urlPathEqualTo("/v3/exports/test-id.csv.gz"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/octet-stream")
+                        .withBody(gzData)));
+
+        Path tempFile = Files.createTempFile("export-test", ".csv.gz");
+        try {
+            client.downloadExport(wireMock.baseUrl() + "/v3/exports/test-id.csv.gz", tempFile);
+            byte[] bytes = Files.readAllBytes(tempFile);
+            // Verify gzip magic bytes
+            assertThat(bytes[0] & 0xFF).isEqualTo(0x1f);
+            assertThat(bytes[1] & 0xFF).isEqualTo(0x8b);
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void testDownloadAndDecompressExport() throws Exception {
+        String csvContent = "Date/Time Start (UTC),DID,Duration\n2018-12-06,972397239159652,0\n";
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzos = new GZIPOutputStream(baos)) {
+            gzos.write(csvContent.getBytes());
+        }
+        byte[] gzData = baos.toByteArray();
+
+        wireMock.stubFor(get(urlPathEqualTo("/v3/exports/test-id.csv.gz"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/octet-stream")
+                        .withBody(gzData)));
+
+        Path tempFile = Files.createTempFile("export-decompress-test", ".csv");
+        try {
+            client.downloadAndDecompressExport(wireMock.baseUrl() + "/v3/exports/test-id.csv.gz", tempFile);
+            String content = Files.readString(tempFile);
+            assertThat(content).contains("Date/Time Start (UTC)");
+            assertThat(content).contains("972397239159652");
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
     }
 }

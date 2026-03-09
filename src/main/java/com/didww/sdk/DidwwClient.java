@@ -19,9 +19,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.zip.GZIPInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -269,6 +272,35 @@ public class DidwwClient {
             }
         } catch (IOException e) {
             throw new DidwwClientException("Failed to download export", e);
+        }
+    }
+
+    /**
+     * Downloads a gzip-compressed export file (.csv.gz) and writes the decompressed CSV to the given path.
+     */
+    public void downloadAndDecompressExport(String url, Path destination) {
+        Path tempFile;
+        try {
+            tempFile = Files.createTempFile("didww_export_", ".csv.gz",
+                    PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
+        } catch (IOException e) {
+            throw new DidwwClientException("Failed to create temp file", e);
+        }
+        try {
+            downloadExport(url, tempFile);
+            try (InputStream fis = Files.newInputStream(tempFile);
+                 InputStream gzis = new GZIPInputStream(fis);
+                 OutputStream out = Files.newOutputStream(destination)) {
+                byte[] buffer = new byte[8192];
+                int len;
+                while ((len = gzis.read(buffer)) != -1) {
+                    out.write(buffer, 0, len);
+                }
+            }
+        } catch (IOException e) {
+            throw new DidwwClientException("Failed to download and decompress export", e);
+        } finally {
+            try { Files.deleteIfExists(tempFile); } catch (IOException ignored) {}
         }
     }
 
