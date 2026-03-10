@@ -34,7 +34,7 @@ public class DidwwApiException extends RuntimeException {
             sb.append(": ");
             for (int i = 0; i < errors.size(); i++) {
                 if (i > 0) sb.append("; ");
-                sb.append(errors.get(i).getDetail());
+                sb.append(errors.get(i).getMessage());
             }
         }
         return sb.toString();
@@ -65,6 +65,13 @@ public class DidwwApiException extends RuntimeException {
 
         public Map<String, Object> getMeta() { return meta; }
         public void setMeta(Map<String, Object> meta) { this.meta = meta; }
+
+        /**
+         * Returns {@code detail} if present, otherwise falls back to {@code title}.
+         */
+        public String getMessage() {
+            return detail != null ? detail : title;
+        }
 
         @Override
         public String toString() {
