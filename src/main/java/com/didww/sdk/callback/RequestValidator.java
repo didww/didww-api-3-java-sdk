@@ -35,6 +35,9 @@ public class RequestValidator {
 
     private String normalizeUrl(String url) {
         try {
+            if (!url.matches("^[a-zA-Z]+://.*")) {
+                url = "http://" + url;
+            }
             URI uri = URI.create(url);
             String scheme = uri.getScheme();
             String userInfo = uri.getUserInfo() != null ? uri.getUserInfo() + "@" : "";
