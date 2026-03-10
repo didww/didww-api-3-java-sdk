@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
+import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.ExportStatus;
 import com.didww.sdk.resource.enums.ExportType;
@@ -16,6 +17,7 @@ import java.util.zip.GZIPOutputStream;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ExportTest extends BaseTest {
 
@@ -122,6 +124,56 @@ class ExportTest extends BaseTest {
             // Verify gzip magic bytes
             assertThat(bytes[0] & 0xFF).isEqualTo(0x1f);
             assertThat(bytes[1] & 0xFF).isEqualTo(0x8b);
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void testDownloadExportApiError() throws Exception {
+        String errorBody = "{\"errors\":[{\"title\":\"Not Found\",\"detail\":\"Export not found\",\"status\":\"404\"}]}";
+        wireMock.stubFor(get(urlPathEqualTo("/v3/exports/missing-id.csv.gz"))
+                .willReturn(aResponse()
+                        .withStatus(404)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(errorBody)));
+
+        Path tempFile = Files.createTempFile("export-error-test", ".csv.gz");
+        try {
+            assertThatThrownBy(() -> client.downloadExport(
+                    wireMock.baseUrl() + "/v3/exports/missing-id.csv.gz", tempFile))
+                    .isInstanceOf(DidwwApiException.class)
+                    .satisfies(ex -> {
+                        DidwwApiException apiEx = (DidwwApiException) ex;
+                        assertThat(apiEx.getHttpStatus()).isEqualTo(404);
+                        assertThat(apiEx.getErrors()).hasSize(1);
+                        assertThat(apiEx.getErrors().get(0).getDetail()).isEqualTo("Export not found");
+                    });
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void testDownloadAndDecompressExportApiError() throws Exception {
+        String errorBody = "{\"errors\":[{\"title\":\"Forbidden\",\"status\":\"403\"}]}";
+        wireMock.stubFor(get(urlPathEqualTo("/v3/exports/forbidden-id.csv.gz"))
+                .willReturn(aResponse()
+                        .withStatus(403)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(errorBody)));
+
+        Path tempFile = Files.createTempFile("export-decompress-error-test", ".csv");
+        try {
+            assertThatThrownBy(() -> client.downloadAndDecompressExport(
+                    wireMock.baseUrl() + "/v3/exports/forbidden-id.csv.gz", tempFile))
+                    .isInstanceOf(DidwwApiException.class)
+                    .satisfies(ex -> {
+                        DidwwApiException apiEx = (DidwwApiException) ex;
+                        assertThat(apiEx.getHttpStatus()).isEqualTo(403);
+                        assertThat(apiEx.getErrors()).hasSize(1);
+                        assertThat(apiEx.getErrors().get(0).getTitle()).isEqualTo("Forbidden");
+                    });
         } finally {
             Files.deleteIfExists(tempFile);
         }

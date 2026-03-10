@@ -1,6 +1,7 @@
 package com.didww.sdk;
 
 import com.didww.sdk.converter.DidwwResourceConverter;
+import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.ApiKeyInterceptor;
 import com.didww.sdk.http.JsonApiMediaType;
@@ -234,7 +235,7 @@ public class DidwwClient {
         try (Response response = uploadClient.newCall(request).execute()) {
             String responseBody = response.body() != null ? response.body().string() : "";
             if (!response.isSuccessful()) {
-                throw new DidwwClientException("Failed to upload encrypted file: HTTP " + response.code() + " " + responseBody);
+                throw parseApiException(response.code(), responseBody);
             }
 
             JsonNode root = objectMapper.readTree(responseBody);
@@ -248,7 +249,7 @@ public class DidwwClient {
                 ids.add(idNode.asText());
             }
             return ids;
-        } catch (DidwwClientException e) {
+        } catch (DidwwApiException | DidwwClientException e) {
             throw e;
         } catch (IOException e) {
             throw new DidwwClientException("Failed to upload encrypted file", e);
@@ -263,7 +264,8 @@ public class DidwwClient {
 
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new DidwwClientException("Failed to download export: HTTP " + response.code());
+                String body = response.body() != null ? response.body().string() : "";
+                throw parseApiException(response.code(), body);
             }
             if (response.body() == null) {
                 throw new DidwwClientException("Empty response body for export download");
@@ -271,6 +273,8 @@ public class DidwwClient {
             try (OutputStream out = Files.newOutputStream(destination)) {
                 out.write(response.body().bytes());
             }
+        } catch (DidwwApiException | DidwwClientException e) {
+            throw e;
         } catch (IOException e) {
             throw new DidwwClientException("Failed to download export", e);
         }
@@ -303,6 +307,33 @@ public class DidwwClient {
         } finally {
             try { Files.deleteIfExists(tempFile); } catch (IOException ignored) {}
         }
+    }
+
+    /**
+     * Parses an HTTP error response body and returns a {@link DidwwApiException}.
+     * If the body contains a JSON:API {@code errors} array, the errors are extracted;
+     * otherwise the raw body text is used as the exception message.
+     */
+    private DidwwApiException parseApiException(int httpStatus, String body) {
+        try {
+            JsonNode root = objectMapper.readTree(body);
+            JsonNode errorsNode = root.get("errors");
+            if (errorsNode != null && errorsNode.isArray()) {
+                List<DidwwApiException.ApiError> errors = new ArrayList<>();
+                for (JsonNode errorNode : errorsNode) {
+                    DidwwApiException.ApiError error = objectMapper.treeToValue(
+                            errorNode, DidwwApiException.ApiError.class);
+                    errors.add(error);
+                }
+                if (!errors.isEmpty()) {
+                    return new DidwwApiException(httpStatus, errors);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return new DidwwApiException(httpStatus, body.isEmpty()
+                ? "HTTP " + httpStatus
+                : body);
     }
 
     public DidwwCredentials getCredentials() {
