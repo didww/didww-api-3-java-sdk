@@ -7,6 +7,7 @@ import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Type("address_verifications")
@@ -71,8 +72,11 @@ public class AddressVerification extends BaseResource {
         return status;
     }
 
-    public String getRejectReasons() {
-        return rejectReasons;
+    public List<String> getRejectReasons() {
+        if (rejectReasons == null) {
+            return null;
+        }
+        return Arrays.asList(rejectReasons.split("; "));
     }
 
     public String getReference() {
