@@ -330,11 +330,13 @@ SharedCapacityGroup created = client.sharedCapacityGroups().create(scg).getData(
 ### Identities
 
 ```java
+import com.didww.sdk.resource.enums.IdentityType;
+
 Identity identity = new Identity();
 identity.setFirstName("John");
 identity.setLastName("Doe");
 identity.setPhoneNumber("12125551234");
-identity.setIdentityType("Personal");
+identity.setIdentityType(IdentityType.PERSONAL);
 identity.setCountry(country);
 Identity created = client.identities().create(identity).getData();
 ```
@@ -364,9 +366,10 @@ AddressVerification created = client.addressVerifications().create(verification)
 
 ```java
 import java.nio.file.Path;
+import com.didww.sdk.resource.enums.ExportType;
 
 Export export = new Export();
-export.setExportType("cdr_in");
+export.setExportType(ExportType.CDR_IN);
 export.setFilters(Map.of("year", 2025, "month", 1));
 Export created = client.exports().create(export).getData();
 
