@@ -34,12 +34,32 @@ class EncryptedFileUploadTest extends BaseTest {
         wireMock.verify(postRequestedFor(urlPathEqualTo("/v3/encrypted_files"))
                 .withHeader("Api-Key", equalTo("test-api-key"))
                 .withHeader(ApiKeyInterceptor.API_VERSION_HEADER, equalTo(ApiKeyInterceptor.API_VERSION))
+                .withHeader("User-Agent", matching("didww-java-sdk/.*"))
                 .withRequestBody(containing("encrypted_files[encryption_fingerprint]"))
                 .withRequestBody(containing("fingerprint-123"))
                 .withRequestBody(containing("encrypted_files[items][][description]"))
                 .withRequestBody(containing("sample.pdf"))
                 .withRequestBody(containing("encrypted_files[items][][file]"))
                 .withRequestBody(containing("sample.pdf.enc")));
+    }
+
+    @Test
+    void testUploadEncryptedFileSendsUserAgent() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/encrypted_files"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(loadFixture("encrypted_files/create.json"))));
+
+        client.uploadEncryptedFile(
+                "example".getBytes(StandardCharsets.UTF_8),
+                "sample.pdf.enc",
+                "fingerprint-123",
+                "sample.pdf"
+        );
+
+        wireMock.verify(postRequestedFor(urlPathEqualTo("/v3/encrypted_files"))
+                .withHeader("User-Agent", equalTo(SdkVersion.userAgent())));
     }
 
     @Test

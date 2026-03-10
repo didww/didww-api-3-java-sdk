@@ -221,6 +221,7 @@ public class DidwwClient {
                 .header("Api-Key", credentials.getApiKey())
                 .header(ApiKeyInterceptor.API_VERSION_HEADER, ApiKeyInterceptor.API_VERSION)
                 .header("Accept", "application/json")
+                .header("User-Agent", SdkVersion.userAgent())
                 .build();
 
         // Dedicated client without JSON:API interceptor, preserving timeouts from main client.
