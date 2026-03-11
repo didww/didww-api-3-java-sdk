@@ -4,6 +4,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -42,7 +43,7 @@ public class RequestValidator {
                 url = "http://" + url;
             }
             URI uri = URI.create(url);
-            String scheme = uri.getScheme().toLowerCase();
+            String scheme = uri.getScheme().toLowerCase(Locale.ROOT);
             String userInfo = uri.getUserInfo() != null ? uri.getUserInfo() + "@" : "";
             String host = uri.getHost();
 
