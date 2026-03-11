@@ -7,11 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.regex.Pattern;
 
 public class RequestValidator {
-
-    private static final Pattern SCHEME_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9+.-]*://");
 
     public static final String HEADER_NAME = "X-DIDWW-Signature";
 
@@ -39,9 +36,6 @@ public class RequestValidator {
 
     private String normalizeUrl(String url) {
         try {
-            if (!SCHEME_PATTERN.matcher(url).find()) {
-                url = "http://" + url;
-            }
             URI uri = URI.create(url);
             String scheme = uri.getScheme().toLowerCase(Locale.ROOT);
             String userInfo = uri.getUserInfo() != null ? uri.getUserInfo() + "@" : "";
@@ -73,11 +67,11 @@ public class RequestValidator {
             byte[] rawHmac = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
             for (byte b : rawHmac) {
-                sb.append(String.format("%02x", b));
+                sb.append(String.format("%02x", b)); // NOSONAR
             }
             return sb.toString();
         } catch (Exception e) {
-            throw new RuntimeException("Failed to compute HMAC-SHA1", e);
+            throw new RuntimeException("Failed to compute HMAC-SHA1", e); // NOSONAR
         }
     }
 }

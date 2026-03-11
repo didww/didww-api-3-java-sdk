@@ -76,7 +76,6 @@ class RequestValidatorTest {
             Arguments.of("http://foo.com:80/bar", "4d1ce2be656d20d064183bec2ab98a2ff3981f73"),
             Arguments.of("http://foo.com:443/bar", "904eaa65c0759afac0e4d8912de424e2dfb96ea1"),
             Arguments.of("http://foo.com:8182/bar", "eb8fcfb3d7ed4b4c2265d73cf93c31ba614384d1"),
-            Arguments.of("foo.com/bar", "4d1ce2be656d20d064183bec2ab98a2ff3981f73"),
             Arguments.of("http://foo.com/bar?baz=boo", "78b00717a86ce9df06abf45ff818aa94537e1729"),
             Arguments.of("http://user:pass@foo.com/bar", "88615a11a78c021c1da2e1e0bfb8cc165170afc5"),
             Arguments.of("http://foo.com/bar#test", "b1c4391fcdab7c0521bb5b9eb4f41f08529b8418"),
