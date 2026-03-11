@@ -6,8 +6,11 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 public class RequestValidator {
+
+    private static final Pattern SCHEME_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9+.-]*://");
 
     public static final String HEADER_NAME = "X-DIDWW-Signature";
 
@@ -35,11 +38,11 @@ public class RequestValidator {
 
     private String normalizeUrl(String url) {
         try {
-            if (!url.matches("^[a-zA-Z]+://.*")) {
+            if (!SCHEME_PATTERN.matcher(url).find()) {
                 url = "http://" + url;
             }
             URI uri = URI.create(url);
-            String scheme = uri.getScheme();
+            String scheme = uri.getScheme().toLowerCase();
             String userInfo = uri.getUserInfo() != null ? uri.getUserInfo() + "@" : "";
             String host = uri.getHost();
 
