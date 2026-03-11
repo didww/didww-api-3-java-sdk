@@ -3,6 +3,8 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
 
+import java.math.BigDecimal;
+
 @Type("balances")
 public class Balance extends BaseResource {
 
@@ -11,23 +13,23 @@ public class Balance extends BaseResource {
     }
 
     @JsonProperty("total_balance")
-    private Double totalBalance;
+    private BigDecimal totalBalance;
 
     @JsonProperty("balance")
-    private Double balance;
+    private BigDecimal balance;
 
     @JsonProperty("credit")
-    private Double credit;
+    private BigDecimal credit;
 
-    public Double getTotalBalance() {
+    public BigDecimal getTotalBalance() {
         return totalBalance;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public Double getCredit() {
+    public BigDecimal getCredit() {
         return credit;
     }
 }
