@@ -264,8 +264,7 @@ public class DidwwClient {
 
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                String body = response.body() != null ? response.body().string() : "";
-                throw parseApiException(response.code(), body);
+                throw new DidwwApiException(response.code(), "HTTP " + response.code());
             }
             if (response.body() == null) {
                 throw new DidwwClientException("Empty response body for export download");

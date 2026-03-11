@@ -131,12 +131,10 @@ class ExportTest extends BaseTest {
 
     @Test
     void testDownloadExportApiError() throws Exception {
-        String errorBody = "{\"errors\":[{\"title\":\"Not Found\",\"detail\":\"Export not found\",\"status\":\"404\"}]}";
         wireMock.stubFor(get(urlPathEqualTo("/v3/exports/missing-id.csv.gz"))
                 .willReturn(aResponse()
                         .withStatus(404)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(errorBody)));
+                        .withHeader("Content-Type", "text/html")));
 
         Path tempFile = Files.createTempFile("export-error-test", ".csv.gz");
         try {
@@ -146,8 +144,8 @@ class ExportTest extends BaseTest {
                     .satisfies(ex -> {
                         DidwwApiException apiEx = (DidwwApiException) ex;
                         assertThat(apiEx.getHttpStatus()).isEqualTo(404);
-                        assertThat(apiEx.getErrors()).hasSize(1);
-                        assertThat(apiEx.getErrors().get(0).getDetail()).isEqualTo("Export not found");
+                        assertThat(apiEx.getErrors()).isEmpty();
+                        assertThat(apiEx.getMessage()).isEqualTo("HTTP 404");
                     });
         } finally {
             Files.deleteIfExists(tempFile);
@@ -156,12 +154,10 @@ class ExportTest extends BaseTest {
 
     @Test
     void testDownloadAndDecompressExportApiError() throws Exception {
-        String errorBody = "{\"errors\":[{\"title\":\"Forbidden\",\"status\":\"403\"}]}";
         wireMock.stubFor(get(urlPathEqualTo("/v3/exports/forbidden-id.csv.gz"))
                 .willReturn(aResponse()
                         .withStatus(403)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(errorBody)));
+                        .withHeader("Content-Type", "text/html")));
 
         Path tempFile = Files.createTempFile("export-decompress-error-test", ".csv");
         try {
@@ -171,8 +167,8 @@ class ExportTest extends BaseTest {
                     .satisfies(ex -> {
                         DidwwApiException apiEx = (DidwwApiException) ex;
                         assertThat(apiEx.getHttpStatus()).isEqualTo(403);
-                        assertThat(apiEx.getErrors()).hasSize(1);
-                        assertThat(apiEx.getErrors().get(0).getTitle()).isEqualTo("Forbidden");
+                        assertThat(apiEx.getErrors()).isEmpty();
+                        assertThat(apiEx.getMessage()).isEqualTo("HTTP 403");
                     });
         } finally {
             Files.deleteIfExists(tempFile);
