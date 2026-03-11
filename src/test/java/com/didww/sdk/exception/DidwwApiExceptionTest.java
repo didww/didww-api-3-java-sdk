@@ -56,8 +56,8 @@ class DidwwApiExceptionTest extends BaseTest {
         wireMock.stubFor(get(urlPathEqualTo("/v3/dids"))
                 .willReturn(aResponse()
                         .withStatus(500)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody("{\"message\":\"Internal Server Error\"}")));
+                        .withHeader("Content-Type", "text/plain")
+                        .withBody("Internal Server Error")));
 
         assertThatThrownBy(() -> client.dids().list())
                 .isInstanceOf(DidwwApiException.class)
