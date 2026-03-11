@@ -34,10 +34,22 @@ public class DidwwApiException extends RuntimeException {
             sb.append(": ");
             for (int i = 0; i < errors.size(); i++) {
                 if (i > 0) sb.append("; ");
-                sb.append(errors.get(i).getDetail());
+                sb.append(errorMessage(errors.get(i), httpStatus));
             }
         }
         return sb.toString();
+    }
+
+    private static String errorMessage(ApiError error, int httpStatus) {
+        String detail = error.getDetail();
+        if (detail != null && !detail.isBlank()) {
+            return detail;
+        }
+        String title = error.getTitle();
+        if (title != null && !title.isBlank()) {
+            return title;
+        }
+        return "HTTP " + httpStatus;
     }
 
     public static class ApiError {
