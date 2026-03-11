@@ -1,5 +1,7 @@
 package com.didww.sdk.exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +33,16 @@ public class DidwwApiException extends RuntimeException {
     private static String buildMessage(int httpStatus, List<ApiError> errors) {
         StringBuilder sb = new StringBuilder("DIDWW API error (HTTP " + httpStatus + ")");
         if (errors != null && !errors.isEmpty()) {
-            sb.append(": ");
-            for (int i = 0; i < errors.size(); i++) {
-                if (i > 0) sb.append("; ");
-                sb.append(errors.get(i).getMessage());
+            StringBuilder details = new StringBuilder();
+            for (ApiError error : errors) {
+                String msg = error.getMessage();
+                if (msg != null && !msg.isBlank()) {
+                    if (details.length() > 0) details.append("; ");
+                    details.append(msg);
+                }
+            }
+            if (details.length() > 0) {
+                sb.append(": ").append(details);
             }
         }
         return sb.toString();
@@ -70,6 +78,7 @@ public class DidwwApiException extends RuntimeException {
          * Returns {@code detail} if present, otherwise falls back to {@code title},
          * or {@code "Unknown error"} when both are absent.
          */
+        @JsonIgnore
         public String getMessage() {
             if (detail != null) return detail;
             if (title != null) return title;
