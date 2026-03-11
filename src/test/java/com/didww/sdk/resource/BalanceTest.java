@@ -3,10 +3,10 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-
-import java.math.BigDecimal;
 
 class BalanceTest extends BaseTest {
 
