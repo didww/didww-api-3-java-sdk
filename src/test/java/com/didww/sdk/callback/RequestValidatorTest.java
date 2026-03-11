@@ -13,6 +13,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class RequestValidatorTest {
 
+    private static Map<String, String> ordersPayload() {
+        Map<String, String> payload = new LinkedHashMap<>();
+        payload.put("status", "completed");
+        payload.put("id", "1dd7a68b-e235-402b-8912-fe73ee14243a");
+        payload.put("type", "orders");
+        return payload;
+    }
+
     @Test
     void testSandbox() {
         RequestValidator validator = new RequestValidator("SOMEAPIKEY");
@@ -29,45 +37,29 @@ class RequestValidatorTest {
     @Test
     void testValidRequest() {
         RequestValidator validator = new RequestValidator("SOMEAPIKEY");
-        Map<String, String> payload = new LinkedHashMap<>();
-        payload.put("status", "completed");
-        payload.put("id", "1dd7a68b-e235-402b-8912-fe73ee14243a");
-        payload.put("type", "orders");
 
-        assertThat(validator.validate("http://example.com/callbacks", payload, "fe99e416c3547f2f59002403ec856ea386d05b2f")).isTrue();
+        assertThat(validator.validate("http://example.com/callbacks", ordersPayload(), "fe99e416c3547f2f59002403ec856ea386d05b2f")).isTrue();
     }
 
     @Test
     void testValidRequestWithQueryAndFragment() {
         RequestValidator validator = new RequestValidator("OTHERAPIKEY");
-        Map<String, String> payload = new LinkedHashMap<>();
-        payload.put("status", "completed");
-        payload.put("id", "1dd7a68b-e235-402b-8912-fe73ee14243a");
-        payload.put("type", "orders");
 
-        assertThat(validator.validate("http://example.com/callbacks?foo=bar#baz", payload, "32754ba93ac1207e540c0cf90371e7786b3b1cde")).isTrue();
+        assertThat(validator.validate("http://example.com/callbacks?foo=bar#baz", ordersPayload(), "32754ba93ac1207e540c0cf90371e7786b3b1cde")).isTrue();
     }
 
     @Test
     void testEmptySignatureRequest() {
         RequestValidator validator = new RequestValidator("SOMEAPIKEY");
-        Map<String, String> payload = new LinkedHashMap<>();
-        payload.put("status", "completed");
-        payload.put("id", "1dd7a68b-e235-402b-8912-fe73ee14243a");
-        payload.put("type", "orders");
 
-        assertThat(validator.validate("http://example.com/callbacks", payload, "")).isFalse();
+        assertThat(validator.validate("http://example.com/callbacks", ordersPayload(), "")).isFalse();
     }
 
     @Test
     void testInvalidSignatureRequest() {
         RequestValidator validator = new RequestValidator("SOMEAPIKEY");
-        Map<String, String> payload = new LinkedHashMap<>();
-        payload.put("status", "completed");
-        payload.put("id", "1dd7a68b-e235-402b-8912-fe73ee14243a");
-        payload.put("type", "orders");
 
-        assertThat(validator.validate("http://example.com/callbacks", payload, "fbdb1d1b18aa6c08324b7d64b71fb76370690e1d")).isFalse();
+        assertThat(validator.validate("http://example.com/callbacks", ordersPayload(), "fbdb1d1b18aa6c08324b7d64b71fb76370690e1d")).isFalse();
     }
 
     static Stream<Arguments> urlNormalizationVectors() {
@@ -93,11 +85,7 @@ class RequestValidatorTest {
     @MethodSource("urlNormalizationVectors")
     void testUrlNormalization(String url, String expectedSignature) {
         RequestValidator validator = new RequestValidator("SOMEAPIKEY");
-        Map<String, String> payload = new LinkedHashMap<>();
-        payload.put("id", "1dd7a68b-e235-402b-8912-fe73ee14243a");
-        payload.put("status", "completed");
-        payload.put("type", "orders");
 
-        assertThat(validator.validate(url, payload, expectedSignature)).isTrue();
+        assertThat(validator.validate(url, ordersPayload(), expectedSignature)).isTrue();
     }
 }
