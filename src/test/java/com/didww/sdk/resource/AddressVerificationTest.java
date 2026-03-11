@@ -7,6 +7,7 @@ import com.didww.sdk.resource.enums.AddressVerificationStatus;
 import com.didww.sdk.resource.enums.CallbackMethod;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,6 +53,23 @@ class AddressVerificationTest extends BaseTest {
         assertThat(av.getId()).isEqualTo("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
         assertThat(av.getStatus()).isEqualTo(AddressVerificationStatus.APPROVED);
         assertThat(av.getReference()).isEqualTo("SHB-485120");
+    }
+
+    @Test
+    void testFindRejectedAddressVerification() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/address_verifications/429e6d4e-2ee9-4953-aa98-0b3ac07f0f96"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("address_verifications/show_rejected.json"))));
+
+        ApiResponse<AddressVerification> response = client.addressVerifications().find("429e6d4e-2ee9-4953-aa98-0b3ac07f0f96");
+        AddressVerification av = response.getData();
+
+        assertThat(av.getId()).isEqualTo("429e6d4e-2ee9-4953-aa98-0b3ac07f0f96");
+        assertThat(av.getStatus()).isEqualTo(AddressVerificationStatus.REJECTED);
+        assertThat(av.getRejectReasons()).isEqualTo(Arrays.asList("Address cannot be validated", "Proof of address should be not older than of 6 months"));
+        assertThat(av.getReference()).isEqualTo("ODW-879912");
     }
 
     @Test
