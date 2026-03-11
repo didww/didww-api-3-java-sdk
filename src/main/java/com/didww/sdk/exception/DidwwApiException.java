@@ -53,7 +53,7 @@ public class DidwwApiException extends RuntimeException {
         if (title != null && !title.isBlank()) {
             return title;
         }
-        return "HTTP " + httpStatus;
+        return "Unknown error";
     }
 
     /**
