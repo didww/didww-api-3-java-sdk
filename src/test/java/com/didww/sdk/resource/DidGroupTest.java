@@ -4,6 +4,7 @@ import com.didww.sdk.BaseTest;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.Feature;
+import com.didww.sdk.resource.enums.IdentityType;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,5 +53,31 @@ class DidGroupTest extends BaseTest {
         assertThat(didGroup.getDidGroupType().getName()).isEqualTo("Local");
         assertThat(didGroup.getRegion()).isNull();
         assertThat(didGroup.getStockKeepingUnits()).hasSize(2);
+    }
+
+    @Test
+    void testFindDidGroupWithRequirement() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1"))
+                .withQueryParam("include", equalTo("requirement"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("did_groups/show_with_requirement.json"))));
+
+        QueryParams params = QueryParams.builder()
+                .include("requirement")
+                .build();
+        ApiResponse<DidGroup> response = client.didGroups().find("2187c36d-28fb-436f-8861-5a0f5b5a3ee1", params);
+        DidGroup didGroup = response.getData();
+
+        assertThat(didGroup.getId()).isEqualTo("2187c36d-28fb-436f-8861-5a0f5b5a3ee1");
+        assertThat(didGroup.getPrefix()).isEqualTo("241");
+        assertThat(didGroup.getAreaName()).isEqualTo("Aachen");
+        assertThat(didGroup.getRequirement()).isNotNull();
+        assertThat(didGroup.getRequirement().getId()).isEqualTo("8da1e0b2-047c-4baf-9c57-57143f09b9ce");
+        assertThat(didGroup.getRequirement().getIdentityType()).isEqualTo(IdentityType.ANY);
+
+        wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1"))
+                .withQueryParam("include", equalTo("requirement")));
     }
 }
