@@ -4,7 +4,6 @@ import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.resource.BaseResource;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.github.jasminb.jsonapi.ResourceConverter;
@@ -16,7 +15,6 @@ import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -91,19 +89,7 @@ public class ReadOnlyRepository<T> {
     protected void handleErrorResponse(Response response) throws IOException {
         if (!response.isSuccessful()) {
             String body = response.body() != null ? response.body().string() : "";
-            List<DidwwApiException.ApiError> errors = new ArrayList<>();
-            try {
-                JsonNode root = objectMapper.readTree(body);
-                JsonNode errorsNode = root.get("errors");
-                if (errorsNode != null && errorsNode.isArray()) {
-                    for (JsonNode errorNode : errorsNode) {
-                        DidwwApiException.ApiError error = objectMapper.treeToValue(
-                                errorNode, DidwwApiException.ApiError.class);
-                        errors.add(error);
-                    }
-                }
-            } catch (Exception ignored) {
-            }
+            List<DidwwApiException.ApiError> errors = DidwwApiException.extractApiErrors(body, objectMapper);
             if (errors.isEmpty()) {
                 throw new DidwwApiException(response.code(), body);
             }

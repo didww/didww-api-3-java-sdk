@@ -314,23 +314,11 @@ public class DidwwClient {
      * otherwise the raw body text is used as the exception message.
      */
     private DidwwApiException parseApiException(int httpStatus, String body) {
-        try {
-            JsonNode root = objectMapper.readTree(body);
-            JsonNode errorsNode = root.get("errors");
-            if (errorsNode != null && errorsNode.isArray()) {
-                List<DidwwApiException.ApiError> errors = new ArrayList<>();
-                for (JsonNode errorNode : errorsNode) {
-                    DidwwApiException.ApiError error = objectMapper.treeToValue(
-                            errorNode, DidwwApiException.ApiError.class);
-                    errors.add(error);
-                }
-                if (!errors.isEmpty()) {
-                    return new DidwwApiException(httpStatus, errors);
-                }
-            }
-        } catch (Exception ignored) {
+        List<DidwwApiException.ApiError> errors = DidwwApiException.extractApiErrors(body, objectMapper);
+        if (!errors.isEmpty()) {
+            return new DidwwApiException(httpStatus, errors);
         }
-        return new DidwwApiException(httpStatus, body.isEmpty()
+        return new DidwwApiException(httpStatus, (body == null || body.trim().isEmpty())
                 ? "HTTP " + httpStatus
                 : body);
     }

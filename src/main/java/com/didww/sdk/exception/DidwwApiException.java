@@ -1,5 +1,9 @@
 package com.didww.sdk.exception;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +54,28 @@ public class DidwwApiException extends RuntimeException {
             return title;
         }
         return "HTTP " + httpStatus;
+    }
+
+    /**
+     * Extracts JSON:API error objects from a response body string.
+     * Returns an empty list if parsing fails or no errors are found.
+     */
+    public static List<ApiError> extractApiErrors(String body, ObjectMapper objectMapper) {
+        List<ApiError> errors = new ArrayList<>();
+        try {
+            JsonNode root = objectMapper.readTree(body);
+            JsonNode errorsNode = root.get("errors");
+            if (errorsNode != null && errorsNode.isArray()) {
+                for (JsonNode errorNode : errorsNode) {
+                    ApiError error = objectMapper.treeToValue(errorNode, ApiError.class);
+                    if (error != null) {
+                        errors.add(error);
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return errors;
     }
 
     public static class ApiError {
