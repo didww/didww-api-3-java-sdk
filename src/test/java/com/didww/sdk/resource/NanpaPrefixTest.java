@@ -54,6 +54,7 @@ class NanpaPrefixTest extends BaseTest {
     @Test
     void testFindNanpaPrefixWithRegion() {
         wireMock.stubFor(get(urlPathEqualTo("/v3/nanpa_prefixes/1e622e21-c740-4d3f-a615-2a7ef4991922"))
+                .withQueryParam("include", equalTo("region"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/vnd.api+json")
@@ -72,5 +73,8 @@ class NanpaPrefixTest extends BaseTest {
         assertThat(prefix.getRegion().getId()).isEqualTo("346e64c8-18c2-4a12-b1e2-20e090043fca");
         assertThat(prefix.getRegion().getName()).isEqualTo("New Jersey");
         assertThat(prefix.getRegion().getIso()).isEqualTo("US-NJ");
+
+        wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/nanpa_prefixes/1e622e21-c740-4d3f-a615-2a7ef4991922"))
+                .withQueryParam("include", equalTo("region")));
     }
 }

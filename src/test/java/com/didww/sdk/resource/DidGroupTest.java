@@ -58,6 +58,7 @@ class DidGroupTest extends BaseTest {
     @Test
     void testFindDidGroupWithRequirement() {
         wireMock.stubFor(get(urlPathEqualTo("/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1"))
+                .withQueryParam("include", equalTo("requirement"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/vnd.api+json")
@@ -75,5 +76,8 @@ class DidGroupTest extends BaseTest {
         assertThat(didGroup.getRequirement()).isNotNull();
         assertThat(didGroup.getRequirement().getId()).isEqualTo("8da1e0b2-047c-4baf-9c57-57143f09b9ce");
         assertThat(didGroup.getRequirement().getIdentityType()).isEqualTo(IdentityType.ANY);
+
+        wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1"))
+                .withQueryParam("include", equalTo("requirement")));
     }
 }
