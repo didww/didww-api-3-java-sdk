@@ -50,4 +50,27 @@ class NanpaPrefixTest extends BaseTest {
         assertThat(prefix.getCountry()).isNotNull();
         assertThat(prefix.getCountry().getName()).isEqualTo("United States");
     }
+
+    @Test
+    void testFindNanpaPrefixWithRegion() {
+        wireMock.stubFor(get(urlPathEqualTo("/v3/nanpa_prefixes/1e622e21-c740-4d3f-a615-2a7ef4991922"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("nanpa_prefixes/show_with_region.json"))));
+
+        QueryParams params = QueryParams.builder()
+                .include("region")
+                .build();
+        ApiResponse<NanpaPrefix> response = client.nanpaPrefixes().find("1e622e21-c740-4d3f-a615-2a7ef4991922", params);
+        NanpaPrefix prefix = response.getData();
+
+        assertThat(prefix.getId()).isEqualTo("1e622e21-c740-4d3f-a615-2a7ef4991922");
+        assertThat(prefix.getNpa()).isEqualTo("201");
+        assertThat(prefix.getNxx()).isEqualTo("221");
+        assertThat(prefix.getRegion()).isNotNull();
+        assertThat(prefix.getRegion().getId()).isEqualTo("346e64c8-18c2-4a12-b1e2-20e090043fca");
+        assertThat(prefix.getRegion().getName()).isEqualTo("New Jersey");
+        assertThat(prefix.getRegion().getIso()).isEqualTo("US-NJ");
+    }
 }

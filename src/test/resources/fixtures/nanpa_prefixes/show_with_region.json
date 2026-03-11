@@ -1,0 +1,49 @@
+{
+  "data": {
+    "id": "1e622e21-c740-4d3f-a615-2a7ef4991922",
+    "type": "nanpa_prefixes",
+    "attributes": {
+      "npa": "201",
+      "nxx": "221"
+    },
+    "relationships": {
+      "country": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/nanpa_prefixes/1e622e21-c740-4d3f-a615-2a7ef4991922/relationships/country",
+          "related": "https://sandbox-api.didww.com/v3/nanpa_prefixes/1e622e21-c740-4d3f-a615-2a7ef4991922/country"
+        }
+      },
+      "region": {
+        "links": {
+          "self": "https://sandbox-api.didww.com/v3/nanpa_prefixes/1e622e21-c740-4d3f-a615-2a7ef4991922/relationships/region",
+          "related": "https://sandbox-api.didww.com/v3/nanpa_prefixes/1e622e21-c740-4d3f-a615-2a7ef4991922/region"
+        },
+        "data": {
+          "type": "regions",
+          "id": "346e64c8-18c2-4a12-b1e2-20e090043fca"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "346e64c8-18c2-4a12-b1e2-20e090043fca",
+      "type": "regions",
+      "attributes": {
+        "name": "New Jersey",
+        "iso": "US-NJ"
+      },
+      "relationships": {
+        "country": {
+          "links": {
+            "self": "https://sandbox-api.didww.com/v3/regions/346e64c8-18c2-4a12-b1e2-20e090043fca/relationships/country",
+            "related": "https://sandbox-api.didww.com/v3/regions/346e64c8-18c2-4a12-b1e2-20e090043fca/country"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "api_version": "2022-05-09"
+  }
+}
