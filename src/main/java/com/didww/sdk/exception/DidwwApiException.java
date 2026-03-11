@@ -67,10 +67,13 @@ public class DidwwApiException extends RuntimeException {
         public void setMeta(Map<String, Object> meta) { this.meta = meta; }
 
         /**
-         * Returns {@code detail} if present, otherwise falls back to {@code title}.
+         * Returns {@code detail} if present, otherwise falls back to {@code title},
+         * or {@code "Unknown error"} when both are absent.
          */
         public String getMessage() {
-            return detail != null ? detail : title;
+            if (detail != null) return detail;
+            if (title != null) return title;
+            return "Unknown error";
         }
 
         @Override

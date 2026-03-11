@@ -84,8 +84,8 @@ class DidwwApiExceptionTest extends BaseTest {
     }
 
     @Test
-    void testApiErrorGetMessageReturnsNullWhenBothMissing() {
+    void testApiErrorGetMessageReturnsFallbackWhenBothMissing() {
         DidwwApiException.ApiError error = new DidwwApiException.ApiError();
-        assertThat(error.getMessage()).isNull();
+        assertThat(error.getMessage()).isEqualTo("Unknown error");
     }
 }
