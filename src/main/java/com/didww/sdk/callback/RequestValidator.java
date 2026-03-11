@@ -50,7 +50,7 @@ public class RequestValidator {
                 port = 80;
             }
 
-            String path = uri.getRawPath() != null ? uri.getRawPath() : "";
+            String path = (uri.getRawPath() != null && !uri.getRawPath().isEmpty()) ? uri.getRawPath() : "/";
             String query = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
             String fragment = uri.getRawFragment() != null ? "#" + uri.getRawFragment() : "";
 

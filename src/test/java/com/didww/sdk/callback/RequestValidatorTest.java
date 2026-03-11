@@ -77,7 +77,15 @@ class RequestValidatorTest {
             Arguments.of("https://foo.com:8384/bar", "9c9fec4b7ebd6e1c461cb8e4ffe4f2987a19a5d3"),
             Arguments.of("https://foo.com/bar?qwe=asd", "4a0e98ddf286acadd1d5be1b0ed85a4e541c3137"),
             Arguments.of("https://qwe:asd@foo.com/bar", "7a8cd4a6c349910dfecaf9807e56a63787250bbd"),
-            Arguments.of("https://foo.com/bar#baz", "5024919770ea5ca2e3ccc07cb940323d79819508")
+            Arguments.of("https://foo.com/bar#baz", "5024919770ea5ca2e3ccc07cb940323d79819508"),
+            Arguments.of("http://[::1]/bar", "e0e9b83e4046d097f54b3ae64b08cbb4a539f601"),
+            Arguments.of("http://[::1]:80/bar", "e0e9b83e4046d097f54b3ae64b08cbb4a539f601"),
+            Arguments.of("http://[::1]:9090/bar", "ebec110ec5debd0e0fd086ff2f02e48ca665b543"),
+            Arguments.of("https://[::1]/bar", "f3cfe6f523fdf1d4eaadc310fcd3ed92e1e324b0"),
+            Arguments.of("http://foo.com", "6e9bb224f621d9bf735e80b45d69af688900e7d2"),
+            Arguments.of("http://foo.com/", "6e9bb224f621d9bf735e80b45d69af688900e7d2"),
+            Arguments.of("http://foo.com/hello%20world", "eb64035b2e8f356ff1442898a39ec94d5c3e2fc8"),
+            Arguments.of("http://foo.com/foo%2Fbar", "db24428442b012fa0972a453ba1ba98e755bba10")
         );
     }
 
