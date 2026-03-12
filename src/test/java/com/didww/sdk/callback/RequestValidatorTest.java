@@ -62,6 +62,19 @@ class RequestValidatorTest {
         assertThat(validator.validate("http://example.com/callbacks", ordersPayload(), "fbdb1d1b18aa6c08324b7d64b71fb76370690e1d")).isFalse();
     }
 
+    // https://doc.didww.com/api3/2022-05-10/callbacks-details.html#algorithm-implementation-details
+    @Test
+    void testDocumentationExample() {
+        RequestValidator validator = new RequestValidator("szrdgh6547umt7tht7xbqhj6g9gdbyp7");
+        String url = "https://mycompany.com/didww_callbacks?opaque=123";
+        Map<String, String> payload = new LinkedHashMap<>();
+        payload.put("id", "bf2cee72-6caa-4ae2-917e-bea01945691e");
+        payload.put("status", "completed");
+        payload.put("type", "orders");
+
+        assertThat(validator.validate(url, payload, "30f66e9d72eb5e193051fd02952f70d8e934b4ff")).isTrue();
+    }
+
     static Stream<Arguments> urlNormalizationVectors() {
         return Stream.of(
             Arguments.of("http://foo.com/bar", "4d1ce2be656d20d064183bec2ab98a2ff3981f73"),
