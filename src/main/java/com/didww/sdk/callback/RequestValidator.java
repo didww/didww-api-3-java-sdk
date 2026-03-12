@@ -4,6 +4,8 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,22 +23,27 @@ public class RequestValidator {
         if (signature == null || signature.isEmpty()) {
             return false;
         }
-        return validSignature(url, payload).equals(signature);
+        byte[] expectedBytes = computeHmac(url, payload);
+        byte[] signatureBytes = hexToBytes(signature);
+        if (signatureBytes.length == 0) {
+            return false;
+        }
+        return MessageDigest.isEqual(expectedBytes, signatureBytes);
     }
 
-    private String validSignature(String url, Map<String, String> payload) {
+    private byte[] computeHmac(String url, Map<String, String> payload) {
         TreeMap<String, String> sorted = new TreeMap<>(payload);
         StringBuilder data = new StringBuilder(normalizeUrl(url));
         for (Map.Entry<String, String> entry : sorted.entrySet()) {
             data.append(entry.getKey()).append(entry.getValue());
         }
-        return hmacSha1(data.toString(), apiKey);
+        return hmacSha1Bytes(data.toString(), apiKey);
     }
 
     private String normalizeUrl(String url) {
         try {
             URI uri = URI.create(url);
-            String scheme = uri.getScheme();
+            String scheme = uri.getScheme().toLowerCase(Locale.ROOT);
             String userInfo = uri.getUserInfo() != null ? uri.getUserInfo() + "@" : "";
             String host = uri.getHost();
 
@@ -49,7 +56,7 @@ public class RequestValidator {
                 port = 80;
             }
 
-            String path = uri.getRawPath() != null ? uri.getRawPath() : "";
+            String path = uri.getRawPath();
             String query = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
             String fragment = uri.getRawFragment() != null ? "#" + uri.getRawFragment() : "";
 
@@ -59,18 +66,29 @@ public class RequestValidator {
         }
     }
 
-    private static String hmacSha1(String data, String key) {
+    private static byte[] hmacSha1Bytes(String data, String key) {
         try {
             Mac mac = Mac.getInstance("HmacSHA1");
             mac.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
-            byte[] rawHmac = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            for (byte b : rawHmac) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
+            return mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
-            throw new RuntimeException("Failed to compute HMAC-SHA1", e);
+            throw new RuntimeException("Failed to compute HMAC-SHA1", e); // NOSONAR
         }
+    }
+
+    private static byte[] hexToBytes(String hex) {
+        if (hex.length() % 2 != 0) {
+            return new byte[0];
+        }
+        byte[] bytes = new byte[hex.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int hi = Character.digit(hex.charAt(i * 2), 16);
+            int lo = Character.digit(hex.charAt(i * 2 + 1), 16);
+            if (hi == -1 || lo == -1) {
+                return new byte[0];
+            }
+            bytes[i] = (byte) ((hi << 4) | lo);
+        }
+        return bytes;
     }
 }
