@@ -21,11 +21,7 @@ class OrderTest extends BaseTest {
 
     @Test
     void testFindOrder() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/orders/9df11dac-9d83-448c-8866-19c998be33db"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("orders/show.json"))));
+        stubGetFixture("/v3/orders/9df11dac-9d83-448c-8866-19c998be33db", "orders/show.json");
 
         ApiResponse<Order> response = client.orders().find("9df11dac-9d83-448c-8866-19c998be33db");
         Order order = response.getData();
@@ -201,11 +197,7 @@ class OrderTest extends BaseTest {
 
     @Test
     void testFindOrderWithGenericItem() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/orders/9df11dac-9d83-448c-8866-19c998be33db"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("orders/show_generic_item.json"))));
+        stubGetFixture("/v3/orders/9df11dac-9d83-448c-8866-19c998be33db", "orders/show_generic_item.json");
 
         ApiResponse<Order> response = client.orders().find("9df11dac-9d83-448c-8866-19c998be33db");
         Order order = response.getData();

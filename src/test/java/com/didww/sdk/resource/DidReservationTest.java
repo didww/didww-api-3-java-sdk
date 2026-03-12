@@ -14,11 +14,7 @@ class DidReservationTest extends BaseTest {
 
     @Test
     void testListDidReservations() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/did_reservations"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("did_reservations/index.json"))));
+        stubGetFixture("/v3/did_reservations", "did_reservations/index.json");
 
         ApiResponse<List<DidReservation>> response = client.didReservations().list();
         List<DidReservation> didReservations = response.getData();
@@ -28,11 +24,7 @@ class DidReservationTest extends BaseTest {
 
     @Test
     void testFindDidReservation() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/did_reservations/fd38d3ff-80cf-4e67-a605-609a2884a5c4"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("did_reservations/show.json"))));
+        stubGetFixture("/v3/did_reservations/fd38d3ff-80cf-4e67-a605-609a2884a5c4", "did_reservations/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("available_did.did_group.stock_keeping_units")

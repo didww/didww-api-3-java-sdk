@@ -12,11 +12,7 @@ class CityTest extends BaseTest {
 
     @Test
     void testListCities() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/cities"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("cities/index.json"))));
+        stubGetFixture("/v3/cities", "cities/index.json");
 
         ApiResponse<List<City>> response = client.cities().list();
         List<City> cities = response.getData();
@@ -26,11 +22,7 @@ class CityTest extends BaseTest {
 
     @Test
     void testFindCity() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/cities/368bf92f-c36e-473f-96fc-d53ed1b4028b"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("cities/show.json"))));
+        stubGetFixture("/v3/cities/368bf92f-c36e-473f-96fc-d53ed1b4028b", "cities/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country", "region", "area")

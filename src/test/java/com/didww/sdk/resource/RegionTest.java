@@ -12,11 +12,7 @@ class RegionTest extends BaseTest {
 
     @Test
     void testListRegions() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/regions"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("regions/index.json"))));
+        stubGetFixture("/v3/regions", "regions/index.json");
 
         ApiResponse<List<Region>> response = client.regions().list();
         List<Region> regions = response.getData();
@@ -26,11 +22,7 @@ class RegionTest extends BaseTest {
 
     @Test
     void testFindRegion() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/regions/c11b1f34-16cf-4ba6-8497-f305b53d5b01"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("regions/show.json"))));
+        stubGetFixture("/v3/regions/c11b1f34-16cf-4ba6-8497-f305b53d5b01", "regions/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country")

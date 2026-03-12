@@ -16,11 +16,7 @@ class IdentityTest extends BaseTest {
 
     @Test
     void testListIdentities() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/identities"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("identities/index.json"))));
+        stubGetFixture("/v3/identities", "identities/index.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country", "addresses", "proofs", "permanent_documents")

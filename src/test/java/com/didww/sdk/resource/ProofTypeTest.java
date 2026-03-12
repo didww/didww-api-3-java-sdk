@@ -13,11 +13,7 @@ class ProofTypeTest extends BaseTest {
 
     @Test
     void testListProofTypes() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/proof_types"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("proof_types/index.json"))));
+        stubGetFixture("/v3/proof_types", "proof_types/index.json");
 
         ApiResponse<List<ProofType>> response = client.proofTypes().list();
         List<ProofType> proofTypes = response.getData();

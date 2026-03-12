@@ -14,11 +14,7 @@ class DidGroupTest extends BaseTest {
 
     @Test
     void testListDidGroups() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/did_groups"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("did_groups/index.json"))));
+        stubGetFixture("/v3/did_groups", "did_groups/index.json");
 
         ApiResponse<List<DidGroup>> response = client.didGroups().list();
         List<DidGroup> didGroups = response.getData();
@@ -29,11 +25,7 @@ class DidGroupTest extends BaseTest {
 
     @Test
     void testFindDidGroup() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("did_groups/show.json"))));
+        stubGetFixture("/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1", "did_groups/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country", "region", "city", "did_group_type", "stock_keeping_units")

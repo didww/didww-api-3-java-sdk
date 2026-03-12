@@ -15,11 +15,7 @@ class VoiceInTrunkGroupTest extends BaseTest {
 
     @Test
     void testListVoiceInTrunkGroups() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_in_trunk_groups"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("voice_in_trunk_groups/index.json"))));
+        stubGetFixture("/v3/voice_in_trunk_groups", "voice_in_trunk_groups/index.json");
 
         ApiResponse<List<VoiceInTrunkGroup>> response = client.voiceInTrunkGroups().list();
         List<VoiceInTrunkGroup> groups = response.getData();

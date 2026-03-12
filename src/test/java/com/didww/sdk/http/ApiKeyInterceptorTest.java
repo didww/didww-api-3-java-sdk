@@ -11,11 +11,7 @@ class ApiKeyInterceptorTest extends BaseTest {
 
     @Test
     void testUserAgentHeaderIsSent() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/balance"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("balance/index.json"))));
+        stubGetFixture("/v3/balance", "balance/index.json");
 
         client.balance().find();
 

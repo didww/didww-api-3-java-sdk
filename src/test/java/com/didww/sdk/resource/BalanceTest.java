@@ -13,11 +13,7 @@ class BalanceTest extends BaseTest {
 
     @Test
     void testFindBalance() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/balance"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("balance/index.json"))));
+        stubGetFixture("/v3/balance", "balance/index.json");
 
         ApiResponse<Balance> response = client.balance().find();
         Balance balance = response.getData();

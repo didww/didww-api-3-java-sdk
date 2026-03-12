@@ -126,11 +126,7 @@ class DidTest extends BaseTest {
 
     @Test
     void testUpdateDidFromLoadedResourceSendsOnlyDirtyAttributes() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("dids/show.json"))));
+        stubGetFixture("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b", "dids/show.json");
 
         wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
                 .withRequestBody(equalToJson(loadFixture("dids/update_from_loaded_request.json"), true, false))
@@ -149,11 +145,7 @@ class DidTest extends BaseTest {
 
     @Test
     void testListDids() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/dids"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("dids/index.json"))));
+        stubGetFixture("/v3/dids", "dids/index.json");
 
         QueryParams params = QueryParams.builder()
                 .include("order")
@@ -168,11 +160,7 @@ class DidTest extends BaseTest {
 
     @Test
     void testFindDid() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("dids/show.json"))));
+        stubGetFixture("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b", "dids/show.json");
 
         ApiResponse<Did> response = client.dids().find("9df99644-f1a5-4a3c-99a4-559d758eb96b");
         Did did = response.getData();
@@ -190,11 +178,7 @@ class DidTest extends BaseTest {
 
     @Test
     void testFindDidWithIncludedRelationshipsHasNoDirtyFlags() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("dids/show_with_address_verification_and_did_group.json"))));
+        stubGetFixture("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe", "dids/show_with_address_verification_and_did_group.json");
 
         QueryParams params = QueryParams.builder()
                 .include("address_verification", "did_group")
@@ -211,11 +195,7 @@ class DidTest extends BaseTest {
 
     @Test
     void testFindDidWithAddressVerificationAndDidGroup() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("dids/show_with_address_verification_and_did_group.json"))));
+        stubGetFixture("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe", "dids/show_with_address_verification_and_did_group.json");
 
         QueryParams params = QueryParams.builder()
                 .include("address_verification", "did_group")

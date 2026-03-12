@@ -14,11 +14,7 @@ class AreaTest extends BaseTest {
 
     @Test
     void testListAreas() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/areas"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("areas/index.json"))));
+        stubGetFixture("/v3/areas", "areas/index.json");
 
         ApiResponse<List<Area>> response = client.areas().list();
         List<Area> areas = response.getData();
@@ -30,11 +26,7 @@ class AreaTest extends BaseTest {
 
     @Test
     void testFindArea() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/areas/ab2adc18-7c94-42d9-bdde-b28dfc373a22"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("areas/show.json"))));
+        stubGetFixture("/v3/areas/ab2adc18-7c94-42d9-bdde-b28dfc373a22", "areas/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country")

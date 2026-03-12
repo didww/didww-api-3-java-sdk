@@ -27,11 +27,7 @@ class VoiceInTrunkTest extends BaseTest {
 
     @Test
     void testListVoiceInTrunks() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_in_trunks"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("voice_in_trunks/index.json"))));
+        stubGetFixture("/v3/voice_in_trunks", "voice_in_trunks/index.json");
 
         QueryParams params = QueryParams.builder()
                 .include("trunk_group", "pop")
@@ -57,11 +53,7 @@ class VoiceInTrunkTest extends BaseTest {
 
     @Test
     void testListSipConfigurationAttributes() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_in_trunks"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("voice_in_trunks/index.json"))));
+        stubGetFixture("/v3/voice_in_trunks", "voice_in_trunks/index.json");
 
         ApiResponse<List<VoiceInTrunk>> response = client.voiceInTrunks().list();
         List<VoiceInTrunk> trunks = response.getData();

@@ -12,11 +12,7 @@ class CountryTest extends BaseTest {
 
     @Test
     void testListCountries() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/countries"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("countries/index.json"))));
+        stubGetFixture("/v3/countries", "countries/index.json");
 
         ApiResponse<List<Country>> response = client.countries().list();
         List<Country> countries = response.getData();
@@ -32,11 +28,7 @@ class CountryTest extends BaseTest {
 
     @Test
     void testFindCountry() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/countries/7eda11bb-0e66-4146-98e7-57a5281f56c8"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("countries/show.json"))));
+        stubGetFixture("/v3/countries/7eda11bb-0e66-4146-98e7-57a5281f56c8", "countries/show.json");
 
         ApiResponse<Country> response = client.countries().find("7eda11bb-0e66-4146-98e7-57a5281f56c8");
         Country country = response.getData();
@@ -48,11 +40,7 @@ class CountryTest extends BaseTest {
 
     @Test
     void testFindCountryWithRegions() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/countries/661d8448-8897-4765-acda-00cc1740148d"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("countries/show_with_regions.json"))));
+        stubGetFixture("/v3/countries/661d8448-8897-4765-acda-00cc1740148d", "countries/show_with_regions.json");
 
         QueryParams params = QueryParams.builder()
                 .include("regions")

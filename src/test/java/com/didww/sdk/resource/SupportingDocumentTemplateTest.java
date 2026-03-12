@@ -13,11 +13,7 @@ class SupportingDocumentTemplateTest extends BaseTest {
 
     @Test
     void testListSupportingDocumentTemplates() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/supporting_document_templates"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("supporting_document_templates/index.json"))));
+        stubGetFixture("/v3/supporting_document_templates", "supporting_document_templates/index.json");
 
         ApiResponse<List<SupportingDocumentTemplate>> response = client.supportingDocumentTemplates().list();
         List<SupportingDocumentTemplate> templates = response.getData();

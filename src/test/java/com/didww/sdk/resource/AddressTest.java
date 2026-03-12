@@ -14,11 +14,7 @@ class AddressTest extends BaseTest {
 
     @Test
     void testListAddresses() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/addresses"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("addresses/index.json"))));
+        stubGetFixture("/v3/addresses", "addresses/index.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country", "identity", "proofs", "area", "city")

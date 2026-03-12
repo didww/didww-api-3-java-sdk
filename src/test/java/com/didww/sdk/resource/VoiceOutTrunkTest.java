@@ -19,11 +19,7 @@ class VoiceOutTrunkTest extends BaseTest {
 
     @Test
     void testListVoiceOutTrunks() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_out_trunks"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("voice_out_trunks/index.json"))));
+        stubGetFixture("/v3/voice_out_trunks", "voice_out_trunks/index.json");
 
         ApiResponse<List<VoiceOutTrunk>> response = client.voiceOutTrunks().list();
         List<VoiceOutTrunk> trunks = response.getData();
@@ -33,11 +29,7 @@ class VoiceOutTrunkTest extends BaseTest {
 
     @Test
     void testFindVoiceOutTrunk() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_out_trunks/425ce763-a3a9-49b4-af5b-ada1a65c8864"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("voice_out_trunks/show.json"))));
+        stubGetFixture("/v3/voice_out_trunks/425ce763-a3a9-49b4-af5b-ada1a65c8864", "voice_out_trunks/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("dids", "default_did")

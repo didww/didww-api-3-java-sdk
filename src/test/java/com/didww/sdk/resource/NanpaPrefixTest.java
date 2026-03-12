@@ -14,11 +14,7 @@ class NanpaPrefixTest extends BaseTest {
 
     @Test
     void testListNanpaPrefixes() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/nanpa_prefixes"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("nanpa_prefixes/index.json"))));
+        stubGetFixture("/v3/nanpa_prefixes", "nanpa_prefixes/index.json");
 
         ApiResponse<List<NanpaPrefix>> response = client.nanpaPrefixes().list();
         List<NanpaPrefix> prefixes = response.getData();
@@ -32,11 +28,7 @@ class NanpaPrefixTest extends BaseTest {
 
     @Test
     void testFindNanpaPrefix() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/nanpa_prefixes/6c16d51d-d376-4395-91c4-012321317e48"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("nanpa_prefixes/show.json"))));
+        stubGetFixture("/v3/nanpa_prefixes/6c16d51d-d376-4395-91c4-012321317e48", "nanpa_prefixes/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country")

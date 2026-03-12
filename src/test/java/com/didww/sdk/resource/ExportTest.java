@@ -21,11 +21,7 @@ class ExportTest extends BaseTest {
 
     @Test
     void testFindExport() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/exports/da15f006-5da4-45ca-b0df-735baeadf423"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("exports/show.json"))));
+        stubGetFixture("/v3/exports/da15f006-5da4-45ca-b0df-735baeadf423", "exports/show.json");
 
         ApiResponse<Export> response = client.exports().find("da15f006-5da4-45ca-b0df-735baeadf423");
         Export export = response.getData();
@@ -57,11 +53,7 @@ class ExportTest extends BaseTest {
 
     @Test
     void testListExports() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/exports"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("exports/index.json"))));
+        stubGetFixture("/v3/exports", "exports/index.json");
 
         ApiResponse<List<Export>> response = client.exports().list();
         List<Export> exports = response.getData();
