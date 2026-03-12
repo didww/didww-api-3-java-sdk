@@ -394,10 +394,10 @@ client.dids().update(did);
 
 ### Building a resource for update
 
-Use `build(id)` to create a lightweight resource for PATCH without fetching first:
+Use `withId(id)` to create a lightweight resource for PATCH without fetching first:
 
 ```java
-VoiceInTrunk trunk = VoiceInTrunk.build("trunk-uuid");
+VoiceInTrunk trunk = new VoiceInTrunk().withId("trunk-uuid");
 trunk.setName("New name");
 // PATCH payload includes only "name"
 client.voiceInTrunks().update(trunk);
@@ -408,7 +408,7 @@ client.voiceInTrunks().update(trunk);
 Calling a setter with `null` marks the field as dirty and includes an explicit `null` in the payload, which clears the server-side value:
 
 ```java
-Did did = Did.build("uuid");
+Did did = new Did().withId("uuid");
 did.setDescription(null);
 // PATCH payload includes "description": null
 client.dids().update(did);
@@ -419,7 +419,7 @@ client.dids().update(did);
 Calling a relationship setter with `null` sends `"data": null` for to-one or `"data": []` for to-many relationships:
 
 ```java
-Did did = Did.build("uuid");
+Did did = new Did().withId("uuid");
 did.setVoiceInTrunk(null);
 // PATCH payload includes: "relationships": { "voice_in_trunk": { "data": null } }
 client.dids().update(did);
