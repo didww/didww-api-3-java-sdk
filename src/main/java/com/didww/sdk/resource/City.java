@@ -3,8 +3,11 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 @Type("cities")
+
+@Getter
 public class City extends BaseResource {
 
     @JsonProperty("name")
@@ -18,20 +21,4 @@ public class City extends BaseResource {
 
     @Relationship("area")
     private Area area;
-
-    public String getName() {
-        return name;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public Area getArea() {
-        return area;
-    }
 }

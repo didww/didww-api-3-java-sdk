@@ -5,11 +5,14 @@ import com.didww.sdk.resource.enums.ExportStatus;
 import com.didww.sdk.resource.enums.ExportType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
 
 @Type("exports")
+
+@Getter
 public class Export extends BaseResource {
 
     @JsonProperty("export_type")
@@ -33,47 +36,19 @@ public class Export extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    public ExportType getExportType() {
-        return exportType;
-    }
-
     public void setExportType(ExportType exportType) {
         this.exportType = markDirty("exportType", exportType);
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
     }
 
     public void setCallbackUrl(String callbackUrl) {
         this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
-    public CallbackMethod getCallbackMethod() {
-        return callbackMethod;
-    }
-
     public void setCallbackMethod(CallbackMethod callbackMethod) {
         this.callbackMethod = markDirty("callbackMethod", callbackMethod);
     }
 
-    public ExportStatus getStatus() {
-        return status;
-    }
-
-    public Map<String, Object> getFilters() {
-        return filters;
-    }
-
     public void setFilters(Map<String, Object> filters) {
         this.filters = markDirty("filters", filters);
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
     }
 }

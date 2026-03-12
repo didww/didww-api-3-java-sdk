@@ -3,10 +3,13 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 
 @Type("did_reservations")
+
+@Getter
 public class DidReservation extends BaseResource {
 
     @JsonProperty("description")
@@ -21,24 +24,8 @@ public class DidReservation extends BaseResource {
     @Relationship("available_did")
     private AvailableDid availableDid;
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = markDirty("description", description);
-    }
-
-    public OffsetDateTime getExpireAt() {
-        return expireAt;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public AvailableDid getAvailableDid() {
-        return availableDid;
     }
 
     public void setAvailableDid(AvailableDid availableDid) {

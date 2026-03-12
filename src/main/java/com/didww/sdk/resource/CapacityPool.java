@@ -3,11 +3,14 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Type("capacity_pools")
+
+@Getter
 public class CapacityPool extends BaseResource {
 
     @JsonProperty(value = "name", access = JsonProperty.Access.WRITE_ONLY)
@@ -46,55 +49,7 @@ public class CapacityPool extends BaseResource {
     @Relationship("qty_based_pricings")
     private List<QtyBasedPricing> qtyBasedPricings;
 
-    public String getName() {
-        return name;
-    }
-
-    public LocalDate getRenewDate() {
-        return renewDate;
-    }
-
-    public Integer getTotalChannelsCount() {
-        return totalChannelsCount;
-    }
-
     public void setTotalChannelsCount(Integer totalChannelsCount) {
         this.totalChannelsCount = markDirty("totalChannelsCount", totalChannelsCount);
-    }
-
-    public Integer getAssignedChannelsCount() {
-        return assignedChannelsCount;
-    }
-
-    public Integer getMinimumLimit() {
-        return minimumLimit;
-    }
-
-    public Integer getMinimumQtyPerOrder() {
-        return minimumQtyPerOrder;
-    }
-
-    public Double getSetupPrice() {
-        return setupPrice;
-    }
-
-    public Double getMonthlyPrice() {
-        return monthlyPrice;
-    }
-
-    public Double getMeteredRate() {
-        return meteredRate;
-    }
-
-    public List<Country> getCountries() {
-        return countries;
-    }
-
-    public List<SharedCapacityGroup> getSharedCapacityGroups() {
-        return sharedCapacityGroups;
-    }
-
-    public List<QtyBasedPricing> getQtyBasedPricings() {
-        return qtyBasedPricings;
     }
 }

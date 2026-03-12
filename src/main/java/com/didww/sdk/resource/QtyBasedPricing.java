@@ -2,8 +2,11 @@ package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 @Type("qty_based_pricings")
+
+@Getter
 public class QtyBasedPricing extends BaseResource {
 
     @JsonProperty("qty")
@@ -14,16 +17,4 @@ public class QtyBasedPricing extends BaseResource {
 
     @JsonProperty("monthly_price")
     private Double monthlyPrice;
-
-    public Integer getQty() {
-        return qty;
-    }
-
-    public Double getSetupPrice() {
-        return setupPrice;
-    }
-
-    public Double getMonthlyPrice() {
-        return monthlyPrice;
-    }
 }

@@ -4,10 +4,13 @@ import com.didww.sdk.resource.enums.Feature;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.util.List;
 
 @Type("did_groups")
+
+@Getter
 public class DidGroup extends BaseResource {
 
     @JsonProperty("area_name")
@@ -42,48 +45,4 @@ public class DidGroup extends BaseResource {
 
     @Relationship("requirement")
     private Requirement requirement;
-
-    public String getAreaName() {
-        return areaName;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public List<Feature> getFeatures() {
-        return features;
-    }
-
-    public Boolean getIsMetered() {
-        return isMetered;
-    }
-
-    public Boolean getAllowAdditionalChannels() {
-        return allowAdditionalChannels;
-    }
-
-    public List<StockKeepingUnit> getStockKeepingUnits() {
-        return stockKeepingUnits;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public DidGroupType getDidGroupType() {
-        return didGroupType;
-    }
-
-    public Requirement getRequirement() {
-        return requirement;
-    }
 }

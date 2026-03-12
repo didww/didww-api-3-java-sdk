@@ -2,8 +2,11 @@ package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 @Type("proof_types")
+
+@Getter
 public class ProofType extends BaseResource {
 
     @JsonProperty("name")
@@ -11,12 +14,4 @@ public class ProofType extends BaseResource {
 
     @JsonProperty("entity_type")
     private String entityType;
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEntityType() {
-        return entityType;
-    }
 }

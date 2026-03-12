@@ -3,8 +3,11 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 @Type("available_dids")
+
+@Getter
 public class AvailableDid extends BaseResource {
 
     @JsonProperty("number")
@@ -15,16 +18,4 @@ public class AvailableDid extends BaseResource {
 
     @Relationship("nanpa_prefix")
     private NanpaPrefix nanpaPrefix;
-
-    public String getNumber() {
-        return number;
-    }
-
-    public DidGroup getDidGroup() {
-        return didGroup;
-    }
-
-    public NanpaPrefix getNanpaPrefix() {
-        return nanpaPrefix;
-    }
 }

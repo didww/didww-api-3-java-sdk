@@ -2,8 +2,11 @@ package com.didww.sdk.resource;
 
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 @Type("requirement_validations")
+
+@Getter
 public class RequirementValidation extends BaseResource {
 
     @Relationship("requirement")
@@ -15,24 +18,12 @@ public class RequirementValidation extends BaseResource {
     @Relationship("identity")
     private Identity identity;
 
-    public Requirement getRequirement() {
-        return requirement;
-    }
-
     public void setRequirement(Requirement requirement) {
         this.requirement = markDirty("requirement", requirement);
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
     public void setAddress(Address address) {
         this.address = markDirty("address", address);
-    }
-
-    public Identity getIdentity() {
-        return identity;
     }
 
     public void setIdentity(Identity identity) {

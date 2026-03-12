@@ -9,10 +9,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 
 @Type("voice_in_trunks")
+
+@Getter
 public class VoiceInTrunk extends BaseResource {
 
     @JsonProperty("name")
@@ -53,92 +56,44 @@ public class VoiceInTrunk extends BaseResource {
     @Relationship("voice_in_trunk_group")
     private VoiceInTrunkGroup voiceInTrunkGroup;
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = markDirty("name", name);
-    }
-
-    public Integer getPriority() {
-        return priority;
     }
 
     public void setPriority(Integer priority) {
         this.priority = markDirty("priority", priority);
     }
 
-    public Integer getWeight() {
-        return weight;
-    }
-
     public void setWeight(Integer weight) {
         this.weight = markDirty("weight", weight);
-    }
-
-    public CliFormat getCliFormat() {
-        return cliFormat;
     }
 
     public void setCliFormat(CliFormat cliFormat) {
         this.cliFormat = markDirty("cliFormat", cliFormat);
     }
 
-    public String getCliPrefix() {
-        return cliPrefix;
-    }
-
     public void setCliPrefix(String cliPrefix) {
         this.cliPrefix = markDirty("cliPrefix", cliPrefix);
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {
         this.description = markDirty("description", description);
     }
 
-    public Integer getRingingTimeout() {
-        return ringingTimeout;
-    }
-
     public void setRingingTimeout(Integer ringingTimeout) {
         this.ringingTimeout = markDirty("ringingTimeout", ringingTimeout);
-    }
-
-    public Integer getCapacityLimit() {
-        return capacityLimit;
     }
 
     public void setCapacityLimit(Integer capacityLimit) {
         this.capacityLimit = markDirty("capacityLimit", capacityLimit);
     }
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public TrunkConfiguration getConfiguration() {
-        return configuration;
-    }
-
     public void setConfiguration(TrunkConfiguration configuration) {
         this.configuration = markDirty("configuration", configuration);
     }
 
-    public Pop getPop() {
-        return pop;
-    }
-
     public void setPop(Pop pop) {
         this.pop = markDirty("pop", pop);
-    }
-
-    public VoiceInTrunkGroup getVoiceInTrunkGroup() {
-        return voiceInTrunkGroup;
     }
 
     public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {

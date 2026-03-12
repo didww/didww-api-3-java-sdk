@@ -3,10 +3,13 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.util.List;
 
 @Type("countries")
+
+@Getter
 public class Country extends BaseResource {
 
     @JsonProperty("name")
@@ -20,20 +23,4 @@ public class Country extends BaseResource {
 
     @Relationship("regions")
     private List<Region> regions;
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public String getIso() {
-        return iso;
-    }
-
-    public List<Region> getRegions() {
-        return regions;
-    }
 }

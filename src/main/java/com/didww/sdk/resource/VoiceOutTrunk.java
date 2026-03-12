@@ -7,11 +7,14 @@ import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("voice_out_trunks")
+
+@Getter
 public class VoiceOutTrunk extends BaseResource {
 
     @JsonProperty("name")
@@ -74,140 +77,60 @@ public class VoiceOutTrunk extends BaseResource {
     @Relationship("default_did")
     private Did defaultDid;
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = markDirty("name", name);
-    }
-
-    public List<String> getAllowedSipIps() {
-        return allowedSipIps;
     }
 
     public void setAllowedSipIps(List<String> allowedSipIps) {
         this.allowedSipIps = markDirty("allowedSipIps", allowedSipIps);
     }
 
-    public OnCliMismatchAction getOnCliMismatchAction() {
-        return onCliMismatchAction;
-    }
-
     public void setOnCliMismatchAction(OnCliMismatchAction onCliMismatchAction) {
         this.onCliMismatchAction = markDirty("onCliMismatchAction", onCliMismatchAction);
-    }
-
-    public List<String> getAllowedRtpIps() {
-        return allowedRtpIps;
     }
 
     public void setAllowedRtpIps(List<String> allowedRtpIps) {
         this.allowedRtpIps = markDirty("allowedRtpIps", allowedRtpIps);
     }
 
-    public Boolean getAllowAnyDidAsCli() {
-        return allowAnyDidAsCli;
-    }
-
     public void setAllowAnyDidAsCli(Boolean allowAnyDidAsCli) {
         this.allowAnyDidAsCli = markDirty("allowAnyDidAsCli", allowAnyDidAsCli);
-    }
-
-    public VoiceOutTrunkStatus getStatus() {
-        return status;
-    }
-
-    public Integer getCapacityLimit() {
-        return capacityLimit;
     }
 
     public void setCapacityLimit(Integer capacityLimit) {
         this.capacityLimit = markDirty("capacityLimit", capacityLimit);
     }
 
-    public String getThresholdAmount() {
-        return thresholdAmount;
-    }
-
     public void setThresholdAmount(String thresholdAmount) {
         this.thresholdAmount = markDirty("thresholdAmount", thresholdAmount);
-    }
-
-    public MediaEncryptionMode getMediaEncryptionMode() {
-        return mediaEncryptionMode;
     }
 
     public void setMediaEncryptionMode(MediaEncryptionMode mediaEncryptionMode) {
         this.mediaEncryptionMode = markDirty("mediaEncryptionMode", mediaEncryptionMode);
     }
 
-    public DefaultDstAction getDefaultDstAction() {
-        return defaultDstAction;
-    }
-
     public void setDefaultDstAction(DefaultDstAction defaultDstAction) {
         this.defaultDstAction = markDirty("defaultDstAction", defaultDstAction);
-    }
-
-    public List<String> getDstPrefixes() {
-        return dstPrefixes;
     }
 
     public void setDstPrefixes(List<String> dstPrefixes) {
         this.dstPrefixes = markDirty("dstPrefixes", dstPrefixes);
     }
 
-    public Boolean getForceSymmetricRtp() {
-        return forceSymmetricRtp;
-    }
-
     public void setForceSymmetricRtp(Boolean forceSymmetricRtp) {
         this.forceSymmetricRtp = markDirty("forceSymmetricRtp", forceSymmetricRtp);
-    }
-
-    public Boolean getRtpPing() {
-        return rtpPing;
     }
 
     public void setRtpPing(Boolean rtpPing) {
         this.rtpPing = markDirty("rtpPing", rtpPing);
     }
 
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
     public void setCallbackUrl(String callbackUrl) {
         this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Boolean getThresholdReached() {
-        return thresholdReached;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public List<Did> getDids() {
-        return dids;
-    }
-
     public void setDids(List<Did> dids) {
         this.dids = markDirty("dids", dids);
-    }
-
-    public Did getDefaultDid() {
-        return defaultDid;
     }
 
     public void setDefaultDid(Did defaultDid) {
