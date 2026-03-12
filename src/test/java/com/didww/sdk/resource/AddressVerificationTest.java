@@ -18,11 +18,7 @@ class AddressVerificationTest extends BaseTest {
 
     @Test
     void testListAddressVerifications() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/address_verifications"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("address_verifications/index.json"))));
+        stubGetFixture("/v3/address_verifications", "address_verifications/index.json");
 
         QueryParams params = QueryParams.builder()
                 .include("address", "dids")
@@ -41,11 +37,7 @@ class AddressVerificationTest extends BaseTest {
 
     @Test
     void testFindAddressVerification() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("address_verifications/show.json"))));
+        stubGetFixture("/v3/address_verifications/c8e004b0-87ec-4987-b4fb-ee89db099f0e", "address_verifications/show.json");
 
         ApiResponse<AddressVerification> response = client.addressVerifications().find("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
         AddressVerification av = response.getData();
@@ -57,11 +49,7 @@ class AddressVerificationTest extends BaseTest {
 
     @Test
     void testFindRejectedAddressVerification() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/address_verifications/429e6d4e-2ee9-4953-aa98-0b3ac07f0f96"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("address_verifications/show_rejected.json"))));
+        stubGetFixture("/v3/address_verifications/429e6d4e-2ee9-4953-aa98-0b3ac07f0f96", "address_verifications/show_rejected.json");
 
         ApiResponse<AddressVerification> response = client.addressVerifications().find("429e6d4e-2ee9-4953-aa98-0b3ac07f0f96");
         AddressVerification av = response.getData();
@@ -81,8 +69,8 @@ class AddressVerificationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("address_verifications/create.json"))));
 
-        Address address = Address.build("d3414687-40f4-4346-a267-c2c65117d28c");
-        Did did = Did.build("a9d64c02-4486-4acb-a9a1-be4c81ff0659");
+        Address address = new Address().withId("d3414687-40f4-4346-a267-c2c65117d28c");
+        Did did = new Did().withId("a9d64c02-4486-4acb-a9a1-be4c81ff0659");
 
         AddressVerification verification = new AddressVerification();
         verification.setCallbackUrl("http://example.com");

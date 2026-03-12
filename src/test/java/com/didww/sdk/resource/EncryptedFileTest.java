@@ -13,11 +13,7 @@ class EncryptedFileTest extends BaseTest {
 
     @Test
     void testListEncryptedFiles() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/encrypted_files"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("encrypted_files/index.json"))));
+        stubGetFixture("/v3/encrypted_files", "encrypted_files/index.json");
 
         ApiResponse<List<EncryptedFile>> response = client.encryptedFiles().list();
         List<EncryptedFile> files = response.getData();
@@ -29,11 +25,7 @@ class EncryptedFileTest extends BaseTest {
 
     @Test
     void testFindEncryptedFile() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/encrypted_files/6eed102c-66a9-4a9b-a95f-4312d70ec12a"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("encrypted_files/show.json"))));
+        stubGetFixture("/v3/encrypted_files/6eed102c-66a9-4a9b-a95f-4312d70ec12a", "encrypted_files/show.json");
 
         ApiResponse<EncryptedFile> response = client.encryptedFiles().find("6eed102c-66a9-4a9b-a95f-4312d70ec12a");
         EncryptedFile file = response.getData();

@@ -14,11 +14,7 @@ class CapacityPoolTest extends BaseTest {
 
     @Test
     void testListCapacityPools() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/capacity_pools"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("capacity_pools/index.json"))));
+        stubGetFixture("/v3/capacity_pools", "capacity_pools/index.json");
 
         ApiResponse<List<CapacityPool>> response = client.capacityPools().list();
         List<CapacityPool> pools = response.getData();
@@ -34,11 +30,7 @@ class CapacityPoolTest extends BaseTest {
 
     @Test
     void testFindCapacityPool() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/capacity_pools/f288d07c-e2fc-4ae6-9837-b18fb469c324"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("capacity_pools/show.json"))));
+        stubGetFixture("/v3/capacity_pools/f288d07c-e2fc-4ae6-9837-b18fb469c324", "capacity_pools/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("countries", "shared_capacity_groups", "qty_based_pricings")
@@ -62,7 +54,7 @@ class CapacityPoolTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("capacity_pools/update.json"))));
 
-        CapacityPool pool = CapacityPool.build("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+        CapacityPool pool = new CapacityPool().withId("f288d07c-e2fc-4ae6-9837-b18fb469c324");
         pool.setTotalChannelsCount(25);
 
         ApiResponse<CapacityPool> response = client.capacityPools().update(pool);

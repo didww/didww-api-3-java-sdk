@@ -9,16 +9,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("orders")
-public class Order extends BaseResource {
 
-    public static Order build(String id) {
-        return BaseResource.build(Order.class, id);
-    }
+@Getter
+public class Order extends BaseResource {
 
     @JsonProperty(value = "amount", access = JsonProperty.Access.WRITE_ONLY)
     private Double amount;
@@ -49,52 +48,16 @@ public class Order extends BaseResource {
     @JsonSerialize(using = OrderItemSerializer.class)
     private List<OrderItem> items;
 
-    public Double getAmount() {
-        return amount;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
     public void setCallbackUrl(String callbackUrl) {
         this.callbackUrl = markDirty("callbackUrl", callbackUrl);
-    }
-
-    public CallbackMethod getCallbackMethod() {
-        return callbackMethod;
     }
 
     public void setCallbackMethod(CallbackMethod callbackMethod) {
         this.callbackMethod = markDirty("callbackMethod", callbackMethod);
     }
 
-    public Boolean getAllowBackOrdering() {
-        return allowBackOrdering;
-    }
-
     public void setAllowBackOrdering(Boolean allowBackOrdering) {
         this.allowBackOrdering = markDirty("allowBackOrdering", allowBackOrdering);
-    }
-
-    public List<OrderItem> getItems() {
-        return items;
     }
 
     public void setItems(List<OrderItem> items) {

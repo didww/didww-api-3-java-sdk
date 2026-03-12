@@ -3,16 +3,15 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("permanent_supporting_documents")
-public class PermanentSupportingDocument extends BaseResource {
 
-    public static PermanentSupportingDocument build(String id) {
-        return BaseResource.build(PermanentSupportingDocument.class, id);
-    }
+@Getter
+public class PermanentSupportingDocument extends BaseResource {
 
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
@@ -26,28 +25,12 @@ public class PermanentSupportingDocument extends BaseResource {
     @Relationship("files")
     private List<EncryptedFile> files;
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Identity getIdentity() {
-        return identity;
-    }
-
     public void setIdentity(Identity identity) {
         this.identity = markDirty("identity", identity);
     }
 
-    public SupportingDocumentTemplate getTemplate() {
-        return template;
-    }
-
     public void setTemplate(SupportingDocumentTemplate template) {
         this.template = markDirty("template", template);
-    }
-
-    public List<EncryptedFile> getFiles() {
-        return files;
     }
 
     public void setFiles(List<EncryptedFile> files) {

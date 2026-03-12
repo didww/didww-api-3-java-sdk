@@ -2,15 +2,14 @@ package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
 @Type("balances")
-public class Balance extends BaseResource {
 
-    public static Balance build(String id) {
-        return BaseResource.build(Balance.class, id);
-    }
+@Getter
+public class Balance extends BaseResource {
 
     @JsonProperty("total_balance")
     private BigDecimal totalBalance;
@@ -20,16 +19,4 @@ public class Balance extends BaseResource {
 
     @JsonProperty("credit")
     private BigDecimal credit;
-
-    public BigDecimal getTotalBalance() {
-        return totalBalance;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public BigDecimal getCredit() {
-        return credit;
-    }
 }

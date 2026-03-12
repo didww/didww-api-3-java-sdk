@@ -25,15 +25,11 @@ public abstract class BaseResource {
         this.id = markDirty("id", id);
     }
 
-    public static <T extends BaseResource> T build(Class<T> type, String id) {
-        try {
-            T instance = type.getDeclaredConstructor().newInstance();
-            instance.setId(id);
-            instance.enableDirtyTracking();
-            return instance;
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Failed to build " + type.getSimpleName(), e);
-        }
+    @SuppressWarnings("unchecked")
+    public <T extends BaseResource> T withId(String id) {
+        this.setId(id);
+        this.enableDirtyTracking();
+        return (T) this;
     }
 
     protected <T> T markDirty(String fieldName, T value) {

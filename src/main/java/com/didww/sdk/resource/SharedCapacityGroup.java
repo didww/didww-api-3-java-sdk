@@ -3,16 +3,15 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("shared_capacity_groups")
-public class SharedCapacityGroup extends BaseResource {
 
-    public static SharedCapacityGroup build(String id) {
-        return BaseResource.build(SharedCapacityGroup.class, id);
-    }
+@Getter
+public class SharedCapacityGroup extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -32,44 +31,20 @@ public class SharedCapacityGroup extends BaseResource {
     @Relationship("dids")
     private List<Did> dids;
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = markDirty("name", name);
-    }
-
-    public Integer getSharedChannelsCount() {
-        return sharedChannelsCount;
     }
 
     public void setSharedChannelsCount(Integer sharedChannelsCount) {
         this.sharedChannelsCount = markDirty("sharedChannelsCount", sharedChannelsCount);
     }
 
-    public Integer getMeteredChannelsCount() {
-        return meteredChannelsCount;
-    }
-
     public void setMeteredChannelsCount(Integer meteredChannelsCount) {
         this.meteredChannelsCount = markDirty("meteredChannelsCount", meteredChannelsCount);
     }
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public CapacityPool getCapacityPool() {
-        return capacityPool;
-    }
-
     public void setCapacityPool(CapacityPool capacityPool) {
         this.capacityPool = markDirty("capacityPool", capacityPool);
-    }
-
-    public List<Did> getDids() {
-        return dids;
     }
 
     public void setDids(List<Did> dids) {

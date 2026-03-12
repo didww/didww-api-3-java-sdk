@@ -2,13 +2,12 @@ package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 @Type("supporting_document_templates")
-public class SupportingDocumentTemplate extends BaseResource {
 
-    public static SupportingDocumentTemplate build(String id) {
-        return BaseResource.build(SupportingDocumentTemplate.class, id);
-    }
+@Getter
+public class SupportingDocumentTemplate extends BaseResource {
 
     @JsonProperty("name")
     private String name;
@@ -18,16 +17,4 @@ public class SupportingDocumentTemplate extends BaseResource {
 
     @JsonProperty("url")
     private String url;
-
-    public String getName() {
-        return name;
-    }
-
-    public Boolean getPermanent() {
-        return permanent;
-    }
-
-    public String getUrl() {
-        return url;
-    }
 }

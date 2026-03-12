@@ -21,8 +21,8 @@ class RequirementValidationTest extends BaseTest {
                         .withBody(loadFixture("requirement_validations/create.json"))));
 
         RequirementValidation validation = new RequirementValidation();
-        validation.setAddress(Address.build("d3414687-40f4-4346-a267-c2c65117d28c"));
-        validation.setRequirement(Requirement.build("aea92b24-a044-4864-9740-89d3e15b65c7"));
+        validation.setAddress(new Address().withId("d3414687-40f4-4346-a267-c2c65117d28c"));
+        validation.setRequirement(new Requirement().withId("aea92b24-a044-4864-9740-89d3e15b65c7"));
 
         ApiResponse<RequirementValidation> response = client.requirementValidations().create(validation);
         RequirementValidation created = response.getData();
@@ -40,9 +40,9 @@ class RequirementValidationTest extends BaseTest {
                         .withBody(loadFixture("requirement_validations/create_1.json"))));
 
         RequirementValidation validation = new RequirementValidation();
-        validation.setIdentity(Identity.build("5e9df058-50d2-4e34-b0d4-d1746b86f41a"));
-        validation.setAddress(Address.build("d3414687-40f4-4346-a267-c2c65117d28c"));
-        validation.setRequirement(Requirement.build("2efc3427-8ba6-4d50-875d-f2de4a068de8"));
+        validation.setIdentity(new Identity().withId("5e9df058-50d2-4e34-b0d4-d1746b86f41a"));
+        validation.setAddress(new Address().withId("d3414687-40f4-4346-a267-c2c65117d28c"));
+        validation.setRequirement(new Requirement().withId("2efc3427-8ba6-4d50-875d-f2de4a068de8"));
 
         assertThatThrownBy(() -> client.requirementValidations().create(validation))
                 .isInstanceOf(DidwwApiException.class)

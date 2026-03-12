@@ -5,15 +5,14 @@ import com.didww.sdk.resource.enums.IdentityType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.util.List;
 
 @Type("requirements")
-public class Requirement extends BaseResource {
 
-    public static Requirement build(String id) {
-        return BaseResource.build(Requirement.class, id);
-    }
+@Getter
+public class Requirement extends BaseResource {
 
     @JsonProperty("identity_type")
     private IdentityType identityType;
@@ -74,84 +73,4 @@ public class Requirement extends BaseResource {
 
     @Relationship("address_proof_types")
     private List<ProofType> addressProofTypes;
-
-    public IdentityType getIdentityType() {
-        return identityType;
-    }
-
-    public AreaLevel getPersonalAreaLevel() {
-        return personalAreaLevel;
-    }
-
-    public AreaLevel getBusinessAreaLevel() {
-        return businessAreaLevel;
-    }
-
-    public AreaLevel getAddressAreaLevel() {
-        return addressAreaLevel;
-    }
-
-    public Integer getPersonalProofQty() {
-        return personalProofQty;
-    }
-
-    public Integer getBusinessProofQty() {
-        return businessProofQty;
-    }
-
-    public Integer getAddressProofQty() {
-        return addressProofQty;
-    }
-
-    public List<String> getPersonalMandatoryFields() {
-        return personalMandatoryFields;
-    }
-
-    public List<String> getBusinessMandatoryFields() {
-        return businessMandatoryFields;
-    }
-
-    public Boolean getServiceDescriptionRequired() {
-        return serviceDescriptionRequired;
-    }
-
-    public String getRestrictionMessage() {
-        return restrictionMessage;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public DidGroupType getDidGroupType() {
-        return didGroupType;
-    }
-
-    public SupportingDocumentTemplate getPersonalPermanentDocument() {
-        return personalPermanentDocument;
-    }
-
-    public SupportingDocumentTemplate getBusinessPermanentDocument() {
-        return businessPermanentDocument;
-    }
-
-    public SupportingDocumentTemplate getPersonalOnetimeDocument() {
-        return personalOnetimeDocument;
-    }
-
-    public SupportingDocumentTemplate getBusinessOnetimeDocument() {
-        return businessOnetimeDocument;
-    }
-
-    public List<ProofType> getPersonalProofTypes() {
-        return personalProofTypes;
-    }
-
-    public List<ProofType> getBusinessProofTypes() {
-        return businessProofTypes;
-    }
-
-    public List<ProofType> getAddressProofTypes() {
-        return addressProofTypes;
-    }
 }

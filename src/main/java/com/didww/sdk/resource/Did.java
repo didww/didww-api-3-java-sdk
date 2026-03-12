@@ -3,15 +3,14 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 
 @Type("dids")
-public class Did extends BaseResource {
 
-    public static Did build(String id) {
-        return BaseResource.build(Did.class, id);
-    }
+@Getter
+public class Did extends BaseResource {
 
     @JsonProperty(value = "number", access = JsonProperty.Access.WRITE_ONLY)
     private String number;
@@ -67,80 +66,24 @@ public class Did extends BaseResource {
     @Relationship("address_verification")
     private AddressVerification addressVerification;
 
-    public String getNumber() {
-        return number;
-    }
-
-    public Boolean getBlocked() {
-        return blocked;
-    }
-
-    public Boolean getAwaitingRegistration() {
-        return awaitingRegistration;
-    }
-
-    public Boolean getTerminated() {
-        return terminated;
-    }
-
     public void setTerminated(Boolean terminated) {
         this.terminated = markDirty("terminated", terminated);
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {
         this.description = markDirty("description", description);
     }
 
-    public Integer getCapacityLimit() {
-        return capacityLimit;
-    }
-
     public void setCapacityLimit(Integer capacityLimit) {
         this.capacityLimit = markDirty("capacityLimit", capacityLimit);
-    }
-
-    public Integer getChannelsIncludedCount() {
-        return channelsIncludedCount;
-    }
-
-    public Integer getDedicatedChannelsCount() {
-        return dedicatedChannelsCount;
     }
 
     public void setDedicatedChannelsCount(Integer dedicatedChannelsCount) {
         this.dedicatedChannelsCount = markDirty("dedicatedChannelsCount", dedicatedChannelsCount);
     }
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public OffsetDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public Integer getBillingCyclesCount() {
-        return billingCyclesCount;
-    }
-
     public void setBillingCyclesCount(Integer billingCyclesCount) {
         this.billingCyclesCount = markDirty("billingCyclesCount", billingCyclesCount);
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public DidGroup getDidGroup() {
-        return didGroup;
-    }
-
-    public VoiceInTrunk getVoiceInTrunk() {
-        return voiceInTrunk;
     }
 
     public void setVoiceInTrunk(VoiceInTrunk voiceInTrunk) {
@@ -148,32 +91,16 @@ public class Did extends BaseResource {
         this.voiceInTrunkGroup = markDirty("voiceInTrunkGroup", null);
     }
 
-    public VoiceInTrunkGroup getVoiceInTrunkGroup() {
-        return voiceInTrunkGroup;
-    }
-
     public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {
         this.voiceInTrunkGroup = markDirty("voiceInTrunkGroup", voiceInTrunkGroup);
         this.voiceInTrunk = markDirty("voiceInTrunk", null);
-    }
-
-    public CapacityPool getCapacityPool() {
-        return capacityPool;
     }
 
     public void setCapacityPool(CapacityPool capacityPool) {
         this.capacityPool = markDirty("capacityPool", capacityPool);
     }
 
-    public SharedCapacityGroup getSharedCapacityGroup() {
-        return sharedCapacityGroup;
-    }
-
     public void setSharedCapacityGroup(SharedCapacityGroup sharedCapacityGroup) {
         this.sharedCapacityGroup = markDirty("sharedCapacityGroup", sharedCapacityGroup);
-    }
-
-    public AddressVerification getAddressVerification() {
-        return addressVerification;
     }
 }

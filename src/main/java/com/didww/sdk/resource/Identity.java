@@ -4,17 +4,16 @@ import com.didww.sdk.resource.enums.IdentityType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("identities")
-public class Identity extends BaseResource implements ProofEntity {
 
-    public static Identity build(String id) {
-        return BaseResource.build(Identity.class, id);
-    }
+@Getter
+public class Identity extends BaseResource implements ProofEntity {
 
     @JsonProperty("first_name")
     private String firstName;
@@ -73,24 +72,12 @@ public class Identity extends BaseResource implements ProofEntity {
     @Relationship("permanent_documents")
     private List<PermanentSupportingDocument> permanentDocuments;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = markDirty("firstName", firstName);
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setLastName(String lastName) {
         this.lastName = markDirty("lastName", lastName);
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
@@ -105,112 +92,52 @@ public class Identity extends BaseResource implements ProofEntity {
         this.idNumber = markDirty("idNumber", idNumber);
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = markDirty("birthDate", birthDate);
-    }
-
-    public String getCompanyName() {
-        return companyName;
     }
 
     public void setCompanyName(String companyName) {
         this.companyName = markDirty("companyName", companyName);
     }
 
-    public String getCompanyRegNumber() {
-        return companyRegNumber;
-    }
-
     public void setCompanyRegNumber(String companyRegNumber) {
         this.companyRegNumber = markDirty("companyRegNumber", companyRegNumber);
-    }
-
-    public String getVatId() {
-        return vatId;
     }
 
     public void setVatId(String vatId) {
         this.vatId = markDirty("vatId", vatId);
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = markDirty("description", description);
-    }
-
-    public String getPersonalTaxId() {
-        return personalTaxId;
     }
 
     public void setPersonalTaxId(String personalTaxId) {
         this.personalTaxId = markDirty("personalTaxId", personalTaxId);
     }
 
-    public IdentityType getIdentityType() {
-        return identityType;
-    }
-
     public void setIdentityType(IdentityType identityType) {
         this.identityType = markDirty("identityType", identityType);
-    }
-
-    public String getExternalReferenceId() {
-        return externalReferenceId;
     }
 
     public void setExternalReferenceId(String externalReferenceId) {
         this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
     public void setContactEmail(String contactEmail) {
         this.contactEmail = markDirty("contactEmail", contactEmail);
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Boolean getVerified() {
-        return verified;
-    }
-
-    public Country getCountry() {
-        return country;
     }
 
     public void setCountry(Country country) {
         this.country = markDirty("country", country);
     }
 
-    public List<Proof> getProofs() {
-        return proofs;
-    }
-
     public void setProofs(List<Proof> proofs) {
         this.proofs = markDirty("proofs", proofs);
     }
 
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
     public void setAddresses(List<Address> addresses) {
         this.addresses = markDirty("addresses", addresses);
-    }
-
-    public List<PermanentSupportingDocument> getPermanentDocuments() {
-        return permanentDocuments;
     }
 
     public void setPermanentDocuments(List<PermanentSupportingDocument> permanentDocuments) {

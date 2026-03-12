@@ -5,6 +5,7 @@ import com.didww.sdk.resource.enums.CallbackMethod;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -12,11 +13,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Type("address_verifications")
-public class AddressVerification extends BaseResource {
 
-    public static AddressVerification build(String id) {
-        return BaseResource.build(AddressVerification.class, id);
-    }
+@Getter
+public class AddressVerification extends BaseResource {
 
     @JsonProperty("service_description")
     private String serviceDescription;
@@ -45,32 +44,16 @@ public class AddressVerification extends BaseResource {
     @Relationship("dids")
     private List<Did> dids;
 
-    public String getServiceDescription() {
-        return serviceDescription;
-    }
-
     public void setServiceDescription(String serviceDescription) {
         this.serviceDescription = markDirty("serviceDescription", serviceDescription);
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
     }
 
     public void setCallbackUrl(String callbackUrl) {
         this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
-    public CallbackMethod getCallbackMethod() {
-        return callbackMethod;
-    }
-
     public void setCallbackMethod(CallbackMethod callbackMethod) {
         this.callbackMethod = markDirty("callbackMethod", callbackMethod);
-    }
-
-    public AddressVerificationStatus getStatus() {
-        return status;
     }
 
     public List<String> getRejectReasons() {
@@ -80,24 +63,8 @@ public class AddressVerification extends BaseResource {
         return Arrays.asList(rejectReasons.split("; "));
     }
 
-    public String getReference() {
-        return reference;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
     public void setAddress(Address address) {
         this.address = markDirty("address", address);
-    }
-
-    public List<Did> getDids() {
-        return dids;
     }
 
     public void setDids(List<Did> dids) {

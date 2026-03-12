@@ -2,18 +2,13 @@ package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 @Type("pops")
-public class Pop extends BaseResource {
 
-    public static Pop build(String id) {
-        return BaseResource.build(Pop.class, id);
-    }
+@Getter
+public class Pop extends BaseResource {
 
     @JsonProperty("name")
     private String name;
-
-    public String getName() {
-        return name;
-    }
 }

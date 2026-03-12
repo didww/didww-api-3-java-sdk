@@ -16,11 +16,7 @@ class RequirementTest extends BaseTest {
 
     @Test
     void testListRequirements() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/requirements"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("requirements/index.json"))));
+        stubGetFixture("/v3/requirements", "requirements/index.json");
 
         ApiResponse<List<Requirement>> response = client.requirements().list();
         List<Requirement> requirements = response.getData();
@@ -33,11 +29,7 @@ class RequirementTest extends BaseTest {
 
     @Test
     void testFindRequirement() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/requirements/25d12afe-1ec6-4fe3-9621-b250dd1fb959"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("requirements/show.json"))));
+        stubGetFixture("/v3/requirements/25d12afe-1ec6-4fe3-9621-b250dd1fb959", "requirements/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country", "did_group_type", "personal_permanent_document",

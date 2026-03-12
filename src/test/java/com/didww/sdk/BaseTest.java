@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.time.Duration;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public abstract class BaseTest {
     protected WireMockServer wireMock;
@@ -39,5 +40,13 @@ public abstract class BaseTest {
         if (wireMock != null) {
             wireMock.stop();
         }
+    }
+
+    protected void stubGetFixture(String urlPath, String fixture) {
+        wireMock.stubFor(get(urlPathEqualTo(urlPath))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture(fixture))));
     }
 }

@@ -14,11 +14,7 @@ class SharedCapacityGroupTest extends BaseTest {
 
     @Test
     void testListSharedCapacityGroups() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/shared_capacity_groups"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("shared_capacity_groups/index.json"))));
+        stubGetFixture("/v3/shared_capacity_groups", "shared_capacity_groups/index.json");
 
         ApiResponse<List<SharedCapacityGroup>> response = client.sharedCapacityGroups().list();
         List<SharedCapacityGroup> groups = response.getData();
@@ -33,11 +29,7 @@ class SharedCapacityGroupTest extends BaseTest {
 
     @Test
     void testFindSharedCapacityGroup() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("shared_capacity_groups/show.json"))));
+        stubGetFixture("/v3/shared_capacity_groups/89f987e2-0862-4bf4-a3f4-cdc89af0d875", "shared_capacity_groups/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("dids", "capacity_pool")
@@ -59,7 +51,7 @@ class SharedCapacityGroupTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("shared_capacity_groups/create.json"))));
 
-        CapacityPool pool = CapacityPool.build("f288d07c-e2fc-4ae6-9837-b18fb469c324");
+        CapacityPool pool = new CapacityPool().withId("f288d07c-e2fc-4ae6-9837-b18fb469c324");
 
         SharedCapacityGroup group = new SharedCapacityGroup();
         group.setName("java-sdk");
@@ -84,7 +76,7 @@ class SharedCapacityGroupTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("shared_capacity_groups/update.json"))));
 
-        SharedCapacityGroup group = SharedCapacityGroup.build("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
+        SharedCapacityGroup group = new SharedCapacityGroup().withId("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
         group.setName("didww1");
         group.setSharedChannelsCount(10);
         group.setMeteredChannelsCount(2);
@@ -106,7 +98,7 @@ class SharedCapacityGroupTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("shared_capacity_groups/update_with_dids.json"))));
 
-        SharedCapacityGroup group = SharedCapacityGroup.build("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
+        SharedCapacityGroup group = new SharedCapacityGroup().withId("89f987e2-0862-4bf4-a3f4-cdc89af0d875");
         group.setName("didww1");
         group.setSharedChannelsCount(10);
         group.setMeteredChannelsCount(2);

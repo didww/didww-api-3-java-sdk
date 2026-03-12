@@ -58,9 +58,7 @@ public class ReadOnlyRepository<T> {
             List<T> data = document.get();
             enableDirtyTracking(data);
             return new ApiResponse<>(data, meta);
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DidwwClientException("Failed to list " + endpoint, e);
         }
     }
@@ -81,9 +79,7 @@ public class ReadOnlyRepository<T> {
             T data = document.get();
             enableDirtyTracking(data);
             return new ApiResponse<>(data, meta);
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DidwwClientException("Failed to find " + endpoint + "/" + id, e);
         }
     }

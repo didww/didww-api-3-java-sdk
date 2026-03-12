@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.github.jasminb.jsonapi.ResourceConverter;
+import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -51,9 +52,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
             T data = responseDoc.get();
             enableDirtyTracking(data);
             return new ApiResponse<>(data, extractMeta(responseDoc));
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DidwwClientException("Failed to create " + endpoint, e);
         }
     }
@@ -87,9 +86,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
             T data = responseDoc.get();
             enableDirtyTracking(data);
             return new ApiResponse<>(data, extractMeta(responseDoc));
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DidwwClientException("Failed to update " + endpoint + "/" + id, e);
         }
     }
@@ -100,9 +97,7 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
 
         try (Response response = httpClient.newCall(request).execute()) {
             handleErrorResponse(response);
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DidwwClientException("Failed to delete " + endpoint + "/" + id, e);
         }
     }

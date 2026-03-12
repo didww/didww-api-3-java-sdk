@@ -11,11 +11,7 @@ class PopTest extends BaseTest {
 
     @Test
     void testListPops() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/pops"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("pops/index.json"))));
+        stubGetFixture("/v3/pops", "pops/index.json");
 
         ApiResponse<List<Pop>> response = client.pops().list();
         List<Pop> pops = response.getData();

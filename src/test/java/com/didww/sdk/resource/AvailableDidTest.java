@@ -12,11 +12,7 @@ class AvailableDidTest extends BaseTest {
 
     @Test
     void testListAvailableDids() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/available_dids"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("available_dids/index.json"))));
+        stubGetFixture("/v3/available_dids", "available_dids/index.json");
 
         ApiResponse<List<AvailableDid>> response = client.availableDids().list();
         List<AvailableDid> availableDids = response.getData();
@@ -26,11 +22,7 @@ class AvailableDidTest extends BaseTest {
 
     @Test
     void testFindAvailableDid() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/available_dids/0b76223b-9625-412f-b0f3-330551473e7e"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("available_dids/show.json"))));
+        stubGetFixture("/v3/available_dids/0b76223b-9625-412f-b0f3-330551473e7e", "available_dids/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("did_group.stock_keeping_units")
@@ -46,11 +38,7 @@ class AvailableDidTest extends BaseTest {
 
     @Test
     void testFindAvailableDidWithNanpaPrefix() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/available_dids/0e1c548e-c6b5-43b0-9c12-2e300178e820"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("available_dids/show_with_nanpa_prefix.json"))));
+        stubGetFixture("/v3/available_dids/0e1c548e-c6b5-43b0-9c12-2e300178e820", "available_dids/show_with_nanpa_prefix.json");
 
         QueryParams params = QueryParams.builder()
                 .include("nanpa_prefix")

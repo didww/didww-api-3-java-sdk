@@ -3,16 +3,15 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("proofs")
-public class Proof extends BaseResource {
 
-    public static Proof build(String id) {
-        return BaseResource.build(Proof.class, id);
-    }
+@Getter
+public class Proof extends BaseResource {
 
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
@@ -29,32 +28,12 @@ public class Proof extends BaseResource {
     @Relationship("files")
     private List<EncryptedFile> files;
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public OffsetDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public ProofEntity getEntity() {
-        return entity;
-    }
-
     public void setEntity(ProofEntity entity) {
         this.entity = markDirty("entity", entity);
     }
 
-    public ProofType getProofType() {
-        return proofType;
-    }
-
     public void setProofType(ProofType proofType) {
         this.proofType = markDirty("proofType", proofType);
-    }
-
-    public List<EncryptedFile> getFiles() {
-        return files;
     }
 
     public void setFiles(List<EncryptedFile> files) {

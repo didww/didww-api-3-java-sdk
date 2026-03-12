@@ -13,11 +13,7 @@ class PublicKeyTest extends BaseTest {
 
     @Test
     void testListPublicKeys() {
-        wireMock.stubFor(get(urlPathEqualTo("/v3/public_keys"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/vnd.api+json")
-                        .withBody(loadFixture("public_keys/index.json"))));
+        stubGetFixture("/v3/public_keys", "public_keys/index.json");
 
         ApiResponse<List<PublicKey>> response = client.publicKeys().list();
         List<PublicKey> keys = response.getData();

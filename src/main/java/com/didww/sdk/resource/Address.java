@@ -3,16 +3,15 @@ package com.didww.sdk.resource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Type("addresses")
-public class Address extends BaseResource implements ProofEntity {
 
-    public static Address build(String id) {
-        return BaseResource.build(Address.class, id);
-    }
+@Getter
+public class Address extends BaseResource implements ProofEntity {
 
     @JsonProperty("city_name")
     private String cityName;
@@ -47,80 +46,36 @@ public class Address extends BaseResource implements ProofEntity {
     @Relationship("city")
     private City city;
 
-    public String getCityName() {
-        return cityName;
-    }
-
     public void setCityName(String cityName) {
         this.cityName = markDirty("cityName", cityName);
-    }
-
-    public String getPostalCode() {
-        return postalCode;
     }
 
     public void setPostalCode(String postalCode) {
         this.postalCode = markDirty("postalCode", postalCode);
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     public void setAddress(String address) {
         this.address = markDirty("address", address);
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {
         this.description = markDirty("description", description);
     }
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Boolean getVerified() {
-        return verified;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
     public void setCountry(Country country) {
         this.country = markDirty("country", country);
-    }
-
-    public Identity getIdentity() {
-        return identity;
     }
 
     public void setIdentity(Identity identity) {
         this.identity = markDirty("identity", identity);
     }
 
-    public List<Proof> getProofs() {
-        return proofs;
-    }
-
     public void setProofs(List<Proof> proofs) {
         this.proofs = markDirty("proofs", proofs);
     }
 
-    public Area getArea() {
-        return area;
-    }
-
     public void setArea(Area area) {
         this.area = markDirty("area", area);
-    }
-
-    public City getCity() {
-        return city;
     }
 
     public void setCity(City city) {

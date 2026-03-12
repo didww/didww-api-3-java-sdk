@@ -2,15 +2,14 @@ package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Type;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 
 @Type("encrypted_files")
-public class EncryptedFile extends BaseResource {
 
-    public static EncryptedFile build(String id) {
-        return BaseResource.build(EncryptedFile.class, id);
-    }
+@Getter
+public class EncryptedFile extends BaseResource {
 
     @JsonProperty("description")
     private String description;
@@ -21,19 +20,7 @@ public class EncryptedFile extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = markDirty("description", description);
-    }
-
-    public OffsetDateTime getExpireAt() {
-        return expireAt;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
     }
 }
