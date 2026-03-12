@@ -3,7 +3,6 @@ package com.didww.sdk.repository;
 import com.didww.sdk.resource.BaseResource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.exception.DidwwClientException;
-import com.didww.sdk.resource.BaseResource;
 import com.didww.sdk.resource.VoiceInTrunk;
 import com.didww.sdk.resource.VoiceInTrunkGroup;
 import com.didww.sdk.resource.Did;
@@ -43,7 +42,7 @@ class RepositoryTest extends BaseTest {
     }
 
     @Test
-    void testBuildDoesNotMarkIdAsDirty() {
+    void testWithIdDoesNotMarkIdAsDirty() {
         VoiceInTrunk trunk = new VoiceInTrunk().withId("test-uuid-123");
 
         assertThat(trunk.getId()).isEqualTo("test-uuid-123");
