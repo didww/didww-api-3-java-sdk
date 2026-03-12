@@ -5,6 +5,7 @@ import com.didww.sdk.http.QueryParams;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jasminb.jsonapi.JSONAPIDocument;
 import com.github.jasminb.jsonapi.ResourceConverter;
+import java.io.IOException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -30,9 +31,7 @@ public class SingletonRepository<T> extends ReadOnlyRepository<T> {
             byte[] body = getResponseBody(response);
             JSONAPIDocument<T> document = converter.readDocument(body, resourceClass);
             return new ApiResponse<>(document.get(), extractMeta(document));
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DidwwClientException("Failed to find " + endpoint, e);
         }
     }
