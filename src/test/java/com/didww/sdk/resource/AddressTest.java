@@ -57,8 +57,8 @@ class AddressTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("addresses/create.json"))));
 
-        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
-        Identity identity = Identity.build("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
+        Country country = new Country().withId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+        Identity identity = new Identity().withId("5e9df058-50d2-4e34-b0d4-d1746b86f41a");
 
         Address address = new Address();
         address.setCityName("New York");
@@ -94,7 +94,7 @@ class AddressTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("addresses/update.json"))));
 
-        Address address = Address.build("bf69bc70-e1c2-442c-9f30-335ee299b663");
+        Address address = new Address().withId("bf69bc70-e1c2-442c-9f30-335ee299b663");
         address.setCityName("Chicago");
         address.setPostalCode("1234");
         address.setAddress("Main street");

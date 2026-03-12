@@ -81,8 +81,8 @@ class AddressVerificationTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("address_verifications/create.json"))));
 
-        Address address = Address.build("d3414687-40f4-4346-a267-c2c65117d28c");
-        Did did = Did.build("a9d64c02-4486-4acb-a9a1-be4c81ff0659");
+        Address address = new Address().withId("d3414687-40f4-4346-a267-c2c65117d28c");
+        Did did = new Did().withId("a9d64c02-4486-4acb-a9a1-be4c81ff0659");
 
         AddressVerification verification = new AddressVerification();
         verification.setCallbackUrl("http://example.com");

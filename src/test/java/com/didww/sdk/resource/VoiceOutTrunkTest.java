@@ -75,7 +75,7 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/create.json"))));
 
-        Did did = Did.build("7a028c32-e6b6-4c86-bf01-90f901b37012");
+        Did did = new Did().withId("7a028c32-e6b6-4c86-bf01-90f901b37012");
 
         VoiceOutTrunk trunk = new VoiceOutTrunk();
         trunk.setName("java-test");
@@ -101,7 +101,7 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/update.json"))));
 
-        VoiceOutTrunk trunk = VoiceOutTrunk.build("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+        VoiceOutTrunk trunk = new VoiceOutTrunk().withId("425ce763-a3a9-49b4-af5b-ada1a65c8864");
         trunk.setName("test");
         trunk.setCapacityLimit(123);
         trunk.setOnCliMismatchAction(OnCliMismatchAction.REPLACE_CLI);

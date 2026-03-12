@@ -1,5 +1,6 @@
 package com.didww.sdk.repository;
 
+import com.didww.sdk.resource.BaseResource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.resource.BaseResource;
@@ -35,7 +36,7 @@ class RepositoryTest extends BaseTest {
 
     @Test
     void testGetIdViaBaseResource() {
-        VoiceInTrunk trunk = VoiceInTrunk.build("test-uuid-123");
+        VoiceInTrunk trunk = new VoiceInTrunk().withId("test-uuid-123");
 
         BaseResource resource = trunk;
         assertThat(resource.getId()).isEqualTo("test-uuid-123");
@@ -43,7 +44,7 @@ class RepositoryTest extends BaseTest {
 
     @Test
     void testBuildDoesNotMarkIdAsDirty() {
-        VoiceInTrunk trunk = VoiceInTrunk.build("test-uuid-123");
+        VoiceInTrunk trunk = new VoiceInTrunk().withId("test-uuid-123");
 
         assertThat(trunk.getId()).isEqualTo("test-uuid-123");
         assertThat(trunk.hasDirtyFields()).isFalse();
@@ -81,7 +82,7 @@ class RepositoryTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(fixture)));
 
-        VoiceInTrunk trunk = VoiceInTrunk.build(id);
+        VoiceInTrunk trunk = new VoiceInTrunk().withId(id);
         trunk.setName("updated");
 
         VoiceInTrunk updated = client.voiceInTrunks().update(trunk).getData();

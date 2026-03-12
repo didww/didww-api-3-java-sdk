@@ -44,8 +44,8 @@ class VoiceInTrunkGroupTest extends BaseTest {
         group.setName("trunk group sample with 2 trunks");
         group.setCapacityLimit(1000);
         group.setVoiceInTrunks(Arrays.asList(
-                VoiceInTrunk.build("7c15bca2-7f17-46fb-9486-7e2a17158c7e"),
-                VoiceInTrunk.build("b07a4cab-48c6-4b3a-9670-11b90b81bdef")
+                new VoiceInTrunk().withId("7c15bca2-7f17-46fb-9486-7e2a17158c7e"),
+                new VoiceInTrunk().withId("b07a4cab-48c6-4b3a-9670-11b90b81bdef")
         ));
 
         QueryParams params = QueryParams.builder()
@@ -69,7 +69,7 @@ class VoiceInTrunkGroupTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_in_trunk_groups/update.json"))));
 
-        VoiceInTrunkGroup group = VoiceInTrunkGroup.build("b2319703-ce6c-480d-bb53-614e7abcfc96");
+        VoiceInTrunkGroup group = new VoiceInTrunkGroup().withId("b2319703-ce6c-480d-bb53-614e7abcfc96");
         group.setName("trunk group sample updated with 2 trunks");
         group.setCapacityLimit(500);
 

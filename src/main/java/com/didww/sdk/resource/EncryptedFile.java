@@ -8,10 +8,6 @@ import java.time.OffsetDateTime;
 @Type("encrypted_files")
 public class EncryptedFile extends BaseResource {
 
-    public static EncryptedFile build(String id) {
-        return BaseResource.build(EncryptedFile.class, id);
-    }
-
     @JsonProperty("description")
     private String description;
 

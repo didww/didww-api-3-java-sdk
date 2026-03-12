@@ -8,10 +8,6 @@ import java.math.BigDecimal;
 @Type("balances")
 public class Balance extends BaseResource {
 
-    public static Balance build(String id) {
-        return BaseResource.build(Balance.class, id);
-    }
-
     @JsonProperty("total_balance")
     private BigDecimal totalBalance;
 

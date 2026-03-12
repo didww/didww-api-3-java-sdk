@@ -63,7 +63,7 @@ class DirtyNullFieldFilterTest {
 
     @Test
     void testSerializableWithExternalObjectMapper() {
-        VoiceInTrunk trunk = VoiceInTrunk.build("test-id");
+        VoiceInTrunk trunk = new VoiceInTrunk().withId("test-id");
         trunk.setName("test");
 
         // SDK consumers may serialize resources with their own ObjectMapper

@@ -11,10 +11,6 @@ import java.util.List;
 @Type("requirements")
 public class Requirement extends BaseResource {
 
-    public static Requirement build(String id) {
-        return BaseResource.build(Requirement.class, id);
-    }
-
     @JsonProperty("identity_type")
     private IdentityType identityType;
 

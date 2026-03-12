@@ -15,10 +15,6 @@ import java.time.OffsetDateTime;
 @Type("voice_in_trunks")
 public class VoiceInTrunk extends BaseResource {
 
-    public static VoiceInTrunk build(String id) {
-        return BaseResource.build(VoiceInTrunk.class, id);
-    }
-
     @JsonProperty("name")
     private String name;
 

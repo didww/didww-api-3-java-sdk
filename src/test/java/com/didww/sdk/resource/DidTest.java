@@ -20,7 +20,7 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/update.json"))));
 
-        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
         did.setCapacityLimit(2);
         did.setDescription("something");
 
@@ -44,7 +44,7 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/update_terminated.json"))));
 
-        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
         did.setTerminated(true);
 
         ApiResponse<Did> response = client.dids().update(did);
@@ -65,7 +65,7 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/update.json"))));
 
-        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
         did.setDescription(null);
 
         ApiResponse<Did> response = client.dids().update(did);
@@ -82,7 +82,7 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/update.json"))));
 
-        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
         did.setDescription("a");
 
         ApiResponse<Did> response = client.dids().update(did);
@@ -99,8 +99,8 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/update.json"))));
 
-        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
-        did.setVoiceInTrunk(VoiceInTrunk.build("41b94706-325e-4704-a433-d65105758836"));
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setVoiceInTrunk(new VoiceInTrunk().withId("41b94706-325e-4704-a433-d65105758836"));
 
         ApiResponse<Did> response = client.dids().update(did);
 
@@ -116,8 +116,8 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/update.json"))));
 
-        Did did = Did.build("9df99644-f1a5-4a3c-99a4-559d758eb96b");
-        did.setVoiceInTrunkGroup(VoiceInTrunkGroup.build("b2319703-ce6c-480d-bb53-614e7abcfc96"));
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setVoiceInTrunkGroup(new VoiceInTrunkGroup().withId("b2319703-ce6c-480d-bb53-614e7abcfc96"));
 
         ApiResponse<Did> response = client.dids().update(did);
 

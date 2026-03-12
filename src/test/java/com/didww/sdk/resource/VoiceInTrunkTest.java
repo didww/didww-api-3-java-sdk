@@ -221,7 +221,7 @@ class VoiceInTrunkTest extends BaseTest {
         PstnConfiguration config = new PstnConfiguration();
         config.setDst("558540420025");
 
-        VoiceInTrunk trunk = VoiceInTrunk.build("41b94706-325e-4704-a433-d65105758836");
+        VoiceInTrunk trunk = new VoiceInTrunk().withId("41b94706-325e-4704-a433-d65105758836");
         trunk.setName("hello, updated test pstn trunk");
         trunk.setConfiguration(config);
 
@@ -254,7 +254,7 @@ class VoiceInTrunkTest extends BaseTest {
         sipConfig.setStirShakenMode(StirShakenMode.PAI);
         sipConfig.setAllowedRtpIps(Arrays.asList("127.0.0.1"));
 
-        VoiceInTrunk trunk = VoiceInTrunk.build("a80006b6-4183-4865-8b99-7ebbd359a762");
+        VoiceInTrunk trunk = new VoiceInTrunk().withId("a80006b6-4183-4865-8b99-7ebbd359a762");
         trunk.setName("hello, updated test sip trunk");
         trunk.setDescription("just a description");
         trunk.setConfiguration(sipConfig);

@@ -6,10 +6,6 @@ import com.github.jasminb.jsonapi.annotations.Type;
 @Type("supporting_document_templates")
 public class SupportingDocumentTemplate extends BaseResource {
 
-    public static SupportingDocumentTemplate build(String id) {
-        return BaseResource.build(SupportingDocumentTemplate.class, id);
-    }
-
     @JsonProperty("name")
     private String name;
 

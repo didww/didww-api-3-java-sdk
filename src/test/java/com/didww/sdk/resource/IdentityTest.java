@@ -48,7 +48,7 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/create.json"))));
 
-        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+        Country country = new Country().withId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
 
         Identity identity = new Identity();
         identity.setFirstName("John");
@@ -88,7 +88,7 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/create_personal.json"))));
 
-        Country country = Country.build("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
+        Country country = new Country().withId("1f6fc2bd-f081-4202-9b1a-d9cb88d942b9");
 
         Identity identity = new Identity();
         identity.setFirstName("John");
@@ -121,7 +121,7 @@ class IdentityTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("identities/update.json"))));
 
-        Identity identity = Identity.build("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
+        Identity identity = new Identity().withId("e96ae7d1-11d5-42bc-a5c5-211f3c3788ae");
         identity.setFirstName("Jake");
         identity.setLastName("Johnson");
         identity.setPhoneNumber("1111111");
