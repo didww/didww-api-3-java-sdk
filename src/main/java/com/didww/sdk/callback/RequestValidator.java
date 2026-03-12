@@ -25,7 +25,7 @@ public class RequestValidator {
         }
         byte[] expectedBytes = computeHmac(url, payload);
         byte[] signatureBytes = hexToBytes(signature);
-        if (signatureBytes == null) {
+        if (signatureBytes.length == 0) {
             return false;
         }
         return MessageDigest.isEqual(expectedBytes, signatureBytes);
@@ -78,14 +78,14 @@ public class RequestValidator {
 
     private static byte[] hexToBytes(String hex) {
         if (hex.length() % 2 != 0) {
-            return null;
+            return new byte[0];
         }
         byte[] bytes = new byte[hex.length() / 2];
         for (int i = 0; i < bytes.length; i++) {
             int hi = Character.digit(hex.charAt(i * 2), 16);
             int lo = Character.digit(hex.charAt(i * 2 + 1), 16);
             if (hi == -1 || lo == -1) {
-                return null;
+                return new byte[0];
             }
             bytes[i] = (byte) ((hi << 4) | lo);
         }
