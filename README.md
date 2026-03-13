@@ -579,7 +579,7 @@ try {
 The SDK distinguishes between date-only and datetime fields:
 
 - **Datetime fields** — deserialized as `OffsetDateTime`:
-  - All `getCreatedAt()` methods — present on most resources (`EncryptedFile` has no `created_at`)
+  - All `getCreatedAt()` methods — present on most resources
   - Expiry fields: `Did.getExpiresAt()`, `DidReservation.getExpireAt()`, `Proof.getExpiresAt()`, `EncryptedFile.getExpireAt()`
 - **Date-only fields** — deserialized as `LocalDate`:
   - `Identity.getBirthDate()`
