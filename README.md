@@ -578,16 +578,23 @@ try {
 
 The SDK distinguishes between date-only and datetime fields:
 
-- **Datetime fields** (`created_at`, `expires_at`, `expire_at`) are deserialized as `OffsetDateTime`.
-- **Date-only fields** (`birth_date`, `renew_date`) are deserialized as `LocalDate`.
-- **Billing range fields** (`billed_from`, `billed_to`) remain as `String`.
+- **Datetime fields** — deserialized as `OffsetDateTime`:
+  - `Did.getCreatedAt()`, `Did.getExpiresAt()`
+  - `EncryptedFile.getCreatedAt()`, `EncryptedFile.getExpireAt()`
+  - `DidReservation.getCreatedAt()`, `DidReservation.getExpireAt()`
+  - `Proof.getCreatedAt()`, `Proof.getExpiresAt()`
+  - `Order.getCreatedAt()`, `Identity.getCreatedAt()`, `Address.getCreatedAt()`, `VoiceInTrunk.getCreatedAt()`, `VoiceInTrunkGroup.getCreatedAt()`, `VoiceOutTrunk.getCreatedAt()`, `SharedCapacityGroup.getCreatedAt()`, `Export.getCreatedAt()`, `AddressVerification.getCreatedAt()`, `PermanentSupportingDocument.getCreatedAt()`
+- **Date-only fields** — deserialized as `LocalDate`:
+  - `Identity.getBirthDate()`, `CapacityPool.getRenewDate()`
+- **Billing range fields** (`DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`) remain as `String`.
 
 ```java
 Did did = client.dids().find("uuid").getData();
-System.out.println(did.getCreatedAt());  // OffsetDateTime
+System.out.println(did.getCreatedAt());   // 2024-01-15T10:00:00Z  (OffsetDateTime)
+System.out.println(did.getExpiresAt());   // null or 2025-01-15T10:00:00Z
 
 Identity identity = client.identities().find("uuid").getData();
-System.out.println(identity.getBirthDate());  // LocalDate
+System.out.println(identity.getBirthDate());  // 1990-05-20  (LocalDate)
 ```
 
 ## Enums
