@@ -16,7 +16,7 @@ public class BalanceExample {
         System.out.println("Credit: " + toPlainString(balance.getCredit()));
     }
 
-    private static String toPlainString(Double value) {
-        return value == null ? "null" : BigDecimal.valueOf(value).toPlainString();
+    private static String toPlainString(BigDecimal value) {
+        return value == null ? "null" : value.toPlainString();
     }
 }
