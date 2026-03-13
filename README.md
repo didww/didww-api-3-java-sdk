@@ -585,8 +585,8 @@ The SDK distinguishes between date-only and datetime fields:
   - `Proof.getCreatedAt()`, `Proof.getExpiresAt()`
   - `Order.getCreatedAt()`, `Identity.getCreatedAt()`, `Address.getCreatedAt()`, `VoiceInTrunk.getCreatedAt()`, `VoiceInTrunkGroup.getCreatedAt()`, `VoiceOutTrunk.getCreatedAt()`, `SharedCapacityGroup.getCreatedAt()`, `Export.getCreatedAt()`, `AddressVerification.getCreatedAt()`, `PermanentSupportingDocument.getCreatedAt()`
 - **Date-only fields** — deserialized as `LocalDate`:
-  - `Identity.getBirthDate()`, `CapacityPool.getRenewDate()`
-- **Billing range fields** (`DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`) remain as `String`.
+  - `Identity.getBirthDate()`
+- **Date-only fields kept as strings** (`CapacityPool.getRenewDate()`, `DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`) — remain as `String`.
 
 ```java
 Did did = client.dids().find("uuid").getData();
