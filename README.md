@@ -579,11 +579,8 @@ try {
 The SDK distinguishes between date-only and datetime fields:
 
 - **Datetime fields** — deserialized as `OffsetDateTime`:
-  - `Did.getCreatedAt()`, `Did.getExpiresAt()`
-  - `EncryptedFile.getExpireAt()` (no `created_at` on this resource)
-  - `DidReservation.getCreatedAt()`, `DidReservation.getExpireAt()`
-  - `Proof.getCreatedAt()`, `Proof.getExpiresAt()`
-  - `Order.getCreatedAt()`, `Identity.getCreatedAt()`, `Address.getCreatedAt()`, `VoiceInTrunk.getCreatedAt()`, `VoiceInTrunkGroup.getCreatedAt()`, `VoiceOutTrunk.getCreatedAt()`, `SharedCapacityGroup.getCreatedAt()`, `Export.getCreatedAt()`, `AddressVerification.getCreatedAt()`, `PermanentSupportingDocument.getCreatedAt()`
+  - All `getCreatedAt()` methods — present on most resources (`EncryptedFile` has no `created_at`)
+  - Expiry fields: `Did.getExpiresAt()`, `DidReservation.getExpireAt()`, `Proof.getExpiresAt()`, `EncryptedFile.getExpireAt()`
 - **Date-only fields** — deserialized as `LocalDate`:
   - `Identity.getBirthDate()`
 - **Date-only fields kept as strings** (`CapacityPool.getRenewDate()`, `DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`) — remain as `String`.
