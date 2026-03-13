@@ -580,7 +580,7 @@ The SDK distinguishes between date-only and datetime fields:
 
 - **Datetime fields** — deserialized as `OffsetDateTime`:
   - `Did.getCreatedAt()`, `Did.getExpiresAt()`
-  - `EncryptedFile.getCreatedAt()`, `EncryptedFile.getExpireAt()`
+  - `EncryptedFile.getExpireAt()` (no `created_at` on this resource)
   - `DidReservation.getCreatedAt()`, `DidReservation.getExpireAt()`
   - `Proof.getCreatedAt()`, `Proof.getExpiresAt()`
   - `Order.getCreatedAt()`, `Identity.getCreatedAt()`, `Address.getCreatedAt()`, `VoiceInTrunk.getCreatedAt()`, `VoiceInTrunkGroup.getCreatedAt()`, `VoiceOutTrunk.getCreatedAt()`, `SharedCapacityGroup.getCreatedAt()`, `Export.getCreatedAt()`, `AddressVerification.getCreatedAt()`, `PermanentSupportingDocument.getCreatedAt()`
