@@ -74,28 +74,28 @@ public class DidTrunkAssignmentExample {
 
         try {
             // 1. Assign trunk to DID (auto-nullifies trunk group)
-            Did update1 = Did.build(did.getId());
-            update1.setVoiceInTrunk(VoiceInTrunk.build(trunkId));
+            Did update1 = new Did().withId(did.getId());
+            update1.setVoiceInTrunk(new VoiceInTrunk().withId(trunkId));
             client.dids().update(update1);
             System.out.println("\n1. Assigned trunk:");
             printDidAssignment(client, did.getId());
 
             // 2. Assign trunk group to DID (auto-nullifies trunk)
-            Did update2 = Did.build(did.getId());
-            update2.setVoiceInTrunkGroup(VoiceInTrunkGroup.build(groupId));
+            Did update2 = new Did().withId(did.getId());
+            update2.setVoiceInTrunkGroup(new VoiceInTrunkGroup().withId(groupId));
             client.dids().update(update2);
             System.out.println("\n2. Assigned trunk group:");
             printDidAssignment(client, did.getId());
 
             // 3. Re-assign trunk (auto-nullifies trunk group again)
-            Did update3 = Did.build(did.getId());
-            update3.setVoiceInTrunk(VoiceInTrunk.build(trunkId));
+            Did update3 = new Did().withId(did.getId());
+            update3.setVoiceInTrunk(new VoiceInTrunk().withId(trunkId));
             client.dids().update(update3);
             System.out.println("\n3. Re-assigned trunk:");
             printDidAssignment(client, did.getId());
 
             // 4. Unassign: update description only (trunk stays assigned)
-            Did update4 = Did.build(did.getId());
+            Did update4 = new Did().withId(did.getId());
             update4.setDescription("DID with trunk assigned");
             client.dids().update(update4);
             System.out.println("\n4. Updated description only (trunk stays):");
@@ -103,8 +103,8 @@ public class DidTrunkAssignmentExample {
         } finally {
             // Cleanup: reassign DID to group (frees trunk), delete trunk, then delete group
             try {
-                Did cleanup = Did.build(did.getId());
-                cleanup.setVoiceInTrunkGroup(VoiceInTrunkGroup.build(groupId));
+                Did cleanup = new Did().withId(did.getId());
+                cleanup.setVoiceInTrunkGroup(new VoiceInTrunkGroup().withId(groupId));
                 client.dids().update(cleanup);
             } catch (Exception ignored) {}
             try {

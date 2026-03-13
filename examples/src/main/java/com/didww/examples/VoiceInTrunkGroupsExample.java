@@ -59,10 +59,7 @@ public class VoiceInTrunkGroupsExample {
         VoiceInTrunkGroup group = new VoiceInTrunkGroup();
         group.setName("My Trunk Group " + suffix);
         group.setCapacityLimit(10);
-        group.setVoiceInTrunks(Arrays.asList(
-                VoiceInTrunk.build(trunkA.getId()),
-                VoiceInTrunk.build(trunkB.getId())
-        ));
+        group.setVoiceInTrunks(Arrays.asList(trunkA, trunkB));
         group = client.voiceInTrunkGroups().create(group).getData();
         System.out.println("Created trunk group: " + group.getId() + " - " + group.getName());
 
