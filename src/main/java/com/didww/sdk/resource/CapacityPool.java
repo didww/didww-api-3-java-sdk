@@ -5,7 +5,6 @@ import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Type("capacity_pools")
@@ -17,7 +16,7 @@ public class CapacityPool extends BaseResource {
     private String name;
 
     @JsonProperty(value = "renew_date", access = JsonProperty.Access.WRITE_ONLY)
-    private LocalDate renewDate;
+    private String renewDate;
 
     @JsonProperty("total_channels_count")
     private Integer totalChannelsCount;

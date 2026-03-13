@@ -574,6 +574,26 @@ try {
 > **Note:** `StockKeepingUnit` and `QtyBasedPricing` have no standalone API endpoints.
 > Access them via `include` on `didGroups` and `capacityPools` respectively.
 
+## Date and Datetime Fields
+
+The SDK distinguishes between date-only and datetime fields:
+
+- **Datetime fields** — deserialized as `OffsetDateTime`:
+  - All `getCreatedAt()` methods — present on most resources
+  - Expiry fields: `Did.getExpiresAt()`, `DidReservation.getExpireAt()`, `Proof.getExpiresAt()`, `EncryptedFile.getExpireAt()`
+- **Date-only fields** — deserialized as `LocalDate`:
+  - `Identity.getBirthDate()`
+- **Date-only fields kept as strings** (`CapacityPool.getRenewDate()`, `DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`) — remain as `String`.
+
+```java
+Did did = client.dids().find("uuid").getData();
+System.out.println(did.getCreatedAt());   // 2024-01-15T10:00:00Z  (OffsetDateTime)
+System.out.println(did.getExpiresAt());   // null or 2025-01-15T10:00:00Z
+
+Identity identity = client.identities().find("uuid").getData();
+System.out.println(identity.getBirthDate());  // 1990-05-20  (LocalDate)
+```
+
 ## Enums
 
 The SDK provides enum classes in `com.didww.sdk.resource.enums`:
