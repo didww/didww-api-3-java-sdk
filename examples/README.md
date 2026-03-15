@@ -34,6 +34,7 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 | [`com.didww.examples.SharedCapacityGroupsExample`](src/main/java/com/didww/examples/SharedCapacityGroupsExample.java) | Creates a shared capacity group in a capacity pool. |
 | [`com.didww.examples.OrdersExample`](src/main/java/com/didww/examples/OrdersExample.java) | Lists orders and creates/cancels a DID order using live SKU lookup. |
 | [`com.didww.examples.OrdersSkuExample`](src/main/java/com/didww/examples/OrdersSkuExample.java) | Creates a DID order by SKU resolved from DID groups. |
+| [`com.didww.examples.OrdersNanpaExample`](src/main/java/com/didww/examples/OrdersNanpaExample.java) | Orders a DID number by NPA/NXX prefix. |
 | [`com.didww.examples.OrdersCapacityExample`](src/main/java/com/didww/examples/OrdersCapacityExample.java) | Purchases capacity by creating a capacity order item. |
 | [`com.didww.examples.OrdersAvailableDidsExample`](src/main/java/com/didww/examples/OrdersAvailableDidsExample.java) | Orders an available DID using included DID group SKU. |
 | [`com.didww.examples.OrdersReservationDidsExample`](src/main/java/com/didww/examples/OrdersReservationDidsExample.java) | Reserves a DID and then places an order from that reservation. |

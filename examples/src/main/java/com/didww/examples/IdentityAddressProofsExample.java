@@ -52,8 +52,8 @@ public class IdentityAddressProofsExample {
         address.setCityName("New York");
         address.setPostalCode("10001");
         address.setAddress("123 Main St");
-        address.setIdentity(Identity.build(identity.getId()));
-        address.setCountry(Country.build(country.getId()));
+        address.setIdentity(identity);
+        address.setCountry(country);
         address = client.addresses().create(address).getData();
         System.out.println("Created address: " + address.getId() + " (" + address.getAddress() + ")");
 
@@ -106,9 +106,9 @@ public class IdentityAddressProofsExample {
         // --- Step 6: Create proof for identity ---
         if (identityProofType != null) {
             Proof identityProof = new Proof();
-            identityProof.setEntity(Identity.build(identity.getId()));
-            identityProof.setProofType(ProofType.build(identityProofType.getId()));
-            identityProof.setFiles(Arrays.asList(EncryptedFile.build(fileIds1.get(0))));
+            identityProof.setEntity(identity);
+            identityProof.setProofType(identityProofType);
+            identityProof.setFiles(Arrays.asList(new EncryptedFile().withId(fileIds1.get(0))));
 
             QueryParams params = QueryParams.builder().include("proof_type").build();
             Proof createdProof = client.proofs().create(identityProof, params).getData();
@@ -119,9 +119,9 @@ public class IdentityAddressProofsExample {
         // --- Step 7: Create proof for address ---
         if (addressProofType != null) {
             Proof addressProof = new Proof();
-            addressProof.setEntity(Address.build(address.getId()));
-            addressProof.setProofType(ProofType.build(addressProofType.getId()));
-            addressProof.setFiles(Arrays.asList(EncryptedFile.build(fileIds2.get(0))));
+            addressProof.setEntity(address);
+            addressProof.setProofType(addressProofType);
+            addressProof.setFiles(Arrays.asList(new EncryptedFile().withId(fileIds2.get(0))));
 
             QueryParams params = QueryParams.builder().include("proof_type").build();
             Proof createdProof = client.proofs().create(addressProof, params).getData();
