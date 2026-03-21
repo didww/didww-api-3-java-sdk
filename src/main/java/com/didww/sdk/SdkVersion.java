@@ -40,6 +40,8 @@ public final class SdkVersion {
     /**
      * Returns the SDK version string (e.g. {@code "1.0.0"}).
      * Falls back to {@code "unknown"} when the properties file is absent.
+     *
+     * @return SDK version string
      */
     public static String get() {
         return VERSION;
@@ -47,6 +49,8 @@ public final class SdkVersion {
 
     /**
      * Returns the full User-Agent value, e.g. {@code "didww-java-sdk/1.0.0"}.
+     *
+     * @return User-Agent header value
      */
     public static String userAgent() {
         return "didww-java-sdk/" + VERSION;
