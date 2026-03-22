@@ -77,6 +77,8 @@ public class DidwwApiException extends RuntimeException {
         /**
          * Returns {@code detail} if present, otherwise falls back to {@code title},
          * or {@code "Unknown error"} when both are absent.
+         *
+         * @return human-readable error message
          */
         @JsonIgnore
         public String getMessage() {

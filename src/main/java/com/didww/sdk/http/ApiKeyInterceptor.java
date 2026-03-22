@@ -16,6 +16,13 @@ public class ApiKeyInterceptor implements Interceptor {
         this.apiKey = apiKey;
     }
 
+    /**
+     * Adds authentication and versioning headers to every outgoing request.
+     *
+     * @param chain OkHttp interceptor chain
+     * @return response from the next interceptor or the network
+     * @throws IOException if the request could not be executed
+     */
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();

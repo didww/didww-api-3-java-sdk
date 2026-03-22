@@ -194,7 +194,13 @@ public class DidwwClient {
 
     /**
      * Uploads one encrypted file to /encrypted_files as multipart/form-data.
-     * Returns encrypted file IDs provided by API response.
+     *
+     * @param encryptedData encrypted file bytes to upload
+     * @param fileName      original file name sent as the multipart part name
+     * @param fingerprint   encryption key fingerprint identifying the public key used
+     * @param description   optional human-readable description for the file (may be {@code null})
+     * @return list of encrypted file IDs returned by the API
+     * @throws DidwwClientException if the upload fails or the response is unexpected
      */
     public List<String> uploadEncryptedFile(byte[] encryptedData,
                                             String fileName,
@@ -257,6 +263,10 @@ public class DidwwClient {
 
     /**
      * Downloads an export file to the given path.
+     *
+     * @param url         URL of the export file to download
+     * @param destination local path where the file will be written
+     * @throws DidwwClientException if the download fails or the response body is empty
      */
     public void downloadExport(String url, Path destination) {
         Request request = new Request.Builder().url(url).get().build();
@@ -278,6 +288,10 @@ public class DidwwClient {
 
     /**
      * Downloads a gzip-compressed export file (.csv.gz) and writes the decompressed CSV to the given path.
+     *
+     * @param url         URL of the gzip-compressed export file to download
+     * @param destination local path where the decompressed CSV will be written
+     * @throws DidwwClientException if the download or decompression fails
      */
     public void downloadAndDecompressExport(String url, Path destination) {
         Path tempFile;
@@ -342,6 +356,9 @@ public class DidwwClient {
 
         /**
          * Overrides the base URL from the credentials environment. Useful for testing.
+         *
+         * @param baseUrl base URL to use instead of the environment default
+         * @return this builder
          */
         public Builder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
@@ -351,6 +368,9 @@ public class DidwwClient {
         /**
          * Sets a custom OkHttpClient.Builder for advanced configuration such as proxy,
          * SSL, interceptors, etc. The API key interceptor will be added automatically.
+         *
+         * @param httpClientBuilder custom OkHttpClient builder to use as the base
+         * @return this builder
          */
         public Builder httpClientBuilder(OkHttpClient.Builder httpClientBuilder) {
             this.httpClientBuilder = httpClientBuilder;

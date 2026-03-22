@@ -84,6 +84,14 @@ public class ReadOnlyRepository<T> {
         }
     }
 
+    /**
+     * Throws {@link DidwwApiException} when the response status is not successful,
+     * parsing API error objects from the response body when available.
+     *
+     * @param response OkHttp response to inspect
+     * @throws IOException         if the response body cannot be read
+     * @throws DidwwApiException   if the response indicates an API error
+     */
     protected void handleErrorResponse(Response response) throws IOException {
         if (!response.isSuccessful()) {
             String body = response.body() != null ? response.body().string() : "";
@@ -107,6 +115,14 @@ public class ReadOnlyRepository<T> {
         }
     }
 
+    /**
+     * Returns the response body as a byte array.
+     *
+     * @param response OkHttp response whose body will be consumed
+     * @return response body bytes
+     * @throws IOException            if the body cannot be read
+     * @throws DidwwClientException   if the response body is absent
+     */
     protected byte[] getResponseBody(Response response) throws IOException {
         ResponseBody body = response.body();
         if (body == null) {
