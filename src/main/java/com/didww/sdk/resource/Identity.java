@@ -63,6 +63,9 @@ public class Identity extends BaseResource implements ProofEntity {
     @Relationship("country")
     private Country country;
 
+    @Relationship("birth_country")
+    private Country birthCountry;
+
     @Relationship("proofs")
     private List<Proof> proofs;
 
@@ -130,6 +133,10 @@ public class Identity extends BaseResource implements ProofEntity {
 
     public void setCountry(Country country) {
         this.country = markDirty("country", country);
+    }
+
+    public void setBirthCountry(Country birthCountry) {
+        this.birthCountry = markDirty("birthCountry", birthCountry);
     }
 
     public void setProofs(List<Proof> proofs) {

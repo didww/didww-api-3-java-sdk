@@ -145,6 +145,27 @@ class IdentityTest extends BaseTest {
     }
 
     @Test
+    void testFindIdentityWithBirthCountry() {
+        String id = "5e9df058-50d2-4e34-b0d4-d1746b86f41a";
+        stubGetFixture("/v3/identities/" + id, "identities/show_with_birth_country.json");
+
+        QueryParams params = QueryParams.builder()
+                .include("country", "birth_country")
+                .build();
+        ApiResponse<Identity> response = client.identities().find(id, params);
+        Identity identity = response.getData();
+
+        assertThat(identity.getId()).isEqualTo(id);
+        assertThat(identity.getFirstName()).isEqualTo("John");
+        assertThat(identity.getCountry()).isNotNull();
+        assertThat(identity.getCountry().getName()).isEqualTo("United States");
+        assertThat(identity.getCountry().getIso()).isEqualTo("US");
+        assertThat(identity.getBirthCountry()).isNotNull();
+        assertThat(identity.getBirthCountry().getName()).isEqualTo("Germany");
+        assertThat(identity.getBirthCountry().getIso()).isEqualTo("DE");
+    }
+
+    @Test
     void testDeleteIdentity() {
         String id = "e96ae7d1-11d5-42bc-a5c5-211f3c3788ae";
         wireMock.stubFor(delete(urlPathEqualTo("/v3/identities/" + id))
