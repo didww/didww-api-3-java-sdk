@@ -48,7 +48,8 @@ public class DidwwResourceConverter {
             SupportingDocumentTemplate.class,
             VoiceOutTrunk.class,
             VoiceOutTrunkRegenerateCredential.class,
-            DidHistory.class
+            DidHistory.class,
+            EmergencyRequirement.class
     };
 
     public static ObjectMapper createObjectMapper() {

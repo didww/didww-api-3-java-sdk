@@ -112,6 +112,10 @@ public class DidwwClient {
         return new ReadOnlyRepository<>(httpClient, converter, baseUrl, "did_history", DidHistory.class, objectMapper);
     }
 
+    public ReadOnlyRepository<EmergencyRequirement> emergencyRequirements() {
+        return new ReadOnlyRepository<>(httpClient, converter, baseUrl, "emergency_requirements", EmergencyRequirement.class, objectMapper);
+    }
+
     public ReadOnlyRepository<AddressRequirement> addressRequirements() {
         return new ReadOnlyRepository<>(httpClient, converter, baseUrl, "address_requirements", AddressRequirement.class, objectMapper);
     }
