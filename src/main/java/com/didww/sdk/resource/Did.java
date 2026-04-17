@@ -45,6 +45,9 @@ public class Did extends BaseResource {
     @JsonProperty("billing_cycles_count")
     private Integer billingCyclesCount;
 
+    @JsonProperty(value = "emergency_enabled", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean emergencyEnabled;
+
     @Relationship("order")
     private Order order;
 
