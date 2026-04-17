@@ -40,6 +40,8 @@ class AddressTest extends BaseTest {
         assertThat(addresses.get(0).getProofs()).hasSize(1);
         assertThat(addresses.get(0).getProofs().get(0).getId()).isEqualTo("dd2f5f37-0d08-415d-9530-6488e6eb797b");
 
+        assertThat(addresses.get(0).getExternalReferenceId()).isEqualTo("crm-addr-0001");
+
         assertThat(addresses.get(0).getArea()).isNull();
         assertThat(addresses.get(0).getCity()).isNull();
     }
