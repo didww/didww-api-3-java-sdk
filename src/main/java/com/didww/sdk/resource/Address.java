@@ -31,6 +31,9 @@ public class Address extends BaseResource implements ProofEntity {
     @JsonProperty(value = "verified", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean verified;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @Relationship("country")
     private Country country;
 
@@ -80,5 +83,9 @@ public class Address extends BaseResource implements ProofEntity {
 
     public void setCity(City city) {
         this.city = markDirty("city", city);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }
