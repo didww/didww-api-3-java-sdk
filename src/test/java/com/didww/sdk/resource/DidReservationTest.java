@@ -33,6 +33,7 @@ class DidReservationTest extends BaseTest {
         DidReservation didReservation = response.getData();
 
         assertThat(didReservation.getDescription()).isEqualTo("DIDWW");
+        assertThat(didReservation.getExpiresAt()).isNotNull();
         assertThat(didReservation.getAvailableDid()).isNotNull();
         assertThat(didReservation.getAvailableDid().getNumber()).isEqualTo("19492033398");
     }
