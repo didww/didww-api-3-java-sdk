@@ -1,1 +1,1 @@
-{"data":{"type":"exports","attributes":{"export_type":"cdr_in","filters":{"did_number":"1234556789","year":"2019","month":"01"}}}}
+{"data":{"type":"exports","attributes":{"export_type":"cdr_in","filters":{"did_number":"1234556789","from":"2026-04-01 00:00:00","to":"2026-04-15 23:59:59"}}}}

@@ -77,8 +77,8 @@ class ExportTest extends BaseTest {
 
         Map<String, Object> filters = new LinkedHashMap<>();
         filters.put("did_number", "1234556789");
-        filters.put("year", "2019");
-        filters.put("month", "01");
+        filters.put("from", "2026-04-01 00:00:00");
+        filters.put("to", "2026-04-15 23:59:59");
 
         Export export = new Export();
         export.setExportType(ExportType.CDR_IN);
