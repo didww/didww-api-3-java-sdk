@@ -1,5 +1,7 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.EmergencyVerificationStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -22,7 +24,7 @@ public class EmergencyVerification extends BaseResource {
     private String reference;
 
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
-    private String status;
+    private EmergencyVerificationStatus status;
 
     @JsonProperty(value = "reject_reasons", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> rejectReasons;
@@ -73,5 +75,20 @@ public class EmergencyVerification extends BaseResource {
 
     public void setDids(List<Did> dids) {
         this.dids = markDirty("dids", dids);
+    }
+
+    @JsonIgnore
+    public boolean isPending() {
+        return EmergencyVerificationStatus.PENDING.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isApproved() {
+        return EmergencyVerificationStatus.APPROVED.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isRejected() {
+        return EmergencyVerificationStatus.REJECTED.equals(status);
     }
 }

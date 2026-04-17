@@ -5,6 +5,7 @@ import com.didww.sdk.resource.enums.OrderStatus;
 import com.didww.sdk.converter.OrderItemDeserializer;
 import com.didww.sdk.converter.OrderItemSerializer;
 import com.didww.sdk.resource.orderitem.OrderItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -69,5 +70,20 @@ public class Order extends BaseResource {
 
     public void setExternalReferenceId(String externalReferenceId) {
         this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
+    }
+
+    @JsonIgnore
+    public boolean isPending() {
+        return OrderStatus.PENDING.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isCompleted() {
+        return OrderStatus.COMPLETED.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isCancelled() {
+        return OrderStatus.CANCELED.equals(status);
     }
 }

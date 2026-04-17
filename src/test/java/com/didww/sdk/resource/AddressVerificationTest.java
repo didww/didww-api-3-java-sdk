@@ -31,6 +31,9 @@ class AddressVerificationTest extends BaseTest {
         assertThat(verifications.get(0).getCallbackUrl()).isEqualTo("http://example.com");
         assertThat(verifications.get(0).getCallbackMethod()).isEqualTo(CallbackMethod.GET);
         assertThat(verifications.get(0).getStatus()).isEqualTo(AddressVerificationStatus.PENDING);
+        assertThat(verifications.get(0).isPending()).isTrue();
+        assertThat(verifications.get(0).isApproved()).isFalse();
+        assertThat(verifications.get(0).isRejected()).isFalse();
         assertThat(verifications.get(0).getAddress()).isNotNull();
         assertThat(verifications.get(0).getAddress().getCityName()).isEqualTo("Chicago");
     }
@@ -44,6 +47,9 @@ class AddressVerificationTest extends BaseTest {
 
         assertThat(av.getId()).isEqualTo("c8e004b0-87ec-4987-b4fb-ee89db099f0e");
         assertThat(av.getStatus()).isEqualTo(AddressVerificationStatus.APPROVED);
+        assertThat(av.isApproved()).isTrue();
+        assertThat(av.isPending()).isFalse();
+        assertThat(av.isRejected()).isFalse();
         assertThat(av.getReference()).isEqualTo("SHB-485120");
     }
 
@@ -56,6 +62,9 @@ class AddressVerificationTest extends BaseTest {
 
         assertThat(av.getId()).isEqualTo("429e6d4e-2ee9-4953-aa98-0b3ac07f0f96");
         assertThat(av.getStatus()).isEqualTo(AddressVerificationStatus.REJECTED);
+        assertThat(av.isRejected()).isTrue();
+        assertThat(av.isPending()).isFalse();
+        assertThat(av.isApproved()).isFalse();
         assertThat(av.getRejectReasons()).isEqualTo(Arrays.asList("Address cannot be validated", "Proof of address should be not older than of 6 months"));
         assertThat(av.getReference()).isEqualTo("ODW-879912");
         assertThat(av.getRejectComment()).isEqualTo("Please re-submit with a more recent utility bill.");

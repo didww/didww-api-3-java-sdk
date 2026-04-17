@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.EmergencyVerificationStatus;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -23,7 +24,10 @@ class EmergencyVerificationTest extends BaseTest {
 
         EmergencyVerification first = records.get(0);
         assertThat(first.getReference()).isEqualTo("EV-0001");
-        assertThat(first.getStatus()).isEqualTo("pending");
+        assertThat(first.getStatus()).isEqualTo(EmergencyVerificationStatus.PENDING);
+        assertThat(first.isPending()).isTrue();
+        assertThat(first.isApproved()).isFalse();
+        assertThat(first.isRejected()).isFalse();
         assertThat(first.getRejectReasons()).isNull();
         assertThat(first.getRejectComment()).isNull();
         assertThat(first.getCallbackUrl()).isEqualTo("https://example.com/emergency/hook");
@@ -42,7 +46,10 @@ class EmergencyVerificationTest extends BaseTest {
 
         assertThat(record.getId()).isEqualTo(id);
         assertThat(record.getReference()).isEqualTo("EV-0042");
-        assertThat(record.getStatus()).isEqualTo("rejected");
+        assertThat(record.getStatus()).isEqualTo(EmergencyVerificationStatus.REJECTED);
+        assertThat(record.isRejected()).isTrue();
+        assertThat(record.isPending()).isFalse();
+        assertThat(record.isApproved()).isFalse();
         assertThat(record.getRejectReasons()).containsExactly("Address does not match identity", "Missing proof of occupancy");
         assertThat(record.getRejectComment()).isEqualTo("Please re-submit with updated documentation.");
         assertThat(record.getExternalReferenceId()).isEqualTo("ref-xyz-999");
@@ -93,7 +100,7 @@ class EmergencyVerificationTest extends BaseTest {
         EmergencyVerification created = response.getData();
 
         assertThat(created.getId()).isEqualTo("bbbbbbbb-cccc-dddd-eeee-ffffffffffff");
-        assertThat(created.getStatus()).isEqualTo("pending");
+        assertThat(created.getStatus()).isEqualTo(EmergencyVerificationStatus.PENDING);
         assertThat(created.getReference()).isEqualTo("EV-0099");
         assertThat(created.getExternalReferenceId()).isEqualTo("ref-abc-123");
     }

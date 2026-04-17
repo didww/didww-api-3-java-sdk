@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.resource.enums.AddressVerificationStatus;
 import com.didww.sdk.resource.enums.CallbackMethod;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -70,5 +71,20 @@ public class AddressVerification extends BaseResource {
 
     public void setExternalReferenceId(String externalReferenceId) {
         this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
+    }
+
+    @JsonIgnore
+    public boolean isPending() {
+        return AddressVerificationStatus.PENDING.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isApproved() {
+        return AddressVerificationStatus.APPROVED.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isRejected() {
+        return AddressVerificationStatus.REJECTED.equals(status);
     }
 }
