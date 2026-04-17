@@ -1,0 +1,28 @@
+{
+  "data": {
+    "id": "eeee1111-2222-3333-4444-555555555555",
+    "type": "orders",
+    "attributes": {
+      "amount": "30.0",
+      "status": "Completed",
+      "created_at": "2026-04-16T10:00:00.000Z",
+      "description": "Emergency calling service",
+      "reference": "EMG-001",
+      "external_reference_id": null,
+      "items": [
+        {
+          "type": "emergency_order_items",
+          "attributes": {
+            "qty": 1,
+            "emergency_calling_service_id": "b6d9d793-578d-42d3-bc33-73dd8155e615",
+            "nrc": "5.0",
+            "mrc": "25.0",
+            "prorated_mrc": false,
+            "billed_from": "2026-04-16",
+            "billed_to": "2026-05-15"
+          }
+        }
+      ]
+    }
+  }
+}
