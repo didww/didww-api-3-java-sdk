@@ -3,7 +3,7 @@
     "type": "emergency_verifications",
     "attributes": {
       "callback_url": "https://example.com/emergency/hook",
-      "callback_method": "POST",
+      "callback_method": "post",
       "external_reference_id": "ref-abc-123"
     },
     "relationships": {

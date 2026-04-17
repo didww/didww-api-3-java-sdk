@@ -65,7 +65,7 @@
       "id": "8da1e0b2-047c-4baf-9c57-57143f09b9ce",
       "type": "address_requirements",
       "attributes": {
-        "identity_type": "Any",
+        "identity_type": "any",
         "personal_area_level": "worldwide",
         "business_area_level": "worldwide",
         "address_area_level": "worldwide",

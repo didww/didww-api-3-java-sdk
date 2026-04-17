@@ -359,7 +359,7 @@ Address created = client.addresses().create(address).getData();
 ```java
 AddressVerification verification = new AddressVerification();
 verification.setCallbackUrl("http://example.com/callback");
-verification.setCallbackMethod("GET");
+verification.setCallbackMethod(CallbackMethod.GET);
 AddressVerification created = client.addressVerifications().create(verification).getData();
 ```
 
