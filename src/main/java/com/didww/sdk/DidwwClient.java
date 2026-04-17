@@ -188,8 +188,8 @@ public class DidwwClient {
         return new Repository<>(httpClient, converter, baseUrl, "proofs", Proof.class, objectMapper);
     }
 
-    public Repository<RequirementValidation> requirementValidations() {
-        return new Repository<>(httpClient, converter, baseUrl, "requirement_validations", RequirementValidation.class, objectMapper);
+    public Repository<AddressRequirementValidation> addressRequirementValidations() {
+        return new Repository<>(httpClient, converter, baseUrl, "address_requirement_validations", AddressRequirementValidation.class, objectMapper);
     }
 
     /**

@@ -4,10 +4,10 @@ import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
 
-@Type("requirement_validations")
+@Type("address_requirement_validations")
 
 @Getter
-public class RequirementValidation extends BaseResource {
+public class AddressRequirementValidation extends BaseResource {
 
     @Relationship("requirement")
     private Requirement requirement;

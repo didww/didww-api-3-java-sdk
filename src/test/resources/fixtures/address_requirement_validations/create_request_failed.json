@@ -1,6 +1,6 @@
 {
   "data": {
-    "type": "requirement_validations",
+    "type": "address_requirement_validations",
     "attributes": {},
     "relationships": {
       "identity": {
