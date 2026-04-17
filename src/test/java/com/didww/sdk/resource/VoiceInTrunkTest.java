@@ -70,7 +70,7 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(sipTrunk).isNotNull();
         SipConfiguration config = (SipConfiguration) sipTrunk.getConfiguration();
         assertThat(config.getUsername()).isEqualTo("username");
-        assertThat(config.getHost()).isEqualTo("216.58.215.78");
+        assertThat(config.getHost()).isEqualTo("203.0.113.78");
         assertThat(config.getPort()).isEqualTo(8060);
         assertThat(config.getCodecIds()).containsExactly(Codec.PCMU, Codec.PCMA, Codec.G729);
         assertThat(config.getTransportProtocolId()).isEqualTo(TransportProtocol.UDP);
@@ -108,7 +108,7 @@ class VoiceInTrunkTest extends BaseTest {
 
         SipConfiguration sipConfig = new SipConfiguration();
         sipConfig.setUsername("username");
-        sipConfig.setHost("216.58.215.110");
+        sipConfig.setHost("203.0.113.110");
         sipConfig.setSstRefreshMethodId(SstRefreshMethod.INVITE);
         sipConfig.setPort(5060);
         sipConfig.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA, Codec.G729, Codec.G723, Codec.TELEPHONE_EVENT));
@@ -161,7 +161,7 @@ class VoiceInTrunkTest extends BaseTest {
         ));
         sipConfig.setMediaEncryptionMode(MediaEncryptionMode.ZRTP);
         sipConfig.setStirShakenMode(StirShakenMode.PAI);
-        sipConfig.setAllowedRtpIps(Arrays.asList("127.0.0.1"));
+        sipConfig.setAllowedRtpIps(Arrays.asList("203.0.113.1"));
 
         VoiceInTrunk trunk = new VoiceInTrunk();
         trunk.setName("hello, test sip trunk");
@@ -240,13 +240,13 @@ class VoiceInTrunkTest extends BaseTest {
 
         SipConfiguration sipConfig = new SipConfiguration();
         sipConfig.setUsername("new-username");
-        sipConfig.setHost("216.58.215.110");
+        sipConfig.setHost("203.0.113.110");
         sipConfig.setPort(5060);
         sipConfig.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA, Codec.G729, Codec.G723, Codec.TELEPHONE_EVENT));
         sipConfig.setSstRefreshMethodId(SstRefreshMethod.INVITE);
         sipConfig.setMediaEncryptionMode(MediaEncryptionMode.ZRTP);
         sipConfig.setStirShakenMode(StirShakenMode.PAI);
-        sipConfig.setAllowedRtpIps(Arrays.asList("127.0.0.1"));
+        sipConfig.setAllowedRtpIps(Arrays.asList("203.0.113.1"));
 
         VoiceInTrunk trunk = new VoiceInTrunk().withId("a80006b6-4183-4865-8b99-7ebbd359a762");
         trunk.setName("hello, updated test sip trunk");
@@ -264,7 +264,7 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(updatedSipConfig.getUsername()).isEqualTo("new-username");
         assertThat(updatedSipConfig.getMediaEncryptionMode()).isEqualTo(MediaEncryptionMode.ZRTP);
         assertThat(updatedSipConfig.getStirShakenMode()).isEqualTo(StirShakenMode.PAI);
-        assertThat(updatedSipConfig.getAllowedRtpIps()).containsExactly("127.0.0.1");
+        assertThat(updatedSipConfig.getAllowedRtpIps()).containsExactly("203.0.113.1");
         assertThat(updatedSipConfig.getReroutingDisconnectCodeIds()).hasSize(45);
     }
 
