@@ -18,24 +18,33 @@ import java.util.List;
 @Getter
 public class EmergencyCallingService extends BaseResource {
 
+    /** Human-readable name for the calling service subscription. */
     @JsonProperty("name")
     private String name;
 
+    /** Server-assigned reference code. */
     @JsonProperty("reference")
     private String reference;
 
+    /**
+     * One of: "active", "canceled", "changes required",
+     * "in process", "new", "pending update".
+     */
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private EmergencyCallingServiceStatus status;
 
+    /** Timestamp when the service became active. Null while pending. */
     @JsonProperty(value = "activated_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime activatedAt;
 
+    /** Timestamp when the service was canceled. Null when active. */
     @JsonProperty(value = "canceled_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime canceledAt;
 
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
+    /** Next renewal date. Null when canceled. */
     @JsonProperty(value = "renew_date", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime renewDate;
 

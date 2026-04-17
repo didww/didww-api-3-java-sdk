@@ -20,24 +20,31 @@ import java.util.List;
 @Getter
 public class EmergencyVerification extends BaseResource {
 
+    /** Verification reference code. */
     @JsonProperty("reference")
     private String reference;
 
+    /** One of: "pending", "approved", "rejected". */
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private EmergencyVerificationStatus status;
 
+    /** List of reject reason codes when status is "rejected". */
     @JsonProperty(value = "reject_reasons", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> rejectReasons;
 
+    /** Optional free-form comment accompanying a rejection. */
     @JsonProperty(value = "reject_comment", access = JsonProperty.Access.WRITE_ONLY)
     private String rejectComment;
 
+    /** Valid URI for callbacks. */
     @JsonProperty("callback_url")
     private String callbackUrl;
 
+    /** GET or POST. */
     @JsonProperty("callback_method")
     private String callbackMethod;
 
+    /** Customer-supplied reference. Max 100 characters. */
     @JsonProperty("external_reference_id")
     private String externalReferenceId;
 
