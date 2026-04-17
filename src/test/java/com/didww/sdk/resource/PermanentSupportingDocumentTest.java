@@ -40,6 +40,7 @@ class PermanentSupportingDocumentTest extends BaseTest {
         assertThat(created.getTemplate()).isNotNull();
         assertThat(created.getTemplate().getId()).isEqualTo("4199435f-646e-4e9d-a143-8f3b972b10c5");
         assertThat(created.getCreatedAt()).isNotNull();
+        assertThat(created.getExternalReferenceId()).isEqualTo("psd-ref-001");
     }
 
     @Test

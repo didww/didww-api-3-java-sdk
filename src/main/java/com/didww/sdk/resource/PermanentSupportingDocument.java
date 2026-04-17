@@ -16,6 +16,9 @@ public class PermanentSupportingDocument extends BaseResource {
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @Relationship("identity")
     private Identity identity;
 
@@ -35,5 +38,9 @@ public class PermanentSupportingDocument extends BaseResource {
 
     public void setFiles(List<EncryptedFile> files) {
         this.files = markDirty("files", files);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }
