@@ -87,6 +87,9 @@ public class VoiceOutTrunk extends BaseResource {
     @Relationship("default_did")
     private Did defaultDid;
 
+    @Relationship("emergency_dids")
+    private List<Did> emergencyDids;
+
     public void setName(String name) {
         this.name = markDirty("name", name);
     }
@@ -157,5 +160,9 @@ public class VoiceOutTrunk extends BaseResource {
 
     public void setRtpTimeout(Integer rtpTimeout) {
         this.rtpTimeout = markDirty("rtpTimeout", rtpTimeout);
+    }
+
+    public void setEmergencyDids(List<Did> emergencyDids) {
+        this.emergencyDids = markDirty("emergencyDids", emergencyDids);
     }
 }
