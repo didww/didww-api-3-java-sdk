@@ -25,6 +25,9 @@ public class SharedCapacityGroup extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @Relationship("capacity_pool")
     private CapacityPool capacityPool;
 
@@ -49,5 +52,9 @@ public class SharedCapacityGroup extends BaseResource {
 
     public void setDids(List<Did> dids) {
         this.dids = markDirty("dids", dids);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }
