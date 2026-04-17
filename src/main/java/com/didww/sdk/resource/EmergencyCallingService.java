@@ -49,6 +49,9 @@ public class EmergencyCallingService extends BaseResource {
     @Relationship("emergency_requirement")
     private EmergencyRequirement emergencyRequirement;
 
+    @Relationship("emergency_verification")
+    private EmergencyVerification emergencyVerification;
+
     @Relationship("dids")
     private List<Did> dids;
 }

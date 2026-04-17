@@ -51,7 +51,8 @@ public class DidwwResourceConverter {
             DidHistory.class,
             EmergencyRequirement.class,
             EmergencyRequirementValidation.class,
-            EmergencyCallingService.class
+            EmergencyCallingService.class,
+            EmergencyVerification.class
     };
 
     public static ObjectMapper createObjectMapper() {
