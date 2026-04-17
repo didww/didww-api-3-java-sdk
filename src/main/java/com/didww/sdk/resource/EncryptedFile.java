@@ -14,8 +14,8 @@ public class EncryptedFile extends BaseResource {
     @JsonProperty("description")
     private String description;
 
-    @JsonProperty(value = "expire_at", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime expireAt;
+    @JsonProperty(value = "expires_at", access = JsonProperty.Access.WRITE_ONLY)
+    private OffsetDateTime expiresAt;
 
     public void setDescription(String description) {
         this.description = markDirty("description", description);

@@ -4,7 +4,7 @@
     "type": "encrypted_files",
     "attributes": {
       "description": "some description",
-      "expire_at": "2021-04-06T16:38:34.396Z"
+      "expires_at": "2021-04-06T16:38:34.396Z"
     }
   },
   "meta": {
