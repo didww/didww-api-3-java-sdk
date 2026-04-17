@@ -37,16 +37,27 @@ public class IdentityAddressProofsExample {
         Country country = countries.get(0);
         System.out.println("Using country: " + country.getName() + " (" + country.getId() + ")");
 
-        // --- Step 2: Create an identity ---
+        // --- Step 2: Create an identity (with birth_country for 2026-04-16) ---
         Identity identity = new Identity();
         identity.setFirstName("John");
         identity.setLastName("Doe");
         identity.setPhoneNumber("12125551234");
         identity.setIdentityType(IdentityType.PERSONAL);
         identity.setCountry(country);
-        identity = client.identities().create(identity).getData();
+        identity.setBirthCountry(country); // 2026-04-16: birth_country relationship
+
+        QueryParams identityParams = QueryParams.builder()
+                .include("country", "birth_country")
+                .build();
+        identity = client.identities().create(identity, identityParams).getData();
         System.out.println("Created identity: " + identity.getId()
                 + " (" + identity.getFirstName() + " " + identity.getLastName() + ")");
+        if (identity.getCountry() != null) {
+            System.out.println("  Country: " + identity.getCountry().getName());
+        }
+        if (identity.getBirthCountry() != null) {
+            System.out.println("  Birth Country: " + identity.getBirthCountry().getName());
+        }
 
         // --- Step 3: Create an address linked to the identity ---
         Address address = new Address();
