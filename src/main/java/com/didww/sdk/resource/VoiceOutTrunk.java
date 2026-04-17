@@ -67,6 +67,9 @@ public class VoiceOutTrunk extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @JsonProperty("authentication_method")
     @JsonDeserialize(using = AuthenticationMethodDeserializer.class)
     @JsonSerialize(using = AuthenticationMethodSerializer.class)
@@ -138,4 +141,7 @@ public class VoiceOutTrunk extends BaseResource {
         this.defaultDid = markDirty("defaultDid", defaultDid);
     }
 
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
+    }
 }
