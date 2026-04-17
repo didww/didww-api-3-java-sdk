@@ -49,6 +49,26 @@ class EmergencyVerificationTest extends BaseTest {
     }
 
     @Test
+    void testUpdateEmergencyVerificationExternalReferenceId() {
+        String id = "01234567-89ab-cdef-0123-456789abcdef";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/emergency_verifications/" + id))
+                .withRequestBody(equalToJson(loadFixture("emergency_verifications/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("emergency_verifications/update.json"))));
+
+        EmergencyVerification verification = new EmergencyVerification().withId(id);
+        verification.setExternalReferenceId("updated-ev-ref");
+
+        ApiResponse<EmergencyVerification> response = client.emergencyVerifications().update(verification);
+        EmergencyVerification updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo(id);
+        assertThat(updated.getExternalReferenceId()).isEqualTo("updated-ev-ref");
+    }
+
+    @Test
     void testCreateEmergencyVerification() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/emergency_verifications"))
                 .withRequestBody(equalToJson(loadFixture("emergency_verifications/create_request.json"), true, false))
