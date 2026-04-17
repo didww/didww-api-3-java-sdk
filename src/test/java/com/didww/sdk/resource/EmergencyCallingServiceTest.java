@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.EmergencyCallingServiceStatus;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -24,7 +25,7 @@ class EmergencyCallingServiceTest extends BaseTest {
         EmergencyCallingService first = records.get(0);
         assertThat(first.getName()).isEqualTo("London Office ECS");
         assertThat(first.getReference()).isEqualTo("ECS-0001");
-        assertThat(first.getStatus()).isEqualTo("active");
+        assertThat(first.getStatus()).isEqualTo(EmergencyCallingServiceStatus.ACTIVE);
         assertThat(first.isActive()).isTrue();
         assertThat(first.isCanceled()).isFalse();
         assertThat(first.isChangesRequired()).isFalse();
@@ -48,7 +49,7 @@ class EmergencyCallingServiceTest extends BaseTest {
         assertThat(record.getId()).isEqualTo(id);
         assertThat(record.getName()).isEqualTo("Berlin Office ECS");
         assertThat(record.getReference()).isEqualTo("ECS-0042");
-        assertThat(record.getStatus()).isEqualTo("pending update");
+        assertThat(record.getStatus()).isEqualTo(EmergencyCallingServiceStatus.PENDING_UPDATE);
         assertThat(record.isPendingUpdate()).isTrue();
         assertThat(record.isActive()).isFalse();
         assertThat(record.getActivatedAt()).isNotNull();
