@@ -27,8 +27,8 @@ public class EmergencyCallingService extends BaseResource {
     private String reference;
 
     /**
-     * One of: "active", "canceled", "changes required",
-     * "in process", "new", "pending update".
+     * One of: "active", "canceled", "changes_required",
+     * "in_process", "new", "pending_update".
      */
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private EmergencyCallingServiceStatus status;

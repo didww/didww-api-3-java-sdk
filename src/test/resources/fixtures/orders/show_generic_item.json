@@ -4,7 +4,7 @@
     "type": "orders",
     "attributes": {
       "amount": "25.07",
-      "status": "Completed",
+      "status": "completed",
       "created_at": "2018-08-17T09:48:48.440Z",
       "description": "Payment processing fee",
       "reference": "SPT-474057",

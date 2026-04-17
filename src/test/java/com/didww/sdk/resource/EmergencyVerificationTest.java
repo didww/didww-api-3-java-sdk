@@ -31,7 +31,7 @@ class EmergencyVerificationTest extends BaseTest {
         assertThat(first.getRejectReasons()).isNull();
         assertThat(first.getRejectComment()).isNull();
         assertThat(first.getCallbackUrl()).isEqualTo("https://example.com/emergency/hook");
-        assertThat(first.getCallbackMethod()).isEqualTo("POST");
+        assertThat(first.getCallbackMethod()).isEqualTo("post");
         assertThat(first.getExternalReferenceId()).isNull();
         assertThat(first.getCreatedAt()).isNotNull();
     }
@@ -90,7 +90,7 @@ class EmergencyVerificationTest extends BaseTest {
 
         EmergencyVerification verification = new EmergencyVerification();
         verification.setCallbackUrl("https://example.com/emergency/hook");
-        verification.setCallbackMethod("POST");
+        verification.setCallbackMethod("post");
         verification.setExternalReferenceId("ref-abc-123");
         verification.setEmergencyCallingService(ecs);
         verification.setAddress(address);
