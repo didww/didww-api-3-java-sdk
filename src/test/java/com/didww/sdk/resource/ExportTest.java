@@ -30,6 +30,7 @@ class ExportTest extends BaseTest {
         assertThat(export.getStatus()).isEqualTo(ExportStatus.COMPLETED);
         assertThat(export.getExportType()).isEqualTo(ExportType.CDR_IN);
         assertThat(export.getUrl()).isEqualTo("https://sandbox-api.didww.com/v3/exports/e5352384-6f64-4132-bba1-cda18fbc5896.csv.gz");
+        assertThat(export.getExternalReferenceId()).isEqualTo("exp-ref-001");
     }
 
     @Test

@@ -36,6 +36,9 @@ public class Export extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     public void setExportType(ExportType exportType) {
         this.exportType = markDirty("exportType", exportType);
     }
@@ -50,5 +53,9 @@ public class Export extends BaseResource {
 
     public void setFilters(Map<String, Object> filters) {
         this.filters = markDirty("filters", filters);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }
