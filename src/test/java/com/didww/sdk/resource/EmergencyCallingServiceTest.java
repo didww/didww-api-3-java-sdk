@@ -25,6 +25,12 @@ class EmergencyCallingServiceTest extends BaseTest {
         assertThat(first.getName()).isEqualTo("London Office ECS");
         assertThat(first.getReference()).isEqualTo("ECS-0001");
         assertThat(first.getStatus()).isEqualTo("active");
+        assertThat(first.isActive()).isTrue();
+        assertThat(first.isCanceled()).isFalse();
+        assertThat(first.isChangesRequired()).isFalse();
+        assertThat(first.isInProcess()).isFalse();
+        assertThat(first.isNewStatus()).isFalse();
+        assertThat(first.isPendingUpdate()).isFalse();
         assertThat(first.getActivatedAt()).isNotNull();
         assertThat(first.getCanceledAt()).isNull();
         assertThat(first.getCreatedAt()).isNotNull();
@@ -43,6 +49,8 @@ class EmergencyCallingServiceTest extends BaseTest {
         assertThat(record.getName()).isEqualTo("Berlin Office ECS");
         assertThat(record.getReference()).isEqualTo("ECS-0042");
         assertThat(record.getStatus()).isEqualTo("pending update");
+        assertThat(record.isPendingUpdate()).isTrue();
+        assertThat(record.isActive()).isFalse();
         assertThat(record.getActivatedAt()).isNotNull();
         assertThat(record.getRenewDate()).isEqualTo(LocalDate.of(2026, 6, 15));
     }

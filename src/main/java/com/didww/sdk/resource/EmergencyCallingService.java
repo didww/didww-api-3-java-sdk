@@ -1,5 +1,6 @@
 package com.didww.sdk.resource;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -62,4 +63,34 @@ public class EmergencyCallingService extends BaseResource {
 
     @Relationship("dids")
     private List<Did> dids;
+
+    @JsonIgnore
+    public boolean isActive() {
+        return "active".equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isCanceled() {
+        return "canceled".equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isChangesRequired() {
+        return "changes required".equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isInProcess() {
+        return "in process".equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isNewStatus() {
+        return "new".equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isPendingUpdate() {
+        return "pending update".equals(status);
+    }
 }
