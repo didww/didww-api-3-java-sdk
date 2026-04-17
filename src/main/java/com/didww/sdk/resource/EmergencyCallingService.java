@@ -1,5 +1,6 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.EmergencyCallingServiceStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
@@ -24,7 +25,7 @@ public class EmergencyCallingService extends BaseResource {
     private String reference;
 
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
-    private String status;
+    private EmergencyCallingServiceStatus status;
 
     @JsonProperty(value = "activated_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime activatedAt;
@@ -61,31 +62,31 @@ public class EmergencyCallingService extends BaseResource {
 
     @JsonIgnore
     public boolean isActive() {
-        return "active".equals(status);
+        return EmergencyCallingServiceStatus.ACTIVE.equals(status);
     }
 
     @JsonIgnore
     public boolean isCanceled() {
-        return "canceled".equals(status);
+        return EmergencyCallingServiceStatus.CANCELED.equals(status);
     }
 
     @JsonIgnore
     public boolean isChangesRequired() {
-        return "changes required".equals(status);
+        return EmergencyCallingServiceStatus.CHANGES_REQUIRED.equals(status);
     }
 
     @JsonIgnore
     public boolean isInProcess() {
-        return "in process".equals(status);
+        return EmergencyCallingServiceStatus.IN_PROCESS.equals(status);
     }
 
     @JsonIgnore
     public boolean isNewStatus() {
-        return "new".equals(status);
+        return EmergencyCallingServiceStatus.NEW.equals(status);
     }
 
     @JsonIgnore
     public boolean isPendingUpdate() {
-        return "pending update".equals(status);
+        return EmergencyCallingServiceStatus.PENDING_UPDATE.equals(status);
     }
 }
