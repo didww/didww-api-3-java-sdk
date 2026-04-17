@@ -31,6 +31,22 @@ class AddressRequirementValidationTest extends BaseTest {
     }
 
     @Test
+    void testCreateAddressRequirementValidationReturns204() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/address_requirement_validations"))
+                .withRequestBody(equalToJson(loadFixture("address_requirement_validations/create_204_request.json"), true, false))
+                .willReturn(aResponse().withStatus(204)));
+
+        AddressRequirementValidation validation = new AddressRequirementValidation();
+        validation.setAddress(new Address().withId("66666666-7777-8888-9999-aaaaaaaaaaaa"));
+        validation.setIdentity(new Identity().withId("bbbbbbbb-cccc-dddd-eeee-ffffffffffff"));
+        validation.setAddressRequirement(new AddressRequirement().withId("11111111-2222-3333-4444-555555555555"));
+
+        ApiResponse<AddressRequirementValidation> response = client.addressRequirementValidations().create(validation);
+
+        assertThat(response.getData()).isNull();
+    }
+
+    @Test
     void testCreateAddressRequirementValidationFailed() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/address_requirement_validations"))
                 .withRequestBody(equalToJson(loadFixture("address_requirement_validations/create_request_failed.json"), true, false))
