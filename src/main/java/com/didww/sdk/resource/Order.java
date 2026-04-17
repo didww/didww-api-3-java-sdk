@@ -43,6 +43,9 @@ public class Order extends BaseResource {
     @JsonProperty("allow_back_ordering")
     private Boolean allowBackOrdering;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @JsonProperty("items")
     @JsonDeserialize(using = OrderItemDeserializer.class)
     @JsonSerialize(using = OrderItemSerializer.class)
@@ -62,5 +65,9 @@ public class Order extends BaseResource {
 
     public void setItems(List<OrderItem> items) {
         this.items = markDirty("items", items);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }
