@@ -35,7 +35,7 @@ public class DidReservationsExample {
         reservation = client.didReservations().create(reservation).getData();
         System.out.println("Created reservation: " + reservation.getId());
         System.out.println("  description: " + reservation.getDescription());
-        System.out.println("  expires at: " + reservation.getExpireAt());
+        System.out.println("  expires at: " + reservation.getExpiresAt());
 
         // List reservations with includes
         QueryParams params = QueryParams.builder()
