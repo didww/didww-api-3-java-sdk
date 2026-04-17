@@ -3,7 +3,8 @@
     "id": "19510da3-c07e-4fa9-a696-6b9ab89cc172",
     "type": "permanent_supporting_documents",
     "attributes": {
-      "created_at": "2021-04-01T15:01:59.756Z"
+      "created_at": "2021-04-01T15:01:59.756Z",
+      "external_reference_id": "psd-ref-001"
     },
     "relationships": {
       "template": {
