@@ -1,0 +1,12 @@
+{
+  "data": {
+    "id": "44957076-778a-4802-b60c-d22db0cda284",
+    "type": "dids",
+    "attributes": {},
+    "relationships": {
+      "emergency_calling_service": {
+        "data": null
+      }
+    }
+  }
+}
