@@ -99,6 +99,9 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonProperty("allowed_rtp_ips")
     private List<String> allowedRtpIps;
 
+    @JsonProperty("diversion_relay_policy")
+    private DiversionRelayPolicy diversionRelayPolicy;
+
     @Override
     @JsonIgnore
     public String getType() {

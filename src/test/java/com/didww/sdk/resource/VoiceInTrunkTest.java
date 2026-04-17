@@ -5,6 +5,7 @@ import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
+import com.didww.sdk.resource.enums.DiversionRelayPolicy;
 import com.didww.sdk.resource.enums.Codec;
 import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.RxDtmfFormat;
@@ -176,6 +177,7 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(codes.get(0)).isEqualTo(ReroutingDisconnectCode.SIP_400_BAD_REQUEST);
         assertThat(codes.get(codes.size() - 1)).isEqualTo(ReroutingDisconnectCode.RINGING_TIMEOUT);
         assertThat(codes).contains(ReroutingDisconnectCode.SIP_480_TEMPORARILY_UNAVAILABLE);
+        assertThat(config.getDiversionRelayPolicy()).isEqualTo(DiversionRelayPolicy.SIP);
     }
 
     @Test
