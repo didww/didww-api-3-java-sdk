@@ -1,0 +1,16 @@
+{
+  "data": {
+    "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "type": "did_history",
+    "attributes": {
+      "did_number": "442038680521",
+      "action": "billing_cycles_count_changed",
+      "method": "api3",
+      "created_at": "2026-04-15T10:00:00.000Z"
+    },
+    "meta": {
+      "from": "2",
+      "to": "1"
+    }
+  }
+}
