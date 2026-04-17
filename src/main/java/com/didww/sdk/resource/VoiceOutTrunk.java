@@ -73,6 +73,9 @@ public class VoiceOutTrunk extends BaseResource {
     @JsonProperty("emergency_enable_all")
     private Boolean emergencyEnableAll;
 
+    @JsonProperty("rtp_timeout")
+    private Integer rtpTimeout;
+
     @JsonProperty("authentication_method")
     @JsonDeserialize(using = AuthenticationMethodDeserializer.class)
     @JsonSerialize(using = AuthenticationMethodSerializer.class)
@@ -150,5 +153,9 @@ public class VoiceOutTrunk extends BaseResource {
 
     public void setEmergencyEnableAll(Boolean emergencyEnableAll) {
         this.emergencyEnableAll = markDirty("emergencyEnableAll", emergencyEnableAll);
+    }
+
+    public void setRtpTimeout(Integer rtpTimeout) {
+        this.rtpTimeout = markDirty("rtpTimeout", rtpTimeout);
     }
 }
