@@ -28,6 +28,9 @@ public class DidGroup extends BaseResource {
     @JsonProperty("allow_additional_channels")
     private Boolean allowAdditionalChannels;
 
+    @JsonProperty("service_restrictions")
+    private String serviceRestrictions;
+
     @Relationship("stock_keeping_units")
     private List<StockKeepingUnit> stockKeepingUnits;
 
