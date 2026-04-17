@@ -31,6 +31,15 @@ public class Export extends BaseResource {
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private ExportStatus status;
 
+    /**
+     * Export filters map. For CDR exports, the following keys are supported:
+     * <ul>
+     *   <li>{@code from} - ISO 8601 lower bound, INCLUSIVE (time_start &gt;= from). cdr_in / cdr_out only.</li>
+     *   <li>{@code to} - ISO 8601 upper bound, EXCLUSIVE (time_start &lt; to). cdr_in / cdr_out only.</li>
+     *   <li>{@code did_number} - filter by DID number (cdr_in only).</li>
+     *   <li>{@code voice_out_trunk_id} - filter by trunk (cdr_out only).</li>
+     * </ul>
+     */
     @JsonProperty("filters")
     private Map<String, Object> filters;
 
