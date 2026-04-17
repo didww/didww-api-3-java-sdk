@@ -34,6 +34,26 @@ class ExportTest extends BaseTest {
     }
 
     @Test
+    void testUpdateExportExternalReferenceId() {
+        String id = "da15f006-5da4-45ca-b0df-735baeadf423";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/exports/" + id))
+                .withRequestBody(equalToJson(loadFixture("exports/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("exports/update.json"))));
+
+        Export export = new Export().withId(id);
+        export.setExternalReferenceId("updated-exp-ref");
+
+        ApiResponse<Export> response = client.exports().update(export);
+        Export updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo(id);
+        assertThat(updated.getExternalReferenceId()).isEqualTo("updated-exp-ref");
+    }
+
+    @Test
     void testCreateCdrOutExport() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/exports"))
                 .willReturn(aResponse()
