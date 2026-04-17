@@ -165,4 +165,14 @@ public class VoiceOutTrunk extends BaseResource {
     public void setEmergencyDids(List<Did> emergencyDids) {
         this.emergencyDids = markDirty("emergencyDids", emergencyDids);
     }
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public boolean isActive() {
+        return VoiceOutTrunkStatus.ACTIVE.equals(status);
+    }
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public boolean isBlocked() {
+        return VoiceOutTrunkStatus.BLOCKED.equals(status);
+    }
 }
