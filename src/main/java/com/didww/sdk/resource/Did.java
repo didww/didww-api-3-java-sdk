@@ -69,6 +69,9 @@ public class Did extends BaseResource {
     @Relationship("address_verification")
     private AddressVerification addressVerification;
 
+    @Relationship("emergency_calling_service")
+    private EmergencyCallingService emergencyCallingService;
+
     public void setTerminated(Boolean terminated) {
         this.terminated = markDirty("terminated", terminated);
     }
@@ -105,5 +108,9 @@ public class Did extends BaseResource {
 
     public void setSharedCapacityGroup(SharedCapacityGroup sharedCapacityGroup) {
         this.sharedCapacityGroup = markDirty("sharedCapacityGroup", sharedCapacityGroup);
+    }
+
+    public void setEmergencyCallingService(EmergencyCallingService emergencyCallingService) {
+        this.emergencyCallingService = markDirty("emergencyCallingService", emergencyCallingService);
     }
 }
