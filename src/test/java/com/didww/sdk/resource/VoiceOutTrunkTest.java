@@ -132,6 +132,28 @@ class VoiceOutTrunkTest extends BaseTest {
     }
 
     @Test
+    void testUpdateVoiceOutTrunkAuthenticationMethodOnly() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/425ce763-a3a9-49b4-af5b-ada1a65c8864"))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/update_auth_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/update.json"))));
+
+        CredentialsAndIpAuthenticationMethod auth = new CredentialsAndIpAuthenticationMethod();
+        auth.setAllowedSipIps(Collections.singletonList("192.0.2.10/32"));
+        auth.setTechPrefix("99");
+
+        VoiceOutTrunk trunk = new VoiceOutTrunk().withId("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+        trunk.setAuthenticationMethod(auth);
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().update(trunk);
+        VoiceOutTrunk updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+    }
+
+    @Test
     void testDeleteVoiceOutTrunk() {
         String id = "b60201c1-21f0-4d9a-aafa-0e6d1e12f22e";
         wireMock.stubFor(delete(urlPathEqualTo("/v3/voice_out_trunks/" + id))
