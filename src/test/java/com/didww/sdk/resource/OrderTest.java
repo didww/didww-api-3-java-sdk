@@ -31,6 +31,7 @@ class OrderTest extends BaseTest {
         assertThat(order.getDescription()).isEqualTo("Payment processing fee");
         assertThat(order.getReference()).isEqualTo("SPT-474057");
         assertThat(order.getItems()).isNotEmpty();
+        assertThat(order.getExternalReferenceId()).isEqualTo("order-ref-001");
     }
 
     @Test
