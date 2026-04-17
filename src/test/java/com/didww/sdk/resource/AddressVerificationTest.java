@@ -63,6 +63,26 @@ class AddressVerificationTest extends BaseTest {
     }
 
     @Test
+    void testUpdateAddressVerificationExternalReferenceId() {
+        String id = "429e6d4e-2ee9-4953-aa98-0b3ac07f0f96";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/address_verifications/" + id))
+                .withRequestBody(equalToJson(loadFixture("address_verifications/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("address_verifications/update.json"))));
+
+        AddressVerification verification = new AddressVerification().withId(id);
+        verification.setExternalReferenceId("updated-ref-42");
+
+        ApiResponse<AddressVerification> response = client.addressVerifications().update(verification);
+        AddressVerification updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo(id);
+        assertThat(updated.getExternalReferenceId()).isEqualTo("updated-ref-42");
+    }
+
+    @Test
     void testCreateAddressVerification() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/address_verifications"))
                 .withRequestBody(equalToJson(loadFixture("address_verifications/create_request.json"), true, false))
