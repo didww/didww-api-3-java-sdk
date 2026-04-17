@@ -27,7 +27,24 @@ class VoiceOutTrunkTest extends BaseTest {
         ApiResponse<List<VoiceOutTrunk>> response = client.voiceOutTrunks().list();
         List<VoiceOutTrunk> trunks = response.getData();
 
-        assertThat(trunks).isNotEmpty();
+        assertThat(trunks).hasSize(2);
+
+        // First entry — credentials_and_ip with 2026-04-16 fields
+        VoiceOutTrunk first = trunks.get(0);
+        assertThat(first.getStatus()).isEqualTo(VoiceOutTrunkStatus.BLOCKED);
+        assertThat(first.getEmergencyEnableAll()).isFalse();
+        assertThat(first.getRtpTimeout()).isEqualTo(30);
+        assertThat(first.getAuthenticationMethod()).isInstanceOf(CredentialsAndIpAuthenticationMethod.class);
+
+        // Second entry — credentials_and_ip with 2026-04-16 fields
+        VoiceOutTrunk second = trunks.get(1);
+        assertThat(second.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
+        assertThat(second.getEmergencyEnableAll()).isFalse();
+        assertThat(second.getRtpTimeout()).isNull();
+        assertThat(second.getAuthenticationMethod()).isInstanceOf(CredentialsAndIpAuthenticationMethod.class);
+        CredentialsAndIpAuthenticationMethod secondAuth = (CredentialsAndIpAuthenticationMethod) second.getAuthenticationMethod();
+        assertThat(secondAuth.getAllowedSipIps()).containsExactly("203.0.113.0/24");
+        assertThat(secondAuth.getUsername()).isEqualTo("50fb4hugfv");
     }
 
     @Test
