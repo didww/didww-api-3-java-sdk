@@ -70,6 +70,9 @@ public class VoiceOutTrunk extends BaseResource {
     @JsonProperty("external_reference_id")
     private String externalReferenceId;
 
+    @JsonProperty("emergency_enable_all")
+    private Boolean emergencyEnableAll;
+
     @JsonProperty("authentication_method")
     @JsonDeserialize(using = AuthenticationMethodDeserializer.class)
     @JsonSerialize(using = AuthenticationMethodSerializer.class)
@@ -143,5 +146,9 @@ public class VoiceOutTrunk extends BaseResource {
 
     public void setExternalReferenceId(String externalReferenceId) {
         this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
+    }
+
+    public void setEmergencyEnableAll(Boolean emergencyEnableAll) {
+        this.emergencyEnableAll = markDirty("emergencyEnableAll", emergencyEnableAll);
     }
 }
