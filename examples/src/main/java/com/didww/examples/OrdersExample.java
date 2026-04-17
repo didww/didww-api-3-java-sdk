@@ -9,6 +9,12 @@ import com.didww.sdk.resource.orderitem.OrderItem;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+
+/**
+ * Orders example — demonstrates creating and listing orders.
+ * 2026-04-16: external_reference_id is a customer-supplied tag (max 100 chars).
+ */
 
 public class OrdersExample {
 
@@ -24,6 +30,9 @@ public class OrdersExample {
                 for (OrderItem item : order.getItems()) {
                     System.out.println("  - " + item.getType());
                 }
+            }
+            if (order.getExternalReferenceId() != null) {
+                System.out.println("  External reference: " + order.getExternalReferenceId());
             }
         }
 
@@ -47,10 +56,14 @@ public class OrdersExample {
         didItem.setSkuId(skuId);
         didItem.setQty(1);
 
+        // 2026-04-16 external_reference_id — customer-supplied tag (max 100 chars)
+        String suffix = UUID.randomUUID().toString().substring(0, 8);
+        newOrder.setExternalReferenceId("java-order-" + suffix);
         newOrder.setItems(Arrays.asList(didItem));
 
         Order created = client.orders().create(newOrder).getData();
         System.out.println("Created order: " + created.getId() + " - " + created.getStatus());
+        System.out.println("  External reference: " + created.getExternalReferenceId());
 
         // Delete order (cancel)
         client.orders().delete(created.getId());
