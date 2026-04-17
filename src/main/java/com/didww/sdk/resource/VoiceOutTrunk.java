@@ -7,6 +7,7 @@ import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
 import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -166,12 +167,12 @@ public class VoiceOutTrunk extends BaseResource {
         this.emergencyDids = markDirty("emergencyDids", emergencyDids);
     }
 
-    @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIgnore
     public boolean isActive() {
         return VoiceOutTrunkStatus.ACTIVE.equals(status);
     }
 
-    @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonIgnore
     public boolean isBlocked() {
         return VoiceOutTrunkStatus.BLOCKED.equals(status);
     }
