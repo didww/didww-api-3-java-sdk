@@ -21,11 +21,13 @@ public class SharedCapacityGroupsExample {
         group.setMeteredChannelsCount(10);
         group.setSharedChannelsCount(1);
         group.setCapacityPool(capacityPool);
+        group.setExternalReferenceId("java-scg-" + suffix);
 
         SharedCapacityGroup created = client.sharedCapacityGroups().create(group).getData();
         System.out.println("Created: " + created.getId()
                 + " name=" + created.getName()
                 + " metered=" + created.getMeteredChannelsCount()
-                + " shared=" + created.getSharedChannelsCount());
+                + " shared=" + created.getSharedChannelsCount()
+                + " ext_ref=" + created.getExternalReferenceId());
     }
 }
