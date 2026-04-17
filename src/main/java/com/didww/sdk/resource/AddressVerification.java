@@ -33,8 +33,14 @@ public class AddressVerification extends BaseResource {
     @JsonProperty(value = "reference", access = JsonProperty.Access.WRITE_ONLY)
     private String reference;
 
+    @JsonProperty(value = "reject_comment", access = JsonProperty.Access.WRITE_ONLY)
+    private String rejectComment;
+
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
+
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
 
     @Relationship("address")
     private Address address;
@@ -60,5 +66,9 @@ public class AddressVerification extends BaseResource {
 
     public void setDids(List<Did> dids) {
         this.dids = markDirty("dids", dids);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }

@@ -58,6 +58,8 @@ class AddressVerificationTest extends BaseTest {
         assertThat(av.getStatus()).isEqualTo(AddressVerificationStatus.REJECTED);
         assertThat(av.getRejectReasons()).isEqualTo(Arrays.asList("Address cannot be validated", "Proof of address should be not older than of 6 months"));
         assertThat(av.getReference()).isEqualTo("ODW-879912");
+        assertThat(av.getRejectComment()).isEqualTo("Please re-submit with a more recent utility bill.");
+        assertThat(av.getExternalReferenceId()).isEqualTo("crm-verif-0001");
     }
 
     @Test
