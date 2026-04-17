@@ -1,6 +1,7 @@
 package com.didww.examples;
 
 import com.didww.sdk.DidwwClient;
+import java.util.Collections;
 import com.didww.sdk.Encrypt;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.resource.*;
@@ -93,22 +94,22 @@ public class IdentityAddressProofsExample {
 
         // Upload for identity proof
         byte[] encrypted1 = enc.encrypt(fileContent);
-        List<String> fileIds1 = client.uploadEncryptedFile(
+        String fileId1 = client.uploadEncryptedFile(
                 encrypted1, "identity_proof.pdf.enc", fingerprint, "identity_proof.pdf");
 
         // Upload for address proof
         byte[] encrypted2 = enc.encrypt(fileContent);
-        List<String> fileIds2 = client.uploadEncryptedFile(
+        String fileId2 = client.uploadEncryptedFile(
                 encrypted2, "address_proof.pdf.enc", fingerprint, "address_proof.pdf");
 
-        System.out.println("Uploaded encrypted files: " + fileIds1 + ", " + fileIds2);
+        System.out.println("Uploaded encrypted files: " + Collections.singletonList(fileId1) + ", " + Collections.singletonList(fileId2));
 
         // --- Step 6: Create proof for identity ---
         if (identityProofType != null) {
             Proof identityProof = new Proof();
             identityProof.setEntity(identity);
             identityProof.setProofType(identityProofType);
-            identityProof.setFiles(Arrays.asList(new EncryptedFile().withId(fileIds1.get(0))));
+            identityProof.setFiles(Arrays.asList(new EncryptedFile().withId(Collections.singletonList(fileId1).get(0))));
 
             QueryParams params = QueryParams.builder().include("proof_type").build();
             Proof createdProof = client.proofs().create(identityProof, params).getData();
@@ -121,7 +122,7 @@ public class IdentityAddressProofsExample {
             Proof addressProof = new Proof();
             addressProof.setEntity(address);
             addressProof.setProofType(addressProofType);
-            addressProof.setFiles(Arrays.asList(new EncryptedFile().withId(fileIds2.get(0))));
+            addressProof.setFiles(Arrays.asList(new EncryptedFile().withId(Collections.singletonList(fileId2).get(0))));
 
             QueryParams params = QueryParams.builder().include("proof_type").build();
             Proof createdProof = client.proofs().create(addressProof, params).getData();
@@ -139,11 +140,11 @@ public class IdentityAddressProofsExample {
         System.out.println("  Deleted address: " + address.getId());
         client.identities().delete(identity.getId());
         System.out.println("  Deleted identity: " + identity.getId());
-        for (String fid : fileIds1) {
+        for (String fid : Collections.singletonList(fileId1)) {
             client.encryptedFiles().delete(fid);
             System.out.println("  Deleted encrypted file: " + fid);
         }
-        for (String fid : fileIds2) {
+        for (String fid : Collections.singletonList(fileId2)) {
             client.encryptedFiles().delete(fid);
             System.out.println("  Deleted encrypted file: " + fid);
         }

@@ -26,8 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -195,38 +193,45 @@ public class DidwwClient {
     /**
      * Uploads one encrypted file to /encrypted_files as multipart/form-data.
      *
+     * <p>API 2026-04-16 accepts a single file per request and returns a JSON:API
+     * document with {@code data.id}.
+     *
      * @param encryptedData encrypted file bytes to upload
      * @param fileName      original file name sent as the multipart part name
      * @param fingerprint   encryption key fingerprint identifying the public key used
      * @param description   optional human-readable description for the file (may be {@code null})
-     * @return list of encrypted file IDs returned by the API
+     * @return the encrypted file ID returned by the API
      * @throws DidwwClientException if the upload fails or the response is unexpected
      */
-    public List<String> uploadEncryptedFile(byte[] encryptedData,
-                                            String fileName,
-                                            String fingerprint,
-                                            String description) {
+    public String uploadEncryptedFile(byte[] encryptedData,
+                                      String fileName,
+                                      String fingerprint,
+                                      String description) {
         Objects.requireNonNull(encryptedData, "encryptedData must not be null");
         Objects.requireNonNull(fileName, "fileName must not be null");
         Objects.requireNonNull(fingerprint, "fingerprint must not be null");
 
-        RequestBody body = new MultipartBody.Builder()
+        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("encrypted_files[encryption_fingerprint]", fingerprint)
-                .addFormDataPart("encrypted_files[items][][description]", description != null ? description : "")
                 .addFormDataPart(
-                        "encrypted_files[items][][file]",
+                        "encrypted_files[file]",
                         fileName,
                         RequestBody.create(encryptedData, MediaType.parse("application/octet-stream"))
-                )
-                .build();
+                );
+
+        if (description != null && !description.isEmpty()) {
+            bodyBuilder.addFormDataPart("encrypted_files[description]", description);
+        }
+
+        RequestBody body = bodyBuilder.build();
 
         Request request = new Request.Builder()
                 .url(baseUrl + "/encrypted_files")
                 .post(body)
                 .header("Api-Key", credentials.getApiKey())
                 .header(ApiKeyInterceptor.API_VERSION_HEADER, ApiKeyInterceptor.API_VERSION)
-                .header("Accept", "application/json")
+                .header("Accept", "application/vnd.api+json")
                 .header("User-Agent", SdkVersion.userAgent())
                 .build();
 
@@ -244,16 +249,12 @@ public class DidwwClient {
             }
 
             JsonNode root = objectMapper.readTree(responseBody);
-            JsonNode idsNode = root.get("ids");
-            if (idsNode == null || !idsNode.isArray()) {
+            JsonNode dataNode = root.get("data");
+            if (dataNode == null || !dataNode.has("id")) {
                 throw new DidwwClientException("Unexpected encrypted_files upload response: " + responseBody);
             }
 
-            List<String> ids = new ArrayList<>();
-            for (JsonNode idNode : idsNode) {
-                ids.add(idNode.asText());
-            }
-            return ids;
+            return dataNode.get("id").asText();
         } catch (DidwwClientException e) {
             throw e;
         } catch (IOException e) {
