@@ -1,10 +1,15 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.converter.AuthenticationMethodDeserializer;
+import com.didww.sdk.converter.AuthenticationMethodSerializer;
+import com.didww.sdk.resource.authenticationmethod.AuthenticationMethod;
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
 import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
@@ -19,9 +24,6 @@ public class VoiceOutTrunk extends BaseResource {
 
     @JsonProperty("name")
     private String name;
-
-    @JsonProperty("allowed_sip_ips")
-    private List<String> allowedSipIps;
 
     @JsonProperty("on_cli_mismatch_action")
     private OnCliMismatchAction onCliMismatchAction;
@@ -59,17 +61,16 @@ public class VoiceOutTrunk extends BaseResource {
     @JsonProperty("callback_url")
     private String callbackUrl;
 
-    @JsonProperty(value = "username", access = JsonProperty.Access.WRITE_ONLY)
-    private String username;
-
-    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
     @JsonProperty(value = "threshold_reached", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean thresholdReached;
 
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
+
+    @JsonProperty("authentication_method")
+    @JsonDeserialize(using = AuthenticationMethodDeserializer.class)
+    @JsonSerialize(using = AuthenticationMethodSerializer.class)
+    private AuthenticationMethod authenticationMethod;
 
     @Relationship("dids")
     private List<Did> dids;
@@ -79,10 +80,6 @@ public class VoiceOutTrunk extends BaseResource {
 
     public void setName(String name) {
         this.name = markDirty("name", name);
-    }
-
-    public void setAllowedSipIps(List<String> allowedSipIps) {
-        this.allowedSipIps = markDirty("allowedSipIps", allowedSipIps);
     }
 
     public void setOnCliMismatchAction(OnCliMismatchAction onCliMismatchAction) {
@@ -127,6 +124,10 @@ public class VoiceOutTrunk extends BaseResource {
 
     public void setCallbackUrl(String callbackUrl) {
         this.callbackUrl = markDirty("callbackUrl", callbackUrl);
+    }
+
+    public void setAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+        this.authenticationMethod = markDirty("authenticationMethod", authenticationMethod);
     }
 
     public void setDids(List<Did> dids) {

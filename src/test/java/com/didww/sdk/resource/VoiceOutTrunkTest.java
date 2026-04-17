@@ -3,6 +3,8 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.authenticationmethod.CredentialsAndIpAuthenticationMethod;
+import com.didww.sdk.resource.authenticationmethod.IpOnlyAuthenticationMethod;
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
@@ -48,14 +50,19 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(trunk.getRtpPing()).isTrue();
         assertThat(trunk.getThresholdReached()).isFalse();
         assertThat(trunk.getThresholdAmount()).isEqualTo("200.0");
-        assertThat(trunk.getUsername()).isEqualTo("dpjgwbbac9");
-        assertThat(trunk.getPassword()).isEqualTo("z0hshvbcy7");
         assertThat(trunk.getCallbackUrl()).isNull();
         assertThat(trunk.getDstPrefixes()).containsExactly("370");
         assertThat(trunk.getAllowedRtpIps()).isNull();
         assertThat(trunk.getDids()).hasSize(2);
         assertThat(trunk.getDefaultDid()).isNotNull();
         assertThat(trunk.getDefaultDid().getNumber()).isEqualTo("37061498222");
+
+        // authentication_method
+        assertThat(trunk.getAuthenticationMethod()).isInstanceOf(CredentialsAndIpAuthenticationMethod.class);
+        CredentialsAndIpAuthenticationMethod auth = (CredentialsAndIpAuthenticationMethod) trunk.getAuthenticationMethod();
+        assertThat(auth.getAllowedSipIps()).containsExactly("10.11.12.13/32");
+        assertThat(auth.getUsername()).isEqualTo("dpjgwbbac9");
+        assertThat(auth.getPassword()).isEqualTo("z0hshvbcy7");
     }
 
     @Test
@@ -69,10 +76,13 @@ class VoiceOutTrunkTest extends BaseTest {
 
         Did did = new Did().withId("7a028c32-e6b6-4c86-bf01-90f901b37012");
 
+        IpOnlyAuthenticationMethod auth = new IpOnlyAuthenticationMethod();
+        auth.setAllowedSipIps(Collections.singletonList("203.0.113.0/24"));
+
         VoiceOutTrunk trunk = new VoiceOutTrunk();
         trunk.setName("java-test");
-        trunk.setAllowedSipIps(Collections.singletonList("0.0.0.0/0"));
         trunk.setOnCliMismatchAction(OnCliMismatchAction.REPLACE_CLI);
+        trunk.setAuthenticationMethod(auth);
         trunk.setDefaultDid(did);
         trunk.setDids(Collections.singletonList(did));
 
@@ -82,6 +92,7 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(created.getId()).isEqualTo("b60201c1-21f0-4d9a-aafa-0e6d1e12f22e");
         assertThat(created.getName()).isEqualTo("java-test");
         assertThat(created.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
+        assertThat(created.getAuthenticationMethod()).isInstanceOf(IpOnlyAuthenticationMethod.class);
     }
 
     @Test
@@ -93,6 +104,9 @@ class VoiceOutTrunkTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("voice_out_trunks/update.json"))));
 
+        IpOnlyAuthenticationMethod auth = new IpOnlyAuthenticationMethod();
+        auth.setAllowedSipIps(Collections.singletonList("10.11.12.13/32"));
+
         VoiceOutTrunk trunk = new VoiceOutTrunk().withId("425ce763-a3a9-49b4-af5b-ada1a65c8864");
         trunk.setName("test");
         trunk.setCapacityLimit(123);
@@ -101,7 +115,7 @@ class VoiceOutTrunkTest extends BaseTest {
         trunk.setDstPrefixes(Collections.singletonList("370"));
         trunk.setForceSymmetricRtp(true);
         trunk.setRtpPing(true);
-        trunk.setAllowedSipIps(Collections.singletonList("10.11.12.13/32"));
+        trunk.setAuthenticationMethod(auth);
 
         ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().update(trunk);
         VoiceOutTrunk updated = response.getData();
