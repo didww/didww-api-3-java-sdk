@@ -19,6 +19,9 @@ public class Proof extends BaseResource {
     @JsonProperty("expires_at")
     private OffsetDateTime expiresAt;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @Relationship("entity")
     private ProofEntity entity;
 
@@ -38,5 +41,9 @@ public class Proof extends BaseResource {
 
     public void setFiles(List<EncryptedFile> files) {
         this.files = markDirty("files", files);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }
