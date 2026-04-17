@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class ApiKeyInterceptor implements Interceptor {
     public static final String API_VERSION_HEADER = "X-DIDWW-API-Version";
-    public static final String API_VERSION = "2022-05-10";
+    public static final String API_VERSION = "2026-04-16";
     private final String apiKey;
 
     public ApiKeyInterceptor(String apiKey) {
