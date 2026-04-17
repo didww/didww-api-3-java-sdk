@@ -10,7 +10,7 @@ import lombok.Getter;
 public class AddressRequirementValidation extends BaseResource {
 
     @Relationship("requirement")
-    private Requirement requirement;
+    private AddressRequirement requirement;
 
     @Relationship("address")
     private Address address;
@@ -18,7 +18,7 @@ public class AddressRequirementValidation extends BaseResource {
     @Relationship("identity")
     private Identity identity;
 
-    public void setRequirement(Requirement requirement) {
+    public void setRequirement(AddressRequirement requirement) {
         this.requirement = markDirty("requirement", requirement);
     }
 

@@ -43,7 +43,7 @@ public class DidwwResourceConverter {
             Proof.class,
             ProofType.class,
             PublicKey.class,
-            Requirement.class,
+            AddressRequirement.class,
             AddressRequirementValidation.class,
             SupportingDocumentTemplate.class,
             VoiceOutTrunk.class,

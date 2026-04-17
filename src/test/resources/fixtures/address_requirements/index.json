@@ -2,7 +2,7 @@
   "data": [
     {
       "id": "b6c80acb-3952-4d53-9e62-fe2348c0636b",
-      "type": "requirements",
+      "type": "address_requirements",
       "attributes": {
         "identity_type": "Any",
         "personal_area_level": "Country",
@@ -77,7 +77,7 @@
     },
     {
       "id": "51b293af-a496-4bf2-9c68-5221b3b0dc1e",
-      "type": "requirements",
+      "type": "address_requirements",
       "attributes": {
         "identity_type": "Any",
         "personal_area_level": "Country",
@@ -154,7 +154,7 @@
     },
     {
       "id": "f7c2a9a4-a40e-4f22-98ff-0f53c86052ac",
-      "type": "requirements",
+      "type": "address_requirements",
       "attributes": {
         "identity_type": "Any",
         "personal_area_level": "WorldWide",
@@ -229,7 +229,7 @@
     },
     {
       "id": "edb71cff-d5e8-44ff-ba36-6f758066c175",
-      "type": "requirements",
+      "type": "address_requirements",
       "attributes": {
         "identity_type": "Any",
         "personal_area_level": "Country",
@@ -306,7 +306,7 @@
     },
     {
       "id": "90b72a1a-1ebd-4771-b818-f7123f8ff7ec",
-      "type": "requirements",
+      "type": "address_requirements",
       "attributes": {
         "identity_type": "Any",
         "personal_area_level": "WorldWide",

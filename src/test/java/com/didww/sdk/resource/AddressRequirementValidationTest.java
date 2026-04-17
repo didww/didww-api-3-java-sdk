@@ -22,7 +22,7 @@ class AddressRequirementValidationTest extends BaseTest {
 
         AddressRequirementValidation validation = new AddressRequirementValidation();
         validation.setAddress(new Address().withId("d3414687-40f4-4346-a267-c2c65117d28c"));
-        validation.setRequirement(new Requirement().withId("aea92b24-a044-4864-9740-89d3e15b65c7"));
+        validation.setRequirement(new AddressRequirement().withId("aea92b24-a044-4864-9740-89d3e15b65c7"));
 
         ApiResponse<AddressRequirementValidation> response = client.addressRequirementValidations().create(validation);
         AddressRequirementValidation created = response.getData();
@@ -42,7 +42,7 @@ class AddressRequirementValidationTest extends BaseTest {
         AddressRequirementValidation validation = new AddressRequirementValidation();
         validation.setIdentity(new Identity().withId("5e9df058-50d2-4e34-b0d4-d1746b86f41a"));
         validation.setAddress(new Address().withId("d3414687-40f4-4346-a267-c2c65117d28c"));
-        validation.setRequirement(new Requirement().withId("2efc3427-8ba6-4d50-875d-f2de4a068de8"));
+        validation.setRequirement(new AddressRequirement().withId("2efc3427-8ba6-4d50-875d-f2de4a068de8"));
 
         assertThatThrownBy(() -> client.addressRequirementValidations().create(validation))
                 .isInstanceOf(DidwwApiException.class)

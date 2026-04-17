@@ -11,7 +11,7 @@
       },
       "requirement": {
         "data": {
-          "type": "requirements",
+          "type": "address_requirements",
           "id": "aea92b24-a044-4864-9740-89d3e15b65c7"
         }
       }

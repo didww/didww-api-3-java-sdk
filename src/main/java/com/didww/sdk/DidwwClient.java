@@ -110,8 +110,8 @@ public class DidwwClient {
         return new ReadOnlyRepository<>(httpClient, converter, baseUrl, "public_keys", PublicKey.class, objectMapper);
     }
 
-    public ReadOnlyRepository<Requirement> requirements() {
-        return new ReadOnlyRepository<>(httpClient, converter, baseUrl, "requirements", Requirement.class, objectMapper);
+    public ReadOnlyRepository<AddressRequirement> addressRequirements() {
+        return new ReadOnlyRepository<>(httpClient, converter, baseUrl, "address_requirements", AddressRequirement.class, objectMapper);
     }
 
     public ReadOnlyRepository<SupportingDocumentTemplate> supportingDocumentTemplates() {

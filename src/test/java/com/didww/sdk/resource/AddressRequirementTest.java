@@ -12,14 +12,14 @@ import java.util.List;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RequirementTest extends BaseTest {
+class AddressRequirementTest extends BaseTest {
 
     @Test
-    void testListRequirements() {
-        stubGetFixture("/v3/requirements", "requirements/index.json");
+    void testListAddressRequirements() {
+        stubGetFixture("/v3/address_requirements", "address_requirements/index.json");
 
-        ApiResponse<List<Requirement>> response = client.requirements().list();
-        List<Requirement> requirements = response.getData();
+        ApiResponse<List<AddressRequirement>> response = client.addressRequirements().list();
+        List<AddressRequirement> requirements = response.getData();
 
         assertThat(requirements).isNotEmpty();
         assertThat(requirements).hasSize(5);
@@ -28,8 +28,8 @@ class RequirementTest extends BaseTest {
     }
 
     @Test
-    void testFindRequirement() {
-        stubGetFixture("/v3/requirements/25d12afe-1ec6-4fe3-9621-b250dd1fb959", "requirements/show.json");
+    void testFindAddressRequirement() {
+        stubGetFixture("/v3/address_requirements/25d12afe-1ec6-4fe3-9621-b250dd1fb959", "address_requirements/show.json");
 
         QueryParams params = QueryParams.builder()
                 .include("country", "did_group_type", "personal_permanent_document",
@@ -37,8 +37,8 @@ class RequirementTest extends BaseTest {
                         "business_onetime_document", "personal_proof_types",
                         "business_proof_types", "address_proof_types")
                 .build();
-        ApiResponse<Requirement> response = client.requirements().find("25d12afe-1ec6-4fe3-9621-b250dd1fb959", params);
-        Requirement requirement = response.getData();
+        ApiResponse<AddressRequirement> response = client.addressRequirements().find("25d12afe-1ec6-4fe3-9621-b250dd1fb959", params);
+        AddressRequirement requirement = response.getData();
 
         assertThat(requirement.getId()).isEqualTo("25d12afe-1ec6-4fe3-9621-b250dd1fb959");
         assertThat(requirement.getIdentityType()).isEqualTo(IdentityType.ANY);

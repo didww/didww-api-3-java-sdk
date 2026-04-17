@@ -1,7 +1,7 @@
 {
   "data": {
     "id": "25d12afe-1ec6-4fe3-9621-b250dd1fb959",
-    "type": "requirements",
+    "type": "address_requirements",
     "attributes": {
       "identity_type": "Any",
       "personal_area_level": "WorldWide",
