@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": "01234567-89ab-cdef-0123-456789abcdef",
+    "type": "emergency_verifications",
+    "attributes": {
+      "external_reference_id": "updated-ev-ref"
+    }
+  }
+}
