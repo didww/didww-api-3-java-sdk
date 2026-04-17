@@ -38,10 +38,10 @@
         },
         "data": null
       },
-      "requirement": {
+      "address_requirement": {
         "links": {
-          "self": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/relationships/requirement",
-          "related": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/requirement"
+          "self": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/relationships/address_requirement",
+          "related": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/address_requirement"
         },
         "data": {
           "type": "address_requirements",

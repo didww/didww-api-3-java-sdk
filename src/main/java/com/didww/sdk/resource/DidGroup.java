@@ -43,6 +43,6 @@ public class DidGroup extends BaseResource {
     @Relationship("did_group_type")
     private DidGroupType didGroupType;
 
-    @Relationship("requirement")
-    private AddressRequirement requirement;
+    @Relationship("address_requirement")
+    private AddressRequirement addressRequirement;
 }
