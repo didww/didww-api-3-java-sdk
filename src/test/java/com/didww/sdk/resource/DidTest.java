@@ -125,6 +125,27 @@ class DidTest extends BaseTest {
     }
 
     @Test
+    void testUpdateDidUnassignEmergencyCallingService() {
+        String id = "44957076-778a-4802-b60c-d22db0cda284";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/" + id))
+                .withRequestBody(equalToJson(loadFixture("dids/unassign_ecs_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/unassign_ecs.json"))));
+
+        Did did = new Did().withId(id);
+        did.setEmergencyCallingService(null);
+
+        ApiResponse<Did> response = client.dids().update(did);
+        Did updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo(id);
+        assertThat(updated.getEmergencyEnabled()).isFalse();
+        assertThat(updated.getEmergencyCallingService()).isNull();
+    }
+
+    @Test
     void testUpdateDidFromLoadedResourceSendsOnlyDirtyAttributes() {
         stubGetFixture("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b", "dids/show.json");
 
