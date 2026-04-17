@@ -54,7 +54,7 @@
       "type": "voice_out_trunks",
       "attributes": {
         "allowed_sip_ips": [
-          "0.0.0.0/0"
+          "203.0.113.0/24"
         ],
         "allowed_rtp_ips": null,
         "allow_any_did_as_cli": false,
