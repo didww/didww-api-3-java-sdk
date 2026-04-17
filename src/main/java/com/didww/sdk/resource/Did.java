@@ -72,6 +72,9 @@ public class Did extends BaseResource {
     @Relationship("emergency_calling_service")
     private EmergencyCallingService emergencyCallingService;
 
+    @Relationship("emergency_verification")
+    private EmergencyVerification emergencyVerification;
+
     public void setTerminated(Boolean terminated) {
         this.terminated = markDirty("terminated", terminated);
     }
