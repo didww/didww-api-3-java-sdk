@@ -29,6 +29,9 @@ class OrderTest extends BaseTest {
 
         assertThat(order.getId()).isEqualTo("9df11dac-9d83-448c-8866-19c998be33db");
         assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(order.isCompleted()).isTrue();
+        assertThat(order.isPending()).isFalse();
+        assertThat(order.isCancelled()).isFalse();
         assertThat(order.getDescription()).isEqualTo("Payment processing fee");
         assertThat(order.getReference()).isEqualTo("SPT-474057");
         assertThat(order.getItems()).isNotEmpty();
@@ -61,6 +64,9 @@ class OrderTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("5da18706-be9f-49b0-aeec-0480aacd49ad");
         assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
+        assertThat(created.isPending()).isTrue();
+        assertThat(created.isCompleted()).isFalse();
+        assertThat(created.isCancelled()).isFalse();
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(2);
     }
