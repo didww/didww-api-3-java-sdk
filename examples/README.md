@@ -45,8 +45,20 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 | [`com.didww.examples.VoiceOutTrunksExample`](src/main/java/com/didww/examples/VoiceOutTrunksExample.java) | CRUD for voice out trunks (requires account config). |
 | [`com.didww.examples.DidTrunkAssignmentExample`](src/main/java/com/didww/examples/DidTrunkAssignmentExample.java) | Demonstrates exclusive trunk/trunk group assignment on DIDs. |
 | [`com.didww.examples.DidReservationsExample`](src/main/java/com/didww/examples/DidReservationsExample.java) | Creates, lists, finds and deletes DID reservations. |
-| [`com.didww.examples.ExportsExample`](src/main/java/com/didww/examples/ExportsExample.java) | Creates and lists CDR exports. |
+| [`com.didww.examples.ExportsExample`](src/main/java/com/didww/examples/ExportsExample.java) | Creates and lists CDR exports with from/to datetime range filters. |
 | [`com.didww.examples.CapacityPoolsExample`](src/main/java/com/didww/examples/CapacityPoolsExample.java) | Lists capacity pools with included shared capacity groups. |
+
+### 2026-04-16 Examples
+
+| Class | Description |
+|---|---|
+| [`com.didww.examples.DidHistoryExample`](src/main/java/com/didww/examples/DidHistoryExample.java) | Lists DID ownership history (last 90 days) with action/date filters. |
+| [`com.didww.examples.EmergencyRequirementsExample`](src/main/java/com/didww/examples/EmergencyRequirementsExample.java) | Lists emergency requirements per country/DID group type. |
+| [`com.didww.examples.EmergencyCallingServicesExample`](src/main/java/com/didww/examples/EmergencyCallingServicesExample.java) | Lists and filters emergency calling services by status. |
+| [`com.didww.examples.EmergencyVerificationsExample`](src/main/java/com/didww/examples/EmergencyVerificationsExample.java) | Lists emergency verifications with status predicates. |
+| [`com.didww.examples.EmergencyRequirementValidationsExample`](src/main/java/com/didww/examples/EmergencyRequirementValidationsExample.java) | Validates address+identity against an emergency requirement. |
+| [`com.didww.examples.AddressVerificationsExample`](src/main/java/com/didww/examples/AddressVerificationsExample.java) | Lists address verifications with status predicates and reject details. |
+| [`com.didww.examples.OrdersEmergencyExample`](src/main/java/com/didww/examples/OrdersEmergencyExample.java) | Inspects emergency orders with EmergencyOrderItem details. |
 
 ## Upload file example
 
