@@ -8,8 +8,6 @@ import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
 
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Type("address_verifications")
@@ -30,7 +28,7 @@ public class AddressVerification extends BaseResource {
     private AddressVerificationStatus status;
 
     @JsonProperty(value = "reject_reasons", access = JsonProperty.Access.WRITE_ONLY)
-    private String rejectReasons;
+    private List<String> rejectReasons;
 
     @JsonProperty(value = "reference", access = JsonProperty.Access.WRITE_ONLY)
     private String reference;
@@ -54,13 +52,6 @@ public class AddressVerification extends BaseResource {
 
     public void setCallbackMethod(CallbackMethod callbackMethod) {
         this.callbackMethod = markDirty("callbackMethod", callbackMethod);
-    }
-
-    public List<String> getRejectReasons() {
-        if (rejectReasons == null) {
-            return Collections.emptyList();
-        }
-        return Arrays.asList(rejectReasons.split("; "));
     }
 
     public void setAddress(Address address) {
