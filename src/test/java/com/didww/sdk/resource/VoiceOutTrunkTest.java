@@ -11,6 +11,7 @@ import com.didww.sdk.resource.enums.OnCliMismatchAction;
 import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -151,6 +152,63 @@ class VoiceOutTrunkTest extends BaseTest {
         VoiceOutTrunk updated = response.getData();
 
         assertThat(updated.getId()).isEqualTo("425ce763-a3a9-49b4-af5b-ada1a65c8864");
+    }
+
+    @Test
+    void testUpdateVoiceOutTrunkEmergencyEnableAll() {
+        String id = "01234567-89ab-cdef-0123-456789abcdef";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/update_emergency_enable_all_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/update_emergency_dids.json"))));
+
+        VoiceOutTrunk trunk = new VoiceOutTrunk().withId(id);
+        trunk.setEmergencyEnableAll(true);
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().update(trunk);
+
+        assertThat(response.getData().getId()).isEqualTo(id);
+    }
+
+    @Test
+    void testUpdateVoiceOutTrunkEmergencyDids() {
+        String id = "01234567-89ab-cdef-0123-456789abcdef";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/update_emergency_dids_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/update_emergency_dids.json"))));
+
+        VoiceOutTrunk trunk = new VoiceOutTrunk().withId(id);
+        trunk.setEmergencyDids(Arrays.asList(
+                new Did().withId("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
+                new Did().withId("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb")
+        ));
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().update(trunk);
+
+        assertThat(response.getData().getId()).isEqualTo(id);
+    }
+
+    @Test
+    void testUpdateVoiceOutTrunkClearEmergencyDids() {
+        String id = "01234567-89ab-cdef-0123-456789abcdef";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/clear_emergency_dids_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/update_emergency_dids.json"))));
+
+        VoiceOutTrunk trunk = new VoiceOutTrunk().withId(id);
+        trunk.setEmergencyDids(Collections.emptyList());
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().update(trunk);
+
+        assertThat(response.getData().getId()).isEqualTo(id);
     }
 
     @Test
