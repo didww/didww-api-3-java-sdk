@@ -38,13 +38,13 @@
         },
         "data": null
       },
-      "requirement": {
+      "address_requirement": {
         "links": {
-          "self": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/relationships/requirement",
-          "related": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/requirement"
+          "self": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/relationships/address_requirement",
+          "related": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/address_requirement"
         },
         "data": {
-          "type": "requirements",
+          "type": "address_requirements",
           "id": "8da1e0b2-047c-4baf-9c57-57143f09b9ce"
         }
       },
@@ -63,9 +63,9 @@
   "included": [
     {
       "id": "8da1e0b2-047c-4baf-9c57-57143f09b9ce",
-      "type": "requirements",
+      "type": "address_requirements",
       "attributes": {
-        "identity_type": "Any",
+        "identity_type": "any",
         "personal_area_level": "worldwide",
         "business_area_level": "worldwide",
         "address_area_level": "worldwide",

@@ -55,13 +55,15 @@ public class VoiceInTrunkGroupsExample {
         trunkB = client.voiceInTrunks().create(trunkB).getData();
         System.out.println("Created trunk B: " + trunkB.getId());
 
-        // Create a trunk group with both trunks
+        // Create a trunk group with both trunks (2026-04-16: external_reference_id)
         VoiceInTrunkGroup group = new VoiceInTrunkGroup();
         group.setName("My Trunk Group " + suffix);
         group.setCapacityLimit(10);
+        group.setExternalReferenceId("java-tg-" + suffix);
         group.setVoiceInTrunks(Arrays.asList(trunkA, trunkB));
         group = client.voiceInTrunkGroups().create(group).getData();
         System.out.println("Created trunk group: " + group.getId() + " - " + group.getName());
+        System.out.println("  External Reference: " + group.getExternalReferenceId());
 
         // List trunk groups with included trunks
         QueryParams params = QueryParams.builder()
@@ -71,7 +73,8 @@ public class VoiceInTrunkGroupsExample {
         System.out.println("\nAll trunk groups (" + groups.size() + "):");
         for (VoiceInTrunkGroup g : groups) {
             int trunkCount = g.getVoiceInTrunks() != null ? g.getVoiceInTrunks().size() : 0;
-            System.out.println("  " + g.getName() + " (" + trunkCount + " trunks)");
+            System.out.println("  " + g.getName() + " (" + trunkCount + " trunks)"
+                    + " ext_ref=" + g.getExternalReferenceId());
         }
 
         // Update group name

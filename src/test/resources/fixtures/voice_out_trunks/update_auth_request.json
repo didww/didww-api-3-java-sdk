@@ -1,0 +1,15 @@
+{
+  "data": {
+    "id": "425ce763-a3a9-49b4-af5b-ada1a65c8864",
+    "type": "voice_out_trunks",
+    "attributes": {
+      "authentication_method": {
+        "type": "credentials_and_ip",
+        "attributes": {
+          "allowed_sip_ips": ["192.0.2.10/32"],
+          "tech_prefix": "99"
+        }
+      }
+    }
+  }
+}

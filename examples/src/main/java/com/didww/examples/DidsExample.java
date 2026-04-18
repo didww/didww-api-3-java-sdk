@@ -4,6 +4,9 @@ import com.didww.sdk.DidwwClient;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.resource.CapacityPool;
 import com.didww.sdk.resource.Did;
+import com.didww.sdk.resource.EmergencyCallingService;
+import com.didww.sdk.resource.EmergencyVerification;
+import com.didww.sdk.resource.Identity;
 import com.didww.sdk.resource.VoiceInTrunk;
 
 import java.util.List;
@@ -13,12 +16,25 @@ public class DidsExample {
     public static void main(String[] args) {
         DidwwClient client = ExampleClientFactory.fromEnv();
 
-        // Get last ordered DID
+        // Get last ordered DID (include 2026-04-16 emergency relationships)
         QueryParams didParams = QueryParams.builder()
                 .sort("-created_at")
+                .include("identity", "emergency_calling_service", "emergency_verification")
                 .page(1, 1)
                 .build();
         Did did = client.dids().list(didParams).getData().get(0);
+        System.out.println("Selected DID: " + did.getId());
+        System.out.println("  Number: " + did.getNumber());
+        System.out.println("  Emergency enabled: " + did.getEmergencyEnabled());
+        if (did.getEmergencyCallingService() != null) {
+            System.out.println("  Emergency Calling Service: " + did.getEmergencyCallingService().getId());
+        }
+        if (did.getEmergencyVerification() != null) {
+            System.out.println("  Emergency Verification: " + did.getEmergencyVerification().getId());
+        }
+        if (did.getIdentity() != null) {
+            System.out.println("  Identity: " + did.getIdentity().getId());
+        }
 
         // Get last SIP trunk
         QueryParams trunkParams = QueryParams.builder()

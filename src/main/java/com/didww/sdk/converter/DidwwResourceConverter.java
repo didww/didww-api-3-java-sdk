@@ -43,11 +43,16 @@ public class DidwwResourceConverter {
             Proof.class,
             ProofType.class,
             PublicKey.class,
-            Requirement.class,
-            RequirementValidation.class,
+            AddressRequirement.class,
+            AddressRequirementValidation.class,
             SupportingDocumentTemplate.class,
             VoiceOutTrunk.class,
-            VoiceOutTrunkRegenerateCredential.class
+            VoiceOutTrunkRegenerateCredential.class,
+            DidHistory.class,
+            EmergencyRequirement.class,
+            EmergencyRequirementValidation.class,
+            EmergencyCallingService.class,
+            EmergencyVerification.class
     };
 
     public static ObjectMapper createObjectMapper() {

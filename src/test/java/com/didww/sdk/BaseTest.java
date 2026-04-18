@@ -44,6 +44,7 @@ public abstract class BaseTest {
 
     protected void stubGetFixture(String urlPath, String fixture) {
         wireMock.stubFor(get(urlPathEqualTo(urlPath))
+                .withHeader("X-DIDWW-API-Version", equalTo("2026-04-16"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/vnd.api+json")

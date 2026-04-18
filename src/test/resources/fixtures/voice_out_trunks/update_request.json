@@ -10,7 +10,12 @@
       "dst_prefixes": ["370"],
       "force_symmetric_rtp": true,
       "rtp_ping": true,
-      "allowed_sip_ips": ["10.11.12.13/32"]
+      "authentication_method": {
+        "type": "ip_only",
+        "attributes": {
+          "allowed_sip_ips": ["203.0.113.1/32"]
+        }
+      }
     }
   }
 }

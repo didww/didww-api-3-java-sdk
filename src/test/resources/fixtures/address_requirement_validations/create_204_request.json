@@ -1,0 +1,26 @@
+{
+  "data": {
+    "type": "address_requirement_validations",
+    "attributes": {},
+    "relationships": {
+      "address": {
+        "data": {
+          "type": "addresses",
+          "id": "66666666-7777-8888-9999-aaaaaaaaaaaa"
+        }
+      },
+      "identity": {
+        "data": {
+          "type": "identities",
+          "id": "bbbbbbbb-cccc-dddd-eeee-ffffffffffff"
+        }
+      },
+      "address_requirement": {
+        "data": {
+          "type": "address_requirements",
+          "id": "11111111-2222-3333-4444-555555555555"
+        }
+      }
+    }
+  }
+}

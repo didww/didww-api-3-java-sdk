@@ -9,10 +9,10 @@ import lombok.Getter;
 
 import java.util.List;
 
-@Type("requirements")
+@Type("address_requirements")
 
 @Getter
-public class Requirement extends BaseResource {
+public class AddressRequirement extends BaseResource {
 
     @JsonProperty("identity_type")
     private IdentityType identityType;

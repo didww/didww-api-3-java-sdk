@@ -22,6 +22,9 @@ public class VoiceInTrunkGroup extends BaseResource {
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @Relationship("voice_in_trunks")
     private List<VoiceInTrunk> voiceInTrunks;
 
@@ -35,5 +38,9 @@ public class VoiceInTrunkGroup extends BaseResource {
 
     public void setVoiceInTrunks(List<VoiceInTrunk> voiceInTrunks) {
         this.voiceInTrunks = markDirty("voiceInTrunks", voiceInTrunks);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
     }
 }

@@ -5,7 +5,7 @@
       "type": "encrypted_files",
       "attributes": {
         "description": "file.enc",
-        "expire_at": "2021-04-02T13:42:51.612Z"
+        "expires_at": "2021-04-02T13:42:51.612Z"
       }
     }
   ],

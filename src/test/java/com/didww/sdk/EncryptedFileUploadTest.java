@@ -5,7 +5,6 @@ import com.didww.sdk.http.ApiKeyInterceptor;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,18 +17,17 @@ class EncryptedFileUploadTest extends BaseTest {
         wireMock.stubFor(post(urlPathEqualTo("/v3/encrypted_files"))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("encrypted_files/create.json"))));
 
-        List<String> ids = client.uploadEncryptedFile(
+        String id = client.uploadEncryptedFile(
                 "example".getBytes(StandardCharsets.UTF_8),
                 "sample.pdf.enc",
                 "fingerprint-123",
                 "sample.pdf"
         );
 
-        assertThat(ids)
-                .containsExactly("6eed102c-66a9-4a9b-a95f-4312d70ec12a", "371eafbd-ac6a-485c-aadf-9e3c5da37eb4");
+        assertThat(id).isEqualTo("6eed102c-66a9-4a9b-a95f-4312d70ec12a");
 
         wireMock.verify(postRequestedFor(urlPathEqualTo("/v3/encrypted_files"))
                 .withHeader("Api-Key", equalTo("test-api-key"))
@@ -37,10 +35,28 @@ class EncryptedFileUploadTest extends BaseTest {
                 .withHeader("User-Agent", equalTo(SdkVersion.userAgent()))
                 .withRequestBody(containing("encrypted_files[encryption_fingerprint]"))
                 .withRequestBody(containing("fingerprint-123"))
-                .withRequestBody(containing("encrypted_files[items][][description]"))
+                .withRequestBody(containing("encrypted_files[description]"))
                 .withRequestBody(containing("sample.pdf"))
-                .withRequestBody(containing("encrypted_files[items][][file]"))
+                .withRequestBody(containing("encrypted_files[file]"))
                 .withRequestBody(containing("sample.pdf.enc")));
+    }
+
+    @Test
+    void testUploadEncryptedFileWithoutDescription() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/encrypted_files"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("encrypted_files/create.json"))));
+
+        String id = client.uploadEncryptedFile(
+                "example".getBytes(StandardCharsets.UTF_8),
+                "sample.pdf.enc",
+                "fingerprint-123",
+                null
+        );
+
+        assertThat(id).isEqualTo("6eed102c-66a9-4a9b-a95f-4312d70ec12a");
     }
 
     @Test
@@ -48,8 +64,8 @@ class EncryptedFileUploadTest extends BaseTest {
         wireMock.stubFor(post(urlPathEqualTo("/v3/encrypted_files"))
                 .willReturn(aResponse()
                         .withStatus(201)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(loadFixture("encrypted_files/show.json"))));
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody("{}")));
 
         assertThatThrownBy(() -> client.uploadEncryptedFile(
                 "example".getBytes(StandardCharsets.UTF_8),

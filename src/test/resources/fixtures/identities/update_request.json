@@ -13,7 +13,7 @@
       "vat_id": "GB1235",
       "description": "test",
       "personal_tax_id": "983217654",
-      "identity_type": "Business",
+      "identity_type": "business",
       "external_reference_id": "112"
     }
   }

@@ -7,6 +7,7 @@ import com.didww.sdk.resource.enums.OrderStatus;
 import com.didww.sdk.resource.orderitem.AvailableDidOrderItem;
 import com.didww.sdk.resource.orderitem.CapacityOrderItem;
 import com.didww.sdk.resource.orderitem.DidOrderItem;
+import com.didww.sdk.resource.orderitem.EmergencyOrderItem;
 import com.didww.sdk.resource.orderitem.GenericOrderItem;
 import com.didww.sdk.resource.orderitem.ReservationDidOrderItem;
 import org.junit.jupiter.api.Test;
@@ -28,9 +29,13 @@ class OrderTest extends BaseTest {
 
         assertThat(order.getId()).isEqualTo("9df11dac-9d83-448c-8866-19c998be33db");
         assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(order.isCompleted()).isTrue();
+        assertThat(order.isPending()).isFalse();
+        assertThat(order.isCancelled()).isFalse();
         assertThat(order.getDescription()).isEqualTo("Payment processing fee");
         assertThat(order.getReference()).isEqualTo("SPT-474057");
         assertThat(order.getItems()).isNotEmpty();
+        assertThat(order.getExternalReferenceId()).isEqualTo("order-ref-001");
     }
 
     @Test
@@ -59,6 +64,9 @@ class OrderTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("5da18706-be9f-49b0-aeec-0480aacd49ad");
         assertThat(created.getStatus()).isEqualTo(OrderStatus.PENDING);
+        assertThat(created.isPending()).isTrue();
+        assertThat(created.isCompleted()).isFalse();
+        assertThat(created.isCancelled()).isFalse();
         assertThat(created.getDescription()).isEqualTo("DID");
         assertThat(created.getItems()).hasSize(2);
     }
@@ -236,5 +244,27 @@ class OrderTest extends BaseTest {
         assertThat(created.getCallbackUrl()).isEqualTo("https://example.com/callback");
         assertThat(created.getCallbackMethod()).isEqualTo(CallbackMethod.POST);
         assertThat(created.getItems()).hasSize(1);
+    }
+
+    @Test
+    void testFindOrderWithEmergencyItem() {
+        stubGetFixture("/v3/orders/eeee1111-2222-3333-4444-555555555555", "orders/show_emergency.json");
+
+        ApiResponse<Order> response = client.orders().find("eeee1111-2222-3333-4444-555555555555");
+        Order order = response.getData();
+
+        assertThat(order.getId()).isEqualTo("eeee1111-2222-3333-4444-555555555555");
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETED);
+        assertThat(order.getItems()).hasSize(1);
+        assertThat(order.getItems().get(0)).isInstanceOf(EmergencyOrderItem.class);
+
+        EmergencyOrderItem item = (EmergencyOrderItem) order.getItems().get(0);
+        assertThat(item.getQty()).isEqualTo(1);
+        assertThat(item.getEmergencyCallingServiceId()).isEqualTo("b6d9d793-578d-42d3-bc33-73dd8155e615");
+        assertThat(item.getNrc()).isEqualTo("5.0");
+        assertThat(item.getMrc()).isEqualTo("25.0");
+        assertThat(item.getProratedMrc()).isFalse();
+        assertThat(item.getBilledFrom()).isEqualTo("2026-04-16");
+        assertThat(item.getBilledTo()).isEqualTo("2026-05-15");
     }
 }

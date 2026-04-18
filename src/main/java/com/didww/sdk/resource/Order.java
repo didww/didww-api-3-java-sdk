@@ -5,6 +5,7 @@ import com.didww.sdk.resource.enums.OrderStatus;
 import com.didww.sdk.converter.OrderItemDeserializer;
 import com.didww.sdk.converter.OrderItemSerializer;
 import com.didww.sdk.resource.orderitem.OrderItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -43,6 +44,9 @@ public class Order extends BaseResource {
     @JsonProperty("allow_back_ordering")
     private Boolean allowBackOrdering;
 
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
     @JsonProperty("items")
     @JsonDeserialize(using = OrderItemDeserializer.class)
     @JsonSerialize(using = OrderItemSerializer.class)
@@ -62,5 +66,24 @@ public class Order extends BaseResource {
 
     public void setItems(List<OrderItem> items) {
         this.items = markDirty("items", items);
+    }
+
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
+    }
+
+    @JsonIgnore
+    public boolean isPending() {
+        return OrderStatus.PENDING.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isCompleted() {
+        return OrderStatus.COMPLETED.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isCancelled() {
+        return OrderStatus.CANCELED.equals(status);
     }
 }
