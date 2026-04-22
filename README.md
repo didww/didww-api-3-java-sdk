@@ -378,6 +378,34 @@ Export created = client.exports().create(export).getData();
 client.downloadExport(created.getUrl(), Path.of("/tmp/export.csv"));
 ```
 
+### Emergency Services (2026-04-16)
+
+```java
+// List emergency requirements
+List<EmergencyRequirement> emergReqs = client.emergencyRequirements().list().getData();
+
+// Create emergency verification
+EmergencyVerification emergVerification = new EmergencyVerification();
+emergVerification.setCallbackUrl("https://example.com/callback");
+emergVerification.setCallbackMethod(CallbackMethod.POST);
+emergVerification.setAddress(address);
+emergVerification.setDids(Arrays.asList(did));
+EmergencyVerification created = client.emergencyVerifications().create(emergVerification).getData();
+
+// List emergency calling services
+List<EmergencyCallingService> emergServices = client.emergencyCallingServices().list().getData();
+```
+
+### DID History (2026-04-16)
+
+```java
+// List DID history
+List<DidHistory> history = client.didHistory().list().getData();
+for (DidHistory entry : history) {
+    System.out.println(entry.getAction() + " " + entry.getCreatedAt());
+}
+```
+
 ## Dirty PATCH Serialization
 
 The SDK tracks which fields have been modified and sends only those fields in PATCH requests. This avoids overwriting server-side values that your code hasn't touched.
