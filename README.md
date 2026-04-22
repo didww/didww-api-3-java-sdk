@@ -585,11 +585,23 @@ try {
 The SDK distinguishes between date-only and datetime fields:
 
 - **Datetime fields** — deserialized as `OffsetDateTime`:
-  - All `getCreatedAt()` methods — present on most resources
-  - Expiry fields: `Did.getExpiresAt()`, `DidReservation.getExpireAt()`, `Proof.getExpiresAt()`, `EncryptedFile.getExpireAt()`
+  - `getCreatedAt()` — present on most resources
+  - `getExpiresAt()` — `Did`, `DidReservation`, `Proof`, `EncryptedFile` (nullable)
+  - `getActivatedAt()` — `EmergencyCallingService` (nullable)
+  - `getCanceledAt()` — `EmergencyCallingService` (nullable)
 - **Date-only fields** — deserialized as `LocalDate`:
   - `Identity.getBirthDate()`
-- **Date-only fields kept as strings** (`CapacityPool.getRenewDate()`, `DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`) — remain as `String`.
+- **Date-only fields kept as strings** — remain as `String`:
+  - `CapacityPool.getRenewDate()`, `EmergencyCallingService.getRenewDate()` — `"YYYY-MM-DD"` (nullable)
+  - `DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`
+- **String fields** (not numeric):
+  - `EmergencyRequirement.getEstimateSetupTime()` — e.g. `"7-14 days"`, `"1"`
+  - `EmergencyRequirement.getRequirementRestrictionMessage()` — nullable
+
+**Important changes from previous API versions:**
+- `getExpireAt()` renamed to `getExpiresAt()` on `DidReservation` and `EncryptedFile`
+- `getRenewDate()` returns a date-only string, NOT an `OffsetDateTime`
+- `getEstimateSetupTime()` returns a `String`, NOT an integer
 
 ```java
 Did did = client.dids().find("uuid").getData();
