@@ -618,9 +618,9 @@ The SDK provides enum classes in `com.didww.sdk.resource.enums`:
 
 `CallbackMethod`, `IdentityType`, `OrderStatus`, `ExportType`, `ExportStatus`, `CliFormat`,
 `OnCliMismatchAction`\*, `MediaEncryptionMode`, `DefaultDstAction`, `VoiceOutTrunkStatus`,
-`EmergencyCallingServiceStatus`, `TransportProtocol`, `Codec`, `RxDtmfFormat`, `TxDtmfFormat`,
-`SstRefreshMethod`, `ReroutingDisconnectCode`, `Feature`, `AreaLevel`, `AddressVerificationStatus`,
-`StirShakenMode`
+`EmergencyCallingServiceStatus`, `EmergencyVerificationStatus`, `DiversionRelayPolicy`,
+`TransportProtocol`, `Codec`, `RxDtmfFormat`, `TxDtmfFormat`, `SstRefreshMethod`,
+`ReroutingDisconnectCode`, `Feature`, `AreaLevel`, `AddressVerificationStatus`, `StirShakenMode`
 
 \* `REPLACE_CLI` and `RANDOMIZE_CLI` require account configuration.
 
