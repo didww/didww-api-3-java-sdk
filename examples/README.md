@@ -59,6 +59,7 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 | [`com.didww.examples.EmergencyRequirementValidationsExample`](src/main/java/com/didww/examples/EmergencyRequirementValidationsExample.java) | Validates address+identity against an emergency requirement. |
 | [`com.didww.examples.AddressVerificationsExample`](src/main/java/com/didww/examples/AddressVerificationsExample.java) | Lists address verifications with status predicates and reject details. |
 | [`com.didww.examples.OrdersEmergencyExample`](src/main/java/com/didww/examples/OrdersEmergencyExample.java) | Inspects emergency orders with EmergencyOrderItem details. |
+| [`com.didww.examples.EmergencyScenarioExample`](src/main/java/com/didww/examples/EmergencyScenarioExample.java) | End-to-end: find DID → check requirements → validate → create verification → get service. |
 
 ## Upload file example
 
