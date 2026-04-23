@@ -83,7 +83,7 @@ public class Order extends BaseResource {
     }
 
     @JsonIgnore
-    public boolean isCancelled() {
+    public boolean isCanceled() {
         return OrderStatus.CANCELED.equals(status);
     }
 }
