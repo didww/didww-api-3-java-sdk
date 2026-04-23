@@ -67,6 +67,6 @@ public class OrdersExample {
 
         // Delete order (cancel)
         client.orders().delete(created.getId());
-        System.out.println("Order cancelled");
+        System.out.println("Order canceled");
     }
 }

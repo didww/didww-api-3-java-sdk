@@ -12,8 +12,9 @@ import java.util.List;
 /**
  * Validates an address+identity against an emergency requirement (2026-04-16).
  *
- * A successful POST returns 204 No Content, meaning the address and identity
- * satisfy the emergency requirement. A validation error (422) means they do not.
+ * A successful POST returns 201 Created with the validation resource, meaning
+ * the address and identity satisfy the emergency requirement. A validation
+ * error (422) means they do not.
  *
  * Usage: DIDWW_API_KEY=xxx ./gradlew runExample -PexampleClass=com.didww.examples.EmergencyRequirementValidationsExample
  */
@@ -59,7 +60,7 @@ public class EmergencyRequirementValidationsExample {
 
         try {
             client.emergencyRequirementValidations().create(validation);
-            System.out.println("Validation passed (204 No Content)");
+            System.out.println("Validation passed (201 Created)");
         } catch (Exception e) {
             System.out.println("Validation failed: " + e.getMessage());
         }

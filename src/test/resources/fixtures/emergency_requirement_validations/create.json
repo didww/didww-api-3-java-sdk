@@ -1,0 +1,9 @@
+{
+  "data": {
+    "id": "c1d2e3f4-a5b6-7890-1234-567890abcdef",
+    "type": "emergency_requirement_validations"
+  },
+  "meta": {
+    "api_version": "2026-04-16"
+  }
+}

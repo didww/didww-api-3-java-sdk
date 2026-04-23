@@ -47,9 +47,6 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
 
         try (Response response = httpClient.newCall(request).execute()) {
             handleErrorResponse(response);
-            if (response.code() == 204) {
-                return new ApiResponse<>(null, null);
-            }
             byte[] responseBody = getResponseBody(response);
             JSONAPIDocument<T> responseDoc = converter.readDocument(responseBody, resourceClass);
             T data = responseDoc.get();

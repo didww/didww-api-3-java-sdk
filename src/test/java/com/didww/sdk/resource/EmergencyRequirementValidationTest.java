@@ -34,10 +34,13 @@ class EmergencyRequirementValidationTest extends BaseTest {
     }
 
     @Test
-    void testCreateEmergencyRequirementValidationReturns204() {
+    void testCreateEmergencyRequirementValidation() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/emergency_requirement_validations"))
                 .withRequestBody(equalToJson(loadFixture("emergency_requirement_validations/create_request.json"), true, false))
-                .willReturn(aResponse().withStatus(204)));
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("emergency_requirement_validations/create.json"))));
 
         EmergencyRequirementValidation validation = new EmergencyRequirementValidation();
         validation.setAddress(new Address().withId("66666666-7777-8888-9999-aaaaaaaaaaaa"));
@@ -45,7 +48,9 @@ class EmergencyRequirementValidationTest extends BaseTest {
         validation.setEmergencyRequirement(new EmergencyRequirement().withId("11111111-2222-3333-4444-555555555555"));
 
         ApiResponse<EmergencyRequirementValidation> response = client.emergencyRequirementValidations().create(validation);
+        EmergencyRequirementValidation created = response.getData();
 
-        assertThat(response.getData()).isNull();
+        assertThat(created).isNotNull();
+        assertThat(created.getId()).isEqualTo("c1d2e3f4-a5b6-7890-1234-567890abcdef");
     }
 }
