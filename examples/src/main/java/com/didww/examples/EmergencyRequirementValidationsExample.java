@@ -39,6 +39,8 @@ public class EmergencyRequirementValidationsExample {
         if (requirement.getCountry() != null) {
             System.out.println("  Country: " + requirement.getCountry().getName());
         }
+        System.out.println("  Setup price:   " + requirement.getMetaSetupPrice());
+        System.out.println("  Monthly price: " + requirement.getMetaMonthlyPrice());
 
         // To validate, you need an existing address and identity ID.
         // Replace these with real IDs from your account:

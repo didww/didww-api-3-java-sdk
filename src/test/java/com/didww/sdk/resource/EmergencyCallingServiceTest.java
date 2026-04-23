@@ -36,6 +36,8 @@ class EmergencyCallingServiceTest extends BaseTest {
         assertThat(first.getCanceledAt()).isNull();
         assertThat(first.getCreatedAt()).isNotNull();
         assertThat(first.getRenewDate()).isEqualTo(LocalDate.of(2026, 5, 1));
+        assertThat(first.getMetaSetupPrice()).isEqualTo("0.0");
+        assertThat(first.getMetaMonthlyPrice()).isEqualTo("2.5");
     }
 
     @Test
@@ -54,6 +56,8 @@ class EmergencyCallingServiceTest extends BaseTest {
         assertThat(record.isActive()).isFalse();
         assertThat(record.getActivatedAt()).isNotNull();
         assertThat(record.getRenewDate()).isEqualTo(LocalDate.of(2026, 6, 15));
+        assertThat(record.getMetaSetupPrice()).isEqualTo("5.0");
+        assertThat(record.getMetaMonthlyPrice()).isEqualTo("3.75");
     }
 
     @Test

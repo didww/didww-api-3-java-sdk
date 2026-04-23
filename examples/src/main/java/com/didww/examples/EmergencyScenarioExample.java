@@ -166,6 +166,8 @@ public class EmergencyScenarioExample {
         System.out.println("  Identity type:         " + requirement.getIdentityType());
         System.out.println("  Address area level:    " + requirement.getAddressAreaLevel());
         System.out.println("  Estimated setup time:  " + requirement.getEstimateSetupTime());
+        System.out.println("  Setup price:           " + requirement.getMetaSetupPrice());
+        System.out.println("  Monthly price:         " + requirement.getMetaMonthlyPrice());
 
         // === Step 3: Find an existing identity ===
         System.out.println("\n=== Step 3: Find an existing identity ===");
@@ -283,6 +285,8 @@ public class EmergencyScenarioExample {
         if (svc.getDidGroupType() != null) {
             System.out.println("  DID Group Type: " + svc.getDidGroupType().getName());
         }
+        System.out.println("  Setup price:    " + svc.getMetaSetupPrice());
+        System.out.println("  Monthly price:  " + svc.getMetaMonthlyPrice());
         System.out.println("  Activated at:   " + svc.getActivatedAt());
         if (svc.getRenewDate() != null) {
             System.out.println("  Renews:         " + svc.getRenewDate());
