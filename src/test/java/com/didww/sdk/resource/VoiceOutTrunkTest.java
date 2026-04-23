@@ -84,6 +84,24 @@ class VoiceOutTrunkTest extends BaseTest {
     }
 
     @Test
+    void testFindVoiceOutTrunkWithIpOnlyAuth() {
+        stubGetFixture("/v3/voice_out_trunks/23fd58f9-9094-406c-bfd9-f4d25bda13c6", "voice_out_trunks/show_ip_only.json");
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().find("23fd58f9-9094-406c-bfd9-f4d25bda13c6");
+        VoiceOutTrunk trunk = response.getData();
+
+        assertThat(trunk.getName()).isEqualTo("SDK Test credentials_and_ip");
+        assertThat(trunk.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
+
+        // authentication_method must be IpOnly, not CredentialsAndIp
+        assertThat(trunk.getAuthenticationMethod()).isInstanceOf(IpOnlyAuthenticationMethod.class);
+        assertThat(trunk.getAuthenticationMethod()).isNotInstanceOf(CredentialsAndIpAuthenticationMethod.class);
+
+        IpOnlyAuthenticationMethod auth = (IpOnlyAuthenticationMethod) trunk.getAuthenticationMethod();
+        assertThat(auth.getAllowedSipIps()).containsExactly("203.0.113.1/32");
+    }
+
+    @Test
     void testCreateVoiceOutTrunk() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/voice_out_trunks"))
                 .withRequestBody(equalToJson(loadFixture("voice_out_trunks/create_request.json"), true, false))
