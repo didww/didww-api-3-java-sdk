@@ -24,8 +24,12 @@ public class DidGroupsExample {
             System.out.println(didGroup.getId()
                     + " - " + didGroup.getAreaName()
                     + " prefix=" + didGroup.getPrefix()
-                    + " features=" + didGroup.getFeatures()
+                    + " features=" + didGroup.getFeatures() // 2026-04-16 adds p2p / a2p / emergency / cnam_out
                     + " metered=" + didGroup.getIsMetered());
+            System.out.println("  Allow additional channels: " + didGroup.getAllowAdditionalChannels()); // 2026-04-16
+            if (didGroup.getServiceRestrictions() != null) {
+                System.out.println("  Service restrictions: " + didGroup.getServiceRestrictions()); // 2026-04-16
+            }
         }
 
         // Fetch a specific DID group

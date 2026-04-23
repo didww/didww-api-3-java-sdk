@@ -14,8 +14,9 @@ This SDK uses [jsonapi-converter](https://github.com/jasminb/jsonapi-converter) 
 
 Read more https://doc.didww.com/api
 
-This SDK targets DIDWW API v3 documentation version:
-[https://doc.didww.com/api3/2022-05-10/index.html](https://doc.didww.com/api3/2022-05-10/index.html)
+SDK Versions **3.X.X** target DIDWW API v3 version [2026-04-16](https://doc.didww.com/api3/2026-04-16/index.html).
+
+SDK Versions **2.X.X** and branch [release-2](https://github.com/didww/didww-api-3-java-sdk/tree/release-2) target DIDWW API v3 version [2022-05-10](https://doc.didww.com/api3/2022-05-10/index.html).
 
 The client sends the `X-DIDWW-API-Version` header with each request.
 
@@ -195,8 +196,8 @@ List<ProofType> proofTypes = client.proofTypes().list().getData();
 // Public Keys
 List<PublicKey> publicKeys = client.publicKeys().list().getData();
 
-// Requirements
-List<Requirement> requirements = client.requirements().list().getData();
+// Address Requirements
+List<AddressRequirement> requirements = client.addressRequirements().list().getData();
 
 // Supporting Document Templates
 List<SupportingDocumentTemplate> templates = client.supportingDocumentTemplates().list().getData();
@@ -270,7 +271,7 @@ import com.didww.sdk.resource.enums.OnCliMismatchAction;
 
 VoiceOutTrunk voTrunk = new VoiceOutTrunk();
 voTrunk.setName("My Outbound Trunk");
-voTrunk.setAllowedSipIps(Arrays.asList("0.0.0.0/0"));
+voTrunk.setAllowedSipIps(Arrays.asList("203.0.113.0/24"));
 voTrunk.setDefaultDstAction(DefaultDstAction.ALLOW_ALL);
 voTrunk.setOnCliMismatchAction(OnCliMismatchAction.REJECT_CALL);
 VoiceOutTrunk created = client.voiceOutTrunks().create(voTrunk).getData();
@@ -358,7 +359,7 @@ Address created = client.addresses().create(address).getData();
 ```java
 AddressVerification verification = new AddressVerification();
 verification.setCallbackUrl("http://example.com/callback");
-verification.setCallbackMethod("GET");
+verification.setCallbackMethod(CallbackMethod.GET);
 AddressVerification created = client.addressVerifications().create(verification).getData();
 ```
 
@@ -370,11 +371,39 @@ import com.didww.sdk.resource.enums.ExportType;
 
 Export export = new Export();
 export.setExportType(ExportType.CDR_IN);
-export.setFilters(Map.of("year", 2025, "month", 1));
+export.setFilters(Map.of("from", "2025-01-01T00:00:00Z", "to", "2025-02-01T00:00:00Z"));
 Export created = client.exports().create(export).getData();
 
 // Download the export when completed
 client.downloadExport(created.getUrl(), Path.of("/tmp/export.csv"));
+```
+
+### Emergency Services (2026-04-16)
+
+```java
+// List emergency requirements
+List<EmergencyRequirement> emergReqs = client.emergencyRequirements().list().getData();
+
+// Create emergency verification
+EmergencyVerification emergVerification = new EmergencyVerification();
+emergVerification.setCallbackUrl("https://example.com/callback");
+emergVerification.setCallbackMethod(CallbackMethod.POST);
+emergVerification.setAddress(address);
+emergVerification.setDids(Arrays.asList(did));
+EmergencyVerification created = client.emergencyVerifications().create(emergVerification).getData();
+
+// List emergency calling services
+List<EmergencyCallingService> emergServices = client.emergencyCallingServices().list().getData();
+```
+
+### DID History (2026-04-16)
+
+```java
+// List DID history
+List<DidHistory> history = client.didHistory().list().getData();
+for (DidHistory entry : history) {
+    System.out.println(entry.getAction() + " " + entry.getCreatedAt());
+}
 ```
 
 ## Dirty PATCH Serialization
@@ -548,7 +577,7 @@ try {
 | AvailableDid | `client.availableDids()` | list, find |
 | ProofType | `client.proofTypes()` | list, find |
 | PublicKey | `client.publicKeys()` | list, find |
-| Requirement | `client.requirements()` | list, find |
+| AddressRequirement | `client.addressRequirements()` | list, find |
 | SupportingDocumentTemplate | `client.supportingDocumentTemplates()` | list, find |
 | Balance | `client.balance()` | find |
 | Did | `client.dids()` | list, find, update, delete |
@@ -560,14 +589,19 @@ try {
 | CapacityPool | `client.capacityPools()` | list, find, update |
 | SharedCapacityGroup | `client.sharedCapacityGroups()` | list, find, create, update, delete |
 | Order | `client.orders()` | list, find, create, delete |
-| Export | `client.exports()` | list, find, create |
+| Export | `client.exports()` | list, find, create, update |
 | Address | `client.addresses()` | list, find, create, update, delete |
-| AddressVerification | `client.addressVerifications()` | list, find, create |
+| AddressVerification | `client.addressVerifications()` | list, find, create, update |
 | Identity | `client.identities()` | list, find, create, update, delete |
 | EncryptedFile | `client.encryptedFiles()` | list, find, delete |
 | PermanentSupportingDocument | `client.permanentSupportingDocuments()` | create |
 | Proof | `client.proofs()` | create |
-| RequirementValidation | `client.requirementValidations()` | create |
+| AddressRequirementValidation | `client.addressRequirementValidations()` | create |
+| DidHistory | `client.didHistory()` | list |
+| EmergencyRequirement | `client.emergencyRequirements()` | list, find |
+| EmergencyRequirementValidation | `client.emergencyRequirementValidations()` | create |
+| EmergencyCallingService | `client.emergencyCallingServices()` | list, find, create, update, delete |
+| EmergencyVerification | `client.emergencyVerifications()` | list, find, create, update |
 | StockKeepingUnit | include on `didGroups` | — |
 | QtyBasedPricing | include on `capacityPools` | — |
 
@@ -579,11 +613,23 @@ try {
 The SDK distinguishes between date-only and datetime fields:
 
 - **Datetime fields** — deserialized as `OffsetDateTime`:
-  - All `getCreatedAt()` methods — present on most resources
-  - Expiry fields: `Did.getExpiresAt()`, `DidReservation.getExpireAt()`, `Proof.getExpiresAt()`, `EncryptedFile.getExpireAt()`
+  - `getCreatedAt()` — present on most resources
+  - `getExpiresAt()` — `Did`, `DidReservation`, `Proof`, `EncryptedFile` (nullable)
+  - `getActivatedAt()` — `EmergencyCallingService` (nullable)
+  - `getCanceledAt()` — `EmergencyCallingService` (nullable)
 - **Date-only fields** — deserialized as `LocalDate`:
   - `Identity.getBirthDate()`
-- **Date-only fields kept as strings** (`CapacityPool.getRenewDate()`, `DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`) — remain as `String`.
+- **Date-only fields kept as strings** — remain as `String`:
+  - `CapacityPool.getRenewDate()`, `EmergencyCallingService.getRenewDate()` — `"YYYY-MM-DD"` (nullable)
+  - `DidOrderItem.getBilledFrom()`, `DidOrderItem.getBilledTo()`
+- **String fields** (not numeric):
+  - `EmergencyRequirement.getEstimateSetupTime()` — e.g. `"7-14 days"`, `"1"`
+  - `EmergencyRequirement.getRequirementRestrictionMessage()` — nullable
+
+**Important changes from previous API versions:**
+- `getExpireAt()` renamed to `getExpiresAt()` on `DidReservation` and `EncryptedFile`
+- `getRenewDate()` returns a date-only string, NOT an `OffsetDateTime`
+- `getEstimateSetupTime()` returns a `String`, NOT an integer
 
 ```java
 Did did = client.dids().find("uuid").getData();
@@ -600,6 +646,7 @@ The SDK provides enum classes in `com.didww.sdk.resource.enums`:
 
 `CallbackMethod`, `IdentityType`, `OrderStatus`, `ExportType`, `ExportStatus`, `CliFormat`,
 `OnCliMismatchAction`\*, `MediaEncryptionMode`, `DefaultDstAction`, `VoiceOutTrunkStatus`,
+`EmergencyCallingServiceStatus`, `EmergencyVerificationStatus`, `DiversionRelayPolicy`,
 `TransportProtocol`, `Codec`, `RxDtmfFormat`, `TxDtmfFormat`, `SstRefreshMethod`,
 `ReroutingDisconnectCode`, `Feature`, `AreaLevel`, `AddressVerificationStatus`, `StirShakenMode`
 

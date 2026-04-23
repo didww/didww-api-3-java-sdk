@@ -4,13 +4,13 @@ import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
 
-@Type("requirement_validations")
+@Type("address_requirement_validations")
 
 @Getter
-public class RequirementValidation extends BaseResource {
+public class AddressRequirementValidation extends BaseResource {
 
-    @Relationship("requirement")
-    private Requirement requirement;
+    @Relationship("address_requirement")
+    private AddressRequirement addressRequirement;
 
     @Relationship("address")
     private Address address;
@@ -18,8 +18,8 @@ public class RequirementValidation extends BaseResource {
     @Relationship("identity")
     private Identity identity;
 
-    public void setRequirement(Requirement requirement) {
-        this.requirement = markDirty("requirement", requirement);
+    public void setAddressRequirement(AddressRequirement addressRequirement) {
+        this.addressRequirement = markDirty("addressRequirement", addressRequirement);
     }
 
     public void setAddress(Address address) {

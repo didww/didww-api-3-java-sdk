@@ -30,6 +30,27 @@ class ExportTest extends BaseTest {
         assertThat(export.getStatus()).isEqualTo(ExportStatus.COMPLETED);
         assertThat(export.getExportType()).isEqualTo(ExportType.CDR_IN);
         assertThat(export.getUrl()).isEqualTo("https://sandbox-api.didww.com/v3/exports/e5352384-6f64-4132-bba1-cda18fbc5896.csv.gz");
+        assertThat(export.getExternalReferenceId()).isEqualTo("exp-ref-001");
+    }
+
+    @Test
+    void testUpdateExportExternalReferenceId() {
+        String id = "da15f006-5da4-45ca-b0df-735baeadf423";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/exports/" + id))
+                .withRequestBody(equalToJson(loadFixture("exports/update_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("exports/update.json"))));
+
+        Export export = new Export().withId(id);
+        export.setExternalReferenceId("updated-exp-ref");
+
+        ApiResponse<Export> response = client.exports().update(export);
+        Export updated = response.getData();
+
+        assertThat(updated.getId()).isEqualTo(id);
+        assertThat(updated.getExternalReferenceId()).isEqualTo("updated-exp-ref");
     }
 
     @Test
@@ -77,8 +98,8 @@ class ExportTest extends BaseTest {
 
         Map<String, Object> filters = new LinkedHashMap<>();
         filters.put("did_number", "1234556789");
-        filters.put("year", "2019");
-        filters.put("month", "01");
+        filters.put("from", "2026-04-01 00:00:00");
+        filters.put("to", "2026-04-15 23:59:59");
 
         Export export = new Export();
         export.setExportType(ExportType.CDR_IN);

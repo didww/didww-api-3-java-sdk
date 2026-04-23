@@ -53,7 +53,7 @@
           "type": "sip_configurations",
           "attributes": {
             "username": "username",
-            "host": "216.58.215.78",
+            "host": "203.0.113.78",
             "port": 8060,
             "codec_ids": [
               9,

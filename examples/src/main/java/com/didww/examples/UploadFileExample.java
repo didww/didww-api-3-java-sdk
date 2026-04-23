@@ -1,6 +1,7 @@
 package com.didww.examples;
 
 import com.didww.sdk.DidwwClient;
+import java.util.Collections;
 import com.didww.sdk.Encrypt;
 
 import java.io.ByteArrayOutputStream;
@@ -37,13 +38,13 @@ public class UploadFileExample {
         System.out.println("Encrypted size: " + encryptedData.length + " bytes");
 
         String originalName = path.getFileName() != null ? path.getFileName().toString() : "example.pdf";
-        List<String> uploadedIds = client.uploadEncryptedFile(
+        String uploadedId = client.uploadEncryptedFile(
                 encryptedData,
                 originalName + ".enc",
                 fingerprint,
                 originalName
         );
-        System.out.println("Uploaded encrypted file IDs: " + uploadedIds);
+        System.out.println("Uploaded encrypted file IDs: " + Collections.singletonList(uploadedId));
     }
 
     private static void createSamplePdf(Path path, String text) throws Exception {

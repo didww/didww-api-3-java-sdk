@@ -45,6 +45,9 @@ public class Did extends BaseResource {
     @JsonProperty("billing_cycles_count")
     private Integer billingCyclesCount;
 
+    @JsonProperty(value = "emergency_enabled", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean emergencyEnabled;
+
     @Relationship("order")
     private Order order;
 
@@ -65,6 +68,15 @@ public class Did extends BaseResource {
 
     @Relationship("address_verification")
     private AddressVerification addressVerification;
+
+    @Relationship("emergency_calling_service")
+    private EmergencyCallingService emergencyCallingService;
+
+    @Relationship("emergency_verification")
+    private EmergencyVerification emergencyVerification;
+
+    @Relationship("identity")
+    private Identity identity;
 
     public void setTerminated(Boolean terminated) {
         this.terminated = markDirty("terminated", terminated);
@@ -102,5 +114,9 @@ public class Did extends BaseResource {
 
     public void setSharedCapacityGroup(SharedCapacityGroup sharedCapacityGroup) {
         this.sharedCapacityGroup = markDirty("sharedCapacityGroup", sharedCapacityGroup);
+    }
+
+    public void setEmergencyCallingService(EmergencyCallingService emergencyCallingService) {
+        this.emergencyCallingService = markDirty("emergencyCallingService", emergencyCallingService);
     }
 }

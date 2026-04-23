@@ -1,12 +1,12 @@
 {
   "data": {
     "id": "25d12afe-1ec6-4fe3-9621-b250dd1fb959",
-    "type": "requirements",
+    "type": "address_requirements",
     "attributes": {
-      "identity_type": "Any",
-      "personal_area_level": "WorldWide",
-      "business_area_level": "WorldWide",
-      "address_area_level": "WorldWide",
+      "identity_type": "any",
+      "personal_area_level": "world_wide",
+      "business_area_level": "world_wide",
+      "address_area_level": "world_wide",
       "personal_proof_qty": 1,
       "business_proof_qty": 1,
       "address_proof_qty": 1,

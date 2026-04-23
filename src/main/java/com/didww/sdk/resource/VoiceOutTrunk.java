@@ -1,10 +1,16 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.converter.AuthenticationMethodDeserializer;
+import com.didww.sdk.converter.AuthenticationMethodSerializer;
+import com.didww.sdk.resource.authenticationmethod.AuthenticationMethod;
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
 import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
@@ -19,9 +25,6 @@ public class VoiceOutTrunk extends BaseResource {
 
     @JsonProperty("name")
     private String name;
-
-    @JsonProperty("allowed_sip_ips")
-    private List<String> allowedSipIps;
 
     @JsonProperty("on_cli_mismatch_action")
     private OnCliMismatchAction onCliMismatchAction;
@@ -59,17 +62,25 @@ public class VoiceOutTrunk extends BaseResource {
     @JsonProperty("callback_url")
     private String callbackUrl;
 
-    @JsonProperty(value = "username", access = JsonProperty.Access.WRITE_ONLY)
-    private String username;
-
-    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
     @JsonProperty(value = "threshold_reached", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean thresholdReached;
 
     @JsonProperty(value = "created_at", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdAt;
+
+    @JsonProperty("external_reference_id")
+    private String externalReferenceId;
+
+    @JsonProperty("emergency_enable_all")
+    private Boolean emergencyEnableAll;
+
+    @JsonProperty("rtp_timeout")
+    private Integer rtpTimeout;
+
+    @JsonProperty("authentication_method")
+    @JsonDeserialize(using = AuthenticationMethodDeserializer.class)
+    @JsonSerialize(using = AuthenticationMethodSerializer.class)
+    private AuthenticationMethod authenticationMethod;
 
     @Relationship("dids")
     private List<Did> dids;
@@ -77,12 +88,11 @@ public class VoiceOutTrunk extends BaseResource {
     @Relationship("default_did")
     private Did defaultDid;
 
+    @Relationship("emergency_dids")
+    private List<Did> emergencyDids;
+
     public void setName(String name) {
         this.name = markDirty("name", name);
-    }
-
-    public void setAllowedSipIps(List<String> allowedSipIps) {
-        this.allowedSipIps = markDirty("allowedSipIps", allowedSipIps);
     }
 
     public void setOnCliMismatchAction(OnCliMismatchAction onCliMismatchAction) {
@@ -129,6 +139,10 @@ public class VoiceOutTrunk extends BaseResource {
         this.callbackUrl = markDirty("callbackUrl", callbackUrl);
     }
 
+    public void setAuthenticationMethod(AuthenticationMethod authenticationMethod) {
+        this.authenticationMethod = markDirty("authenticationMethod", authenticationMethod);
+    }
+
     public void setDids(List<Did> dids) {
         this.dids = markDirty("dids", dids);
     }
@@ -137,4 +151,29 @@ public class VoiceOutTrunk extends BaseResource {
         this.defaultDid = markDirty("defaultDid", defaultDid);
     }
 
+    public void setExternalReferenceId(String externalReferenceId) {
+        this.externalReferenceId = markDirty("externalReferenceId", externalReferenceId);
+    }
+
+    public void setEmergencyEnableAll(Boolean emergencyEnableAll) {
+        this.emergencyEnableAll = markDirty("emergencyEnableAll", emergencyEnableAll);
+    }
+
+    public void setRtpTimeout(Integer rtpTimeout) {
+        this.rtpTimeout = markDirty("rtpTimeout", rtpTimeout);
+    }
+
+    public void setEmergencyDids(List<Did> emergencyDids) {
+        this.emergencyDids = markDirty("emergencyDids", emergencyDids);
+    }
+
+    @JsonIgnore
+    public boolean isActive() {
+        return VoiceOutTrunkStatus.ACTIVE.equals(status);
+    }
+
+    @JsonIgnore
+    public boolean isBlocked() {
+        return VoiceOutTrunkStatus.BLOCKED.equals(status);
+    }
 }

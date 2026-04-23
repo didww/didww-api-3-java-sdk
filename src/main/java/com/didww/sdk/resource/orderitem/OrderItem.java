@@ -15,6 +15,7 @@ public abstract class OrderItem {
         map.put("did_order_items", DidOrderItem.class);
         map.put("capacity_order_items", CapacityOrderItem.class);
         map.put("generic_order_items", GenericOrderItem.class);
+        map.put("emergency_order_items", EmergencyOrderItem.class);
         TYPE_MAP = Collections.unmodifiableMap(map);
     }
 

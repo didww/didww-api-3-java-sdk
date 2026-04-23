@@ -30,7 +30,7 @@ public class OrdersReservationDidsExample {
 
         DidReservation created = client.didReservations().create(reservation).getData();
         System.out.println("Reserved: " + created.getDescription()
-                + " expires=" + created.getExpireAt()
+                + " expires=" + created.getExpiresAt()
                 + " created=" + created.getCreatedAt());
 
         // Purchase reserved DID

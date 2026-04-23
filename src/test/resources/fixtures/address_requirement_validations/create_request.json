@@ -1,6 +1,6 @@
 {
   "data": {
-    "type": "requirement_validations",
+    "type": "address_requirement_validations",
     "attributes": {},
     "relationships": {
       "address": {
@@ -9,9 +9,9 @@
           "id": "d3414687-40f4-4346-a267-c2c65117d28c"
         }
       },
-      "requirement": {
+      "address_requirement": {
         "data": {
-          "type": "requirements",
+          "type": "address_requirements",
           "id": "aea92b24-a044-4864-9740-89d3e15b65c7"
         }
       }
