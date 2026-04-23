@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.resource.enums.EmergencyCallingServiceStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.jasminb.jsonapi.annotations.Meta;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
@@ -12,10 +13,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Customer-owned subscription to emergency calling on one or more DIDs.
  * Supported operations: index, show, destroy. Introduced in API 2026-04-16.
+ *
+ * <p>Each resource includes server-provided {@code meta} with pricing information:
+ * <ul>
+ *   <li>{@code setup_price} - one-time setup fee (as a decimal string, e.g. "5.0")</li>
+ *   <li>{@code monthly_price} - recurring monthly fee (as a decimal string, e.g. "3.75")</li>
+ * </ul>
  */
 @Type("emergency_calling_services")
 @Getter
@@ -72,6 +80,33 @@ public class EmergencyCallingService extends BaseResource {
 
     @Relationship("dids")
     private List<Did> dids;
+
+    /**
+     * Server-provided meta containing pricing information.
+     * Keys: "setup_price", "monthly_price".
+     */
+    @Meta
+    private Map<String, String> meta;
+
+    /**
+     * Returns the one-time setup price from the resource meta.
+     *
+     * @return the "setup_price" meta value, or null if not present
+     */
+    @JsonIgnore
+    public String getMetaSetupPrice() {
+        return meta != null ? meta.get("setup_price") : null;
+    }
+
+    /**
+     * Returns the recurring monthly price from the resource meta.
+     *
+     * @return the "monthly_price" meta value, or null if not present
+     */
+    @JsonIgnore
+    public String getMetaMonthlyPrice() {
+        return meta != null ? meta.get("monthly_price") : null;
+    }
 
     @JsonIgnore
     public boolean isActive() {

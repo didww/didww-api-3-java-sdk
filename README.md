@@ -265,16 +265,30 @@ VoiceInTrunkGroup created = client.voiceInTrunkGroups().create(group).getData();
 > **Note:** Voice Out Trunks require additional account configuration. Contact DIDWW support to enable.
 > The `REPLACE_CLI` and `RANDOMIZE_CLI` values of `OnCliMismatchAction` also require account configuration.
 
+Voice Out Trunks use a polymorphic `authenticationMethod` (2026-04-16). Three types are supported:
+
+- **`credentials_and_ip`** -- default method; `username` and `password` are server-generated and returned in the response.
+- **`twilio`** -- requires a `twilioAccountSid`.
+- **`ip_only`** -- read-only; can only be configured by DIDWW staff upon request. Cannot be set via the API.
+
 ```java
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
+import com.didww.sdk.resource.authenticationmethod.CredentialsAndIpAuthenticationMethod;
+
+// NOTE: 203.0.113.0/24 is RFC 5737 TEST-NET-3 documentation space.
+// Replace with the real CIDR of your SIP infrastructure.
+CredentialsAndIpAuthenticationMethod auth = new CredentialsAndIpAuthenticationMethod();
+auth.setAllowedSipIps(Collections.singletonList("203.0.113.0/24"));
 
 VoiceOutTrunk voTrunk = new VoiceOutTrunk();
 voTrunk.setName("My Outbound Trunk");
-voTrunk.setAllowedSipIps(Arrays.asList("203.0.113.0/24"));
+voTrunk.setAuthenticationMethod(auth);
 voTrunk.setDefaultDstAction(DefaultDstAction.ALLOW_ALL);
 voTrunk.setOnCliMismatchAction(OnCliMismatchAction.REJECT_CALL);
 VoiceOutTrunk created = client.voiceOutTrunks().create(voTrunk).getData();
+// created.getAuthenticationMethod().getUsername() -- server-generated
+// created.getAuthenticationMethod().getPassword() -- server-generated
 ```
 
 ### Orders

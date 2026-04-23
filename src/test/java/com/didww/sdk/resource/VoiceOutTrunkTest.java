@@ -5,6 +5,7 @@ import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.authenticationmethod.CredentialsAndIpAuthenticationMethod;
 import com.didww.sdk.resource.authenticationmethod.IpOnlyAuthenticationMethod;
+import com.didww.sdk.resource.authenticationmethod.TwilioAuthenticationMethod;
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
@@ -84,6 +85,69 @@ class VoiceOutTrunkTest extends BaseTest {
     }
 
     @Test
+    void testFindVoiceOutTrunkWithIpOnlyAuth() {
+        stubGetFixture("/v3/voice_out_trunks/23fd58f9-9094-406c-bfd9-f4d25bda13c6", "voice_out_trunks/show_ip_only.json");
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().find("23fd58f9-9094-406c-bfd9-f4d25bda13c6");
+        VoiceOutTrunk trunk = response.getData();
+
+        assertThat(trunk.getName()).isEqualTo("SDK Test credentials_and_ip");
+        assertThat(trunk.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
+
+        // authentication_method must be IpOnly, not CredentialsAndIp
+        assertThat(trunk.getAuthenticationMethod()).isInstanceOf(IpOnlyAuthenticationMethod.class);
+        assertThat(trunk.getAuthenticationMethod()).isNotInstanceOf(CredentialsAndIpAuthenticationMethod.class);
+
+        IpOnlyAuthenticationMethod auth = (IpOnlyAuthenticationMethod) trunk.getAuthenticationMethod();
+        assertThat(auth.getAllowedSipIps()).containsExactly("203.0.113.1/32");
+    }
+
+    @Test
+    void testFindVoiceOutTrunkWithTwilioAuth() {
+        stubGetFixture("/v3/voice_out_trunks/b5e701f4-ea15-4f9d-8f35-6a0bdce04385", "voice_out_trunks/show_twilio.json");
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().find("b5e701f4-ea15-4f9d-8f35-6a0bdce04385");
+        VoiceOutTrunk trunk = response.getData();
+
+        assertThat(trunk.getName()).isEqualTo("SDK Test twilio");
+        assertThat(trunk.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
+
+        // authentication_method must be Twilio
+        assertThat(trunk.getAuthenticationMethod()).isInstanceOf(TwilioAuthenticationMethod.class);
+
+        TwilioAuthenticationMethod auth = (TwilioAuthenticationMethod) trunk.getAuthenticationMethod();
+        assertThat(auth.getTwilioAccountSid()).isEqualTo("AC22222222222222222222222222222222");
+    }
+
+    @Test
+    void testCreateVoiceOutTrunkWithTwilioAuth() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/voice_out_trunks"))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/create_twilio_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/create_twilio.json"))));
+
+        TwilioAuthenticationMethod auth = new TwilioAuthenticationMethod();
+        auth.setTwilioAccountSid("AC33333333333333333333333333333333");
+
+        VoiceOutTrunk trunk = new VoiceOutTrunk();
+        trunk.setName("SDK Test twilio create");
+        trunk.setOnCliMismatchAction(OnCliMismatchAction.REJECT_CALL);
+        trunk.setAuthenticationMethod(auth);
+
+        ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().create(trunk);
+        VoiceOutTrunk created = response.getData();
+
+        assertThat(created.getId()).isEqualTo("507fa5a2-fd58-4c4d-a231-efba27f67c3a");
+        assertThat(created.getName()).isEqualTo("SDK Test twilio create");
+        assertThat(created.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
+        assertThat(created.getAuthenticationMethod()).isInstanceOf(TwilioAuthenticationMethod.class);
+        TwilioAuthenticationMethod createdAuth = (TwilioAuthenticationMethod) created.getAuthenticationMethod();
+        assertThat(createdAuth.getTwilioAccountSid()).isEqualTo("AC33333333333333333333333333333333");
+    }
+
+    @Test
     void testCreateVoiceOutTrunk() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/voice_out_trunks"))
                 .withRequestBody(equalToJson(loadFixture("voice_out_trunks/create_request.json"), true, false))
@@ -94,7 +158,7 @@ class VoiceOutTrunkTest extends BaseTest {
 
         Did did = new Did().withId("7a028c32-e6b6-4c86-bf01-90f901b37012");
 
-        IpOnlyAuthenticationMethod auth = new IpOnlyAuthenticationMethod();
+        CredentialsAndIpAuthenticationMethod auth = new CredentialsAndIpAuthenticationMethod();
         auth.setAllowedSipIps(Collections.singletonList("203.0.113.0/24"));
 
         VoiceOutTrunk trunk = new VoiceOutTrunk();
@@ -110,7 +174,10 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(created.getId()).isEqualTo("b60201c1-21f0-4d9a-aafa-0e6d1e12f22e");
         assertThat(created.getName()).isEqualTo("java-test");
         assertThat(created.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
-        assertThat(created.getAuthenticationMethod()).isInstanceOf(IpOnlyAuthenticationMethod.class);
+        assertThat(created.getAuthenticationMethod()).isInstanceOf(CredentialsAndIpAuthenticationMethod.class);
+        CredentialsAndIpAuthenticationMethod createdAuth = (CredentialsAndIpAuthenticationMethod) created.getAuthenticationMethod();
+        assertThat(createdAuth.getUsername()).isEqualTo("dLPa6JbLTeMjKjl5");
+        assertThat(createdAuth.getPassword()).isEqualTo("BZj1YvP45yWvX5Ic");
     }
 
     @Test

@@ -1,0 +1,1 @@
+{"data":{"type":"voice_out_trunks","attributes":{"name":"SDK Test twilio create","on_cli_mismatch_action":"reject_call","authentication_method":{"type":"twilio","attributes":{"twilio_account_sid":"AC33333333333333333333333333333333"}}}}}
