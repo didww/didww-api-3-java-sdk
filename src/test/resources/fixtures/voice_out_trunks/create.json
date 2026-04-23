@@ -18,11 +18,16 @@
       "force_symmetric_rtp": false,
       "rtp_ping": false,
       "callback_url": null,
+      "external_reference_id": null,
+      "emergency_enable_all": false,
+      "rtp_timeout": 30,
       "authentication_method": {
-        "type": "ip_only",
+        "type": "credentials_and_ip",
         "attributes": {
           "allowed_sip_ips": ["203.0.113.0/24"],
-          "tech_prefix": null
+          "tech_prefix": null,
+          "username": "dLPa6JbLTeMjKjl5",
+          "password": "BZj1YvP45yWvX5Ic"
         }
       }
     },
@@ -45,6 +50,6 @@
     }
   },
   "meta": {
-    "api_version": "2021-12-15"
+    "api_version": "2026-04-16"
   }
 }

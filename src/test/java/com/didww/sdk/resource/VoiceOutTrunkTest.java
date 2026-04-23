@@ -94,7 +94,7 @@ class VoiceOutTrunkTest extends BaseTest {
 
         Did did = new Did().withId("7a028c32-e6b6-4c86-bf01-90f901b37012");
 
-        IpOnlyAuthenticationMethod auth = new IpOnlyAuthenticationMethod();
+        CredentialsAndIpAuthenticationMethod auth = new CredentialsAndIpAuthenticationMethod();
         auth.setAllowedSipIps(Collections.singletonList("203.0.113.0/24"));
 
         VoiceOutTrunk trunk = new VoiceOutTrunk();
@@ -110,7 +110,10 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(created.getId()).isEqualTo("b60201c1-21f0-4d9a-aafa-0e6d1e12f22e");
         assertThat(created.getName()).isEqualTo("java-test");
         assertThat(created.getStatus()).isEqualTo(VoiceOutTrunkStatus.ACTIVE);
-        assertThat(created.getAuthenticationMethod()).isInstanceOf(IpOnlyAuthenticationMethod.class);
+        assertThat(created.getAuthenticationMethod()).isInstanceOf(CredentialsAndIpAuthenticationMethod.class);
+        CredentialsAndIpAuthenticationMethod createdAuth = (CredentialsAndIpAuthenticationMethod) created.getAuthenticationMethod();
+        assertThat(createdAuth.getUsername()).isEqualTo("dLPa6JbLTeMjKjl5");
+        assertThat(createdAuth.getPassword()).isEqualTo("BZj1YvP45yWvX5Ic");
     }
 
     @Test
