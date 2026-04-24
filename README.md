@@ -655,6 +655,17 @@ The SDK provides enum classes in `com.didww.sdk.resource.enums`:
 
 \* `REPLACE_CLI` and `RANDOMIZE_CLI` require account configuration.
 
+## Releasing a New Version
+
+1. Update `version` in `build.gradle.kts` to the new version (e.g. `"4.0.0"`)
+2. Commit and push to `main`
+3. Create and push a git tag matching the version:
+   ```bash
+   git tag 4.0.0
+   git push origin 4.0.0
+   ```
+4. JitPack will automatically build and publish the new version from the tag
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/didww/didww-api-3-java-sdk
