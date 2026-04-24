@@ -14,11 +14,14 @@ This SDK uses [jsonapi-converter](https://github.com/jasminb/jsonapi-converter) 
 
 Read more https://doc.didww.com/api
 
-SDK Versions **3.X.X** target DIDWW API v3 version [2026-04-16](https://doc.didww.com/api3/2026-04-16/index.html).
+## API Version
 
-SDK Versions **2.X.X** and branch [release-2](https://github.com/didww/didww-api-3-java-sdk/tree/release-2) target DIDWW API v3 version [2022-05-10](https://doc.didww.com/api3/2022-05-10/index.html).
+This SDK sends the `X-DIDWW-API-Version: 2026-04-16` header with every request by default.
 
-The client sends the `X-DIDWW-API-Version` header with each request.
+| SDK Version | Branch | DIDWW API Version |
+|-------------|--------|-------------------|
+| **3.x** | [`main`](https://github.com/didww/didww-api-3-java-sdk) | [`2026-04-16`](https://doc.didww.com/api3/2026-04-16/index.html) |
+| **2.x** | [`2022-05-10`](https://github.com/didww/didww-api-3-java-sdk/tree/2022-05-10) | [`2022-05-10`](https://doc.didww.com/api3/2022-05-10/index.html) |
 
 ## Requirements
 
@@ -665,6 +668,17 @@ The SDK provides enum classes in `com.didww.sdk.resource.enums`:
 `ReroutingDisconnectCode`, `Feature`, `AreaLevel`, `AddressVerificationStatus`, `StirShakenMode`
 
 \* `REPLACE_CLI` and `RANDOMIZE_CLI` require account configuration.
+
+## Releasing a New Version
+
+1. Update `version` in `build.gradle.kts` to the new version (e.g. `"4.0.0"`)
+2. Commit and push to `main`
+3. Create and push a git tag matching the version:
+   ```bash
+   git tag 4.0.0
+   git push origin 4.0.0
+   ```
+4. JitPack will automatically build and publish the new version from the tag
 
 ## Contributing
 
