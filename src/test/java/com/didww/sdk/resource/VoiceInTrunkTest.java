@@ -170,6 +170,10 @@ class VoiceInTrunkTest extends BaseTest {
         sipConfig.setDiversionInjectMode(DiversionInjectMode.DID_NUMBER);
         sipConfig.setNetworkProtocolPriority(NetworkProtocolPriority.FORCE_IPV4);
         sipConfig.setCnamLookup(true);
+        // use_did_in_ruri must stay false unless enabled_sip_registration is
+        // also true (server returns 422 otherwise).  Setting it here is
+        // redundant against the server default but documents the field.
+        sipConfig.setUseDidInRuri(false);
 
         VoiceInTrunk trunk = new VoiceInTrunk();
         trunk.setName("hello, test sip trunk");
@@ -185,7 +189,10 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(codes.get(0)).isEqualTo(ReroutingDisconnectCode.SIP_400_BAD_REQUEST);
         assertThat(codes.get(codes.size() - 1)).isEqualTo(ReroutingDisconnectCode.RINGING_TIMEOUT);
         assertThat(codes).contains(ReroutingDisconnectCode.SIP_480_TEMPORARILY_UNAVAILABLE);
-        assertThat(config.getDiversionRelayPolicy()).isEqualTo(DiversionRelayPolicy.SIP);
+        assertThat(config.getDiversionRelayPolicy()).isEqualTo(DiversionRelayPolicy.AS_IS);
+        assertThat(config.getDiversionInjectMode()).isEqualTo(DiversionInjectMode.DID_NUMBER);
+        assertThat(config.getNetworkProtocolPriority()).isEqualTo(NetworkProtocolPriority.FORCE_IPV4);
+        assertThat(config.getCnamLookup()).isTrue();
     }
 
     @Test
@@ -310,6 +317,62 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(config.getNetworkProtocolPriority()).isEqualTo(NetworkProtocolPriority.PREFER_IPV4);
         assertThat(config.getIncomingAuthUsername()).isEqualTo("sipreg-user-1");
         assertThat(config.getIncomingAuthPassword()).isEqualTo("s3cret-Pa55");
+    }
+
+    /**
+     * End-to-end: when the SDK sends `enabled_sip_registration: true`, the
+     * server returns 201 with server-generated `incoming_auth_username` and
+     * `incoming_auth_password`. The SDK must surface those populated values
+     * to the caller (NOT null).
+     */
+    @Test
+    void testCreateWithEnabledSipRegistrationReturnsPopulatedIncomingAuthCredentials() {
+        String responseJson = "{\"data\":{\"id\":\"f1c5d834-1d1f-49cc-8e88-3f73c0a35b31\","
+                + "\"type\":\"voice_in_trunks\","
+                + "\"attributes\":{"
+                + "\"name\":\"sip-registration\",\"priority\":1,\"weight\":100,"
+                + "\"cli_format\":\"e164\",\"ringing_timeout\":30,"
+                + "\"configuration\":{\"type\":\"sip_configurations\","
+                + "\"attributes\":{"
+                + "\"username\":null,\"host\":null,\"port\":null,"
+                + "\"enabled_sip_registration\":true,\"use_did_in_ruri\":true,"
+                + "\"cnam_lookup\":true,"
+                + "\"diversion_relay_policy\":\"as_is\","
+                + "\"diversion_inject_mode\":\"did_number\","
+                + "\"network_protocol_priority\":\"prefer_ipv4\","
+                + "\"incoming_auth_username\":\"7e3IUOSKtroNLfM6\","
+                + "\"incoming_auth_password\":\"31kSndbuugzPEu8M\""
+                + "}}}}}";
+
+        wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunks"))
+                .withRequestBody(matchingJsonPath("$.data.attributes.configuration.attributes.enabled_sip_registration", equalTo("true")))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(responseJson)));
+
+        SipConfiguration sipConfig = new SipConfiguration();
+        sipConfig.setEnabledSipRegistration(true);
+        sipConfig.setUseDidInRuri(true);
+        sipConfig.setCnamLookup(true);
+        sipConfig.setDiversionRelayPolicy(DiversionRelayPolicy.AS_IS);
+        sipConfig.setDiversionInjectMode(DiversionInjectMode.DID_NUMBER);
+        sipConfig.setNetworkProtocolPriority(NetworkProtocolPriority.PREFER_IPV4);
+
+        VoiceInTrunk trunk = new VoiceInTrunk();
+        trunk.setName("sip-registration");
+        trunk.setPriority(1);
+        trunk.setWeight(100);
+        trunk.setCliFormat(CliFormat.E164);
+        trunk.setRingingTimeout(30);
+        trunk.setConfiguration(sipConfig);
+
+        ApiResponse<VoiceInTrunk> response = client.voiceInTrunks().create(trunk);
+        SipConfiguration created = (SipConfiguration) response.getData().getConfiguration();
+        assertThat(created.getEnabledSipRegistration()).isTrue();
+        // Server-generated credentials are populated, not null.
+        assertThat(created.getIncomingAuthUsername()).isNotNull().isNotEmpty();
+        assertThat(created.getIncomingAuthPassword()).isNotNull().isNotEmpty();
     }
 
     @Test
