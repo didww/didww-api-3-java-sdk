@@ -108,6 +108,14 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonProperty("network_protocol_priority")
     private NetworkProtocolPriority networkProtocolPriority;
 
+    /**
+     * Whether SIP registration is enabled. When {@code true} the server
+     * generates {@code incoming_auth_username} / {@code incoming_auth_password}
+     * and the trunk's {@code host} and {@code port} must be left blank. When
+     * disabling sip registration on an existing trunk, the same PATCH must
+     * also set {@code host} to a non-blank value and {@code use_did_in_ruri}
+     * to {@code false}, or the server returns 422. (API 2026-04-16)
+     */
     @JsonProperty("enabled_sip_registration")
     private Boolean enabledSipRegistration;
 
