@@ -282,10 +282,14 @@ class VoiceInTrunkTest extends BaseTest {
         wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_in_trunks/" + id)));
     }
 
-    // V3.5 SIP-registration attributes (API 2026-04-16)
+    // V3.5 SIP-registration attributes (API 2026-04-16).
+    //
+    // Real wire shape captured from sandbox: when sip_registration is enabled
+    // the API returns host/port/username as null (and rejects writes that set
+    // them).  The fixtures below mirror that shape.
     @Test
     void testSipConfigurationDeserializesV35AttributesIncludingReadOnlyCredentials() throws Exception {
-        String json = "{\"type\":\"sip_configurations\",\"username\":\"username\",\"host\":\"example.com\","
+        String json = "{\"type\":\"sip_configurations\",\"username\":null,\"host\":null,\"port\":null,"
                 + "\"enabled_sip_registration\":true,\"use_did_in_ruri\":true,\"cnam_lookup\":true,"
                 + "\"diversion_inject_mode\":\"did_number\",\"network_protocol_priority\":\"prefer_ipv4\","
                 + "\"incoming_auth_username\":\"sipreg-user-1\","
@@ -310,8 +314,10 @@ class VoiceInTrunkTest extends BaseTest {
         // The server returns 400 Param not allowed if these credentials are
         // echoed in the request, so the SDK MUST omit them from serialized
         // output. Jackson's @JsonProperty(access = WRITE_ONLY) handles this.
+        //
+        // Note: host/port are intentionally left null because the API
+        // requires them to be blank when sip_registration is enabled.
         SipConfiguration config = new SipConfiguration();
-        config.setHost("example.com");
         config.setEnabledSipRegistration(true);
         config.setUseDidInRuri(true);
         config.setCnamLookup(true);
