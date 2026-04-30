@@ -165,6 +165,11 @@ class VoiceInTrunkTest extends BaseTest {
         sipConfig.setMediaEncryptionMode(MediaEncryptionMode.ZRTP);
         sipConfig.setStirShakenMode(StirShakenMode.PAI);
         sipConfig.setAllowedRtpIps(Arrays.asList("203.0.113.1"));
+        // V3.5 (API 2026-04-16) writable attributes
+        sipConfig.setDiversionRelayPolicy(DiversionRelayPolicy.AS_IS);
+        sipConfig.setDiversionInjectMode(DiversionInjectMode.DID_NUMBER);
+        sipConfig.setNetworkProtocolPriority(NetworkProtocolPriority.FORCE_IPV4);
+        sipConfig.setCnamLookup(true);
 
         VoiceInTrunk trunk = new VoiceInTrunk();
         trunk.setName("hello, test sip trunk");
