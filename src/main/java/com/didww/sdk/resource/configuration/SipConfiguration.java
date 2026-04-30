@@ -102,6 +102,37 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonProperty("diversion_relay_policy")
     private DiversionRelayPolicy diversionRelayPolicy;
 
+    @JsonProperty("diversion_inject_mode")
+    private DiversionInjectMode diversionInjectMode;
+
+    @JsonProperty("network_protocol_priority")
+    private NetworkProtocolPriority networkProtocolPriority;
+
+    @JsonProperty("enabled_sip_registration")
+    private Boolean enabledSipRegistration;
+
+    @JsonProperty("use_did_in_ruri")
+    private Boolean useDidInRuri;
+
+    @JsonProperty("cnam_lookup")
+    private Boolean cnamLookup;
+
+    /**
+     * Server-generated SIP authentication username, returned in responses
+     * when {@code enabledSipRegistration} is {@code true}. Read-only; the API
+     * rejects any write attempt with HTTP 400 "Param not allowed". (API 2026-04-16)
+     */
+    @JsonProperty(value = "incoming_auth_username", access = JsonProperty.Access.WRITE_ONLY)
+    private String incomingAuthUsername;
+
+    /**
+     * Server-generated SIP authentication password, returned in responses
+     * when {@code enabledSipRegistration} is {@code true}. Read-only; the API
+     * rejects any write attempt with HTTP 400 "Param not allowed". (API 2026-04-16)
+     */
+    @JsonProperty(value = "incoming_auth_password", access = JsonProperty.Access.WRITE_ONLY)
+    private String incomingAuthPassword;
+
     @Override
     @JsonIgnore
     public String getType() {

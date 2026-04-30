@@ -5,8 +5,11 @@ import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
+import com.didww.sdk.resource.enums.DiversionInjectMode;
 import com.didww.sdk.resource.enums.DiversionRelayPolicy;
+import com.didww.sdk.resource.enums.NetworkProtocolPriority;
 import com.didww.sdk.resource.enums.Codec;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.RxDtmfFormat;
 import com.didww.sdk.resource.enums.SstRefreshMethod;
@@ -277,5 +280,55 @@ class VoiceInTrunkTest extends BaseTest {
         client.voiceInTrunks().delete(id);
 
         wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_in_trunks/" + id)));
+    }
+
+    // V3.5 SIP-registration attributes (API 2026-04-16)
+    @Test
+    void testSipConfigurationDeserializesV35AttributesIncludingReadOnlyCredentials() throws Exception {
+        String json = "{\"type\":\"sip_configurations\",\"username\":\"username\",\"host\":\"example.com\","
+                + "\"enabled_sip_registration\":true,\"use_did_in_ruri\":true,\"cnam_lookup\":true,"
+                + "\"diversion_inject_mode\":\"did_number\",\"network_protocol_priority\":\"prefer_ipv4\","
+                + "\"incoming_auth_username\":\"sipreg-user-1\","
+                + "\"incoming_auth_password\":\"s3cret-Pa55\"}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        SipConfiguration config = mapper.readValue(json, SipConfiguration.class);
+
+        assertThat(config.getEnabledSipRegistration()).isTrue();
+        assertThat(config.getUseDidInRuri()).isTrue();
+        assertThat(config.getCnamLookup()).isTrue();
+        assertThat(config.getDiversionInjectMode()).isEqualTo(DiversionInjectMode.DID_NUMBER);
+        assertThat(config.getNetworkProtocolPriority()).isEqualTo(NetworkProtocolPriority.PREFER_IPV4);
+        assertThat(config.getIncomingAuthUsername()).isEqualTo("sipreg-user-1");
+        assertThat(config.getIncomingAuthPassword()).isEqualTo("s3cret-Pa55");
+    }
+
+    @Test
+    void testSipConfigurationStripsReadOnlyCredentialsOnSerialization() throws Exception {
+        // Simulate a caller that loaded a configuration from the server
+        // (with incoming_auth_* populated) and is about to write it back.
+        // The server returns 400 Param not allowed if these credentials are
+        // echoed in the request, so the SDK MUST omit them from serialized
+        // output. Jackson's @JsonProperty(access = WRITE_ONLY) handles this.
+        SipConfiguration config = new SipConfiguration();
+        config.setHost("example.com");
+        config.setEnabledSipRegistration(true);
+        config.setUseDidInRuri(true);
+        config.setCnamLookup(true);
+        config.setDiversionInjectMode(DiversionInjectMode.DID_NUMBER);
+        config.setNetworkProtocolPriority(NetworkProtocolPriority.PREFER_IPV4);
+        config.setIncomingAuthUsername("sipreg-user-1");
+        config.setIncomingAuthPassword("s3cret-Pa55");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(config);
+
+        assertThat(json).contains("\"enabled_sip_registration\":true");
+        assertThat(json).contains("\"use_did_in_ruri\":true");
+        assertThat(json).contains("\"cnam_lookup\":true");
+        assertThat(json).contains("\"diversion_inject_mode\":\"did_number\"");
+        assertThat(json).contains("\"network_protocol_priority\":\"prefer_ipv4\"");
+        assertThat(json).doesNotContain("incoming_auth_username");
+        assertThat(json).doesNotContain("incoming_auth_password");
     }
 }
