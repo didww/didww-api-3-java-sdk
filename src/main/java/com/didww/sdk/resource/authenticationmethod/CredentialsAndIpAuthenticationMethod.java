@@ -1,5 +1,6 @@
 package com.didww.sdk.resource.authenticationmethod;
 
+import com.didww.sdk.internal.Redact;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -40,8 +41,8 @@ public class CredentialsAndIpAuthenticationMethod extends AuthenticationMethod {
         return "CredentialsAndIpAuthenticationMethod("
                 + "allowedSipIps=" + allowedSipIps
                 + ", techPrefix=" + techPrefix
-                + ", username=" + (username == null ? "null" : "[FILTERED]")
-                + ", password=" + (password == null ? "null" : "[FILTERED]")
+                + ", username=" + Redact.mask(username)
+                + ", password=" + Redact.mask(password)
                 + ")";
     }
 }

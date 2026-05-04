@@ -1,5 +1,6 @@
 package com.didww.sdk.resource.configuration;
 
+import com.didww.sdk.internal.Redact;
 import com.didww.sdk.resource.enums.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -216,11 +217,11 @@ public class SipConfiguration extends TrunkConfiguration {
                 + "username=" + username
                 + ", host=" + host
                 + ", port=" + port
-                + ", authPassword=" + (authPassword == null ? "null" : "[FILTERED]")
+                + ", authPassword=" + Redact.mask(authPassword)
                 + ", enabledSipRegistration=" + enabledSipRegistration
                 + ", useDidInRuri=" + useDidInRuri
-                + ", incomingAuthUsername=" + (incomingAuthUsername == null ? "null" : "[FILTERED]")
-                + ", incomingAuthPassword=" + (incomingAuthPassword == null ? "null" : "[FILTERED]")
+                + ", incomingAuthUsername=" + Redact.mask(incomingAuthUsername)
+                + ", incomingAuthPassword=" + Redact.mask(incomingAuthPassword)
                 + ")";
     }
 }
