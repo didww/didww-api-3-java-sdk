@@ -1,0 +1,9 @@
+{
+  "enabled_sip_registration": true,
+  "use_did_in_ruri": true,
+  "cnam_lookup": true,
+  "diversion_inject_mode": "did_number",
+  "network_protocol_priority": "prefer_ipv4",
+  "incoming_auth_username": "sipreg-user-1",
+  "incoming_auth_password": "s3cret-Pa55"
+}

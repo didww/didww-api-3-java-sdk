@@ -3,6 +3,7 @@ package com.didww.sdk.resource.configuration;
 import com.didww.sdk.resource.enums.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -101,6 +102,47 @@ public class SipConfiguration extends TrunkConfiguration {
 
     @JsonProperty("diversion_relay_policy")
     private DiversionRelayPolicy diversionRelayPolicy;
+
+    @JsonProperty("diversion_inject_mode")
+    private DiversionInjectMode diversionInjectMode;
+
+    @JsonProperty("network_protocol_priority")
+    private NetworkProtocolPriority networkProtocolPriority;
+
+    /**
+     * Whether SIP registration is enabled. When {@code true} the server
+     * generates {@code incoming_auth_username} / {@code incoming_auth_password}
+     * and the trunk's {@code host} and {@code port} must be left blank. When
+     * disabling sip registration on an existing trunk, the same PATCH must
+     * also set {@code host} to a non-blank value and {@code use_did_in_ruri}
+     * to {@code false}, or the server returns 422. (API 2026-04-16)
+     */
+    @JsonProperty("enabled_sip_registration")
+    private Boolean enabledSipRegistration;
+
+    @JsonProperty("use_did_in_ruri")
+    private Boolean useDidInRuri;
+
+    @JsonProperty("cnam_lookup")
+    private Boolean cnamLookup;
+
+    /**
+     * Server-generated SIP authentication username, returned in responses
+     * when {@code enabledSipRegistration} is {@code true}. Read-only; the API
+     * rejects any write attempt with HTTP 400 "Param not allowed". (API 2026-04-16)
+     */
+    @JsonProperty(value = "incoming_auth_username", access = JsonProperty.Access.WRITE_ONLY)
+    @Setter(AccessLevel.PRIVATE)
+    private String incomingAuthUsername;
+
+    /**
+     * Server-generated SIP authentication password, returned in responses
+     * when {@code enabledSipRegistration} is {@code true}. Read-only; the API
+     * rejects any write attempt with HTTP 400 "Param not allowed". (API 2026-04-16)
+     */
+    @JsonProperty(value = "incoming_auth_password", access = JsonProperty.Access.WRITE_ONLY)
+    @Setter(AccessLevel.PRIVATE)
+    private String incomingAuthPassword;
 
     @Override
     @JsonIgnore
