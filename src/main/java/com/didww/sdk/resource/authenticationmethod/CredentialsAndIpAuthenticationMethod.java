@@ -28,4 +28,20 @@ public class CredentialsAndIpAuthenticationMethod extends AuthenticationMethod {
     public String getType() {
         return "credentials_and_ip";
     }
+
+    /**
+     * Override toString() so default logging / debugger inspection / unhandled
+     * exception traces never leak server-generated credentials. The wire
+     * payload is unaffected — Jackson serializes the real values (or strips
+     * them via the WRITE_ONLY access modifier on incoming requests).
+     */
+    @Override
+    public String toString() {
+        return "CredentialsAndIpAuthenticationMethod("
+                + "allowedSipIps=" + allowedSipIps
+                + ", techPrefix=" + techPrefix
+                + ", username=" + (username == null ? "null" : "[FILTERED]")
+                + ", password=" + (password == null ? "null" : "[FILTERED]")
+                + ")";
+    }
 }

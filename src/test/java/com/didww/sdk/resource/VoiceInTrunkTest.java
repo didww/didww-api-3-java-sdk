@@ -425,4 +425,22 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(updated.getIncomingAuthUsername()).isNull();
         assertThat(updated.getIncomingAuthPassword()).isNull();
     }
+
+    /**
+     * Default toString output is what shows up in default logging / debugger
+     * inspection / unhandled exception traces — none of those contexts should
+     * ever expose SIP credentials in plaintext.
+     */
+    @Test
+    void testSipConfigurationToStringRedactsCredentials() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        SipConfiguration config = mapper.readValue(
+                loadFixture("voice_in_trunks/sip_registration_load_shape.json"),
+                SipConfiguration.class);
+
+        String output = config.toString();
+        assertThat(output).contains("[FILTERED]");
+        assertThat(output).doesNotContain("sipreg-user-1");
+        assertThat(output).doesNotContain("s3cret-Pa55");
+    }
 }

@@ -149,4 +149,24 @@ public class SipConfiguration extends TrunkConfiguration {
     public String getType() {
         return "sip_configurations";
     }
+
+    /**
+     * Override toString() so default logging / debugger inspection / unhandled
+     * exception traces never leak SIP credentials. The wire payload is
+     * unaffected — Jackson serializes the real values (or strips read-only
+     * ones via @JsonProperty WRITE_ONLY).
+     */
+    @Override
+    public String toString() {
+        return "SipConfiguration("
+                + "username=" + username
+                + ", host=" + host
+                + ", port=" + port
+                + ", authPassword=" + (authPassword == null ? "null" : "[FILTERED]")
+                + ", enabledSipRegistration=" + enabledSipRegistration
+                + ", useDidInRuri=" + useDidInRuri
+                + ", incomingAuthUsername=" + (incomingAuthUsername == null ? "null" : "[FILTERED]")
+                + ", incomingAuthPassword=" + (incomingAuthPassword == null ? "null" : "[FILTERED]")
+                + ")";
+    }
 }
