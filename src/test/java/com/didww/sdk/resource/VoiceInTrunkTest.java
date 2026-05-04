@@ -300,7 +300,7 @@ class VoiceInTrunkTest extends BaseTest {
     // the API returns host/port/username as null (and rejects writes that set
     // them).  The fixtures below mirror that shape.
     @Test
-    void testSipConfigurationDeserializesV35AttributesIncludingReadOnlyCredentials() throws Exception {
+    void testSipConfigurationDeserializesRegistrationAttributesIncludingReadOnlyCredentials() throws Exception {
         String json = "{\"type\":\"sip_configurations\",\"username\":null,\"host\":null,\"port\":null,"
                 + "\"enabled_sip_registration\":true,\"use_did_in_ruri\":true,\"cnam_lookup\":true,"
                 + "\"diversion_inject_mode\":\"did_number\",\"network_protocol_priority\":\"prefer_ipv4\","
@@ -391,10 +391,10 @@ class VoiceInTrunkTest extends BaseTest {
 
     /**
      * Disabling SIP registration is a multi-field PATCH because the
-     * server's V3 form rejects (422) any request that flips
+     * server returns 422 for any request that flips
      * enabled_sip_registration to false without simultaneously providing
-     * a non-blank host (model-level presence) and use_did_in_ruri = false
-     * (form-level). Lock those three fields in the same request body via
+     * a non-blank host and use_did_in_ruri = false.
+     * Lock those three fields in the same request body via
      * {@code equalToJson(..., true, false)} (lenient ordering, strict
      * field set) — a regression that drops one of them fails the request
      * match and so the test fails.
@@ -424,6 +424,103 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(updated.getHost()).isEqualTo("203.0.113.10");
         assertThat(updated.getIncomingAuthUsername()).isNull();
         assertThat(updated.getIncomingAuthPassword()).isNull();
+    }
+
+    @Test
+    void testEnablingSipRegistrationClearsHostAndPort() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setHost("sip.example.com");
+        cfg.setPort(5060);
+        cfg.setEnabledSipRegistration(true);
+        assertThat(cfg.getHost()).isNull();
+        assertThat(cfg.getPort()).isNull();
+        assertThat(cfg.getEnabledSipRegistration()).isTrue();
+    }
+
+    @Test
+    void testDisablingSipRegistrationForcesUseDidInRuriToFalse() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setEnabledSipRegistration(false);
+        assertThat(cfg.getEnabledSipRegistration()).isFalse();
+        assertThat(cfg.getUseDidInRuri()).isFalse();
+    }
+
+    @Test
+    void testSettingHostDisablesSipRegistrationAndForcesUseDidInRuriToFalse() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setHost("sip.example.com");
+        assertThat(cfg.getHost()).isEqualTo("sip.example.com");
+        assertThat(cfg.getEnabledSipRegistration()).isFalse();
+        assertThat(cfg.getUseDidInRuri()).isFalse();
+    }
+
+    /**
+     * Mirror dimension: after the cascade fires from a setter, the
+     * on-the-wire payload (Jackson output) must contain the cascaded
+     * field values — not just the in-memory state.
+     */
+    @Test
+    void testSipConfigurationWirePayloadReflectsCascadedState() throws Exception {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setHost("sip.example.com"); // triggers cascade
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(cfg);
+        assertThat(json).contains("\"host\":\"sip.example.com\"");
+        assertThat(json).contains("\"enabled_sip_registration\":false");
+        assertThat(json).contains("\"use_did_in_ruri\":false");
+    }
+
+    @Test
+    void testEnablingSipRegistrationLeavesUseDidInRuriUntouched() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setEnabledSipRegistration(true);
+        assertThat(cfg.getUseDidInRuri()).isTrue();
+    }
+
+    /**
+     * Server may return a regular SIP trunk shape (host: present together
+     * with use_did_in_ruri: true) — Jackson must populate the private fields
+     * directly via reflection rather than calling the cascading setters.
+     * The private fields skip the cascade, so the loaded configuration
+     * matches the server response byte-for-byte.
+     */
+    @Test
+    void testDeserializingServerResponseDoesNotTriggerCascade() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        SipConfiguration config = mapper.readValue(
+                loadFixture("voice_in_trunks/sip_regular_load_shape.json"),
+                SipConfiguration.class);
+        assertThat(config.getHost()).isEqualTo("sip.example.com");
+        assertThat(config.getPort()).isEqualTo(5060);
+        assertThat(config.getEnabledSipRegistration()).isFalse();
+        assertThat(config.getUseDidInRuri()).as("deserialization must not cascade UseDidInRuri to false").isTrue();
+    }
+
+    /**
+     * Regression: PATCH against an existing trunk that already has a
+     * host/port persisted server-side. The local SipConfiguration starts
+     * empty (host/port never assigned), so the cascade must still emit
+     * "host": null and "port": null on the wire — otherwise the server
+     * merges the new enabled_sip_registration=true with the persisted host
+     * and rejects with 422.
+     */
+    @Test
+    void testEnablingSipRegistrationOnFreshConfigEmitsHostAndPortAsNullOnWire() throws Exception {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(cfg);
+        assertThat(json).contains("\"host\":null");
+        assertThat(json).contains("\"port\":null");
+        assertThat(json).contains("\"enabled_sip_registration\":true");
     }
 
     /**

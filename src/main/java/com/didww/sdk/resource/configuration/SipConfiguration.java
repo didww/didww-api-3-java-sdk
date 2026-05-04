@@ -2,6 +2,7 @@ package com.didww.sdk.resource.configuration;
 
 import com.didww.sdk.resource.enums.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,10 +17,21 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonProperty("username")
     private String username;
 
+    // host / port / enabledSipRegistration use manual setters that propagate
+    // server-enforced field dependencies (API 2026-04-16). Lombok would
+    // otherwise generate plain setters from the class-level @Setter, which
+    // would skip the cascade. Jackson deserializes into the private fields
+    // directly via reflection (no setter present), so server responses
+    // bypass the cascade on the way in — exactly what we want, since
+    // server data is already internally consistent.
+    @Setter(AccessLevel.NONE)
     @JsonProperty("host")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     private String host;
 
+    @Setter(AccessLevel.NONE)
     @JsonProperty("port")
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     private Integer port;
 
     @JsonProperty("codec_ids")
@@ -117,6 +129,7 @@ public class SipConfiguration extends TrunkConfiguration {
      * also set {@code host} to a non-blank value and {@code use_did_in_ruri}
      * to {@code false}, or the server returns 422. (API 2026-04-16)
      */
+    @Setter(AccessLevel.NONE)
     @JsonProperty("enabled_sip_registration")
     private Boolean enabledSipRegistration;
 
@@ -143,6 +156,47 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonProperty(value = "incoming_auth_password", access = JsonProperty.Access.WRITE_ONLY)
     @Setter(AccessLevel.PRIVATE)
     private String incomingAuthPassword;
+
+    /**
+     * Setting host to a non-null value cascades enabledSipRegistration and
+     * useDidInRuri to false because the server requires those states
+     * whenever host is present (API 2026-04-16).
+     */
+    public void setHost(String host) {
+        if (host != null) {
+            this.enabledSipRegistration = false;
+            this.useDidInRuri = false;
+        }
+        this.host = host;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    /**
+     * Setting enabledSipRegistration cascades dependent fields:
+     * <ul>
+     * <li>true  -> nullify host / port and emit them as {@code null} on the
+     * wire (host/port must be blank when sip_registration is on). The wire
+     * emission fires unconditionally so PATCH against an existing trunk that
+     * already has host/port set server-side is told to clear them.</li>
+     * <li>false -> force useDidInRuri = false (must be disabled when
+     * sip_registration is disabled).</li>
+     * </ul>
+     */
+    public void setEnabledSipRegistration(Boolean enabledSipRegistration) {
+        if (Boolean.TRUE.equals(enabledSipRegistration)) {
+            // Always emit host: null and port: null on the wire so a PATCH
+            // against an existing trunk that already has them persisted on
+            // the server side is told to clear them.
+            this.host = null;
+            this.port = null;
+        } else if (Boolean.FALSE.equals(enabledSipRegistration)) {
+            this.useDidInRuri = false;
+        }
+        this.enabledSipRegistration = enabledSipRegistration;
+    }
 
     @Override
     @JsonIgnore
