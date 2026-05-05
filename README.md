@@ -20,8 +20,8 @@ This SDK sends the `X-DIDWW-API-Version: 2026-04-16` header with every request b
 
 | SDK Version | Branch | DIDWW API Version |
 |-------------|--------|-------------------|
-| **3.x** | [`main`](https://github.com/didww/didww-api-3-java-sdk) | [`2026-04-16`](https://doc.didww.com/api3/2026-04-16/index.html) |
-| **2.x** | [`2022-05-10`](https://github.com/didww/didww-api-3-java-sdk/tree/2022-05-10) | [`2022-05-10`](https://doc.didww.com/api3/2022-05-10/index.html) |
+| **4.x** | [`main`](https://github.com/didww/didww-api-3-java-sdk) | [`2026-04-16`](https://doc.didww.com/api3/2026-04-16/index.html) |
+| **3.x** | [`2022-05-10`](https://github.com/didww/didww-api-3-java-sdk/tree/2022-05-10) | [`2022-05-10`](https://doc.didww.com/api3/2022-05-10/index.html) |
 
 ## Requirements
 
