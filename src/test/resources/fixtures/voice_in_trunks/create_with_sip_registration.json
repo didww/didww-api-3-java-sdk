@@ -1,0 +1,29 @@
+{
+  "data": {
+    "id": "f1c5d834-1d1f-49cc-8e88-3f73c0a35b31",
+    "type": "voice_in_trunks",
+    "attributes": {
+      "name": "sip-registration",
+      "priority": 1,
+      "weight": 100,
+      "cli_format": "e164",
+      "ringing_timeout": 30,
+      "configuration": {
+        "type": "sip_configurations",
+        "attributes": {
+          "username": null,
+          "host": null,
+          "port": null,
+          "enabled_sip_registration": true,
+          "use_did_in_ruri": true,
+          "cnam_lookup": true,
+          "diversion_relay_policy": "as_is",
+          "diversion_inject_mode": "did_number",
+          "network_protocol_priority": "prefer_ipv4",
+          "incoming_auth_username": "7e3IUOSKtroNLfM6",
+          "incoming_auth_password": "31kSndbuugzPEu8M"
+        }
+      }
+    }
+  }
+}

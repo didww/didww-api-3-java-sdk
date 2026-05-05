@@ -5,8 +5,11 @@ import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
+import com.didww.sdk.resource.enums.DiversionInjectMode;
 import com.didww.sdk.resource.enums.DiversionRelayPolicy;
+import com.didww.sdk.resource.enums.NetworkProtocolPriority;
 import com.didww.sdk.resource.enums.Codec;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.RxDtmfFormat;
 import com.didww.sdk.resource.enums.SstRefreshMethod;
@@ -162,6 +165,15 @@ class VoiceInTrunkTest extends BaseTest {
         sipConfig.setMediaEncryptionMode(MediaEncryptionMode.ZRTP);
         sipConfig.setStirShakenMode(StirShakenMode.PAI);
         sipConfig.setAllowedRtpIps(Arrays.asList("203.0.113.1"));
+        // API 2026-04-16 writable attributes
+        sipConfig.setDiversionRelayPolicy(DiversionRelayPolicy.AS_IS);
+        sipConfig.setDiversionInjectMode(DiversionInjectMode.DID_NUMBER);
+        sipConfig.setNetworkProtocolPriority(NetworkProtocolPriority.FORCE_IPV4);
+        sipConfig.setCnamLookup(true);
+        // use_did_in_ruri must stay false unless enabled_sip_registration is
+        // also true (server returns 422 otherwise).  Setting it here is
+        // redundant against the server default but documents the field.
+        sipConfig.setUseDidInRuri(false);
 
         VoiceInTrunk trunk = new VoiceInTrunk();
         trunk.setName("hello, test sip trunk");
@@ -177,7 +189,10 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(codes.get(0)).isEqualTo(ReroutingDisconnectCode.SIP_400_BAD_REQUEST);
         assertThat(codes.get(codes.size() - 1)).isEqualTo(ReroutingDisconnectCode.RINGING_TIMEOUT);
         assertThat(codes).contains(ReroutingDisconnectCode.SIP_480_TEMPORARILY_UNAVAILABLE);
-        assertThat(config.getDiversionRelayPolicy()).isEqualTo(DiversionRelayPolicy.SIP);
+        assertThat(config.getDiversionRelayPolicy()).isEqualTo(DiversionRelayPolicy.AS_IS);
+        assertThat(config.getDiversionInjectMode()).isEqualTo(DiversionInjectMode.DID_NUMBER);
+        assertThat(config.getNetworkProtocolPriority()).isEqualTo(NetworkProtocolPriority.FORCE_IPV4);
+        assertThat(config.getCnamLookup()).isTrue();
     }
 
     @Test
@@ -277,5 +292,252 @@ class VoiceInTrunkTest extends BaseTest {
         client.voiceInTrunks().delete(id);
 
         wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_in_trunks/" + id)));
+    }
+
+    // 2026-04-16 SIP-registration attributes (API 2026-04-16).
+    //
+    // Real wire shape captured from sandbox: when sip_registration is enabled
+    // the API returns host/port/username as null (and rejects writes that set
+    // them).  The fixtures below mirror that shape.
+    @Test
+    void testSipConfigurationDeserializesRegistrationAttributesIncludingReadOnlyCredentials() throws Exception {
+        String json = "{\"type\":\"sip_configurations\",\"username\":null,\"host\":null,\"port\":null,"
+                + "\"enabled_sip_registration\":true,\"use_did_in_ruri\":true,\"cnam_lookup\":true,"
+                + "\"diversion_inject_mode\":\"did_number\",\"network_protocol_priority\":\"prefer_ipv4\","
+                + "\"incoming_auth_username\":\"sipreg-user-1\","
+                + "\"incoming_auth_password\":\"s3cret-Pa55\"}";
+
+        ObjectMapper mapper = new ObjectMapper();
+        SipConfiguration config = mapper.readValue(json, SipConfiguration.class);
+
+        assertThat(config.getEnabledSipRegistration()).isTrue();
+        assertThat(config.getUseDidInRuri()).isTrue();
+        assertThat(config.getCnamLookup()).isTrue();
+        assertThat(config.getDiversionInjectMode()).isEqualTo(DiversionInjectMode.DID_NUMBER);
+        assertThat(config.getNetworkProtocolPriority()).isEqualTo(NetworkProtocolPriority.PREFER_IPV4);
+        assertThat(config.getIncomingAuthUsername()).isEqualTo("sipreg-user-1");
+        assertThat(config.getIncomingAuthPassword()).isEqualTo("s3cret-Pa55");
+    }
+
+    /**
+     * End-to-end: when the SDK sends `enabled_sip_registration: true`, the
+     * server returns 201 with server-generated `incoming_auth_username` and
+     * `incoming_auth_password`. The SDK must surface those populated values
+     * to the caller (NOT null).
+     */
+    @Test
+    void testCreateWithEnabledSipRegistrationReturnsPopulatedIncomingAuthCredentials() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunks"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_with_sip_registration_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/create_with_sip_registration.json"))));
+
+        SipConfiguration sipConfig = new SipConfiguration();
+        sipConfig.setEnabledSipRegistration(true);
+        sipConfig.setUseDidInRuri(true);
+        sipConfig.setCnamLookup(true);
+        sipConfig.setDiversionRelayPolicy(DiversionRelayPolicy.AS_IS);
+        sipConfig.setDiversionInjectMode(DiversionInjectMode.DID_NUMBER);
+        sipConfig.setNetworkProtocolPriority(NetworkProtocolPriority.PREFER_IPV4);
+
+        VoiceInTrunk trunk = new VoiceInTrunk();
+        trunk.setName("sip-registration");
+        trunk.setPriority(1);
+        trunk.setWeight(100);
+        trunk.setCliFormat(CliFormat.E164);
+        trunk.setRingingTimeout(30);
+        trunk.setConfiguration(sipConfig);
+
+        ApiResponse<VoiceInTrunk> response = client.voiceInTrunks().create(trunk);
+        SipConfiguration created = (SipConfiguration) response.getData().getConfiguration();
+        assertThat(created.getEnabledSipRegistration()).isTrue();
+        // Server-generated credentials are populated, not null.
+        assertThat(created.getIncomingAuthUsername()).isNotNull().isNotEmpty();
+        assertThat(created.getIncomingAuthPassword()).isNotNull().isNotEmpty();
+    }
+
+    @Test
+    void testSipConfigurationStripsReadOnlyCredentialsOnSerialization() throws Exception {
+        // Simulate a caller that loaded a configuration from the server
+        // (with incoming_auth_* populated) and is about to write it back.
+        // The server returns 400 Param not allowed if these credentials are
+        // echoed in the request, so the SDK MUST omit them from serialized
+        // output. Jackson's @JsonProperty(access = WRITE_ONLY) handles this.
+        //
+        // Note: host/port are intentionally left null because the API
+        // requires them to be blank when sip_registration is enabled. The
+        // load-shape JSON below mirrors a real GET response — the SDK
+        // exposes incoming_auth_* via Lombok-generated getters but locks
+        // their setters to private so callers cannot mutate them.
+        ObjectMapper mapper = new ObjectMapper();
+        SipConfiguration config = mapper.readValue(
+                loadFixture("voice_in_trunks/sip_registration_load_shape.json"),
+                SipConfiguration.class);
+        assertThat(config.getIncomingAuthUsername()).isEqualTo("sipreg-user-1");
+        assertThat(config.getIncomingAuthPassword()).isEqualTo("s3cret-Pa55");
+
+        String json = mapper.writeValueAsString(config);
+
+        assertThat(json).contains("\"enabled_sip_registration\":true");
+        assertThat(json).contains("\"use_did_in_ruri\":true");
+        assertThat(json).contains("\"cnam_lookup\":true");
+        assertThat(json).contains("\"diversion_inject_mode\":\"did_number\"");
+        assertThat(json).contains("\"network_protocol_priority\":\"prefer_ipv4\"");
+        assertThat(json).doesNotContain("incoming_auth_username");
+        assertThat(json).doesNotContain("incoming_auth_password");
+    }
+
+    /**
+     * Disabling SIP registration is a multi-field PATCH because the
+     * server returns 422 for any request that flips
+     * enabled_sip_registration to false without simultaneously providing
+     * a non-blank host and use_did_in_ruri = false.
+     * Lock those three fields in the same request body via
+     * {@code equalToJson(..., true, false)} (lenient ordering, strict
+     * field set) — a regression that drops one of them fails the request
+     * match and so the test fails.
+     */
+    @Test
+    void testDisableSipRegistrationPatchSerializesAllThreeFields() {
+        String id = "57a939dd-1600-41a6-80b1-f624e22a1f4c";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/disable_sip_registration_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/disable_sip_registration.json"))));
+
+        SipConfiguration sipConfig = new SipConfiguration();
+        sipConfig.setEnabledSipRegistration(false);
+        sipConfig.setUseDidInRuri(false);
+        sipConfig.setHost("203.0.113.10");
+
+        VoiceInTrunk trunk = new VoiceInTrunk().withId(id);
+        trunk.setConfiguration(sipConfig);
+
+        ApiResponse<VoiceInTrunk> response = client.voiceInTrunks().update(trunk);
+        SipConfiguration updated = (SipConfiguration) response.getData().getConfiguration();
+        assertThat(updated.getEnabledSipRegistration()).isFalse();
+        assertThat(updated.getUseDidInRuri()).isFalse();
+        assertThat(updated.getHost()).isEqualTo("203.0.113.10");
+        assertThat(updated.getIncomingAuthUsername()).isNull();
+        assertThat(updated.getIncomingAuthPassword()).isNull();
+    }
+
+    @Test
+    void testEnablingSipRegistrationClearsHostAndPort() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setHost("sip.example.com");
+        cfg.setPort(5060);
+        cfg.setEnabledSipRegistration(true);
+        assertThat(cfg.getHost()).isNull();
+        assertThat(cfg.getPort()).isNull();
+        assertThat(cfg.getEnabledSipRegistration()).isTrue();
+    }
+
+    @Test
+    void testDisablingSipRegistrationForcesUseDidInRuriToFalse() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setEnabledSipRegistration(false);
+        assertThat(cfg.getEnabledSipRegistration()).isFalse();
+        assertThat(cfg.getUseDidInRuri()).isFalse();
+    }
+
+    @Test
+    void testSettingHostDisablesSipRegistrationAndForcesUseDidInRuriToFalse() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setHost("sip.example.com");
+        assertThat(cfg.getHost()).isEqualTo("sip.example.com");
+        assertThat(cfg.getEnabledSipRegistration()).isFalse();
+        assertThat(cfg.getUseDidInRuri()).isFalse();
+    }
+
+    /**
+     * Mirror dimension: after the cascade fires from a setter, the
+     * on-the-wire payload (Jackson output) must contain the cascaded
+     * field values — not just the in-memory state.
+     */
+    @Test
+    void testSipConfigurationWirePayloadReflectsCascadedState() throws Exception {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setHost("sip.example.com"); // triggers cascade
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(cfg);
+        assertThat(json).contains("\"host\":\"sip.example.com\"");
+        assertThat(json).contains("\"enabled_sip_registration\":false");
+        assertThat(json).contains("\"use_did_in_ruri\":false");
+    }
+
+    @Test
+    void testEnablingSipRegistrationLeavesUseDidInRuriUntouched() {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        cfg.setUseDidInRuri(true);
+        cfg.setEnabledSipRegistration(true);
+        assertThat(cfg.getUseDidInRuri()).isTrue();
+    }
+
+    /**
+     * Server may return a regular SIP trunk shape (host: present together
+     * with use_did_in_ruri: true) — Jackson must populate the private fields
+     * directly via reflection rather than calling the cascading setters.
+     * The private fields skip the cascade, so the loaded configuration
+     * matches the server response byte-for-byte.
+     */
+    @Test
+    void testDeserializingServerResponseDoesNotTriggerCascade() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        SipConfiguration config = mapper.readValue(
+                loadFixture("voice_in_trunks/sip_regular_load_shape.json"),
+                SipConfiguration.class);
+        assertThat(config.getHost()).isEqualTo("sip.example.com");
+        assertThat(config.getPort()).isEqualTo(5060);
+        assertThat(config.getEnabledSipRegistration()).isFalse();
+        assertThat(config.getUseDidInRuri()).as("deserialization must not cascade UseDidInRuri to false").isTrue();
+    }
+
+    /**
+     * Regression: PATCH against an existing trunk that already has a
+     * host/port persisted server-side. The local SipConfiguration starts
+     * empty (host/port never assigned), so the cascade must still emit
+     * "host": null and "port": null on the wire — otherwise the server
+     * merges the new enabled_sip_registration=true with the persisted host
+     * and rejects with 422.
+     */
+    @Test
+    void testEnablingSipRegistrationOnFreshConfigEmitsHostAndPortAsNullOnWire() throws Exception {
+        SipConfiguration cfg = new SipConfiguration();
+        cfg.setEnabledSipRegistration(true);
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(cfg);
+        assertThat(json).contains("\"host\":null");
+        assertThat(json).contains("\"port\":null");
+        assertThat(json).contains("\"enabled_sip_registration\":true");
+    }
+
+    /**
+     * Default toString output is what shows up in default logging / debugger
+     * inspection / unhandled exception traces — none of those contexts should
+     * ever expose SIP credentials in plaintext.
+     */
+    @Test
+    void testSipConfigurationToStringRedactsCredentials() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        SipConfiguration config = mapper.readValue(
+                loadFixture("voice_in_trunks/sip_registration_load_shape.json"),
+                SipConfiguration.class);
+
+        String output = config.toString();
+        assertThat(output).contains("[FILTERED]");
+        assertThat(output).doesNotContain("sipreg-user-1");
+        assertThat(output).doesNotContain("s3cret-Pa55");
     }
 }

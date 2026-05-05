@@ -1,0 +1,7 @@
+{
+  "username": "alice",
+  "host": "sip.example.com",
+  "port": 5060,
+  "enabled_sip_registration": false,
+  "use_did_in_ruri": true
+}

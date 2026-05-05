@@ -1,5 +1,6 @@
 package com.didww.sdk.resource.authenticationmethod;
 
+import com.didww.sdk.internal.Redact;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -27,5 +28,21 @@ public class CredentialsAndIpAuthenticationMethod extends AuthenticationMethod {
     @JsonIgnore
     public String getType() {
         return "credentials_and_ip";
+    }
+
+    /**
+     * Override toString() so default logging / debugger inspection / unhandled
+     * exception traces never leak server-generated credentials. The wire
+     * payload is unaffected — Jackson serializes the real values (or strips
+     * them via the WRITE_ONLY access modifier on incoming requests).
+     */
+    @Override
+    public String toString() {
+        return "CredentialsAndIpAuthenticationMethod("
+                + "allowedSipIps=" + allowedSipIps
+                + ", techPrefix=" + techPrefix
+                + ", username=" + Redact.mask(username)
+                + ", password=" + Redact.mask(password)
+                + ")";
     }
 }

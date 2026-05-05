@@ -42,6 +42,7 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 | [`com.didww.examples.UploadFileExample`](src/main/java/com/didww/examples/UploadFileExample.java) | Creates (or reads) a file, encrypts it, and uploads to `encrypted_files`. |
 | [`com.didww.examples.IdentityAddressProofsExample`](src/main/java/com/didww/examples/IdentityAddressProofsExample.java) | Creates identity and address, encrypts and uploads files, attaches proofs to both. |
 | [`com.didww.examples.VoiceInTrunkGroupsExample`](src/main/java/com/didww/examples/VoiceInTrunkGroupsExample.java) | CRUD for trunk groups with trunk relationships. |
+| [`com.didww.examples.VoiceInTrunkSipRegistrationExample`](src/main/java/com/didww/examples/VoiceInTrunkSipRegistrationExample.java) | End-to-end SIP registration flow: create with `enabledSipRegistration=true`, rename, disable by setting `host`, re-enable by toggling the flag. The SDK keeps the dependent fields (`host`, `port`, `useDidInRuri`) aligned with the server's validation rules automatically. |
 | [`com.didww.examples.VoiceOutTrunksExample`](src/main/java/com/didww/examples/VoiceOutTrunksExample.java) | CRUD for voice out trunks (requires account config). |
 | [`com.didww.examples.DidTrunkAssignmentExample`](src/main/java/com/didww/examples/DidTrunkAssignmentExample.java) | Demonstrates exclusive trunk/trunk group assignment on DIDs. |
 | [`com.didww.examples.DidReservationsExample`](src/main/java/com/didww/examples/DidReservationsExample.java) | Creates, lists, finds and deletes DID reservations. |
