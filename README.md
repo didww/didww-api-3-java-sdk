@@ -527,6 +527,8 @@ client.voiceInTrunks().update(trunk);
 
 ## Filtering, Sorting, and Pagination
 
+> See [`FILTERS.md`](FILTERS.md) for the canonical list of `filter[KEY]` keys accepted by every list endpoint, verified live against the DIDWW API at version `2026-04-16`.
+
 ```java
 import com.didww.sdk.http.QueryParams;
 
