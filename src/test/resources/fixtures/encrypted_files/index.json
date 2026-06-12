@@ -11,7 +11,7 @@
   ],
   "meta": {
     "total_records": 1,
-    "api_version": "2021-04-19"
+    "api_version": "2026-04-16"
   },
   "links": {
     "first": "https://sandbox-api.didww.com/v3/encrypted_files?page%5Bnumber%5D=1&page%5Bsize%5D=5",

@@ -4,6 +4,6 @@
     "type": "voice_out_trunk_regenerate_credentials"
   },
   "meta": {
-    "api_version": "2021-12-15"
+    "api_version": "2026-04-16"
   }
 }

@@ -62,7 +62,7 @@
   ],
   "meta": {
     "total_records": 1,
-    "api_version": "2022-05-09"
+    "api_version": "2026-04-16"
   },
   "links": {
     "first": "https://sandbox-api.didww.com/v3/did_groups?filter%5Bnanpa_prefix.id%5D=eeed293b-f3d8-4ef8-91ef-1b077d174b3b&page%5Bnumber%5D=1&page%5Bsize%5D=50",
