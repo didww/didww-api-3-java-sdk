@@ -135,7 +135,7 @@
             "type": "address_verifications",
             "attributes": {
                 "service_description": "Address verification for registration 01kjan2paw2wfqndqdkd2m3hyc",
-                "callback_url": "https://didwwwebhook.aurora-dev.sinchlab.com/AuroraDIDWWWebhookService/api/didww/verification/callback/119881627",
+                "callback_url": "https://example.com/webhook/verification/callback/119881627",
                 "callback_method": "post",
                 "status": "approved",
                 "reject_reasons": null,
