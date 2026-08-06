@@ -159,8 +159,7 @@ class ExportTest extends BaseTest {
         try {
             client.downloadAndDecompressExport(wireMock.baseUrl() + "/v3/exports/test-id.csv.gz", tempFile);
             String content = Files.readString(tempFile);
-            assertThat(content).contains("Date/Time Start (UTC)");
-            assertThat(content).contains("972397239159652");
+            assertThat(content).isEqualTo(csvContent);
         } finally {
             Files.deleteIfExists(tempFile);
         }

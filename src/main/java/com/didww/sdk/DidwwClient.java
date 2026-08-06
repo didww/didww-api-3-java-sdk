@@ -4,9 +4,9 @@ import com.didww.sdk.converter.DidwwResourceConverter;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.ApiKeyInterceptor;
 import com.didww.sdk.http.JsonApiMediaType;
+import com.didww.sdk.repository.BalanceRepository;
 import com.didww.sdk.repository.ReadOnlyRepository;
 import com.didww.sdk.repository.Repository;
-import com.didww.sdk.repository.SingletonRepository;
 import com.didww.sdk.resource.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -129,8 +129,8 @@ public class DidwwClient {
     }
 
     // Singleton repository
-    public SingletonRepository<Balance> balance() {
-        return new SingletonRepository<>(httpClient, converter, baseUrl, "balance", Balance.class, objectMapper);
+    public BalanceRepository balance() {
+        return new BalanceRepository(httpClient, converter, baseUrl, "balance", objectMapper);
     }
 
     // CRUD repositories
@@ -327,11 +327,7 @@ public class DidwwClient {
             try (InputStream fis = Files.newInputStream(tempFile);
                  InputStream gzis = new GZIPInputStream(fis);
                  OutputStream out = Files.newOutputStream(destination)) {
-                byte[] buffer = new byte[8192];
-                int len;
-                while ((len = gzis.read(buffer)) != -1) {
-                    out.write(buffer, 0, len);
-                }
+                gzis.transferTo(out);
             }
         } catch (IOException e) {
             throw new DidwwClientException("Failed to download and decompress export", e);
