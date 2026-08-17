@@ -22,7 +22,7 @@
       }
     },
     "meta": {
-      "setup_price": "10.0",
+      "setup_price": 0,
       "monthly_price": "2.5"
     }
   }

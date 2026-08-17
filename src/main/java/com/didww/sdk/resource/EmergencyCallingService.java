@@ -3,7 +3,6 @@ package com.didww.sdk.resource;
 import com.didww.sdk.resource.enums.EmergencyCallingServiceStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Meta;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Customer-owned subscription to emergency calling on one or more DIDs.
@@ -27,7 +25,7 @@ import java.util.Map;
  */
 @Type("emergency_calling_services")
 @Getter
-public class EmergencyCallingService extends BaseResource {
+public class EmergencyCallingService extends MetaResource {
 
     /** Human-readable name for the calling service subscription. */
     @JsonProperty("name")
@@ -80,13 +78,6 @@ public class EmergencyCallingService extends BaseResource {
 
     @Relationship("dids")
     private List<Did> dids;
-
-    /**
-     * Server-provided meta containing pricing information.
-     * Keys: "setup_price", "monthly_price".
-     */
-    @Meta
-    private Map<String, String> meta;
 
     /**
      * Returns the one-time setup price from the resource meta.
