@@ -28,6 +28,9 @@ jobs:
       - name: Run tests with coverage
         run: ./gradlew --no-daemon clean test jacocoTestReport
 
+      - name: Verify Javadoc
+        run: ./gradlew --no-daemon javadoc
+
       - name: Publish coverage summary
         if: always()
         run: |

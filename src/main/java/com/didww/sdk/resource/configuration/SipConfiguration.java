@@ -178,11 +178,11 @@ public class SipConfiguration extends TrunkConfiguration {
     /**
      * Setting enabledSipRegistration cascades dependent fields:
      * <ul>
-     * <li>true  -> nullify host / port and emit them as {@code null} on the
+     * <li>true  &rarr; nullify host / port and emit them as {@code null} on the
      * wire (host/port must be blank when sip_registration is on). The wire
      * emission fires unconditionally so PATCH against an existing trunk that
      * already has host/port set server-side is told to clear them.</li>
-     * <li>false -> force useDidInRuri = false (must be disabled when
+     * <li>false &rarr; force useDidInRuri = false (must be disabled when
      * sip_registration is disabled).</li>
      * </ul>
      */
