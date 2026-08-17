@@ -23,12 +23,39 @@
         }
       },
       "meta": {
+        "setup_price": 0,
+        "monthly_price": "0.75"
+      }
+    },
+    {
+      "id": "22222222-3333-4444-5555-666666666666",
+      "type": "emergency_requirements",
+      "attributes": {
+        "identity_type": "business",
+        "address_area_level": "country",
+        "personal_area_level": "country",
+        "business_area_level": "country",
+        "address_mandatory_fields": ["street", "city"],
+        "personal_mandatory_fields": ["first_name", "last_name"],
+        "business_mandatory_fields": ["company_name"],
+        "estimate_setup_time": "3-5 days",
+        "requirement_restriction_message": null
+      },
+      "relationships": {
+        "country": {
+          "data": { "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "type": "countries" }
+        },
+        "did_group_type": {
+          "data": { "id": "ffffffff-0000-1111-2222-333333333333", "type": "did_group_types" }
+        }
+      },
+      "meta": {
         "setup_price": "0.0",
-        "monthly_price": "0.0"
+        "monthly_price": "2.5"
       }
     }
   ],
   "meta": {
-    "total_records": 1
+    "total_records": 2
   }
 }
