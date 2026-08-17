@@ -17,7 +17,7 @@ class EmergencyRequirementTest extends BaseTest {
         ApiResponse<List<EmergencyRequirement>> response = client.emergencyRequirements().list();
         List<EmergencyRequirement> records = response.getData();
 
-        assertThat(records).hasSize(1);
+        assertThat(records).hasSize(2);
 
         EmergencyRequirement first = records.get(0);
         assertThat(first.getIdentityType()).isEqualTo("personal");
@@ -27,8 +27,12 @@ class EmergencyRequirementTest extends BaseTest {
         assertThat(first.getBusinessMandatoryFields()).containsExactly("company_name", "tax_number");
         assertThat(first.getEstimateSetupTime()).isEqualTo("7-14 days");
         assertThat(first.getRequirementRestrictionMessage()).isNull();
-        assertThat(first.getMetaSetupPrice()).isEqualTo("0.0");
-        assertThat(first.getMetaMonthlyPrice()).isEqualTo("0.0");
+        assertThat(first.getMetaSetupPrice()).isEqualTo("0");
+        assertThat(first.getMetaMonthlyPrice()).isEqualTo("0.75");
+
+        EmergencyRequirement priceAsString = records.get(1);
+        assertThat(priceAsString.getMetaSetupPrice()).isEqualTo("0.0");
+        assertThat(priceAsString.getMetaMonthlyPrice()).isEqualTo("2.5");
     }
 
     @Test
@@ -45,7 +49,7 @@ class EmergencyRequirementTest extends BaseTest {
         assertThat(record.getEstimateSetupTime()).isEqualTo("7-14 days");
         assertThat(record.getRequirementRestrictionMessage()).isEqualTo("Additional compliance review is required for this country.");
         assertThat(record.getBusinessMandatoryFields()).containsExactly("company_name", "tax_number", "registration_number");
-        assertThat(record.getMetaSetupPrice()).isEqualTo("10.0");
+        assertThat(record.getMetaSetupPrice()).isEqualTo("0");
         assertThat(record.getMetaMonthlyPrice()).isEqualTo("2.5");
     }
 }

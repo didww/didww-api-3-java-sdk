@@ -2,12 +2,10 @@ package com.didww.sdk.resource;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.jasminb.jsonapi.annotations.Meta;
 import com.github.jasminb.jsonapi.annotations.Type;
 import lombok.Getter;
 
 import java.time.OffsetDateTime;
-import java.util.Map;
 
 /**
  * Immutable ownership-history records for DIDs in the customer's account.
@@ -23,7 +21,7 @@ import java.util.Map;
  */
 @Type("did_history")
 @Getter
-public class DidHistory extends BaseResource {
+public class DidHistory extends MetaResource {
 
     @JsonProperty("did_number")
     private String didNumber;
@@ -36,9 +34,6 @@ public class DidHistory extends BaseResource {
 
     @JsonProperty("created_at")
     private OffsetDateTime createdAt;
-
-    @Meta
-    private Map<String, String> meta;
 
     /**
      * Returns the previous billing_cycles_count value from the resource meta.
