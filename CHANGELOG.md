@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [4.0.1] - 2026-08-17
 
 ### Fixed
 - Reading server-provided `meta` off `EmergencyRequirement`, `EmergencyCallingService` and
