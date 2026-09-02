@@ -12,8 +12,11 @@ import java.util.List;
  * Requirements that must be satisfied before ordering an emergency
  * calling service for a given country/did_group_type. Introduced in API 2026-04-16.
  *
- * <p>Server-provided {@code meta} carries {@code setup_price} and {@code monthly_price}. The
- * former is sent as the JSON number 0 and is read back as the string "0".
+ * <p>Server-provided {@code meta} carries {@code setup_price} and {@code monthly_price}, both
+ * decimal strings (e.g. "0.0").
+ *
+ * <p>{@code personalAreaLevel} and {@code businessAreaLevel} are null when the country does not
+ * accept that kind of identity for emergency calling. {@code addressAreaLevel} is always present.
  */
 @Type("emergency_requirements")
 @Getter
