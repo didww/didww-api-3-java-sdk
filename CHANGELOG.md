@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.1.1] - 2026-10-07
+
+### Changed
+- `RequestValidator` is keyed with the callback secret enabled in the DIDWW User Panel (**APIs → DIDWW API 3 → Callback Secrets**); its constructor parameter is renamed to `callbackSecret`. Java has no named arguments, so existing code keeps working, and the signature algorithm is unchanged.
+
 ## [4.1.0] - 2026-08-18
 
 ### Added
