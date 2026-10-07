@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.3] - 2026-10-07
+
+Publishes the 4.1.1 changes. The 4.1.1 and 4.1.2 tags could not be built on JitPack, so they are not available there; use 4.1.3. No code changes since 4.1.1.
+
+### Added
+- `jitpack.yml` pins the JitPack build to JDK 11, matching `sourceCompatibility`.
+
 ## [4.1.2] - 2026-10-07
 
 Publishes the 4.1.1 changes. The 4.1.1 tag could not be built on JitPack, so 4.1.1 is not available there; use 4.1.2. No code changes since 4.1.1.

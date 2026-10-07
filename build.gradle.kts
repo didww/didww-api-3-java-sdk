@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.didww"
-version = "4.1.2"
+version = "4.1.3"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
