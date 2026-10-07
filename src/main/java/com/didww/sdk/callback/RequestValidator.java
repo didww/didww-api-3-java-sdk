@@ -13,10 +13,13 @@ public class RequestValidator {
 
     public static final String HEADER_NAME = "X-DIDWW-Signature";
 
-    private final String apiKey;
+    private final String callbackSecret;
 
-    public RequestValidator(String apiKey) {
-        this.apiKey = apiKey;
+    /**
+     * @param callbackSecret the callback secret enabled in the DIDWW User Panel
+     */
+    public RequestValidator(String callbackSecret) {
+        this.callbackSecret = callbackSecret;
     }
 
     public boolean validate(String url, Map<String, String> payload, String signature) {
@@ -37,7 +40,7 @@ public class RequestValidator {
         for (Map.Entry<String, String> entry : sorted.entrySet()) {
             data.append(entry.getKey()).append(entry.getValue());
         }
-        return hmacSha1Bytes(data.toString(), apiKey);
+        return hmacSha1Bytes(data.toString(), callbackSecret);
     }
 
     private String normalizeUrl(String url) {
