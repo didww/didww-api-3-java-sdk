@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.4] - 2026-10-07
+
+Publishes the 4.1.1 changes. The 4.1.1, 4.1.2 and 4.1.3 tags could not be built on JitPack, so they are not available there; use 4.1.4. No code changes since 4.1.1.
+
+### Changed
+- `jitpack.yml` installs JDK 11 through SDKMAN: the JitPack build image has no JDK 11 behind `jdk: openjdk11`.
+
 ## [4.1.3] - 2026-10-07
 
 Publishes the 4.1.1 changes. The 4.1.1 and 4.1.2 tags could not be built on JitPack, so they are not available there; use 4.1.3. No code changes since 4.1.1.
