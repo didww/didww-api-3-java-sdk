@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.1.2] - 2026-10-07
+
+Publishes the 4.1.1 changes. The 4.1.1 tag could not be built on JitPack, so 4.1.1 is not available there; use 4.1.2. No code changes since 4.1.1.
+
 ## [4.1.1] - 2026-10-07
 
 ### Changed
