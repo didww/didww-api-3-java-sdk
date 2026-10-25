@@ -361,7 +361,7 @@ public final class PricesService<T> {
             return null;
         }
         String value = header.trim();
-        return value.matches("[0-9]{1,18}") ? Long.valueOf(value) : null;
+        return value.matches("\\d{1,18}") ? Long.valueOf(value) : null;
     }
 
     private Response execute(Request request) {
@@ -440,7 +440,7 @@ public final class PricesService<T> {
             return null;
         }
         String value = header.trim();
-        return value.matches("[0-9]{1,9}") ? Duration.ofSeconds(Long.parseLong(value)) : null;
+        return value.matches("\\d{1,9}") ? Duration.ofSeconds(Long.parseLong(value)) : null;
     }
 
     // The error objects of a JSON:API errors document; none for any other body.
@@ -484,15 +484,7 @@ public final class PricesService<T> {
     }
 
     private Map<String, String> checkFilters(Map<String, String> filters) {
-        TreeMap<String, String> given = new TreeMap<>();
-        if (filters != null) {
-            for (Map.Entry<String, String> filter : filters.entrySet()) {
-                String value = filter.getValue();
-                if (filter.getKey() != null && value != null && !value.isBlank()) {
-                    given.put(filter.getKey(), value);
-                }
-            }
-        }
+        Map<String, String> given = givenFilters(filters);
 
         List<String> allowed = list.allowed();
         List<String> unknown = new ArrayList<>();
@@ -523,6 +515,21 @@ public final class PricesService<T> {
         if (!list.getAnyOf().isEmpty() && !anyOfGiven) {
             throw new IllegalArgumentException("One of filters " + String.join(", ", list.getAnyOf())
                     + " is required on " + lookupPath);
+        }
+        return given;
+    }
+
+    // The filters with a name and a non-blank value, sorted by name.
+    private static Map<String, String> givenFilters(Map<String, String> filters) {
+        TreeMap<String, String> given = new TreeMap<>();
+        if (filters == null) {
+            return given;
+        }
+        for (Map.Entry<String, String> filter : filters.entrySet()) {
+            String value = filter.getValue();
+            if (filter.getKey() != null && value != null && !value.isBlank()) {
+                given.put(filter.getKey(), value);
+            }
         }
         return given;
     }

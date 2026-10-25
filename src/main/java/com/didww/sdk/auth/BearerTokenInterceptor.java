@@ -30,6 +30,8 @@ import java.util.Objects;
  * would ignore {@code If-Modified-Since} next to it.
  */
 public final class BearerTokenInterceptor implements Interceptor {
+    private static final String AUTHORIZATION = "Authorization";
+
     private final TokenProvider tokens;
 
     /**
@@ -60,11 +62,11 @@ public final class BearerTokenInterceptor implements Interceptor {
             audience = isPublicEndpoint(original.url()) ? null : Audience.API.getValue();
         }
         if (audience == null) {
-            return chain.proceed(builder.removeHeader("Authorization").build());
+            return chain.proceed(builder.removeHeader(AUTHORIZATION).build());
         }
 
         AccessToken token = tokens.token(audience);
-        Response response = chain.proceed(builder.header("Authorization", "Bearer " + token.getAccessToken()).build());
+        Response response = chain.proceed(builder.header(AUTHORIZATION, "Bearer " + token.getAccessToken()).build());
         if (response.code() != 401) {
             return response;
         }
@@ -77,7 +79,7 @@ public final class BearerTokenInterceptor implements Interceptor {
         response.close();
 
         token = tokens.token(audience);
-        response = chain.proceed(builder.header("Authorization", "Bearer " + token.getAccessToken()).build());
+        response = chain.proceed(builder.header(AUTHORIZATION, "Bearer " + token.getAccessToken()).build());
         if (response.code() == 401) {
             tokens.invalidate(audience, token.getAccessToken());
         }

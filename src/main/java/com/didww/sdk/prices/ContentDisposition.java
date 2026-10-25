@@ -20,43 +20,53 @@ final class ContentDisposition {
         String extended = null;
         int i = header.indexOf(';');
         while (i >= 0 && i < header.length()) {
-            int start = i + 1;
-            int eq = header.indexOf('=', start);
+            int eq = header.indexOf('=', i + 1);
             if (eq < 0) {
                 break;
             }
-            String name = header.substring(start, eq).trim().toLowerCase(Locale.ROOT);
-            int pos = eq + 1;
-            while (pos < header.length() && header.charAt(pos) == ' ') {
-                pos++;
-            }
-            String value;
-            if (pos < header.length() && header.charAt(pos) == '"') {
-                StringBuilder sb = new StringBuilder();
-                pos++;
-                while (pos < header.length() && header.charAt(pos) != '"') {
-                    char c = header.charAt(pos);
-                    if (c == '\\' && pos + 1 < header.length()) {
-                        c = header.charAt(++pos);
-                    }
-                    sb.append(c);
-                    pos++;
-                }
-                value = sb.toString();
-                i = header.indexOf(';', pos);
-            } else {
-                int end = header.indexOf(';', pos);
-                value = (end < 0 ? header.substring(pos) : header.substring(pos, end)).trim();
-                i = end;
-            }
+            String name = header.substring(i + 1, eq).trim().toLowerCase(Locale.ROOT);
+            StringBuilder value = new StringBuilder();
+            i = readValue(header, skipSpaces(header, eq + 1), value);
             if (name.equals("filename") && plain == null) {
-                plain = value;
+                plain = value.toString();
             } else if (name.equals("filename*") && extended == null) {
-                extended = decodeExtended(value);
+                extended = decodeExtended(value.toString());
             }
         }
         String name = extended != null ? extended : plain;
         return name == null || name.isEmpty() ? null : name;
+    }
+
+    private static int skipSpaces(String header, int from) {
+        int pos = from;
+        while (pos < header.length() && header.charAt(pos) == ' ') {
+            pos++;
+        }
+        return pos;
+    }
+
+    // Appends the parameter value that starts at from to value and returns the
+    // index of the next ';', or -1.
+    private static int readValue(String header, int from, StringBuilder value) {
+        if (from < header.length() && header.charAt(from) == '"') {
+            return readQuoted(header, from + 1, value);
+        }
+        int end = header.indexOf(';', from);
+        value.append((end < 0 ? header.substring(from) : header.substring(from, end)).trim());
+        return end;
+    }
+
+    private static int readQuoted(String header, int from, StringBuilder value) {
+        int pos = from;
+        while (pos < header.length() && header.charAt(pos) != '"') {
+            char c = header.charAt(pos);
+            if (c == '\\' && pos + 1 < header.length()) {
+                c = header.charAt(++pos);
+            }
+            value.append(c);
+            pos++;
+        }
+        return header.indexOf(';', pos);
     }
 
     private static String decodeExtended(String value) {
@@ -65,36 +75,55 @@ final class ContentDisposition {
         if (second < 0) {
             return null;
         }
-        String charsetName = value.substring(0, first);
-        Charset charset;
-        if (charsetName.equalsIgnoreCase("UTF-8")) {
-            charset = StandardCharsets.UTF_8;
-        } else if (charsetName.equalsIgnoreCase("ISO-8859-1")) {
-            charset = StandardCharsets.ISO_8859_1;
-        } else {
+        Charset charset = charset(value.substring(0, first));
+        if (charset == null) {
             return null;
         }
-        String encoded = value.substring(second + 1);
+        return percentDecode(value.substring(second + 1), charset);
+    }
+
+    private static Charset charset(String name) {
+        if (name.equalsIgnoreCase("UTF-8")) {
+            return StandardCharsets.UTF_8;
+        }
+        if (name.equalsIgnoreCase("ISO-8859-1")) {
+            return StandardCharsets.ISO_8859_1;
+        }
+        return null;
+    }
+
+    private static String percentDecode(String encoded, Charset charset) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        for (int p = 0; p < encoded.length(); p++) {
+        int p = 0;
+        while (p < encoded.length()) {
             char c = encoded.charAt(p);
             if (c == '%') {
-                if (p + 2 >= encoded.length()) {
+                int octet = hexOctet(encoded, p + 1);
+                if (octet < 0) {
                     return null;
                 }
-                int hi = Character.digit(encoded.charAt(p + 1), 16);
-                int lo = Character.digit(encoded.charAt(p + 2), 16);
-                if (hi < 0 || lo < 0) {
-                    return null;
-                }
-                bytes.write((hi << 4) | lo);
-                p += 2;
+                bytes.write(octet);
+                p += 3;
             } else if (c > 0x20 && c < 0x7f) {
                 bytes.write(c);
+                p++;
             } else {
                 return null;
             }
         }
         return new String(bytes.toByteArray(), charset);
+    }
+
+    // The octet written as two hex digits at index, or -1.
+    private static int hexOctet(String encoded, int index) {
+        if (index + 1 >= encoded.length()) {
+            return -1;
+        }
+        int hi = Character.digit(encoded.charAt(index), 16);
+        int lo = Character.digit(encoded.charAt(index + 1), 16);
+        if (hi < 0 || lo < 0) {
+            return -1;
+        }
+        return (hi << 4) | lo;
     }
 }

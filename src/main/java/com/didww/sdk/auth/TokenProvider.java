@@ -398,13 +398,9 @@ public final class TokenProvider {
             TokenResponse response = null;
             IOException failure = null;
             try {
-                response = attempt(body);
+                response = attemptOrFail(body);
             } catch (IOException e) {
                 failure = e;
-            } catch (RuntimeException e) {
-                // Its message may quote a header value, so only its class is kept.
-                throw new DidwwAuthException(AuthErrorKind.CONNECTION_ERROR, null, null,
-                        "the token request failed: " + e.getClass().getName(), null, null);
             }
 
             if (response != null && (response.status < 500 || attempt == MAX_MINT_ATTEMPTS)) {
@@ -415,14 +411,28 @@ public final class TokenProvider {
                 throw new DidwwAuthException(AuthErrorKind.CONNECTION_ERROR, null, null, null, null, failure);
             }
 
-            try {
-                sleeper.sleep(backoff(attempt));
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new DidwwAuthException(AuthErrorKind.CONNECTION_ERROR, null, null,
-                        "interrupted while waiting to retry the token request", null, e);
-            }
+            sleepBeforeRetry(attempt);
             throwIfRateLimited();
+        }
+    }
+
+    private TokenResponse attemptOrFail(byte[] body) throws IOException {
+        try {
+            return attempt(body);
+        } catch (RuntimeException e) {
+            // Its message may quote a header value, so only its class is kept.
+            throw new DidwwAuthException(AuthErrorKind.CONNECTION_ERROR, null, null,
+                    "the token request failed: " + e.getClass().getName(), null, null);
+        }
+    }
+
+    private void sleepBeforeRetry(int attempt) {
+        try {
+            sleeper.sleep(backoff(attempt));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new DidwwAuthException(AuthErrorKind.CONNECTION_ERROR, null, null,
+                    "interrupted while waiting to retry the token request", null, e);
         }
     }
 
@@ -540,7 +550,7 @@ public final class TokenProvider {
             return Duration.ofSeconds(1);
         }
         String value = header.trim();
-        if (!value.matches("[0-9]{1,9}")) {
+        if (!value.matches("\\d{1,9}")) {
             return Duration.ofSeconds(1);
         }
         return Duration.ofSeconds(Math.max(1, Long.parseLong(value)));

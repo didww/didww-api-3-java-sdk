@@ -39,9 +39,9 @@ import java.util.stream.StreamSupport;
  * checksum, {@link java.io.EOFException} for gzip data cut short (an empty
  * input included), and an {@link IOException} whose message starts with
  * {@code Price file:} for malformed CSV or a row whose field count differs
- * from the header. Data after the end of the gzip data is ignored, so input
- * of several gzip members that ends within the first bytes of a later member
- * reads as complete.
+ * from the header. Data after the end of the gzip data is ignored unless it
+ * starts another gzip member, so a later member that is cut short or corrupt
+ * raises the error too.
  */
 public final class PriceFileReader {
     private static final int BUFFER_SIZE = 64 * 1024;
@@ -150,16 +150,16 @@ public final class PriceFileReader {
             if (header == null) {
                 return null;
             }
-            List<String> record = csv.read();
-            if (record == null) {
+            List<String> fields = csv.read();
+            if (fields == null) {
                 return null;
             }
-            if (record.size() != header.size()) {
+            if (fields.size() != header.size()) {
                 throw new IOException("Price file: record on line " + csv.recordLine() + ": wrong number of fields");
             }
             Map<String, String> row = new LinkedHashMap<>(header.size() * 2);
             for (int i = 0; i < header.size(); i++) {
-                row.put(header.get(i), record.get(i));
+                row.put(header.get(i), fields.get(i));
             }
             return row;
         }

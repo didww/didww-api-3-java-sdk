@@ -9,11 +9,11 @@ import com.didww.sdk.resource.enums.ExportTrunkType;
 import com.didww.sdk.resource.enums.ExportType;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.zip.GZIPInputStream;
 
 /**
  * Creates SMS exports (sms_in / sms_out, 2026-10-22) for yesterday and reads the columns of a completed
@@ -74,18 +73,14 @@ public class ExportsSmsExample {
             return;
         }
 
-        // The export file is a gzip-compressed CSV; download it and read its header line.
+        // The export file is a gzip-compressed CSV; download it decompressed and read its header line.
         Export export = completed.get(0);
-        Path file = Files.createTempFile("didww-export-", ".csv.gz");
-        try {
-            client.downloadExport(export.getUrl(), file);
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    new GZIPInputStream(Files.newInputStream(file)), StandardCharsets.UTF_8))) {
-                System.out.println("Export " + export.getId() + " (" + export.getExportType() + ") columns: "
-                        + reader.readLine());
-            }
-        } finally {
-            Files.deleteIfExists(file);
+        ByteArrayOutputStream csv = new ByteArrayOutputStream();
+        client.downloadAndDecompressExport(export.getUrl(), csv);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new ByteArrayInputStream(csv.toByteArray()), StandardCharsets.UTF_8))) {
+            System.out.println("Export " + export.getId() + " (" + export.getExportType() + ") columns: "
+                    + reader.readLine());
         }
     }
 

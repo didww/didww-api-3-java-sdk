@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,7 +64,7 @@ public class GenericSmsTrunkConfiguration extends SmsTrunkConfiguration {
     public String toString() {
         List<String> names = new ArrayList<>();
         attributes.fieldNames().forEachRemaining(names::add);
-        Collections.sort(names);
+        names.sort(null);
         StringBuilder sb = new StringBuilder("GenericSmsTrunkConfiguration(type=").append(type).append(", attributes={");
         for (int i = 0; i < names.size(); i++) {
             if (i > 0) {

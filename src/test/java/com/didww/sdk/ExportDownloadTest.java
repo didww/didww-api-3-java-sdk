@@ -509,6 +509,34 @@ class ExportDownloadTest extends BaseTest {
         assertThat(files()).containsExactly("export.csv");
     }
 
+    // The body is complete and ends 5 bytes into the header of the second member,
+    // which GZIPInputStream takes for the end of the data.
+    @Test
+    void testDecompressOfALaterMemberCutShortKeepsTheExistingFile() throws IOException {
+        byte[] first = gzip("Date/Time Start (UTC),DID,Duration\n");
+        byte[] second = Arrays.copyOf(gzip("2026-10-01 00:00:00,15550000000,0\n"), 5);
+        Path target = dir.resolve("export.csv");
+        Files.write(target, "old".getBytes(StandardCharsets.UTF_8));
+        try (RawHttpServer server = RawHttpServer.start(connection -> {
+            connection.readRequest();
+            connection.write("HTTP/1.1 200 OK\r\nContent-Length: " + (first.length + second.length) + "\r\n\r\n");
+            connection.write(first);
+            connection.write(second);
+            connection.drain(1000);
+        })) {
+            DidwwClient raw = clientBuilder().baseUrl(server.url() + "/v3").build();
+
+            DidwwClientException e = catchThrowableOfType(
+                    () -> raw.downloadAndDecompressExport(server.url() + PATH, target), DidwwClientException.class);
+
+            assertThat(e).isNotNull();
+            assertThat(e).hasMessage("Failed to decompress export data: Unexpected end of gzip member");
+            assertThat(e.getCause()).isInstanceOf(EOFException.class);
+        }
+        assertThat(Files.readString(target)).isEqualTo("old");
+        assertThat(files()).containsExactly("export.csv");
+    }
+
     @Test
     void testCorruptGzipFailsWithoutCreatingTheFile() throws IOException {
         stubExport("not gzip at all".getBytes(StandardCharsets.UTF_8));

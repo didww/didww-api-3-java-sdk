@@ -43,4 +43,19 @@ public final class ProbingInputStream extends FilterInputStream {
         source.unread(b);
         return 1;
     }
+
+    /**
+     * Reads up to {@code len} bytes, starting with a byte read ahead by
+     * {@link #available()}.
+     *
+     * @param b   the buffer
+     * @param off the start offset in {@code b}
+     * @param len the maximum number of bytes to read
+     * @return the number of bytes read, or -1 at the end of the data
+     * @throws IOException if the source cannot be read
+     */
+    @Override
+    public int read(byte[] b, int off, int len) throws IOException {
+        return in.read(b, off, len);
+    }
 }

@@ -26,22 +26,25 @@ import java.util.Map;
  */
 public class PricesLookupExample {
 
+    private static final String NUMBER = "number";
+    private static final String DST_NUMBER = "dst_number";
+
     public static void main(String[] args) {
         DidwwClient client = ExampleClientFactory.fromEnv();
         String number = args.length > 0 ? args[0] : "18005550123";
 
-        show("Voice IN", client.voiceInPrices(), filters("number", number));
+        show("Voice IN", client.voiceInPrices(), filters(NUMBER, number));
         show("Voice IN, calls from the US", client.voiceInPrices(),
-                filters("number", number, "src_country_iso", "US"));
-        show("Voice OUT", client.voiceOutPrices(), filters("number", number));
-        show("SMS OUT A2P", client.smsOutA2pPrices(), filters("dst_number", number));
+                filters(NUMBER, number, "src_country_iso", "US"));
+        show("Voice OUT", client.voiceOutPrices(), filters(NUMBER, number));
+        show("SMS OUT A2P", client.smsOutA2pPrices(), filters(DST_NUMBER, number));
         show("SMS OUT P2P, whole country", client.smsOutP2pPrices(), filters("dst_country_iso", "US"));
-        show("SMS OUT OTP", client.smsOutOtpPrices(), filters("dst_number", number, "dst_country_iso", "US"));
-        show("SMS IN", client.smsInPrices(), filters("dst_number", number));
+        show("SMS OUT OTP", client.smsOutOtpPrices(), filters(DST_NUMBER, number, "dst_country_iso", "US"));
+        show("SMS IN", client.smsInPrices(), filters(DST_NUMBER, number));
 
         // Filters are checked before any request is sent: Voice OUT takes number only.
         try {
-            client.voiceOutPrices().lookup(filters("number", number, "src_country_iso", "US"));
+            client.voiceOutPrices().lookup(filters(NUMBER, number, "src_country_iso", "US"));
         } catch (IllegalArgumentException e) {
             System.out.println("\nRejected locally: " + e.getMessage());
         }

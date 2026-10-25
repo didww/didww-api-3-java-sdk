@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class DidwwApiException extends DidwwException {
     private final int httpStatus;
-    private final List<ApiError> errors;
+    private final transient List<ApiError> errors;
 
     public DidwwApiException(int httpStatus, List<ApiError> errors) {
         super(buildMessage(httpStatus, errors));
@@ -27,7 +27,7 @@ public class DidwwApiException extends DidwwException {
     }
 
     public List<ApiError> getErrors() {
-        return errors;
+        return errors != null ? errors : Collections.emptyList();
     }
 
     private static String buildMessage(int httpStatus, List<ApiError> errors) {

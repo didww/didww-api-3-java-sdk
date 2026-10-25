@@ -35,16 +35,16 @@ final class CsvRecordReader {
             line++;
         } while (text.isEmpty());
 
-        RecordBuilder record = new RecordBuilder();
+        RecordBuilder builder = new RecordBuilder();
         recordLine = line;
-        while (!record.parseLine(text, line)) {
+        while (!builder.parseLine(text, line)) {
             text = reader.readLine();
             if (text == null) {
                 throw error(recordLine, "extraneous or missing \" in quoted-field");
             }
             line++;
         }
-        return record.fields;
+        return builder.fields;
     }
 
     static IOException error(int line, String message) {

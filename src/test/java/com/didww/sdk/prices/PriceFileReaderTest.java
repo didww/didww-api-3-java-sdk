@@ -59,8 +59,18 @@ class PriceFileReaderTest {
         }
     }
 
+    private static byte[] concat(byte[] first, byte[] second) {
+        byte[] both = Arrays.copyOf(first, first.length + second.length);
+        System.arraycopy(second, 0, both, first.length, second.length);
+        return both;
+    }
+
     private static List<Map<String, String>> readAll(byte[] gzipped) {
-        try (Stream<Map<String, String>> rows = PriceFileReader.rows(new ByteArrayInputStream(gzipped))) {
+        return readAll(new ByteArrayInputStream(gzipped));
+    }
+
+    private static List<Map<String, String>> readAll(InputStream gzipped) {
+        try (Stream<Map<String, String>> rows = PriceFileReader.rows(gzipped)) {
             return rows.collect(Collectors.toList());
         }
     }
@@ -269,6 +279,43 @@ class PriceFileReaderTest {
         }
 
         assertThat(rows).containsExactly(row("A", "1", "B", "2"), row("A", "3", "B", "4"));
+    }
+
+    // GZIPInputStream takes a member cut within its first bytes for the end of the data.
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 5, 9, 10, 18, 19})
+    void testRowsRejectALaterMemberCutShort(int cut) {
+        byte[] data = concat(gzip("A,B\n1,2\n"), Arrays.copyOf(gzip("3,4\n5,6\n"), cut));
+        for (int maxRead : new int[] {1, 7, 64, Integer.MAX_VALUE}) {
+            InputStream network = new FilterInputStream(new ByteArrayInputStream(data)) {
+                @Override
+                public int read(byte[] b, int off, int len) throws IOException {
+                    return super.read(b, off, Math.min(len, maxRead));
+                }
+
+                @Override
+                public int available() {
+                    return 0;
+                }
+            };
+
+            UncheckedIOException e = catchThrowableOfType(() -> readAll(network), UncheckedIOException.class);
+
+            assertThat(e).as("reads of %d", maxRead).isNotNull();
+            assertThat(e.getCause()).isInstanceOf(EOFException.class);
+        }
+        UncheckedIOException e = catchThrowableOfType(() -> readAll(data), UncheckedIOException.class);
+
+        assertThat(e).isNotNull();
+        assertThat(e.getCause()).isInstanceOf(EOFException.class);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"xyz", "\u0000", "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"})
+    void testRowsIgnoreOtherDataAfterTheLastMember(String trailing) {
+        byte[] data = concat(gzip("A,B\n1,2\n"), trailing.getBytes(StandardCharsets.ISO_8859_1));
+
+        assertThat(readAll(data)).containsExactly(row("A", "1", "B", "2"));
     }
 
     // Like a network stream, the first read ends with the first member; GZIPInputStream

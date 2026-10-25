@@ -13,7 +13,7 @@ public class DidwwPricesException extends DidwwException {
     private final PricesErrorKind kind;
     private final Integer httpStatus;
     private final String code;
-    private final List<DidwwApiException.ApiError> errors;
+    private final transient List<DidwwApiException.ApiError> errors;
     private final Duration retryAfter;
 
     /**
@@ -71,7 +71,7 @@ public class DidwwPricesException extends DidwwException {
      * @return the errors, empty when the answer has none
      */
     public List<DidwwApiException.ApiError> getErrors() {
-        return errors;
+        return errors != null ? errors : Collections.emptyList();
     }
 
     /**
@@ -86,20 +86,8 @@ public class DidwwPricesException extends DidwwException {
     }
 
     private static String buildMessage(Integer httpStatus, List<DidwwApiException.ApiError> errors, Throwable cause) {
-        StringBuilder details = new StringBuilder();
-        if (errors != null) {
-            for (DidwwApiException.ApiError error : errors) {
-                String text = notEmpty(error.getDetail()) ? error.getDetail()
-                        : notEmpty(error.getTitle()) ? error.getTitle() : null;
-                if (text != null) {
-                    if (details.length() > 0) {
-                        details.append("; ");
-                    }
-                    details.append(text);
-                }
-            }
-        }
-        if (details.length() > 0) {
+        String details = joinErrorTexts(errors);
+        if (!details.isEmpty()) {
             return "Prices service: " + details;
         }
         if (cause != null) {
@@ -110,6 +98,33 @@ public class DidwwPricesException extends DidwwException {
             return "Prices service responded with status " + httpStatus;
         }
         return "Prices service request failed";
+    }
+
+    private static String joinErrorTexts(List<DidwwApiException.ApiError> errors) {
+        if (errors == null) {
+            return "";
+        }
+        StringBuilder details = new StringBuilder();
+        for (DidwwApiException.ApiError error : errors) {
+            String text = errorText(error);
+            if (text != null) {
+                if (details.length() > 0) {
+                    details.append("; ");
+                }
+                details.append(text);
+            }
+        }
+        return details.toString();
+    }
+
+    private static String errorText(DidwwApiException.ApiError error) {
+        if (notEmpty(error.getDetail())) {
+            return error.getDetail();
+        }
+        if (notEmpty(error.getTitle())) {
+            return error.getTitle();
+        }
+        return null;
     }
 
     private static boolean notEmpty(String value) {

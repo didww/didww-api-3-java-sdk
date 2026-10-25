@@ -70,7 +70,8 @@ public class DidwwClient {
      */
     public static final String DEFAULT_API_VERSION = "2026-10-22";
 
-    private static final String API_VERSION_PATTERN = "[0-9]{4}-[0-9]{2}-[0-9]{2}";
+    private static final String API_VERSION_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
+    private static final String DESTINATION_REQUIRED = "destination must not be null";
     private static final MediaType OCTET_STREAM = MediaType.parse("application/octet-stream");
 
     private final DidwwCredentials credentials;
@@ -387,7 +388,7 @@ public class DidwwClient {
      * @throws UncheckedIOException if {@code destination} cannot be written
      */
     public void downloadExport(String url, OutputStream destination) {
-        Objects.requireNonNull(destination, "destination must not be null");
+        Objects.requireNonNull(destination, DESTINATION_REQUIRED);
         download(url, false, (in, readFailure) -> Streams.copy(in, destination, readFailure));
     }
 
@@ -405,7 +406,7 @@ public class DidwwClient {
      * @throws UncheckedIOException if {@code destination} cannot be written
      */
     public void downloadExport(String url, Path destination) {
-        Objects.requireNonNull(destination, "destination must not be null");
+        Objects.requireNonNull(destination, DESTINATION_REQUIRED);
         download(url, false, (in, readFailure) -> writeFile(in, destination, readFailure));
     }
 
@@ -422,7 +423,7 @@ public class DidwwClient {
      * @throws UncheckedIOException if {@code destination} cannot be written
      */
     public void downloadAndDecompressExport(String url, OutputStream destination) {
-        Objects.requireNonNull(destination, "destination must not be null");
+        Objects.requireNonNull(destination, DESTINATION_REQUIRED);
         download(url, true, (in, readFailure) -> Streams.copy(in, destination, readFailure));
     }
 
@@ -440,7 +441,7 @@ public class DidwwClient {
      * @throws UncheckedIOException if {@code destination} cannot be written
      */
     public void downloadAndDecompressExport(String url, Path destination) {
-        Objects.requireNonNull(destination, "destination must not be null");
+        Objects.requireNonNull(destination, DESTINATION_REQUIRED);
         download(url, true, (in, readFailure) -> writeFile(in, destination, readFailure));
     }
 
@@ -467,17 +468,19 @@ public class DidwwClient {
                 consumer.accept(in, readFailure);
                 return;
             }
-            InputStream gzip;
-            try {
-                gzip = new MultiMemberGzipInputStream(in, 64 * 1024);
-            } catch (IOException e) {
-                throw readFailure.apply(e);
-            }
-            try (InputStream source = gzip) {
+            try (InputStream source = openGzip(in, readFailure)) {
                 consumer.accept(source, readFailure);
             }
         } catch (IOException e) {
             throw new DidwwClientException("Failed to download export", e);
+        }
+    }
+
+    private static InputStream openGzip(InputStream in, Function<IOException, RuntimeException> readFailure) {
+        try {
+            return new MultiMemberGzipInputStream(in, 64 * 1024);
+        } catch (IOException e) {
+            throw readFailure.apply(e);
         }
     }
 
@@ -504,8 +507,10 @@ public class DidwwClient {
     }
 
     private static DidwwClientException readFailure(IOException e, boolean decompress) {
-        String reason = e.getMessage() != null ? e.getMessage()
-                : e instanceof EOFException ? "the download was cut short" : null;
+        String reason = e.getMessage();
+        if (reason == null && e instanceof EOFException) {
+            reason = "the download was cut short";
+        }
         String failure = decompress && (e instanceof ZipException || e instanceof EOFException)
                 ? "Failed to decompress export data" : "Failed to read export data";
         return new DidwwClientException(reason != null ? failure + ": " + reason : failure, e);

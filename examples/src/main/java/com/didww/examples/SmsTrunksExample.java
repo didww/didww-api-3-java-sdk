@@ -42,7 +42,8 @@ public class SmsTrunksExample {
         // POST and PUT need a body type and a body; GET takes neither.
         config.setHttpMethod(SmsHttpMethod.POST);
         config.setBodyType(SmsBodyType.JSON);
-        // Placeholders: {SMS_TEXT}, {SMS_TEXT_BASE64_ENCODED}, {SMS_SRC_ADDR}, {SMS_DST_ADDR}, {SMS_TIME}
+        // The body may use the placeholders SMS_TEXT, SMS_TEXT_BASE64_ENCODED, SMS_SRC_ADDR, SMS_DST_ADDR and
+        // SMS_TIME, each written in curly braces.
         config.setBody("{\"text\":\"{SMS_TEXT}\",\"from\":\"{SMS_SRC_ADDR}\",\"to\":\"{SMS_DST_ADDR}\"}");
         config.setValidateHttpsCertificate(true);
 
