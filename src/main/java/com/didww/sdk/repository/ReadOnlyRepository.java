@@ -3,6 +3,7 @@ package com.didww.sdk.repository;
 import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.QueryParams;
+import com.didww.sdk.internal.Bodies;
 import com.didww.sdk.resource.BaseResource;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.IdentityHashMap;
@@ -86,7 +88,9 @@ public class ReadOnlyRepository<T> {
 
     /**
      * Throws {@link DidwwApiException} when the response status is not successful,
-     * parsing API error objects from the response body when available.
+     * parsing API error objects from the response body when available. At most
+     * 1 MiB of the body is read, within the read timeout of the client (or 60
+     * seconds); a body that breaks or stalls keeps the status.
      *
      * @param response OkHttp response to inspect
      * @throws IOException         if the response body cannot be read
@@ -94,7 +98,8 @@ public class ReadOnlyRepository<T> {
      */
     protected void handleErrorResponse(Response response) throws IOException {
         if (!response.isSuccessful()) {
-            String body = response.body() != null ? response.body().string() : "";
+            String body = new String(Bodies.readLimitedQuietly(response.body(), Bodies.MAX_ERROR_BODY_SIZE,
+                    Bodies.errorBodyDeadlineMillis(httpClient)), StandardCharsets.UTF_8);
             List<DidwwApiException.ApiError> errors = new ArrayList<>();
             try {
                 JsonNode root = objectMapper.readTree(body);

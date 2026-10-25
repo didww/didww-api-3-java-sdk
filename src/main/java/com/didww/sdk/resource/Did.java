@@ -60,6 +60,12 @@ public class Did extends BaseResource {
     @Relationship("voice_in_trunk_group")
     private VoiceInTrunkGroup voiceInTrunkGroup;
 
+    @Relationship("sms_trunk")
+    private SmsTrunk smsTrunk;
+
+    @Relationship("sms_trunk_group")
+    private SmsTrunkGroup smsTrunkGroup;
+
     @Relationship("capacity_pool")
     private CapacityPool capacityPool;
 
@@ -106,6 +112,32 @@ public class Did extends BaseResource {
     public void setVoiceInTrunkGroup(VoiceInTrunkGroup voiceInTrunkGroup) {
         this.voiceInTrunkGroup = markDirty("voiceInTrunkGroup", voiceInTrunkGroup);
         this.voiceInTrunk = markDirty("voiceInTrunk", null);
+    }
+
+    /**
+     * Routes the DID's inbound messages to an SMS trunk. A non-null trunk also unassigns the SMS trunk group;
+     * null unassigns the trunk only (sent as {@code {"data": null}} on update).
+     *
+     * @param smsTrunk the SMS trunk, or null
+     */
+    public void setSmsTrunk(SmsTrunk smsTrunk) {
+        this.smsTrunk = markDirty("smsTrunk", smsTrunk);
+        if (smsTrunk != null) {
+            this.smsTrunkGroup = markDirty("smsTrunkGroup", null);
+        }
+    }
+
+    /**
+     * Routes the DID's inbound messages to an SMS trunk group. A non-null group also unassigns the SMS trunk;
+     * null unassigns the group only (sent as {@code {"data": null}} on update).
+     *
+     * @param smsTrunkGroup the SMS trunk group, or null
+     */
+    public void setSmsTrunkGroup(SmsTrunkGroup smsTrunkGroup) {
+        this.smsTrunkGroup = markDirty("smsTrunkGroup", smsTrunkGroup);
+        if (smsTrunkGroup != null) {
+            this.smsTrunk = markDirty("smsTrunk", null);
+        }
     }
 
     public void setCapacityPool(CapacityPool capacityPool) {

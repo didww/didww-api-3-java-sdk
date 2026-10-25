@@ -8,7 +8,6 @@ import com.didww.sdk.resource.AvailableDid;
 import com.didww.sdk.resource.Country;
 import com.didww.sdk.resource.Did;
 import com.didww.sdk.resource.DidGroup;
-import com.didww.sdk.resource.DidGroupType;
 import com.didww.sdk.resource.EmergencyCallingService;
 import com.didww.sdk.resource.EmergencyRequirement;
 import com.didww.sdk.resource.EmergencyRequirementValidation;
@@ -16,6 +15,7 @@ import com.didww.sdk.resource.EmergencyVerification;
 import com.didww.sdk.resource.Identity;
 import com.didww.sdk.resource.Order;
 import com.didww.sdk.resource.StockKeepingUnit;
+import com.didww.sdk.resource.enums.NumberType;
 import com.didww.sdk.resource.orderitem.AvailableDidOrderItem;
 import com.didww.sdk.resource.orderitem.OrderItem;
 
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * Steps:
  * 0. Find an address, then order an available DID with emergency feature in the same country.
  * 1. Find the newly ordered DID (not yet emergency-enabled).
- * 2. Look up emergency requirements for that DID's country + DID group type.
+ * 2. Look up emergency requirements for that DID's country + number type.
  * 3. Find an existing identity on the account.
  * 4. Find an existing address for that identity.
  * 5. Validate the (emergency_requirement, address, identity) triple.
@@ -118,7 +118,7 @@ public class EmergencyScenarioExample {
         QueryParams didParams = QueryParams.builder()
                 .filter("did_group.features", "emergency")
                 .filter("emergency_enabled", "false")
-                .include("did_group", "did_group.country", "did_group.did_group_type", "emergency_calling_service")
+                .include("did_group", "did_group.country", "emergency_calling_service")
                 .sort("-created_at")
                 .page(1, 10)
                 .build();
@@ -139,21 +139,24 @@ public class EmergencyScenarioExample {
 
         DidGroup dg = did.getDidGroup();
         Country country = dg != null ? dg.getCountry() : null;
-        DidGroupType dgt = dg != null ? dg.getDidGroupType() : null;
+        NumberType numberType = dg != null ? dg.getNumberType() : null;
 
         System.out.println("  DID:            " + did.getNumber() + " (" + did.getId() + ")");
         System.out.println("  DID Group:      " + (dg != null ? dg.getId() : "?"));
         System.out.println("  Country:        " + (country != null ? country.getName() : "?")
                 + " (" + (country != null ? country.getId() : "?") + ")");
-        System.out.println("  DID Group Type: " + (dgt != null ? dgt.getName() : "?")
-                + " (" + (dgt != null ? dgt.getId() : "?") + ")");
+        System.out.println("  Number type:    " + (numberType != null ? EnumWire.value(numberType) : "?"));
 
         // === Step 2: Get emergency requirements ===
-        System.out.println("\n=== Step 2: Get emergency requirements for country + did_group_type ===");
-        QueryParams reqParams = QueryParams.builder()
-                .filter("country.id", country != null ? country.getId() : "")
-                .filter("did_group_type.id", dgt != null ? dgt.getId() : "")
-                .build();
+        System.out.println("\n=== Step 2: Get emergency requirements for country + number_type ===");
+        QueryParams.Builder reqFilters = QueryParams.builder();
+        if (country != null) {
+            reqFilters.filter("country.id", country.getId());
+        }
+        if (numberType != null) {
+            reqFilters.filter("number_type", EnumWire.value(numberType));
+        }
+        QueryParams reqParams = reqFilters.build();
         List<EmergencyRequirement> requirements = client.emergencyRequirements().list(reqParams).getData();
 
         if (requirements.isEmpty()) {
@@ -269,7 +272,7 @@ public class EmergencyScenarioExample {
 
     private static void printEmergencyCallingService(DidwwClient client, String serviceId) {
         QueryParams params = QueryParams.builder()
-                .include("country", "did_group_type", "dids", "address", "emergency_verification")
+                .include("country", "dids", "address", "emergency_verification")
                 .build();
         EmergencyCallingService svc = client.emergencyCallingServices().find(serviceId, params).getData();
         System.out.println("  Service:        " + svc.getId());
@@ -282,9 +285,7 @@ public class EmergencyScenarioExample {
         if (svc.getCountry() != null) {
             System.out.println("  Country:        " + svc.getCountry().getName());
         }
-        if (svc.getDidGroupType() != null) {
-            System.out.println("  DID Group Type: " + svc.getDidGroupType().getName());
-        }
+        System.out.println("  Number type:    " + svc.getNumberType());
         System.out.println("  Setup price:    " + svc.getMetaSetupPrice());
         System.out.println("  Monthly price:  " + svc.getMetaMonthlyPrice());
         System.out.println("  Activated at:   " + svc.getActivatedAt());

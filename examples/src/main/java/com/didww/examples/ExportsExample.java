@@ -5,6 +5,7 @@ import com.didww.sdk.resource.Export;
 import com.didww.sdk.resource.enums.ExportType;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.UUID;
  * 2026-04-16 additions:
  *   - external_reference_id: customer-supplied reference (max 100 chars)
  *
- * Filter semantics on CDR exports:
+ * Filter semantics on CDR exports ("YYYY-MM-DD HH:MM:SS" in UTC; "to" must not be in the future):
  *   - filters.from: lower bound, INCLUSIVE  (server: time_start &gt;= from)
  *   - filters.to:   upper bound, EXCLUSIVE  (server: time_start &lt;  to)
  * To cover a whole day, pass from: "2026-04-15 00:00:00", to: "2026-04-16 00:00:00".
@@ -55,7 +56,8 @@ public class ExportsExample {
 
         // Create a CDR-In export for yesterday (from is inclusive, to is exclusive)
         System.out.println("\n=== Creating CDR-In Export (yesterday, with external_reference_id) ===");
-        LocalDate today = LocalDate.now();
+        // Both bounds come from one UTC midnight, so "to" is never in the future
+        LocalDate today = LocalDate.now(ZoneOffset.UTC);
         LocalDate yesterday = today.minusDays(1);
 
         Map<String, Object> filters = new HashMap<>();

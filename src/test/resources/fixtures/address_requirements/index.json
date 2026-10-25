@@ -16,19 +16,14 @@
         ],
         "business_mandatory_fields": null,
         "service_description_required": false,
-        "restriction_message": "Needs end user registration."
+        "restriction_message": "Needs end user registration.",
+        "number_type": "local"
       },
       "relationships": {
         "country": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/requirements/b6c80acb-3952-4d53-9e62-fe2348c0636b/relationships/country",
             "related": "https://sandbox-api.didww.com/v3/requirements/b6c80acb-3952-4d53-9e62-fe2348c0636b/country"
-          }
-        },
-        "did_group_type": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/requirements/b6c80acb-3952-4d53-9e62-fe2348c0636b/relationships/did_group_type",
-            "related": "https://sandbox-api.didww.com/v3/requirements/b6c80acb-3952-4d53-9e62-fe2348c0636b/did_group_type"
           }
         },
         "personal_permanent_document": {
@@ -93,19 +88,14 @@
           "Country"
         ],
         "service_description_required": false,
-        "restriction_message": "restriction_message"
+        "restriction_message": "restriction_message",
+        "number_type": "local"
       },
       "relationships": {
         "country": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/requirements/51b293af-a496-4bf2-9c68-5221b3b0dc1e/relationships/country",
             "related": "https://sandbox-api.didww.com/v3/requirements/51b293af-a496-4bf2-9c68-5221b3b0dc1e/country"
-          }
-        },
-        "did_group_type": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/requirements/51b293af-a496-4bf2-9c68-5221b3b0dc1e/relationships/did_group_type",
-            "related": "https://sandbox-api.didww.com/v3/requirements/51b293af-a496-4bf2-9c68-5221b3b0dc1e/did_group_type"
           }
         },
         "personal_permanent_document": {
@@ -168,19 +158,14 @@
           "Country"
         ],
         "service_description_required": false,
-        "restriction_message": "restriction_message"
+        "restriction_message": "restriction_message",
+        "number_type": "local"
       },
       "relationships": {
         "country": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/requirements/f7c2a9a4-a40e-4f22-98ff-0f53c86052ac/relationships/country",
             "related": "https://sandbox-api.didww.com/v3/requirements/f7c2a9a4-a40e-4f22-98ff-0f53c86052ac/country"
-          }
-        },
-        "did_group_type": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/requirements/f7c2a9a4-a40e-4f22-98ff-0f53c86052ac/relationships/did_group_type",
-            "related": "https://sandbox-api.didww.com/v3/requirements/f7c2a9a4-a40e-4f22-98ff-0f53c86052ac/did_group_type"
           }
         },
         "personal_permanent_document": {
@@ -245,19 +230,14 @@
           "Country"
         ],
         "service_description_required": true,
-        "restriction_message": "restriction_message"
+        "restriction_message": "restriction_message",
+        "number_type": "local"
       },
       "relationships": {
         "country": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/requirements/edb71cff-d5e8-44ff-ba36-6f758066c175/relationships/country",
             "related": "https://sandbox-api.didww.com/v3/requirements/edb71cff-d5e8-44ff-ba36-6f758066c175/country"
-          }
-        },
-        "did_group_type": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/requirements/edb71cff-d5e8-44ff-ba36-6f758066c175/relationships/did_group_type",
-            "related": "https://sandbox-api.didww.com/v3/requirements/edb71cff-d5e8-44ff-ba36-6f758066c175/did_group_type"
           }
         },
         "personal_permanent_document": {
@@ -318,19 +298,14 @@
         "personal_mandatory_fields": null,
         "business_mandatory_fields": null,
         "service_description_required": false,
-        "restriction_message": "restriction_message"
+        "restriction_message": "restriction_message",
+        "number_type": "local"
       },
       "relationships": {
         "country": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/requirements/90b72a1a-1ebd-4771-b818-f7123f8ff7ec/relationships/country",
             "related": "https://sandbox-api.didww.com/v3/requirements/90b72a1a-1ebd-4771-b818-f7123f8ff7ec/country"
-          }
-        },
-        "did_group_type": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/requirements/90b72a1a-1ebd-4771-b818-f7123f8ff7ec/relationships/did_group_type",
-            "related": "https://sandbox-api.didww.com/v3/requirements/90b72a1a-1ebd-4771-b818-f7123f8ff7ec/did_group_type"
           }
         },
         "personal_permanent_document": {

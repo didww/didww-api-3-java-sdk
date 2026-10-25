@@ -1,6 +1,6 @@
 package com.didww.sdk.exception;
 
-public class DidwwClientException extends RuntimeException {
+public class DidwwClientException extends DidwwException {
 
     public DidwwClientException(String message) {
         super(message);

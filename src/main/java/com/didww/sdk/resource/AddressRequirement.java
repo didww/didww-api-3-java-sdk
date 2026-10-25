@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.resource.enums.AreaLevel;
 import com.didww.sdk.resource.enums.IdentityType;
+import com.didww.sdk.resource.enums.NumberType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -47,11 +48,11 @@ public class AddressRequirement extends BaseResource {
     @JsonProperty("restriction_message")
     private String restrictionMessage;
 
+    @JsonProperty("number_type")
+    private NumberType numberType;
+
     @Relationship("country")
     private Country country;
-
-    @Relationship("did_group_type")
-    private DidGroupType didGroupType;
 
     @Relationship("personal_permanent_document")
     private SupportingDocumentTemplate personalPermanentDocument;

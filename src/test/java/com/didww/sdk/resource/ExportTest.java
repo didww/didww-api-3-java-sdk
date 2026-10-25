@@ -3,12 +3,14 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.ExportStatus;
+import com.didww.sdk.resource.enums.ExportTrunkType;
 import com.didww.sdk.resource.enums.ExportType;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +132,7 @@ class ExportTest extends BaseTest {
 
         Path tempFile = Files.createTempFile("export-test", ".csv.gz");
         try {
-            client.downloadExport(wireMock.baseUrl() + "/v3/exports/test-id.csv.gz", tempFile);
+            client.downloadExport(origin() + "/v3/exports/test-id.csv.gz", tempFile);
             byte[] bytes = Files.readAllBytes(tempFile);
             // Verify gzip magic bytes
             assertThat(bytes[0] & 0xFF).isEqualTo(0x1f);
@@ -157,11 +159,64 @@ class ExportTest extends BaseTest {
 
         Path tempFile = Files.createTempFile("export-decompress-test", ".csv");
         try {
-            client.downloadAndDecompressExport(wireMock.baseUrl() + "/v3/exports/test-id.csv.gz", tempFile);
+            client.downloadAndDecompressExport(origin() + "/v3/exports/test-id.csv.gz", tempFile);
             String content = Files.readString(tempFile);
             assertThat(content).isEqualTo(csvContent);
         } finally {
             Files.deleteIfExists(tempFile);
         }
+    }
+
+    @Test
+    void testCreateSmsInExport() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/exports"))
+                .withRequestBody(equalToJson(loadFixture("exports/create_sms_in_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("exports/create_sms_in.json"))));
+
+        Map<String, Object> filters = new LinkedHashMap<>();
+        filters.put("from", "2026-10-01 00:00:00");
+        filters.put("to", "2026-10-15 00:00:00");
+        filters.put("trunk_type", Arrays.asList(ExportTrunkType.SMPP_SMSC, ExportTrunkType.HTTP_IN));
+        filters.put("destination_address_eq", "12125550100");
+
+        Export export = new Export();
+        export.setExportType(ExportType.SMS_IN);
+        export.setFilters(filters);
+
+        Export created = client.exports().create(export).getData();
+
+        assertThat(created.getId()).isEqualTo("5a2d3e4f-6b7c-4d8e-9f0a-1b2c3d4e5f60");
+        assertThat(created.getExportType()).isEqualTo(ExportType.SMS_IN);
+        assertThat(created.getFilters()).containsEntry("trunk_type", Arrays.asList("SMPP SMSC", "HTTP IN"));
+    }
+
+    @Test
+    void testCreateSmsOutExport() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/exports"))
+                .withRequestBody(equalToJson(loadFixture("exports/create_sms_out_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("exports/create_sms_out.json"))));
+
+        Map<String, Object> filters = new LinkedHashMap<>();
+        filters.put("from", "2026-10-01 00:00:00");
+        filters.put("to", "2026-10-15 00:00:00");
+        filters.put("sms_trunk.id", Arrays.asList("b2c3d4e5-0000-4000-8000-000000000001", "b2c3d4e5-0000-4000-8000-000000000003"));
+        filters.put("service_type", "a2p");
+        filters.put("sender_id_verification.id", "c3d4e5f6-0000-4000-8000-000000000002");
+
+        Export export = new Export();
+        export.setExportType(ExportType.SMS_OUT);
+        export.setFilters(filters);
+
+        Export created = client.exports().create(export).getData();
+
+        assertThat(created.getId()).isEqualTo("4f1c2d3e-5a6b-4c7d-8e9f-0a1b2c3d4e5f");
+        assertThat(created.getExportType()).isEqualTo(ExportType.SMS_OUT);
+        assertThat(created.getFilters()).containsEntry("service_type", "a2p");
     }
 }

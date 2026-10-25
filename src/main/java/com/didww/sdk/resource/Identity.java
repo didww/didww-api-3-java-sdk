@@ -33,6 +33,9 @@ public class Identity extends BaseResource implements ProofEntity {
     @JsonProperty("company_name")
     private String companyName;
 
+    @JsonProperty("company_website")
+    private String companyWebsite;
+
     @JsonProperty("company_reg_number")
     private String companyRegNumber;
 
@@ -101,6 +104,15 @@ public class Identity extends BaseResource implements ProofEntity {
 
     public void setCompanyName(String companyName) {
         this.companyName = markDirty("companyName", companyName);
+    }
+
+    /**
+     * Sets the website of a business identity. Rejected on a personal identity; null clears it on update.
+     *
+     * @param companyWebsite the website, or null
+     */
+    public void setCompanyWebsite(String companyWebsite) {
+        this.companyWebsite = markDirty("companyWebsite", companyWebsite);
     }
 
     public void setCompanyRegNumber(String companyRegNumber) {

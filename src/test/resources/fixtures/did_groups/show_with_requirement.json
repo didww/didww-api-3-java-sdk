@@ -10,7 +10,9 @@
       ],
       "is_metered": false,
       "area_name": "Aachen",
-      "allow_additional_channels": true
+      "allow_additional_channels": true,
+      "number_type": "local",
+      "is_demo": false
     },
     "relationships": {
       "country": {
@@ -23,12 +25,6 @@
         "links": {
           "self": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/relationships/city",
           "related": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/city"
-        }
-      },
-      "did_group_type": {
-        "links": {
-          "self": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/relationships/did_group_type",
-          "related": "https://sandbox-api.didww.com/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1/did_group_type"
         }
       },
       "region": {
@@ -75,19 +71,14 @@
         "service_description_required": true,
         "restriction_message": "End User Registration is Required",
         "personal_mandatory_fields": [],
-        "business_mandatory_fields": []
+        "business_mandatory_fields": [],
+        "number_type": "local"
       },
       "relationships": {
         "country": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/requirements/8da1e0b2-047c-4baf-9c57-57143f09b9ce/relationships/country",
             "related": "https://sandbox-api.didww.com/v3/requirements/8da1e0b2-047c-4baf-9c57-57143f09b9ce/country"
-          }
-        },
-        "did_group_type": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/requirements/8da1e0b2-047c-4baf-9c57-57143f09b9ce/relationships/did_group_type",
-            "related": "https://sandbox-api.didww.com/v3/requirements/8da1e0b2-047c-4baf-9c57-57143f09b9ce/did_group_type"
           }
         }
       }

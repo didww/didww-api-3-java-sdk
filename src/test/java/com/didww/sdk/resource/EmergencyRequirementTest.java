@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.NumberType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -31,6 +32,7 @@ class EmergencyRequirementTest extends BaseTest {
         assertThat(first.getRequirementRestrictionMessage()).isNull();
         assertThat(first.getMetaSetupPrice()).isEqualTo("0.0");
         assertThat(first.getMetaMonthlyPrice()).isEqualTo("0.75");
+        assertThat(first.getNumberType()).isEqualTo(NumberType.LOCAL);
 
         // A country that accepts business identities only leaves the personal level unset.
         EmergencyRequirement businessOnly = records.get(1);
@@ -56,6 +58,7 @@ class EmergencyRequirementTest extends BaseTest {
         assertThat(record.getEstimateSetupTime()).isEqualTo("7-14 days");
         assertThat(record.getRequirementRestrictionMessage()).isEqualTo("Additional compliance review is required for this country.");
         assertThat(record.getBusinessMandatoryFields()).containsExactly("company_name", "tax_number", "registration_number");
+        assertThat(record.getNumberType()).isEqualTo(NumberType.LOCAL);
         assertThat(record.getMetaSetupPrice()).isEqualTo("0.0");
         assertThat(record.getMetaMonthlyPrice()).isEqualTo("2.5");
     }

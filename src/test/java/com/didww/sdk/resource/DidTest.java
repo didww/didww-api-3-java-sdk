@@ -239,4 +239,118 @@ class DidTest extends BaseTest {
         assertThat(didGroup.getIsMetered()).isFalse();
         assertThat(didGroup.getAllowAdditionalChannels()).isFalse();
     }
+
+    @Test
+    void testUpdateDidAssignSmsTrunk() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_assign_sms_trunk_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update_success.json"))));
+
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setSmsTrunk(new SmsTrunk().withId("1a2b3c4d-0002-4a5b-8c6d-7e8f9a0b1c02"));
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidAssignSmsTrunkGroup() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_assign_sms_trunk_group_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update_success.json"))));
+
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setSmsTrunkGroup(new SmsTrunkGroup().withId("2b3c4d5e-0001-4b6c-9d7e-8f9a0b1c2d01"));
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidUnassignSmsTrunk() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_unassign_sms_trunk_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update_success.json"))));
+
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setSmsTrunk(null);
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidUnassignSmsTrunkGroup() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_unassign_sms_trunk_group_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update_success.json"))));
+
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setSmsTrunkGroup(null);
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testUpdateDidUnassignSms() {
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b"))
+                .withRequestBody(equalToJson(loadFixture("dids/update_unassign_sms_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("dids/update_success.json"))));
+
+        Did did = new Did().withId("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+        did.setSmsTrunk(null);
+        did.setSmsTrunkGroup(null);
+
+        ApiResponse<Did> response = client.dids().update(did);
+
+        assertThat(response.getData().getId()).isEqualTo("9df99644-f1a5-4a3c-99a4-559d758eb96b");
+    }
+
+    @Test
+    void testFindDidWithSmsTrunk() {
+        stubGetFixture("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b", "dids/show_with_sms_trunk.json");
+
+        Did did = client.dids().find("9df99644-f1a5-4a3c-99a4-559d758eb96b",
+                QueryParams.builder().include("sms_trunk").build()).getData();
+
+        assertThat(did.getSmsTrunk()).isNotNull();
+        assertThat(did.getSmsTrunk().getId()).isEqualTo("1a2b3c4d-0002-4a5b-8c6d-7e8f9a0b1c02");
+        assertThat(did.getSmsTrunk().getName()).isEqualTo("http_in trunk");
+        assertThat(did.getSmsTrunkGroup()).isNull();
+        assertThat(did.hasDirtyFields()).isFalse();
+    }
+
+    @Test
+    void testFindDidWithSmsTrunkGroup() {
+        stubGetFixture("/v3/dids/9df99644-f1a5-4a3c-99a4-559d758eb96b", "dids/show_with_sms_trunk_group.json");
+
+        Did did = client.dids().find("9df99644-f1a5-4a3c-99a4-559d758eb96b",
+                QueryParams.builder().include("sms_trunk_group").build()).getData();
+
+        assertThat(did.getSmsTrunkGroup()).isNotNull();
+        assertThat(did.getSmsTrunkGroup().getId()).isEqualTo("2b3c4d5e-0001-4b6c-9d7e-8f9a0b1c2d01");
+        assertThat(did.getSmsTrunkGroup().getName()).isEqualTo("Inbound SMS");
+        assertThat(did.getSmsTrunk()).isNull();
+        assertThat(did.hasDirtyFields()).isFalse();
+    }
 }

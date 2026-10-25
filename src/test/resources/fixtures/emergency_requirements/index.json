@@ -8,18 +8,26 @@
         "address_area_level": "city",
         "personal_area_level": "country",
         "business_area_level": null,
-        "address_mandatory_fields": ["street", "city", "postal_code"],
-        "personal_mandatory_fields": ["first_name", "last_name"],
+        "address_mandatory_fields": [
+          "street",
+          "city",
+          "postal_code"
+        ],
+        "personal_mandatory_fields": [
+          "first_name",
+          "last_name"
+        ],
         "business_mandatory_fields": [],
         "estimate_setup_time": "7-14 days",
-        "requirement_restriction_message": null
+        "requirement_restriction_message": null,
+        "number_type": "local"
       },
       "relationships": {
         "country": {
-          "data": { "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "type": "countries" }
-        },
-        "did_group_type": {
-          "data": { "id": "ffffffff-0000-1111-2222-333333333333", "type": "did_group_types" }
+          "data": {
+            "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+            "type": "countries"
+          }
         }
       },
       "meta": {
@@ -35,18 +43,24 @@
         "address_area_level": "country",
         "personal_area_level": null,
         "business_area_level": "world_wide",
-        "address_mandatory_fields": ["street", "city"],
+        "address_mandatory_fields": [
+          "street",
+          "city"
+        ],
         "personal_mandatory_fields": [],
-        "business_mandatory_fields": ["company_name"],
+        "business_mandatory_fields": [
+          "company_name"
+        ],
         "estimate_setup_time": "3-5 days",
-        "requirement_restriction_message": null
+        "requirement_restriction_message": null,
+        "number_type": "local"
       },
       "relationships": {
         "country": {
-          "data": { "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", "type": "countries" }
-        },
-        "did_group_type": {
-          "data": { "id": "ffffffff-0000-1111-2222-333333333333", "type": "did_group_types" }
+          "data": {
+            "id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+            "type": "countries"
+          }
         }
       },
       "meta": {

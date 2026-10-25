@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.didww"
-version = "4.1.0"
+version = "5.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -55,6 +55,18 @@ val generateVersionProperties by tasks.registering {
 }
 
 sourceSets["main"].resources.srcDir(generateVersionProperties.map { it.outputs.files.singleFile })
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Javadoc> {
+    options.encoding = "UTF-8"
+    (options as StandardJavadocDocletOptions).apply {
+        docEncoding = "UTF-8"
+        charSet = "UTF-8"
+    }
+}
 
 tasks.test {
     useJUnitPlatform()
