@@ -5,6 +5,7 @@ import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.Feature;
 import com.didww.sdk.resource.enums.IdentityType;
+import com.didww.sdk.resource.enums.NumberType;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +22,8 @@ class DidGroupTest extends BaseTest {
 
         assertThat(didGroups).isNotEmpty();
         assertThat(didGroups.get(0).getFeatures()).containsExactly(Feature.VOICE_IN, Feature.SMS_IN, Feature.T38);
+        assertThat(didGroups.get(0).getNumberType()).isEqualTo(NumberType.LOCAL);
+        assertThat(didGroups.get(0).getIsDemo()).isFalse();
     }
 
     @Test
@@ -28,7 +31,7 @@ class DidGroupTest extends BaseTest {
         stubGetFixture("/v3/did_groups/2187c36d-28fb-436f-8861-5a0f5b5a3ee1", "did_groups/show.json");
 
         QueryParams params = QueryParams.builder()
-                .include("country", "region", "city", "did_group_type", "stock_keeping_units")
+                .include("country", "region", "city", "stock_keeping_units")
                 .build();
         ApiResponse<DidGroup> response = client.didGroups().find("2187c36d-28fb-436f-8861-5a0f5b5a3ee1", params);
         DidGroup didGroup = response.getData();
@@ -41,8 +44,8 @@ class DidGroupTest extends BaseTest {
         assertThat(didGroup.getCountry().getName()).isEqualTo("Germany");
         assertThat(didGroup.getCity()).isNotNull();
         assertThat(didGroup.getCity().getName()).isEqualTo("Aachen");
-        assertThat(didGroup.getDidGroupType()).isNotNull();
-        assertThat(didGroup.getDidGroupType().getName()).isEqualTo("Local");
+        assertThat(didGroup.getNumberType()).isEqualTo(NumberType.LOCAL);
+        assertThat(didGroup.getIsDemo()).isFalse();
         assertThat(didGroup.getRegion()).isNull();
         assertThat(didGroup.getStockKeepingUnits()).hasSize(2);
     }

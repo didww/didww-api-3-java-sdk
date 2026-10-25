@@ -1,0 +1,1 @@
+{"data":{"type":"sms_trunks","attributes":{"name":"http_in trunk","configuration":{"type":"http_in","attributes":{"url":"https://example.com/sms","http_method":"post","headers":{"X-Source":"didww"},"body_type":"json","body":"{\"text\":\"{SMS_TEXT}\",\"from\":\"{SMS_SRC_ADDR}\"}","follow_redirect":false,"validate_https_certificate":true}}}}}

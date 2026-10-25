@@ -1,0 +1,1 @@
+{"data":{"id":"1a2b3c4d-0003-4a5b-8c6d-7e8f9a0b1c03","type":"sms_trunks","attributes":{"configuration":{"type":"http_out","attributes":{"callback_url":"https://example.com/sms/status/v2","allowed_ips":["203.0.113.10"]}}}}}

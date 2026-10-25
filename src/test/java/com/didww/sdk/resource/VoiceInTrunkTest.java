@@ -9,6 +9,7 @@ import com.didww.sdk.resource.enums.DiversionInjectMode;
 import com.didww.sdk.resource.enums.DiversionRelayPolicy;
 import com.didww.sdk.resource.enums.NetworkProtocolPriority;
 import com.didww.sdk.resource.enums.Codec;
+import com.didww.sdk.resource.enums.Pop;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.RxDtmfFormat;
@@ -34,7 +35,7 @@ class VoiceInTrunkTest extends BaseTest {
         stubGetFixture("/v3/voice_in_trunks", "voice_in_trunks/index.json");
 
         QueryParams params = QueryParams.builder()
-                .include("trunk_group", "pop")
+                .include("voice_in_trunk_group")
                 .build();
         ApiResponse<List<VoiceInTrunk>> response = client.voiceInTrunks().list(params);
         List<VoiceInTrunk> trunks = response.getData();
@@ -51,8 +52,7 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(first.getPop()).isNull();
 
         VoiceInTrunk second = trunks.get(1);
-        assertThat(second.getPop()).isNotNull();
-        assertThat(second.getPop().getName()).isEqualTo("DE, FRA");
+        assertThat(second.getPop()).isEqualTo(Pop.FRA);
     }
 
     @Test
@@ -539,5 +539,45 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(output).contains("[FILTERED]");
         assertThat(output).doesNotContain("sipreg-user-1");
         assertThat(output).doesNotContain("s3cret-Pa55");
+    }
+
+    @Test
+    void testCreateVoiceInTrunkWithPop() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunks"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_with_pop_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/create_with_pop.json"))));
+
+        PstnConfiguration config = new PstnConfiguration();
+        config.setDst("558540420024");
+
+        VoiceInTrunk trunk = new VoiceInTrunk();
+        trunk.setName("hello, test pstn trunk");
+        trunk.setConfiguration(config);
+        trunk.setPop(Pop.FRA);
+
+        VoiceInTrunk created = client.voiceInTrunks().create(trunk).getData();
+
+        assertThat(created.getPop()).isEqualTo(Pop.FRA);
+    }
+
+    @Test
+    void testUpdateClearsPop() {
+        String id = "41b94706-325e-4704-a433-d65105758836";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/update_clear_pop_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/update_pstn.json"))));
+
+        VoiceInTrunk trunk = new VoiceInTrunk().withId(id);
+        trunk.setPop(null);
+
+        VoiceInTrunk updated = client.voiceInTrunks().update(trunk).getData();
+
+        assertThat(updated.getPop()).isNull();
     }
 }

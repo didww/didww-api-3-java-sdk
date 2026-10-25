@@ -1,0 +1,1 @@
+{"data":{"type":"sms_trunk_regenerate_credentials","attributes":{},"relationships":{"sms_trunk":{"data":{"type":"sms_trunks","id":"1a2b3c4d-0003-4a5b-8c6d-7e8f9a0b1c03"}}}}}

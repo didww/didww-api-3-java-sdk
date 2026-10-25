@@ -1,0 +1,1 @@
+{"data":{"type":"exports","attributes":{"export_type":"sms_in","filters":{"from":"2026-10-01 00:00:00","to":"2026-10-15 00:00:00","trunk_type":["SMPP SMSC","HTTP IN"],"destination_address_eq":"12125550100"}}}}

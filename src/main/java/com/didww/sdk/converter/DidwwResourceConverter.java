@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.cfg.JsonNodeFeature;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.jasminb.jsonapi.ResourceConverter;
@@ -18,8 +19,6 @@ public class DidwwResourceConverter {
             Country.class,
             Region.class,
             City.class,
-            Pop.class,
-            DidGroupType.class,
             DidGroup.class,
             StockKeepingUnit.class,
             QtyBasedPricing.class,
@@ -52,7 +51,11 @@ public class DidwwResourceConverter {
             EmergencyRequirement.class,
             EmergencyRequirementValidation.class,
             EmergencyCallingService.class,
-            EmergencyVerification.class
+            EmergencyVerification.class,
+            SmsTrunk.class,
+            SmsTrunkGroup.class,
+            SmsTrunkRegenerateCredential.class,
+            SenderIdVerification.class
     };
 
     public static ObjectMapper createObjectMapper() {
@@ -61,6 +64,8 @@ public class DidwwResourceConverter {
         mapper.registerModule(new EnumModule());
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
+        mapper.configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true);
+        mapper.configure(JsonNodeFeature.STRIP_TRAILING_BIGDECIMAL_ZEROES, false);
         mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         mapper.setFilterProvider(new SimpleFilterProvider()

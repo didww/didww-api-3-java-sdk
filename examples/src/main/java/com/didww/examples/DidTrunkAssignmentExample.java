@@ -3,11 +3,11 @@ package com.didww.examples;
 import com.didww.sdk.DidwwClient;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.resource.Did;
-import com.didww.sdk.resource.Pop;
 import com.didww.sdk.resource.VoiceInTrunk;
 import com.didww.sdk.resource.VoiceInTrunkGroup;
 import com.didww.sdk.resource.configuration.SipConfiguration;
 import com.didww.sdk.resource.enums.Codec;
+import com.didww.sdk.resource.enums.Pop;
 import com.didww.sdk.resource.enums.TransportProtocol;
 
 import java.util.Arrays;
@@ -17,6 +17,8 @@ import java.util.UUID;
 /**
  * Demonstrates exclusive trunk/trunk group assignment on DIDs.
  * Assigning a trunk auto-nullifies the trunk group and vice versa.
+ * At the end the DID's original voice routing and description are restored and the
+ * created trunk and trunk group are deleted, also when a step fails.
  * Usage: DIDWW_API_KEY=xxx ./gradlew runExample -PexampleClass=com.didww.examples.DidTrunkAssignmentExample
  */
 public class DidTrunkAssignmentExample {
@@ -46,34 +48,37 @@ public class DidTrunkAssignmentExample {
         Did did = dids.get(0);
         System.out.println("Using DID: " + did.getNumber() + " (" + did.getId() + ")");
 
-        // Get a POP
-        Pop pop = client.pops().list().getData().get(0);
+        // Remember the current routing and description to put them back at the end
+        String originalTrunkId = did.getVoiceInTrunk() != null ? did.getVoiceInTrunk().getId() : null;
+        String originalGroupId = did.getVoiceInTrunkGroup() != null ? did.getVoiceInTrunkGroup().getId() : null;
+        String originalDescription = did.getDescription();
 
-        // Create a trunk
-        VoiceInTrunk trunk = new VoiceInTrunk();
-        trunk.setName("Assignment Trunk " + suffix);
-        SipConfiguration sip = new SipConfiguration();
-        sip.setHost("sip.example.com");
-        sip.setPort(5060);
-        sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
-        sip.setTransportProtocolId(TransportProtocol.UDP);
-        trunk.setConfiguration(sip);
-        trunk.setPop(pop);
-        trunk = client.voiceInTrunks().create(trunk).getData();
-        System.out.println("Created trunk: " + trunk.getId());
-
-        // Create a trunk group
-        VoiceInTrunkGroup group = new VoiceInTrunkGroup();
-        group.setName("Assignment Group " + suffix);
-        group.setCapacityLimit(10);
-        group = client.voiceInTrunkGroups().create(group).getData();
-        System.out.println("Created trunk group: " + group.getId());
-
-        String trunkId = trunk.getId();
-        String groupId = group.getId();
-
+        String trunkId = null;
+        String groupId = null;
+        boolean didChanged = false;
         try {
+            // Create a trunk
+            VoiceInTrunk trunk = new VoiceInTrunk();
+            trunk.setName("Assignment Trunk " + suffix);
+            SipConfiguration sip = new SipConfiguration();
+            sip.setHost("sip.example.com");
+            sip.setPort(5060);
+            sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
+            sip.setTransportProtocolId(TransportProtocol.UDP);
+            trunk.setConfiguration(sip);
+            trunk.setPop(Pop.FRA); // optional; leave it unset to let DIDWW choose
+            trunkId = client.voiceInTrunks().create(trunk).getData().getId();
+            System.out.println("Created trunk: " + trunkId);
+
+            // Create a trunk group
+            VoiceInTrunkGroup group = new VoiceInTrunkGroup();
+            group.setName("Assignment Group " + suffix);
+            group.setCapacityLimit(10);
+            groupId = client.voiceInTrunkGroups().create(group).getData().getId();
+            System.out.println("Created trunk group: " + groupId);
+
             // 1. Assign trunk to DID (auto-nullifies trunk group)
+            didChanged = true;
             Did update1 = new Did().withId(did.getId());
             update1.setVoiceInTrunk(new VoiceInTrunk().withId(trunkId));
             client.dids().update(update1);
@@ -94,32 +99,47 @@ public class DidTrunkAssignmentExample {
             System.out.println("\n3. Re-assigned trunk:");
             printDidAssignment(client, did.getId());
 
-            // 4. Unassign: update description only (trunk stays assigned)
+            // 4. Update the description only: only changed fields are sent, so the trunk stays
             Did update4 = new Did().withId(did.getId());
             update4.setDescription("DID with trunk assigned");
             client.dids().update(update4);
             System.out.println("\n4. Updated description only (trunk stays):");
             printDidAssignment(client, did.getId());
         } finally {
-            // Cleanup: reassign DID to group (frees trunk), delete trunk, then delete group
             try {
-                Did cleanup = new Did().withId(did.getId());
-                cleanup.setVoiceInTrunkGroup(new VoiceInTrunkGroup().withId(groupId));
-                client.dids().update(cleanup);
-            } catch (Exception ignored) {}
-            try {
-                client.voiceInTrunks().delete(trunkId);
-                System.out.println("\nDeleted trunk");
-            } catch (Exception e) {
-                System.out.println("\nTrunk cleanup: " + e.getMessage());
-            }
-            // Reassign DID to trunk (frees group) using a temporary trunk, or just delete group
-            try {
-                client.voiceInTrunkGroups().delete(groupId);
-                System.out.println("Deleted trunk group");
-            } catch (Exception e) {
-                System.out.println("Trunk group still assigned to DID (expected): " + e.getMessage());
+                // Restore the DID first, so the created trunk and group are no longer in use
+                if (didChanged) {
+                    restoreDid(client, did.getId(), originalTrunkId, originalGroupId, originalDescription);
+                }
+            } finally {
+                try {
+                    if (trunkId != null) {
+                        client.voiceInTrunks().delete(trunkId);
+                        System.out.println("Deleted trunk");
+                    }
+                } finally {
+                    if (groupId != null) {
+                        client.voiceInTrunkGroups().delete(groupId);
+                        System.out.println("Deleted trunk group");
+                    }
+                }
             }
         }
+    }
+
+    private static void restoreDid(DidwwClient client, String didId, String trunkId, String groupId,
+                                   String description) {
+        Did restore = new Did().withId(didId);
+        if (trunkId != null) {
+            restore.setVoiceInTrunk(new VoiceInTrunk().withId(trunkId));
+        } else if (groupId != null) {
+            restore.setVoiceInTrunkGroup(new VoiceInTrunkGroup().withId(groupId));
+        } else {
+            restore.setVoiceInTrunk(null); // sends both trunk and trunk group as null
+        }
+        restore.setDescription(description);
+        client.dids().update(restore);
+        System.out.println("\nRestored the DID's original routing:");
+        printDidAssignment(client, didId);
     }
 }

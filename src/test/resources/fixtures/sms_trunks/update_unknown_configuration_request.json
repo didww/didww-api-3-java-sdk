@@ -1,0 +1,1 @@
+{"data":{"id":"1a2b3c4d-0006-4a5b-8c6d-7e8f9a0b1c06","type":"sms_trunks","attributes":{"configuration":{"type":"future_transport","attributes":{"endpoint":"https://example.com/future/v2","retries":3,"enabled":true,"ratio":1.10,"sequence":9007199254740993,"nested":{"ids":[123456789012345678901234567890],"cleared":null}}}}}}

@@ -23,7 +23,8 @@
         "Representative Tax ID"
       ],
       "service_description_required": true,
-      "restriction_message": "End User Registration is Required"
+      "restriction_message": "End User Registration is Required",
+      "number_type": "local"
     },
     "relationships": {
       "country": {
@@ -34,16 +35,6 @@
         "data": {
           "type": "countries",
           "id": "5b156dc2-327e-4665-bdc5-35cd8729b885"
-        }
-      },
-      "did_group_type": {
-        "links": {
-          "self": "https://sandbox-api.didww.com/v3/requirements/25d12afe-1ec6-4fe3-9621-b250dd1fb959/relationships/did_group_type",
-          "related": "https://sandbox-api.didww.com/v3/requirements/25d12afe-1ec6-4fe3-9621-b250dd1fb959/did_group_type"
-        },
-        "data": {
-          "type": "did_group_types",
-          "id": "994ea201-4a4d-4b27-ac4b-b5916ac969a3"
         }
       },
       "personal_permanent_document": {
@@ -164,13 +155,6 @@
             "related": "https://sandbox-api.didww.com/v3/countries/5b156dc2-327e-4665-bdc5-35cd8729b885/regions"
           }
         }
-      }
-    },
-    {
-      "id": "994ea201-4a4d-4b27-ac4b-b5916ac969a3",
-      "type": "did_group_types",
-      "attributes": {
-        "name": "Local"
       }
     },
     {

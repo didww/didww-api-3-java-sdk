@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.resource.enums.EmergencyCallingServiceStatus;
+import com.didww.sdk.resource.enums.NumberType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
@@ -58,11 +59,11 @@ public class EmergencyCallingService extends MetaResource {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate renewDate;
 
+    @JsonProperty(value = "number_type", access = JsonProperty.Access.WRITE_ONLY)
+    private NumberType numberType;
+
     @Relationship("country")
     private Country country;
-
-    @Relationship("did_group_type")
-    private DidGroupType didGroupType;
 
     @Relationship("order")
     private Order order;

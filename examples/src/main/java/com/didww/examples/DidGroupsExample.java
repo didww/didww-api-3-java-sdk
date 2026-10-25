@@ -26,6 +26,7 @@ public class DidGroupsExample {
                     + " prefix=" + didGroup.getPrefix()
                     + " features=" + didGroup.getFeatures() // 2026-04-16 adds p2p / a2p / emergency / cnam_out
                     + " metered=" + didGroup.getIsMetered());
+            System.out.println("  Number type: " + didGroup.getNumberType() + ", demo: " + didGroup.getIsDemo()); // 2026-10-22
             System.out.println("  Allow additional channels: " + didGroup.getAllowAdditionalChannels()); // 2026-04-16
             if (didGroup.getServiceRestrictions() != null) {
                 System.out.println("  Service restrictions: " + didGroup.getServiceRestrictions()); // 2026-04-16

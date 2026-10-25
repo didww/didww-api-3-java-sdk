@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class DidwwApiException extends RuntimeException {
+public class DidwwApiException extends DidwwException {
     private final int httpStatus;
     private final List<ApiError> errors;
 

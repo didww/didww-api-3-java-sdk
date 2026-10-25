@@ -1,0 +1,1 @@
+{"data":{"id":"e5a4e2f1-3b26-4a5c-9a0a-2f7c1f3e8d10","type":"sender_id_verifications","attributes":{},"relationships":{"sms_trunk":{"data":{"type":"sms_trunks","id":"1a2b3c4d-0003-4a5b-8c6d-7e8f9a0b1c03"}}}}}

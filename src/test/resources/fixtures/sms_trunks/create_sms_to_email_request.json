@@ -1,0 +1,1 @@
+{"data":{"type":"sms_trunks","attributes":{"name":"sms_to_email trunk","configuration":{"type":"sms_to_email","attributes":{"send_to":"sms@example.com","subject":"Inbound SMS","message":"You have a new message."}}}}}

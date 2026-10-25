@@ -1,0 +1,1 @@
+{"data":{"type":"sms_trunks","attributes":{"name":"smpp_smsc trunk","configuration":{"type":"smpp_smsc","attributes":{"host":"smsc.example.com","tx_port":2775,"rx_port":2776,"transceiver_mode":true,"connection_timeout":30,"use_ssl":false,"system_id":"didww","password":"secret","server_location":"nyc"}}}}}

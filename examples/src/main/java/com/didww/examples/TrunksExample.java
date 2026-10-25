@@ -2,12 +2,12 @@ package com.didww.examples;
 
 import com.didww.sdk.DidwwClient;
 import com.didww.sdk.http.QueryParams;
-import com.didww.sdk.resource.Pop;
 import com.didww.sdk.resource.VoiceInTrunk;
 import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.configuration.SipConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
 import com.didww.sdk.resource.enums.Codec;
+import com.didww.sdk.resource.enums.Pop;
 import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.TransportProtocol;
 
@@ -22,13 +22,13 @@ public class TrunksExample {
 
         // List voice in trunks with included relationships
         QueryParams params = QueryParams.builder()
-                .include("pop", "voice_in_trunk_group")
+                .include("voice_in_trunk_group")
                 .page(1, 10)
                 .build();
         List<VoiceInTrunk> trunks = client.voiceInTrunks().list(params).getData();
         for (VoiceInTrunk trunk : trunks) {
             String configType = trunk.getConfiguration() != null ? trunk.getConfiguration().getType() : "unknown";
-            System.out.println(trunk.getName() + " [" + configType + "]");
+            System.out.println(trunk.getName() + " [" + configType + "] pop=" + trunk.getPop());
         }
 
         // Create a SIP trunk
@@ -52,25 +52,21 @@ public class TrunksExample {
         ));
         newTrunk.setConfiguration(sip);
 
-        // Set POP relationship
-        List<Pop> pops = client.pops().list().getData();
-        if (pops.isEmpty()) {
-            throw new IllegalStateException("No POPs found");
-        }
-        Pop pop = pops.get(0);
-        newTrunk.setPop(pop);
+        // Point of presence: a Pop constant, or leave it unset to let DIDWW choose
+        newTrunk.setPop(Pop.FRA);
 
         VoiceInTrunk created = client.voiceInTrunks().create(newTrunk).getData();
-        System.out.println("Created trunk: " + created.getId() + " - " + created.getName());
+        try {
+            System.out.println("Created trunk: " + created.getId() + " - " + created.getName() + " (pop " + created.getPop() + ")");
 
-        // Update trunk
-        created.setDescription("Updated description");
-        VoiceInTrunk updated = client.voiceInTrunks().update(created).getData();
-        System.out.println("Updated trunk: " + updated.getDescription());
-
-        // Delete trunk
-        client.voiceInTrunks().delete(created.getId());
-        System.out.println("SIP trunk deleted");
+            // Update trunk
+            created.setDescription("Updated description");
+            VoiceInTrunk updated = client.voiceInTrunks().update(created).getData();
+            System.out.println("Updated trunk: " + updated.getDescription());
+        } finally {
+            client.voiceInTrunks().delete(created.getId());
+            System.out.println("SIP trunk deleted");
+        }
 
         // --- Create a PSTN trunk ---
         VoiceInTrunk pstnTrunk = new VoiceInTrunk();
@@ -82,12 +78,13 @@ public class TrunksExample {
         pstnTrunk.setConfiguration(pstn);
 
         VoiceInTrunk createdPstn = client.voiceInTrunks().create(pstnTrunk).getData();
-        System.out.println("Created PSTN trunk: " + createdPstn.getId() + " - " + createdPstn.getName());
-        System.out.println("  Config type: " + createdPstn.getConfiguration().getType());
-        System.out.println("  DST: " + ((PstnConfiguration) createdPstn.getConfiguration()).getDst());
-
-        // Delete PSTN trunk
-        client.voiceInTrunks().delete(createdPstn.getId());
-        System.out.println("PSTN trunk deleted");
+        try {
+            System.out.println("Created PSTN trunk: " + createdPstn.getId() + " - " + createdPstn.getName());
+            System.out.println("  Config type: " + createdPstn.getConfiguration().getType());
+            System.out.println("  DST: " + ((PstnConfiguration) createdPstn.getConfiguration()).getDst());
+        } finally {
+            client.voiceInTrunks().delete(createdPstn.getId());
+            System.out.println("PSTN trunk deleted");
+        }
     }
 }

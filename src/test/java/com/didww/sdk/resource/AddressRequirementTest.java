@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.repository.ApiResponse;
+import com.didww.sdk.resource.enums.NumberType;
 import com.didww.sdk.resource.enums.AreaLevel;
 import com.didww.sdk.resource.enums.IdentityType;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class AddressRequirementTest extends BaseTest {
         stubGetFixture("/v3/address_requirements/25d12afe-1ec6-4fe3-9621-b250dd1fb959", "address_requirements/show.json");
 
         QueryParams params = QueryParams.builder()
-                .include("country", "did_group_type", "personal_permanent_document",
+                .include("country", "personal_permanent_document",
                         "business_permanent_document", "personal_onetime_document",
                         "business_onetime_document", "personal_proof_types",
                         "business_proof_types", "address_proof_types")
@@ -59,8 +60,7 @@ class AddressRequirementTest extends BaseTest {
         // relationship accessors
         assertThat(requirement.getCountry()).isNotNull();
         assertThat(requirement.getCountry().getId()).isEqualTo("5b156dc2-327e-4665-bdc5-35cd8729b885");
-        assertThat(requirement.getDidGroupType()).isNotNull();
-        assertThat(requirement.getDidGroupType().getId()).isEqualTo("994ea201-4a4d-4b27-ac4b-b5916ac969a3");
+        assertThat(requirement.getNumberType()).isEqualTo(NumberType.LOCAL);
         assertThat(requirement.getPersonalPermanentDocument()).isNotNull();
         assertThat(requirement.getPersonalPermanentDocument().getId()).isEqualTo("fd38c86d-b69b-4ca8-b73c-286a3b93d107");
         assertThat(requirement.getBusinessPermanentDocument()).isNotNull();
