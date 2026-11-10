@@ -74,9 +74,9 @@ public class IdentityAddressProofsExample {
         ProofType identityProofType = null;
         ProofType addressProofType = null;
         for (ProofType pt : proofTypes) {
-            if ("Personal".equals(pt.getEntityType()) && identityProofType == null) {
+            if ("personal".equals(pt.getEntityType()) && identityProofType == null) {
                 identityProofType = pt;
-            } else if ("Address".equals(pt.getEntityType()) && addressProofType == null) {
+            } else if ("address".equals(pt.getEntityType()) && addressProofType == null) {
                 addressProofType = pt;
             }
             if (identityProofType != null && addressProofType != null) break;

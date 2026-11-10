@@ -12,6 +12,7 @@ import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.internal.AtomicFile;
 import com.didww.sdk.internal.Bodies;
 import com.didww.sdk.internal.MultiMemberGzipInputStream;
+import com.didww.sdk.internal.RetryAfter;
 import com.didww.sdk.internal.Streams;
 import com.didww.sdk.internal.Urls;
 import com.didww.sdk.prices.PriceList;
@@ -226,6 +227,12 @@ public class DidwwClient {
         return new Repository<>(httpClient, converter, baseUrl, "voice_out_trunks", VoiceOutTrunk.class, objectMapper);
     }
 
+    /**
+     * Rotates the generated credentials of a Voice OUT trunk. Only {@code create} is supported; a trunk
+     * with {@code twilio} authentication is answered 404.
+     *
+     * @return the repository
+     */
     public Repository<VoiceOutTrunkRegenerateCredential> voiceOutTrunkRegenerateCredentials() {
         return new Repository<>(httpClient, converter, baseUrl, "voice_out_trunk_regenerate_credentials", VoiceOutTrunkRegenerateCredential.class, objectMapper);
     }
@@ -320,7 +327,9 @@ public class DidwwClient {
      * @param fingerprint   encryption key fingerprint identifying the public key used
      * @param description   optional human-readable description for the file (may be {@code null})
      * @return the encrypted file ID returned by the API
-     * @throws DidwwClientException if the upload fails or the response is unexpected
+     * @throws DidwwApiException    if the API answers with an error status (see
+     *                              {@link DidwwApiException#getRetryAfter()}); a 429 is not retried
+     * @throws DidwwClientException if the upload fails in transport or the response is unexpected
      */
     public String uploadEncryptedFile(byte[] encryptedData,
                                       String fileName,
@@ -350,10 +359,7 @@ public class DidwwClient {
 
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                byte[] errorBody = Bodies.readLimitedQuietly(response.body(), Bodies.MAX_ERROR_BODY_SIZE,
-                        Bodies.errorBodyDeadlineMillis(httpClient));
-                String detail = errorBody.length > 0 ? " " + new String(errorBody, StandardCharsets.UTF_8) : "";
-                throw new DidwwClientException("Failed to upload encrypted file: HTTP " + response.code() + detail);
+                throw unexpectedStatus(response);
             }
 
             String responseBody = response.body() != null ? response.body().string() : "";
@@ -379,7 +385,8 @@ public class DidwwClient {
      * elsewhere: a URL on any other origin raises {@link DidwwClientException}
      * without a request. Only a 200 answer is written, as it arrives; redirects
      * are not followed, and any other status, including 3xx and 204, raises
-     * {@link DidwwApiException}.
+     * {@link DidwwApiException} (see {@link DidwwApiException#getRetryAfter()});
+     * a 429 is not retried.
      *
      * @param url         URL of the export file ({@code Export.getUrl()})
      * @param destination where the file is written
@@ -396,8 +403,8 @@ public class DidwwClient {
      * Downloads an export file to {@code destination} unchanged (gzip-compressed
      * CSV). The URL is checked and the answer handled as in
      * {@link #downloadExport(String, OutputStream)}. The file is written to a
-     * temporary file next to {@code destination}, which replaces it only once
-     * the whole file has arrived.
+     * temporary file {@code .didww-<16 hex digits>.tmp} in the directory of
+     * {@code destination}, which replaces it only once the whole file has arrived.
      *
      * @param url         URL of the export file ({@code Export.getUrl()})
      * @param destination local path where the file will be written
@@ -429,9 +436,10 @@ public class DidwwClient {
 
     /**
      * Downloads a gzip-compressed export file (.csv.gz) and writes the
-     * decompressed CSV to {@code destination} through a temporary file next to
-     * it, which replaces it only once the whole file has been decompressed. The
-     * URL is checked and the answer handled as in
+     * decompressed CSV to {@code destination} through a temporary file
+     * {@code .didww-<16 hex digits>.tmp} in its directory, which replaces it only
+     * once the whole file has been decompressed. The URL is checked and the
+     * answer handled as in
      * {@link #downloadExport(String, OutputStream)}.
      *
      * @param url         URL of the gzip-compressed export file
@@ -554,7 +562,7 @@ public class DidwwClient {
             error.setDetail(body.isEmpty() ? null : body);
             errors = Collections.singletonList(error);
         }
-        return new DidwwApiException(response.code(), errors);
+        return new DidwwApiException(response.code(), errors, RetryAfter.seconds(response));
     }
 
     private static void validateApiKey(String apiKey) {

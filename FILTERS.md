@@ -217,7 +217,7 @@ Pass values URL-encoded as strings. Where the server accepts arrays, comma-separ
 
 ## ProofType — `GET /v3/proof_types`
 
-- `filter[entity_type]`
+- `filter[entity_type]` — `address`, `business` or `personal`
 
 ## Region — `GET /v3/regions`
 
@@ -282,7 +282,7 @@ Pass values URL-encoded as strings. Where the server accepts arrays, comma-separ
 
 ## Export filters — `filters` of `POST /v3/exports`
 
-Set them as a map with `Export#setFilters(Map<String, Object>)`. `from` and `to` are required for every export type, as `YYYY-MM-DD HH:MM:SS` in UTC (`from` inclusive, `to` exclusive). Where a key takes several values, pass a `List<String>`; it is sent as a JSON array. Any key that the export type does not accept is rejected.
+Set them as a map with `Export#setFilters(Map<String, Object>)`. `from` and `to` are required for every export type, as `YYYY-MM-DD HH:MM:SS` in UTC (`from` inclusive, `to` exclusive). Where a key takes several values, pass a `List` (of strings, or of `ExportTrunkType` constants for `trunk_type`); it is sent as a JSON array. An enum constant of the SDK, such as `ExportServiceType.A2P`, is sent as its wire value (`a2p`); `name()` is not the wire form. The values of `service_type`, `trunk_type` and `status` are lowercase. Any key that the export type does not accept is rejected.
 
 | Key | Export types |
 |---|---|
@@ -300,11 +300,11 @@ Set them as a map with `Export#setFilters(Map<String, Object>)`. `from` and `to`
 | `source_address_cont` | `sms_in`, `sms_out` |
 | `destination_address_eq` | `sms_in`, `sms_out` |
 | `destination_address_cont` | `sms_in`, `sms_out` |
-| `status` | `sms_in` (`Success`, `Failed`, `Queued`), `sms_out` (`Routing Error`, `In Progress`, `Queued`, `Failed`, `Success`) |
+| `status` | `sms_in` (`success`, `failed`, `queued`), `sms_out` (`routing_error`, `in_progress`, `queued`, `failed`, `success`) |
 | `sms_id` | `sms_in`, `sms_out` |
 | `sms_trunk.id` | `sms_in`, `sms_out` — one id or a list of ids |
-| `trunk_type` | `sms_in` — one or a list of `ExportTrunkType` values in their wire form, e.g. `HTTP IN` |
-| `service_type` | `sms_out` — `a2p` or `p2p` |
+| `trunk_type` | `sms_in` — one or a list of `ExportTrunkType` values (`smpp_smsc`, `smpp_esme`, `sms_to_email`, `http_in`) |
+| `service_type` | `sms_out` — an `ExportServiceType` value, `a2p` or `p2p` |
 | `sender_id_verification.id` | `sms_out` — one id or a list of ids |
 
 ## Price lookups — `GET /v3/…/lookup/prices`

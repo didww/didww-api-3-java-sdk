@@ -7,8 +7,11 @@ import com.didww.sdk.resource.authenticationmethod.CredentialsAndIpAuthenticatio
 import com.didww.sdk.resource.authenticationmethod.IpOnlyAuthenticationMethod;
 import com.didww.sdk.resource.authenticationmethod.TwilioAuthenticationMethod;
 import com.didww.sdk.resource.enums.DefaultDstAction;
+import com.didww.sdk.resource.enums.IceMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
+import com.didww.sdk.resource.enums.VoiceOutCodec;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +48,7 @@ public class VoiceOutTrunksExample {
             System.out.println("  External Reference ID: " + t.getExternalReferenceId());
             System.out.println("  Emergency Enable All: " + t.getEmergencyEnableAll());
             System.out.println("  RTP Timeout: " + t.getRtpTimeout());
+            System.out.println("  Codecs: " + t.getCodecs() + ", ICE: " + t.getIceMode());
             System.out.println();
         }
 
@@ -62,6 +66,9 @@ public class VoiceOutTrunksExample {
         trunk.setOnCliMismatchAction(OnCliMismatchAction.REJECT_CALL);
         trunk.setExternalReferenceId("java-example-" + uniqueSuffix);
         trunk.setRtpTimeout(60);
+        // Codecs by name, in priority order; left out, DIDWW applies its default list
+        trunk.setCodecs(Arrays.asList(VoiceOutCodec.OPUS, VoiceOutCodec.PCMA, VoiceOutCodec.TELEPHONE_EVENT));
+        trunk.setIceMode(IceMode.ACCEPT);
 
         VoiceOutTrunk created = client.voiceOutTrunks().create(trunk).getData();
         System.out.println("Created voice out trunk: " + created.getId());

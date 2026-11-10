@@ -11,16 +11,16 @@
       "business_proof_qty": 1,
       "address_proof_qty": 1,
       "personal_mandatory_fields": [
-        "Birth Date",
-        "Country",
-        "Personal Tax ID"
+        "birth_date",
+        "country",
+        "personal_tax_id"
       ],
       "business_mandatory_fields": [
-        "Proof of ID",
-        "VAT Number / TAX Code",
-        "Country",
-        "Company ID",
-        "Representative Tax ID"
+        "id_number",
+        "tax_id",
+        "country",
+        "company_reg_number",
+        "personal_tax_id"
       ],
       "service_description_required": true,
       "restriction_message": "End User Registration is Required",
@@ -180,7 +180,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Drivers License",
-        "entity_type": "Personal"
+        "entity_type": "personal"
       }
     },
     {
@@ -188,7 +188,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Business Registration Certificate / Incorporation Certificate",
-        "entity_type": "Business"
+        "entity_type": "business"
       }
     },
     {
@@ -196,7 +196,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Trade License",
-        "entity_type": "Business"
+        "entity_type": "business"
       }
     },
     {
@@ -204,7 +204,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Excerpt from the commercial register",
-        "entity_type": "Business"
+        "entity_type": "business"
       }
     },
     {
@@ -212,7 +212,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Other",
-        "entity_type": "Business"
+        "entity_type": "business"
       }
     },
     {
@@ -220,7 +220,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Passport",
-        "entity_type": "Business"
+        "entity_type": "business"
       }
     },
     {
@@ -228,7 +228,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "National ID",
-        "entity_type": "Business"
+        "entity_type": "business"
       }
     },
     {
@@ -236,7 +236,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Drivers License",
-        "entity_type": "Business"
+        "entity_type": "business"
       }
     },
     {
@@ -244,7 +244,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Copy of Phone Bill",
-        "entity_type": "Address"
+        "entity_type": "address"
       }
     }
   ],

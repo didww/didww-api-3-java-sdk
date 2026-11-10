@@ -10,6 +10,10 @@
       "dst_prefixes": ["370"],
       "force_symmetric_rtp": true,
       "rtp_ping": true,
+      "codecs": ["g722", "opus", "telephone_event"],
+      "ice_mode": "disabled",
+      "rtcp_mux_mode": "initiate",
+      "rtcp_feedback_mode": "disabled",
       "authentication_method": {
         "type": "ip_only",
         "attributes": {

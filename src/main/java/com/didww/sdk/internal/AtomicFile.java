@@ -16,7 +16,9 @@ import java.nio.file.attribute.FileTime;
 
 /**
  * Internal helper, not part of the SDK API: writes a file through a temporary
- * file next to it, which replaces the target only on {@link #commit(FileTime)}.
+ * file {@code .didww-<16 hex digits>.tmp} in its directory, a name that fits
+ * any file system whatever the length of the file name, which replaces the
+ * target only on {@link #commit(FileTime)}.
  * The temporary file is created with the default permissions of new files
  * (the umask on POSIX systems), so the target gets them too.
  */
@@ -37,20 +39,19 @@ public final class AtomicFile implements Closeable {
     }
 
     /**
-     * Creates a new temporary file next to {@code target}.
+     * Creates a new temporary file in the directory of {@code target}.
      *
      * @param target the file to write
      * @return the open file
      * @throws IOException if the temporary file cannot be created
      */
     public static AtomicFile open(Path target) throws IOException {
-        Path name = target.getFileName();
-        if (name == null) {
+        if (target.getFileName() == null) {
             throw new IOException("Not a file path: " + target);
         }
         FileAlreadyExistsException last = null;
         for (int i = 0; i < MAX_NAME_ATTEMPTS; i++) {
-            Path temp = target.resolveSibling("." + name + "." + Jitter.randomHex(8) + ".tmp");
+            Path temp = target.resolveSibling(".didww-" + Jitter.randomHex(8) + ".tmp");
             try {
                 FileChannel channel = FileChannel.open(temp, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
                 return new AtomicFile(target, temp, channel);

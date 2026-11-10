@@ -39,6 +39,10 @@ public class Identity extends BaseResource implements ProofEntity {
     @JsonProperty("company_reg_number")
     private String companyRegNumber;
 
+    /**
+     * VAT identification number, listed as {@code tax_id} in the mandatory fields of
+     * {@link AddressRequirement} and {@link EmergencyRequirement}.
+     */
     @JsonProperty("vat_id")
     private String vatId;
 

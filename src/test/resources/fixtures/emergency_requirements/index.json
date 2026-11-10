@@ -9,13 +9,11 @@
         "personal_area_level": "country",
         "business_area_level": null,
         "address_mandatory_fields": [
-          "street",
-          "city",
-          "postal_code"
+          "area"
         ],
         "personal_mandatory_fields": [
-          "first_name",
-          "last_name"
+          "birth_date",
+          "id_number"
         ],
         "business_mandatory_fields": [],
         "estimate_setup_time": "7-14 days",
@@ -43,13 +41,10 @@
         "address_area_level": "country",
         "personal_area_level": null,
         "business_area_level": "world_wide",
-        "address_mandatory_fields": [
-          "street",
-          "city"
-        ],
+        "address_mandatory_fields": [],
         "personal_mandatory_fields": [],
         "business_mandatory_fields": [
-          "company_name"
+          "contact_email"
         ],
         "estimate_setup_time": "3-5 days",
         "requirement_restriction_message": null,

@@ -4,6 +4,7 @@ import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.internal.Bodies;
+import com.didww.sdk.internal.RetryAfter;
 import com.didww.sdk.resource.BaseResource;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ import okhttp3.ResponseBody;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.IdentityHashMap;
@@ -88,7 +90,8 @@ public class ReadOnlyRepository<T> {
 
     /**
      * Throws {@link DidwwApiException} when the response status is not successful,
-     * parsing API error objects from the response body when available. At most
+     * parsing API error objects from the response body when available, with the
+     * Retry-After of the answer; a 429 is not retried. At most
      * 1 MiB of the body is read, within the read timeout of the client (or 60
      * seconds); a body that breaks or stalls keeps the status.
      *
@@ -113,10 +116,11 @@ public class ReadOnlyRepository<T> {
                 }
             } catch (Exception ignored) {
             }
+            Duration retryAfter = RetryAfter.seconds(response);
             if (errors.isEmpty()) {
-                throw new DidwwApiException(response.code(), body);
+                throw new DidwwApiException(response.code(), body, retryAfter);
             }
-            throw new DidwwApiException(response.code(), errors);
+            throw new DidwwApiException(response.code(), errors, retryAfter);
         }
     }
 

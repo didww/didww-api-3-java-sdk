@@ -5,6 +5,7 @@ import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.http.QueryParams;
 import com.didww.sdk.resource.Export;
 import com.didww.sdk.resource.enums.ExportStatus;
+import com.didww.sdk.resource.enums.ExportServiceType;
 import com.didww.sdk.resource.enums.ExportTrunkType;
 import com.didww.sdk.resource.enums.ExportType;
 
@@ -29,10 +30,13 @@ import java.util.UUID;
  * Filters on SMS exports (Export#setFilters):
  *   - "from", "to" (required): "YYYY-MM-DD HH:MM:SS" in UTC; from inclusive, to exclusive and not in the future
  *   - "source_address_eq" / "source_address_cont", "destination_address_eq" / "destination_address_cont",
- *     "status", "sms_id"
+ *     "status" (sms_in: "success", "failed", "queued"; sms_out: "routing_error", "in_progress",
+ *     "queued", "failed", "success"), "sms_id"
  *   - "sms_trunk.id": one id or a list of ids
- *   - sms_in only: "trunk_type", one or a list of ExportTrunkType values in their wire form
- *   - sms_out only: "service_type" ("a2p" or "p2p"), "sender_id_verification.id"
+ *   - sms_in only: "trunk_type", an ExportTrunkType or a List of them (or of wire strings)
+ *   - sms_out only: "service_type", an ExportServiceType ("a2p" or "p2p"); "sender_id_verification.id"
+ *   The values of "service_type", "trunk_type" and "status" are lowercase; an SDK enum constant is
+ *   sent as its wire value.
  *
  * Usage: DIDWW_API_KEY=xxx ./gradlew runExample -PexampleClass=com.didww.examples.ExportsSmsExample
  */
@@ -51,15 +55,14 @@ public class ExportsSmsExample {
         Map<String, Object> outFilters = new HashMap<>();
         outFilters.put("from", from);
         outFilters.put("to", to);
-        outFilters.put("service_type", "a2p");
+        outFilters.put("service_type", ExportServiceType.A2P);
         create(client, ExportType.SMS_OUT, outFilters, "java-sms-out-" + suffix);
 
-        System.out.println("\n=== Creating SMS-In Export (HTTP IN and email trunks, yesterday) ===");
+        System.out.println("\n=== Creating SMS-In Export (HTTP IN and SMS to email trunks, yesterday) ===");
         Map<String, Object> inFilters = new HashMap<>();
         inFilters.put("from", from);
         inFilters.put("to", to);
-        inFilters.put("trunk_type", Arrays.asList(
-                EnumWire.value(ExportTrunkType.HTTP_IN), EnumWire.value(ExportTrunkType.EMAIL)));
+        inFilters.put("trunk_type", Arrays.asList(ExportTrunkType.HTTP_IN, ExportTrunkType.SMS_TO_EMAIL));
         create(client, ExportType.SMS_IN, inFilters, "java-sms-in-" + suffix);
 
         System.out.println("\n=== Completed SMS-Out exports ===");

@@ -36,9 +36,19 @@ public class AddressRequirement extends BaseResource {
     @JsonProperty("address_proof_qty")
     private Integer addressProofQty;
 
+    /**
+     * Identity fields that must be filled in for a personal identity, among {@code birth_date},
+     * {@code country}, {@code birth_country}, {@code id_number}, {@code personal_tax_id} and
+     * {@code contact_email}. Empty when none are.
+     */
     @JsonProperty("personal_mandatory_fields")
     private List<String> personalMandatoryFields;
 
+    /**
+     * Identity fields that must be filled in for a business identity, among {@code id_number},
+     * {@code tax_id} (the {@code vat_id} of an {@link Identity}), {@code country}, {@code company_reg_number},
+     * {@code personal_tax_id} and {@code contact_email}. Empty when none are.
+     */
     @JsonProperty("business_mandatory_fields")
     private List<String> businessMandatoryFields;
 

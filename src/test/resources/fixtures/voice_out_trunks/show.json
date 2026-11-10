@@ -19,6 +19,14 @@
       ],
       "force_symmetric_rtp": true,
       "rtp_ping": true,
+      "codecs": [
+        "opus",
+        "g722",
+        "pcma"
+      ],
+      "ice_mode": "initiate",
+      "rtcp_mux_mode": "disabled",
+      "rtcp_feedback_mode": "accept",
       "callback_url": null,
       "authentication_method": {
         "type": "credentials_and_ip",

@@ -35,12 +35,22 @@ public class EmergencyRequirement extends MetaResource {
     @JsonProperty("business_area_level")
     private String businessAreaLevel;
 
+    /** Address fields that must be filled in ({@code area}). Empty when none are. */
     @JsonProperty("address_mandatory_fields")
     private List<String> addressMandatoryFields;
 
+    /**
+     * Fields that must be filled in for a personal identity, among {@code birth_date}, {@code country},
+     * {@code id_number}, {@code personal_tax_id} and {@code contact_email}. Empty when none are.
+     */
     @JsonProperty("personal_mandatory_fields")
     private List<String> personalMandatoryFields;
 
+    /**
+     * Fields that must be filled in for a business identity, among {@code id_number}, {@code tax_id}
+     * (the {@code vat_id} of an {@link Identity}), {@code country}, {@code company_reg_number}, {@code personal_tax_id},
+     * {@code contact_email} and {@code birth_date}. Empty when none are.
+     */
     @JsonProperty("business_mandatory_fields")
     private List<String> businessMandatoryFields;
 

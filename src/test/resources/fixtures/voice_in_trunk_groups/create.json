@@ -48,11 +48,14 @@
             "username": "{CALL_DID}",
             "host": "203.0.113.1",
             "port": null,
-            "codec_ids": [
-              9,
-              8,
-              6
+            "codecs": [
+              "pcmu",
+              "g729",
+              "telephone_event"
             ],
+            "ice_mode": "disabled",
+            "rtcp_mux_mode": "disabled",
+            "rtcp_feedback_mode": "disabled",
             "rx_dtmf_format_id": 1,
             "tx_dtmf_format_id": 1,
             "resolve_ruri": false,
@@ -112,13 +115,16 @@
             "username": "{DID}",
             "host": "didww.com",
             "port": null,
-            "codec_ids": [
-              9,
-              10,
-              8,
-              7,
-              6
+            "codecs": [
+              "pcmu",
+              "pcma",
+              "g729",
+              "g723",
+              "telephone_event"
             ],
+            "ice_mode": "disabled",
+            "rtcp_mux_mode": "disabled",
+            "rtcp_feedback_mode": "disabled",
             "rx_dtmf_format_id": 1,
             "tx_dtmf_format_id": 1,
             "resolve_ruri": false,

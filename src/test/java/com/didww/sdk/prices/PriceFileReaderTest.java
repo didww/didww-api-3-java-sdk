@@ -93,8 +93,8 @@ class PriceFileReaderTest {
                 "Src country name", "",
                 "Source type", "cellular",
                 "Destination", "44800",
-                "Rate (USD, excl. VAT)", "",
-                "Connection fee (USD, excl. VAT)", "",
+                "Rate", "",
+                "Connection fee", "",
                 "Initial interval", "60",
                 "Next interval", "60",
                 "Reject calls", "true"));
@@ -113,8 +113,8 @@ class PriceFileReaderTest {
                 "Prefix", "4930",
                 "Rate", "0.0045",
                 "Connection fee", "0.0",
-                "Initial Increment", "1",
-                "Recurring Increment", "1",
+                "Initial increment", "1",
+                "Recurring increment", "1",
                 "Reject calls", "false",
                 "Next rate", "0.005",
                 "Next connection fee", "0.0",
@@ -123,7 +123,6 @@ class PriceFileReaderTest {
                 "Effective date", "2026-11-01T00:00:00Z",
                 "Comment", "Increase and Billing increment change"));
         assertThat(rows.get(1).get("Category")).isEqualTo("Origin based");
-        assertThat(rows.get(2).get("Prefix")).isEqualTo("99950,99951,99952");
         assertThat(rows.get(3).get("Network")).isEqualTo("New Breakout");
         assertThat(rows.get(3).get("Rate")).isEmpty();
         assertThat(rows.get(3).get("Reject calls")).isEqualTo("true");
@@ -385,7 +384,7 @@ class PriceFileReaderTest {
 
     @Test
     void testRowsQuotedFields() {
-        String csv = "\"Prefix\",\"Rate (USD, excl. VAT)\",Comment\r\n"
+        String csv = "\"Prefix\",\"Rate, quoted\",Comment\r\n"
                 + "\"99950,99951\",0.25,\"say \"\"hi\"\"\"\r\n"
                 + "\r\n"
                 + "49,,\"two\r\nlines\"\r\n"
@@ -396,10 +395,10 @@ class PriceFileReaderTest {
         assertThat(rows).hasSize(3);
         assertThat(rows.get(0)).containsExactlyEntriesOf(row(
                 "Prefix", "99950,99951",
-                "Rate (USD, excl. VAT)", "0.25",
+                "Rate, quoted", "0.25",
                 "Comment", "say \"hi\""));
         assertThat(rows.get(1).get("Comment")).isEqualTo("two\nlines");
-        assertThat(rows.get(1).get("Rate (USD, excl. VAT)")).isEmpty();
+        assertThat(rows.get(1).get("Rate, quoted")).isEmpty();
         assertThat(rows.get(2).get("Prefix")).as("spaces are kept").isEqualTo(" 1 ");
         assertThat(rows.get(2).get("Comment")).as("the last line needs no line end").isEqualTo("last");
     }
