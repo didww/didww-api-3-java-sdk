@@ -5,12 +5,14 @@ import com.didww.sdk.SdkVersion;
 import com.didww.sdk.exception.DidwwPricesException;
 import com.didww.sdk.exception.PricesErrorKind;
 import com.didww.sdk.support.InterruptingBody;
+import com.didww.sdk.support.ObservedBody;
 import com.github.tomakehurst.wiremock.http.Fault;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -646,14 +649,43 @@ class PriceFileTest extends PricesTestBase {
         serveFile();
         Path path = dir.resolve("voice_in_prices.csv.gz");
         Files.write(dir.resolve("voice_in_prices.csv.gz.tmp"), "concurrent download".getBytes(StandardCharsets.UTF_8));
-        Files.write(dir.resolve(".voice_in_prices.csv.gz.0123456789abcdef.tmp"), new byte[]{1});
+        Files.write(dir.resolve(".didww-0123456789abcdef.tmp"), new byte[]{1});
 
         client.voiceInPrices().downloadToFile(path);
 
         assertThat(Files.readAllBytes(path)).isEqualTo(fixture);
         assertThat(Files.readString(dir.resolve("voice_in_prices.csv.gz.tmp"))).isEqualTo("concurrent download");
-        assertThat(entries()).containsExactly(".voice_in_prices.csv.gz.0123456789abcdef.tmp",
+        assertThat(entries()).containsExactly(".didww-0123456789abcdef.tmp",
                 "voice_in_prices.csv.gz", "voice_in_prices.csv.gz.tmp");
+    }
+
+    // The temporary file name does not grow with the destination name, so a
+    // name close to the 255-byte limit of most file systems still downloads.
+    @Test
+    void testPriceFileDownloadToFileWithLongName() throws IOException {
+        serveFile();
+        String name = "p".repeat(243) + ".csv.gz";
+        List<List<String>> during = new ArrayList<>();
+        DidwwClient observed = builder()
+                .httpClientBuilder(new OkHttpClient.Builder().addInterceptor(ObservedBody.interceptor(VOICE_IN_FILE,
+                        () -> during.add(uncheckedEntries()))))
+                .build();
+
+        observed.voiceInPrices().downloadToFile(dir.resolve(name));
+
+        assertThat(during).hasSize(1);
+        assertThat(during.get(0)).singleElement(InstanceOfAssertFactories.STRING)
+                .matches("\\.didww-[0-9a-f]{16}\\.tmp");
+        assertThat(entries()).containsExactly(name);
+        assertThat(Files.readAllBytes(dir.resolve(name))).isEqualTo(fixture);
+    }
+
+    private List<String> uncheckedEntries() {
+        try {
+            return entries();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     @Test

@@ -35,8 +35,25 @@ public class SipConfiguration extends TrunkConfiguration {
     @JsonInclude(JsonInclude.Include.ALWAYS)
     private Integer port;
 
-    @JsonProperty("codec_ids")
-    private List<Codec> codecIds;
+    /**
+     * Codecs offered on calls to the trunk, in priority order: the first has the highest priority.
+     * Left out on create, the trunk offers {@code pcmu}, {@code pcma}, {@code g729}, {@code g723}
+     * and {@code telephone_event}. (API 2026-10-22: replaces {@code codec_ids})
+     */
+    @JsonProperty("codecs")
+    private List<Codec> codecs;
+
+    /** ICE on calls to the trunk. Defaults to {@link IceMode#DISABLED}. (API 2026-10-22) */
+    @JsonProperty("ice_mode")
+    private IceMode iceMode;
+
+    /** RTP and RTCP on one port on calls to the trunk. Defaults to {@link RtcpMuxMode#DISABLED}. (API 2026-10-22) */
+    @JsonProperty("rtcp_mux_mode")
+    private RtcpMuxMode rtcpMuxMode;
+
+    /** RTCP feedback (AVPF) on calls to the trunk. Defaults to {@link RtcpFeedbackMode#DISABLED}. (API 2026-10-22) */
+    @JsonProperty("rtcp_feedback_mode")
+    private RtcpFeedbackMode rtcpFeedbackMode;
 
     @JsonProperty("rx_dtmf_format_id")
     private RxDtmfFormat rxDtmfFormatId;

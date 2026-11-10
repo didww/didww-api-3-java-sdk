@@ -362,6 +362,8 @@ Balance balance = client.balance().find().getData();
 
 `DidGroup`, `AddressRequirement`, `EmergencyRequirement` and `EmergencyCallingService` carry `getNumberType()`, one of the `NumberType` values (`LOCAL`, `NATIONAL`, `MOBILE`, `TOLL_FREE`, `SHARED_COST`, `GLOBAL`; in filters use the wire form, such as `toll_free`). `DidGroup#getIsDemo()` flags demo groups. `NumberType` replaces the `DidGroupType` resource and the `did_group_type` relationship, which API `2026-10-22` no longer has. The `pops` resource is gone too: a Voice IN trunk carries its point of presence in the `pop` attribute (see [Voice In Trunks](#voice-in-trunks)).
 
+The mandatory fields of `AddressRequirement` (`getPersonalMandatoryFields()`, `getBusinessMandatoryFields()`) and of `EmergencyRequirement` (`getAddressMandatoryFields()`, `getPersonalMandatoryFields()`, `getBusinessMandatoryFields()`) list the fields as the API spells them, such as `birth_date`, `id_number`, `country` or `area`, and are empty when nothing is mandatory. `tax_id` stands for `Identity#getVatId()`. `ProofType#getEntityType()` is `address`, `business` or `personal`.
+
 ### DIDs
 
 ```java
@@ -423,7 +425,8 @@ trunk.setPop(Pop.FRA); // optional; null lets DIDWW choose
 SipConfiguration sip = new SipConfiguration();
 sip.setHost("sip.example.com");
 sip.setPort(5060);
-sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
+sip.setCodecs(Arrays.asList(Codec.PCMA, Codec.PCMU, Codec.TELEPHONE_EVENT));
+sip.setIceMode(IceMode.ACCEPT);
 sip.setTransportProtocolId(TransportProtocol.UDP);
 trunk.setConfiguration(sip);
 
@@ -437,7 +440,9 @@ client.voiceInTrunks().update(created);
 client.voiceInTrunks().delete(created.getId());
 ```
 
-`pop` is a plain attribute, one of the `com.didww.sdk.resource.enums.Pop` values (`NYC`, `FRA`, `LAC`, `MIA`, `SG`, `HK`, `AMS`). Leave it `null` to let DIDWW choose; `setPop(null)` on a built or fetched trunk sends `"pop": null`. A value this SDK does not know reads as `null`. It is no longer a relationship and cannot be included.
+`codecs` lists the codecs offered on calls to the trunk by name, in priority order: the first has the highest priority. It replaces `codec_ids`; the names are the `Codec` values. Left out, the trunk offers `pcmu`, `pcma`, `g729`, `g723` and `telephone_event`. `setIceMode`, `setRtcpMuxMode` and `setRtcpFeedbackMode` take the `IceMode`, `RtcpMuxMode` and `RtcpFeedbackMode` values `DISABLED` (the default), `ACCEPT` or `INITIATE`.
+
+`pop` is a plain attribute, one of the `com.didww.sdk.resource.enums.Pop` values (`NYC`, `FRA`, `LAC`, `MIA`, `SG`, `HK`, `AMS`, sent as `nyc`, `fra`, `lac`, `mia`, `sg`, `hk`, `ams`). Leave it `null` to let DIDWW choose; `setPop(null)` on a built or fetched trunk sends `"pop": null`. A value this SDK does not know reads as `null`. It is no longer a relationship and cannot be included.
 
 ```java
 VoiceInTrunk popUpdate = new VoiceInTrunk().withId("trunk-uuid");
@@ -497,6 +502,8 @@ group.setCapacityLimit(50);
 VoiceInTrunkGroup created = client.voiceInTrunkGroups().create(group).getData();
 ```
 
+A Voice In trunk group cannot be deleted while DIDs are routed to it or to one of its trunks (422): unroute those DIDs, or route them elsewhere, first.
+
 ### Voice Out Trunks
 
 > **Note:** Voice Out Trunks require additional account configuration. Contact DIDWW support to enable.
@@ -511,6 +518,7 @@ Voice Out Trunks use a polymorphic `authenticationMethod` (2026-04-16). Three ty
 ```java
 import com.didww.sdk.resource.enums.DefaultDstAction;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
+import com.didww.sdk.resource.enums.VoiceOutCodec;
 import com.didww.sdk.resource.authenticationmethod.CredentialsAndIpAuthenticationMethod;
 
 // NOTE: 203.0.113.0/24 is RFC 5737 TEST-NET-3 documentation space.
@@ -523,10 +531,13 @@ voTrunk.setName("My Outbound Trunk");
 voTrunk.setAuthenticationMethod(auth);
 voTrunk.setDefaultDstAction(DefaultDstAction.ALLOW_ALL);
 voTrunk.setOnCliMismatchAction(OnCliMismatchAction.REJECT_CALL);
+voTrunk.setCodecs(Arrays.asList(VoiceOutCodec.OPUS, VoiceOutCodec.PCMA, VoiceOutCodec.TELEPHONE_EVENT));
 VoiceOutTrunk created = client.voiceOutTrunks().create(voTrunk).getData();
 // created.getAuthenticationMethod().getUsername() -- server-generated
 // created.getAuthenticationMethod().getPassword() -- server-generated
 ```
+
+`codecs` lists the codecs offered on calls from the trunk by name, in priority order: the first has the highest priority. The names are the `VoiceOutCodec` values, which differ from the `Codec` values of an inbound SIP trunk. Left out, the trunk offers `pcma`, `pcmu` and `telephone_event`. `setIceMode`, `setRtcpMuxMode` and `setRtcpFeedbackMode` take `DISABLED`, `ACCEPT` (the default) or `INITIATE`.
 
 ### SMS Trunks
 
@@ -759,6 +770,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import com.didww.sdk.resource.enums.ExportServiceType;
 import com.didww.sdk.resource.enums.ExportType;
 
 // Dates are "YYYY-MM-DD HH:MM:SS" in UTC: from is inclusive, to is exclusive and not in the future
@@ -778,7 +790,7 @@ Export created = client.exports().create(export).getData();
 Map<String, Object> smsFilters = new HashMap<>();
 smsFilters.put("from", from);
 smsFilters.put("to", to);
-smsFilters.put("service_type", "a2p");
+smsFilters.put("service_type", ExportServiceType.A2P); // sent as "a2p"
 smsFilters.put("sms_trunk.id", Arrays.asList("sms-trunk-uuid"));
 Export smsOut = new Export();
 smsOut.setExportType(ExportType.SMS_OUT);
@@ -797,15 +809,17 @@ if (completed.isCompleted()) {
 }
 ```
 
-The export downloads send the token only to the origin (scheme, host and port) of the JSON:API base URL or of the environment, so export URLs, which the API builds on the environment's host, are still downloaded when `baseUrl(...)` points elsewhere; that request goes directly to the environment's host. A URL on any other origin throws a `DidwwClientException` and nothing is sent. Only a 200 answer is written, as it arrives, without holding the file in memory; redirects are not followed, and any other status, a 3xx or a 204 included, throws a `DidwwApiException` (see [Error Handling](#error-handling)). The `Path` overloads write to a temporary file next to the destination, which replaces it only once the whole file has arrived (or has been decompressed); the `OutputStream` overloads write into your stream, which is not closed and may hold part of the file after a failure.
+The export downloads send the token only to the origin (scheme, host and port) of the JSON:API base URL or of the environment, so export URLs, which the API builds on the environment's host, are still downloaded when `baseUrl(...)` points elsewhere; that request goes directly to the environment's host. A URL on any other origin throws a `DidwwClientException` and nothing is sent. Only a 200 answer is written, as it arrives, without holding the file in memory; redirects are not followed, and any other status, a 3xx or a 204 included, throws a `DidwwApiException` (see [Error Handling](#error-handling)). The `Path` overloads write to a temporary file `.didww-<16 hex digits>.tmp` in the directory of the destination, which replaces it only once the whole file has arrived (or has been decompressed); the `OutputStream` overloads write into your stream, which is not closed and may hold part of the file after a failure.
 
 `from` and `to` are required for every export type (`cdr_in`, `cdr_out`, `sms_in`, `sms_out`). The other filter keys depend on the type:
 
 - `cdr_in`: `did_number`, `source_number`, `source_number_out`, `source_country_iso`;
 - `cdr_out`: `voice_out_trunk.id`, `source`, `cli`, `destination`;
 - `sms_in` and `sms_out`: `source_address_eq`, `source_address_cont`, `destination_address_eq`, `destination_address_cont`, `status`, `sms_id`, `sms_trunk.id` (a string or a list of strings);
-- `sms_in` only: `trunk_type`, one or more of the `ExportTrunkType` values in their wire form (`SMPP SMSC`, `SMPP ESME`, `Email`, `HTTP IN`);
-- `sms_out` only: `service_type` (`a2p` or `p2p`) and `sender_id_verification.id` (a string or a list of strings).
+- `sms_in` only: `trunk_type`, one or more of the `ExportTrunkType` values;
+- `sms_out` only: `service_type`, one of the `ExportServiceType` values, and `sender_id_verification.id` (a string or a list of strings).
+
+Filter values are lowercase, and an enum constant of the SDK is sent as its wire value: `service_type` is `a2p` or `p2p`, `trunk_type` is one or more of `smpp_smsc`, `smpp_esme`, `sms_to_email` and `http_in`, and `status` is `success`, `failed` or `queued` for `sms_in`, and `routing_error`, `in_progress`, `queued`, `failed` or `success` for `sms_out`.
 
 The Javadoc of `Export#setFilters` lists the keys of every type.
 
@@ -907,7 +921,7 @@ System.out.println(file.isNotModified()
 
 // Read the rows, keyed by the header line
 try (Stream<Map<String, String>> rows = PriceFileReader.rows(path)) {
-    rows.limit(5).forEach(row -> System.out.println(row.get("Destination") + ": " + row.get("Rate (USD, excl. VAT)")));
+    rows.limit(5).forEach(row -> System.out.println(row.get("Destination") + ": " + row.get("Rate")));
 }
 
 // Lower-level calls
@@ -922,11 +936,12 @@ try (OutputStream out = Files.newOutputStream(Path.of("/tmp/voice_in_prices.csv.
 ```
 
 - `fetch(path)` sends the modification time of the file at `path` as `If-Modified-Since`, when the file is there; an unchanged price file is answered 304 and the file is kept. A file written by `downloadToFile` or `fetch` gets the `Last-Modified` of the response as its modification time, so the date matches the copy on disk. `fetch` trusts the modification time of any file at `path`: a file copied or changed by other means can be answered 304 and kept, so replace such a file with `downloadToFile`.
-- `downloadToFile` and `fetch` stream the body into a temporary file next to `path`, unique to the call, which gets the permissions of a new file (the umask on POSIX systems), is flushed to the disk and replaces `path` atomically only on a complete 200. A 304 or an error leaves an existing file untouched, the temporary file is always removed, and concurrent downloads to one path do not mix their bytes. A directory that does not exist throws an `UncheckedIOException` without a request. **On Windows the replacement fails while `path` is open**, for example by a `PriceFileReader` stream that has not been closed.
+- `downloadToFile` and `fetch` stream the body into a temporary file `.didww-<16 hex digits>.tmp` in the directory of `path`, unique to the call, which gets the permissions of a new file (the umask on POSIX systems), is flushed to the disk and replaces `path` atomically only on a complete 200. A 304 or an error leaves an existing file untouched, the temporary file is always removed, and concurrent downloads to one path do not mix their bytes. A directory that does not exist throws an `UncheckedIOException` without a request. **On Windows the replacement fails while `path` is open**, for example by a `PriceFileReader` stream that has not been closed.
 - `download(destination)` and `download(destination, ifModifiedSince)` write the body into `destination` only on a 200, as it arrives, so after a transfer error `destination` may hold part of it. The stream is not closed. An `IOException` of `destination` is thrown as an `UncheckedIOException` with it as the cause.
 - A body shorter than its `Content-Length` throws `PricesErrorKind.CONNECTION_ERROR`; it never replaces a file.
 - `head` and the downloads return a `PriceFile`: `getStatusCode()`, `getLastModified()` (`null` when absent), `getContentLength()`, `getFileName()` (as sent: check it before using it as a path), `getBytesWritten()` and `isNotModified()`.
-- `PriceFileReader.rows(path)` and `PriceFileReader.rows(inputStream)` gunzip a downloaded file and return a lazy `Stream` of rows, each a `Map<String, String>` keyed by the header line, as served (for example `Rate (USD, excl. VAT)`), in header order. A UTF-8 byte order mark and empty lines are skipped. Input that is not gzip (`ZipException`), gzip data cut short, an empty input included (`EOFException`), or a row whose field count differs from the header (an `IOException` whose message starts with `Price file:`) throws an `UncheckedIOException` with that cause while the stream is consumed, so rows before the error have already been passed on. Data after the end of the gzip data is ignored unless it starts another gzip member, so a later member that is cut short or corrupt raises the error too. Close the stream: `rows(path)` opens the file, `rows(inputStream)` leaves your stream open.
+- `PriceFileReader.rows(path)` and `PriceFileReader.rows(inputStream)` gunzip a downloaded file and return a lazy `Stream` of rows, each a `Map<String, String>` keyed by the header line, as served, in header order. A UTF-8 byte order mark and empty lines are skipped. Input that is not gzip (`ZipException`), gzip data cut short, an empty input included (`EOFException`), or a row whose field count differs from the header (an `IOException` whose message starts with `Price file:`) throws an `UncheckedIOException` with that cause while the stream is consumed, so rows before the error have already been passed on. Data after the end of the gzip data is ignored unless it starts another gzip member, so a later member that is cut short or corrupt raises the error too. Close the stream: `rows(path)` opens the file, `rows(inputStream)` leaves your stream open.
+- The columns, prices in USD with VAT excluded. Voice IN: `Country`, `Src country name`, `Source type`, `Destination`, `Rate`, `Connection fee`, `Initial interval`, `Next interval` and `Reject calls`. Voice OUT: `Category`, `Country`, `Network`, `Prefix` (one prefix per row), `Rate`, `Connection fee`, `Initial increment`, `Recurring increment`, `Reject calls`, `Next rate`, `Next connection fee`, `Next initial increment`, `Next recurring increment`, `Effective date` and `Comment`. SMS OUT: `Source prefix`, `Destination prefix`, `Country`, `MCC`, `MCC name`, `MNC`, `MNC name`, `Reject SMS` (`true` or `false`) and `Price`. SMS IN: `Source prefix`, `Source number length min`, `Source number length max`, `Destination prefix`, `Destination number length min`, `Destination number length max`, `Country` and `Price`.
 - Only `Last-Modified` and `If-Modified-Since` are used, in whole seconds. The service sends no `ETag`, and the SDK never sends `If-None-Match`, which would make the service ignore `If-Modified-Since`.
 - A 503 on a price file is retried up to 2 times when its `Retry-After` is 60 seconds or less, after waiting that long (at least 1 s) plus a small random delay so that clients do not retry in step. Otherwise it throws `PricesErrorKind.SERVICE_UNAVAILABLE` with `getRetryAfter()`. Lookups and other statuses, 429 included, are not retried.
 - A 404 `price_not_found` throws `PRICE_NOT_FOUND`; any other 404, `price_plan_not_assigned` included, and any 404 on `head`, which has no body, throws `PRICE_PLAN_NOT_ASSIGNED`. `DidwwPricesException#getCode()` holds the code of the answer, or `price_plan_not_assigned` for a 404 without one.
@@ -1083,12 +1098,25 @@ try {
 
 | Exception | Thrown for |
 |-----------|------------|
-| `DidwwApiException` | An error status of the JSON:API repositories and of the export downloads, with `getHttpStatus()` and `getErrors()`. |
-| `DidwwClientException` | A failure on the client side: a JSON:API call that fails in transport (the `IOException` is the cause) or whose resource cannot be serialized, an error status of `uploadEncryptedFile`, an upload or price lookup answer that cannot be parsed, a refused export URL, an export download that breaks off or cannot be decompressed. |
+| `DidwwApiException` | An error status of the JSON:API repositories, the export downloads and `uploadEncryptedFile`, with `getHttpStatus()`, `getErrors()` and `getRetryAfter()`. |
+| `DidwwClientException` | A failure on the client side: a JSON:API call or upload that fails in transport (the `IOException` is the cause) or whose resource cannot be serialized, an upload or price lookup answer that cannot be parsed, a refused export URL, an export download that breaks off or cannot be decompressed. |
 | `DidwwAuthException` | The token service, from any call that needs a new token. |
 | `DidwwPricesException` | The prices services. |
 
-`DidwwApiException` also reports the authentication failures of the API: a 401 still answered after the token was replaced once (`getHttpStatus()` 401), and a 403 such as `insufficient_scope` for a write with a `READ` token, which is never retried. `uploadEncryptedFile` reports any error status, including a 401 after the retry and a 403, as a `DidwwClientException` whose message holds the HTTP status. The export downloads do not follow redirects: any status other than 200, such as a 3xx or a 204, throws a `DidwwApiException`.
+`DidwwApiException` also reports the authentication failures of the API: a 401 still answered after the token was replaced once (`getHttpStatus()` 401), and a 403 such as `insufficient_scope` for a write with a `READ` token, which is never retried. The export downloads do not follow redirects: any status other than 200, such as a 3xx or a 204, throws a `DidwwApiException`.
+
+A 429 (`too_many_requests`) means the request budget of the account for the current window is spent. The repositories, the export downloads and `uploadEncryptedFile` throw it as a `DidwwApiException` with `getHttpStatus()` 429 and `getRetryAfter()`, the `Retry-After` of the response as a `Duration` (`null` when it is missing or not a number of seconds; any other error status carries it too). The SDK does not retry it, as a write may not be safe to send twice: wait `getRetryAfter()` before sending the request again.
+
+```java
+try {
+    client.dids().list();
+} catch (DidwwApiException e) {
+    if (e.getHttpStatus() != 429) {
+        throw e;
+    }
+    System.out.println("API rate limit, retry after " + e.getRetryAfter());
+}
+```
 
 The token service and prices errors carry a kind, which `getKind()` tells apart:
 
@@ -1264,14 +1292,16 @@ The SDK provides enum classes in `com.didww.sdk.resource.enums`:
 `CallbackMethod`, `IdentityType`, `OrderStatus`, `ExportType`, `ExportStatus`, `CliFormat`,
 `OnCliMismatchAction`\*, `MediaEncryptionMode`, `DefaultDstAction`, `VoiceOutTrunkStatus`,
 `EmergencyCallingServiceStatus`, `EmergencyVerificationStatus`, `DiversionRelayPolicy`,
-`TransportProtocol`, `Codec`, `RxDtmfFormat`, `TxDtmfFormat`, `SstRefreshMethod`,
-`ReroutingDisconnectCode`, `Feature`, `AreaLevel`, `AddressVerificationStatus`, `StirShakenMode`,
-`NumberType`, `Pop`, `SenderIdVerificationStatus`, `SenderType`, `SmsHttpMethod`, `SmsBodyType`,
-`SmsServerLocation`, `ExportTrunkType`
+`TransportProtocol`, `Codec`, `VoiceOutCodec`, `IceMode`, `RtcpMuxMode`, `RtcpFeedbackMode`,
+`RxDtmfFormat`, `TxDtmfFormat`, `SstRefreshMethod`, `ReroutingDisconnectCode`, `Feature`, `AreaLevel`,
+`AddressVerificationStatus`, `StirShakenMode`, `NumberType`, `Pop`, `SenderIdVerificationStatus`, `SenderType`,
+`SmsHttpMethod`, `SmsBodyType`, `SmsServerLocation`, `ExportTrunkType`, `ExportServiceType`
 
 \* `REPLACE_CLI` and `RANDOMIZE_CLI` require account configuration.
 
-`ExportType` includes `SMS_IN` and `SMS_OUT`. `VoiceOutPriceCategory` is in `com.didww.sdk.prices`, and `DidwwScope` in `com.didww.sdk.auth`. A value the API sends that this SDK does not know reads as `null`.
+`Codec` holds the codecs of an inbound SIP trunk (`SipConfiguration#setCodecs`) and `VoiceOutCodec` those of a Voice OUT trunk (`VoiceOutTrunk#setCodecs`); the two lists differ. `IceMode`, `RtcpMuxMode` and `RtcpFeedbackMode` serve both.
+
+`ExportType` includes `SMS_IN` and `SMS_OUT`; `ExportTrunkType` and `ExportServiceType` are the values of the `trunk_type` and `service_type` filters of SMS exports. `VoiceOutPriceCategory` is in `com.didww.sdk.prices`, and `DidwwScope` in `com.didww.sdk.auth`. A value the API sends that this SDK does not know reads as `null`.
 
 The wire value of a string enum is declared with Jackson's `@JsonProperty` only: `name()` is not the wire form (`NumberType.TOLL_FREE.name()` is `TOLL_FREE`, the API value is `toll_free`). Write the wire value in filters, such as `filter("number_type", "toll_free")` or `filter("status", "changes_required")`.
 
@@ -1285,13 +1315,15 @@ Most code keeps working: `DidwwClient.builder().credentials(new DidwwCredentials
 - **API version.** `X-DIDWW-API-Version` is no longer sent: the version is requested in the token. The default is `2026-10-22`, and an earlier version makes `build()` throw an `IllegalArgumentException`.
 - **Validation.** `build()` throws an `IllegalArgumentException` for an invalid API key, API version or service URL (see [Configuration](#configuration)), which 4.x accepted.
 - **Removed resources.** `client.pops()`, `client.didGroupTypes()`, `com.didww.sdk.resource.Pop` and `com.didww.sdk.resource.DidGroupType` are removed, with the `did_group_type` relationship and include. `DidGroup`, `AddressRequirement`, `EmergencyRequirement` and `EmergencyCallingService` have `getNumberType()` instead of `getDidGroupType()`; filter with `number_type` instead of `did_group_type.id`, and with `did_group.number_type` on available DIDs.
+- **Codecs.** `SipConfiguration#setCodecIds` and `getCodecIds` (`codec_ids`) are replaced by `setCodecs` and `getCodecs` (`codecs`), the codec names in priority order. `Codec` is no longer an integer enum: its constants are sent by name (`PCMU` as `pcmu`), and `AMR` and `AMR_WB` are new. Voice OUT trunks have their own codec list, `VoiceOutCodec`. Both trunk kinds gain `iceMode`, `rtcpMuxMode` and `rtcpFeedbackMode`.
+- **Requirements and proof types.** The mandatory fields of `AddressRequirement` and `EmergencyRequirement` are field names as the API spells them (such as `birth_date` or `tax_id`, not labels such as `Birth Date`) and never `null`. `ProofType#getEntityType()` is lowercase: `address`, `business` or `personal`.
 - **Point of presence.** `VoiceInTrunk#setPop` takes the enum `com.didww.sdk.resource.enums.Pop` (for example `Pop.FRA`), and `getPop()` returns it; `pop` is an attribute, no longer a relationship, and cannot be included.
 - **Numbers in untyped maps.** Decimal numbers that the SDK reads into a `Map<String, Object>` or a Jackson node, such as `ApiResponse#getMeta()`, `GenericAuthenticationMethod#getAttributes()` (an unknown Voice OUT trunk authentication method), the `source` and `meta` of the errors of a `DidwwApiException`, `Export#getFilters()` and the maps of `HttpInConfiguration`, are now `BigDecimal` with their exact value, not `Double`. Integers are unchanged.
 - **HTTP defaults.** 4.x used OkHttp's defaults: 10 s timeouts and redirects followed. 5.x opens TCP connections within 10 s, waits up to 60 s for a proxy tunnel, the TLS handshake, the response headers and between two reads or writes, follows no redirects, sends and stores no cookies and ignores the `Authenticator` and cache of your builder (see [HTTP client](#http-client-proxy-tls-timeouts)). The timeouts of your own `httpClientBuilder` are kept as before.
-- **Export download and file upload.** `uploadEncryptedFile` now goes through your configured HTTP client (proxy, TLS, interceptors) with the bearer token; 4.x used a separate default client. `downloadExport` and `downloadAndDecompressExport` download only from the API origin or the environment origin (a `DidwwClientException` otherwise, without a request), succeed only on a 200 (any other status, a 2xx included, now throws a `DidwwApiException` with the status and the parsed errors, where 4.x threw a `DidwwClientException`), follow no redirects, stream the file instead of reading it into memory, and replace the destination file only once it is complete; a destination file that cannot be written (missing directory, permissions, full disk) now throws an `UncheckedIOException` with the `IOException` as its cause, not a `DidwwClientException`; new overloads write to an `OutputStream`.
+- **Export download and file upload.** `uploadEncryptedFile` now goes through your configured HTTP client (proxy, TLS, interceptors) with the bearer token; 4.x used a separate default client. An error status of `uploadEncryptedFile` now throws a `DidwwApiException` with the status, the parsed errors and `getRetryAfter()`, where 4.x threw a `DidwwClientException`. `downloadExport` and `downloadAndDecompressExport` download only from the API origin or the environment origin (a `DidwwClientException` otherwise, without a request), succeed only on a 200 (any other status, a 2xx included, now throws a `DidwwApiException` with the status and the parsed errors, where 4.x threw a `DidwwClientException`), follow no redirects, stream the file instead of reading it into memory, and replace the destination file only once it is complete; a destination file that cannot be written (missing directory, permissions, full disk) now throws an `UncheckedIOException` with the `IOException` as its cause, not a `DidwwClientException`; new overloads write to an `OutputStream`.
 - **Exceptions.** `DidwwApiException` and `DidwwClientException` now extend the abstract `DidwwException` (still a `RuntimeException`), the base of the new `DidwwAuthException` and `DidwwPricesException`.
 
-New in 5.0.0: [SMS trunks](#sms-trunks), [SMS trunk groups](#sms-trunk-groups), [Sender ID verifications](#sender-id-verifications), [DID SMS routing](#sms-routing), `sms_in` and `sms_out` [exports](#exports), [prices](#prices), `DidGroup#getIsDemo()`, `Identity` company website, and the `apiVersion`, `scope`, `tokenStore`, `logger` and service URL methods of the builder.
+New in 5.0.0: `DidwwApiException#getRetryAfter()` for a 429 of the API (see [Error Handling](#error-handling)), codecs and ICE, RTCP multiplexing and RTCP feedback modes of [Voice Out trunks](#voice-out-trunks), [SMS trunks](#sms-trunks), [SMS trunk groups](#sms-trunk-groups), [Sender ID verifications](#sender-id-verifications), [DID SMS routing](#sms-routing), `sms_in` and `sms_out` [exports](#exports), [prices](#prices), `DidGroup#getIsDemo()`, `Identity` company website, and the `apiVersion`, `scope`, `tokenStore`, `logger` and service URL methods of the builder.
 
 ## Development
 

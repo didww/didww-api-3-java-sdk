@@ -38,9 +38,10 @@ public class EmergencyRequirementsExample {
             System.out.println("  Number type: " + req.getNumberType());
             System.out.println("  Identity type required: " + req.getIdentityType());
             System.out.println("  Address area level: " + req.getAddressAreaLevel());
-            if (req.getAddressMandatoryFields() != null) {
-                System.out.println("  Address mandatory fields: " + String.join(", ", req.getAddressMandatoryFields()));
-            }
+            // Field names as the API spells them, such as "area" or "birth_date"; empty when none are mandatory
+            System.out.println("  Address mandatory fields: " + req.getAddressMandatoryFields());
+            System.out.println("  Personal mandatory fields: " + req.getPersonalMandatoryFields());
+            System.out.println("  Business mandatory fields: " + req.getBusinessMandatoryFields());
             System.out.println("  Estimated setup time (days): " + req.getEstimateSetupTime());
             if (req.getRequirementRestrictionMessage() != null) {
                 System.out.println("  Restriction: " + req.getRequirementRestrictionMessage());

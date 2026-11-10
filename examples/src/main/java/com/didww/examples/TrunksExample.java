@@ -7,6 +7,7 @@ import com.didww.sdk.resource.configuration.PstnConfiguration;
 import com.didww.sdk.resource.configuration.SipConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
 import com.didww.sdk.resource.enums.Codec;
+import com.didww.sdk.resource.enums.IceMode;
 import com.didww.sdk.resource.enums.Pop;
 import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.TransportProtocol;
@@ -44,7 +45,9 @@ public class TrunksExample {
         SipConfiguration sip = new SipConfiguration();
         sip.setHost("sip.example.com");
         sip.setPort(5060);
-        sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
+        // Codecs by name, in priority order; left out, DIDWW applies its default list
+        sip.setCodecs(Arrays.asList(Codec.PCMU, Codec.PCMA, Codec.TELEPHONE_EVENT));
+        sip.setIceMode(IceMode.ACCEPT);
         sip.setTransportProtocolId(TransportProtocol.UDP);
         sip.setReroutingDisconnectCodeIds(Arrays.asList(
                 ReroutingDisconnectCode.SIP_480_TEMPORARILY_UNAVAILABLE,

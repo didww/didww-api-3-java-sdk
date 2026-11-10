@@ -54,6 +54,8 @@ public class Export extends BaseResource {
 
     /**
      * Export filters. Dates are {@code "YYYY-MM-DD HH:MM:SS"} in UTC; list values are sent as JSON arrays.
+     * An SDK enum constant is sent as its wire value, such as {@code a2p} for
+     * {@link com.didww.sdk.resource.enums.ExportServiceType#A2P}; {@code name()} is not the wire form.
      * <ul>
      *   <li>Every export: {@code from} (inclusive) and {@code to} (exclusive).</li>
      *   <li>{@code cdr_in}: {@code did_number}, {@code source_number}, {@code source_number_out},
@@ -61,10 +63,14 @@ public class Export extends BaseResource {
      *   <li>{@code cdr_out}: {@code voice_out_trunk.id}, {@code source}, {@code cli}, {@code destination}.</li>
      *   <li>{@code sms_in} and {@code sms_out}: {@code source_address_eq}, {@code source_address_cont},
      *       {@code destination_address_eq}, {@code destination_address_cont}, {@code status}, {@code sms_id},
-     *       {@code sms_trunk.id} (a string or a list).</li>
-     *   <li>{@code sms_in} only: {@code trunk_type} (a string or a list, see
-     *       {@link com.didww.sdk.resource.enums.ExportTrunkType}).</li>
-     *   <li>{@code sms_out} only: {@code service_type} ({@code a2p} or {@code p2p}) and
+     *       {@code sms_trunk.id} (a string or a list); {@code status} is {@code success}, {@code failed} or
+     *       {@code queued} for {@code sms_in}, and {@code routing_error}, {@code in_progress}, {@code queued},
+     *       {@code failed} or {@code success} for {@code sms_out}.</li>
+     *   <li>{@code sms_in} only: {@code trunk_type}, an {@link com.didww.sdk.resource.enums.ExportTrunkType},
+     *       a list of them, or the wire string ({@code smpp_smsc}, {@code smpp_esme}, {@code sms_to_email},
+     *       {@code http_in}).</li>
+     *   <li>{@code sms_out} only: {@code service_type}, {@code a2p} or {@code p2p} (see
+     *       {@link com.didww.sdk.resource.enums.ExportServiceType}), and
      *       {@code sender_id_verification.id} (a string or a list).</li>
      *   <li>Read back only: {@code year}, {@code month} and {@code day}, on exports created at earlier API versions.</li>
      * </ul>

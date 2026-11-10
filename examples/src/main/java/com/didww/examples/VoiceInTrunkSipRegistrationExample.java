@@ -31,7 +31,7 @@ public class VoiceInTrunkSipRegistrationExample {
         sip.setEnabledSipRegistration(true);
         sip.setUseDidInRuri(true);
         sip.setCnamLookup(false);
-        sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
+        sip.setCodecs(Arrays.asList(Codec.PCMU, Codec.PCMA));
         sip.setTransportProtocolId(TransportProtocol.UDP);
 
         VoiceInTrunk trunk = new VoiceInTrunk();

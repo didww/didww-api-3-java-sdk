@@ -25,8 +25,8 @@ class EmergencyRequirementTest extends BaseTest {
         assertThat(first.getAddressAreaLevel()).isEqualTo("city");
         assertThat(first.getPersonalAreaLevel()).isEqualTo("country");
         assertThat(first.getBusinessAreaLevel()).isNull();
-        assertThat(first.getAddressMandatoryFields()).containsExactly("street", "city", "postal_code");
-        assertThat(first.getPersonalMandatoryFields()).containsExactly("first_name", "last_name");
+        assertThat(first.getAddressMandatoryFields()).containsExactly("area");
+        assertThat(first.getPersonalMandatoryFields()).containsExactly("birth_date", "id_number");
         assertThat(first.getBusinessMandatoryFields()).isEmpty();
         assertThat(first.getEstimateSetupTime()).isEqualTo("7-14 days");
         assertThat(first.getRequirementRestrictionMessage()).isNull();
@@ -38,6 +38,8 @@ class EmergencyRequirementTest extends BaseTest {
         EmergencyRequirement businessOnly = records.get(1);
         assertThat(businessOnly.getPersonalAreaLevel()).isNull();
         assertThat(businessOnly.getBusinessAreaLevel()).isEqualTo("world_wide");
+        assertThat(businessOnly.getAddressMandatoryFields()).isEmpty();
+        assertThat(businessOnly.getBusinessMandatoryFields()).containsExactly("contact_email");
         assertThat(businessOnly.getMetaSetupPrice()).isEqualTo("0.0");
         assertThat(businessOnly.getMetaMonthlyPrice()).isEqualTo("2.5");
     }
@@ -57,7 +59,8 @@ class EmergencyRequirementTest extends BaseTest {
         assertThat(record.getBusinessAreaLevel()).isEqualTo("world_wide");
         assertThat(record.getEstimateSetupTime()).isEqualTo("7-14 days");
         assertThat(record.getRequirementRestrictionMessage()).isEqualTo("Additional compliance review is required for this country.");
-        assertThat(record.getBusinessMandatoryFields()).containsExactly("company_name", "tax_number", "registration_number");
+        assertThat(record.getAddressMandatoryFields()).containsExactly("area");
+        assertThat(record.getBusinessMandatoryFields()).containsExactly("id_number", "tax_id", "company_reg_number", "birth_date");
         assertThat(record.getNumberType()).isEqualTo(NumberType.LOCAL);
         assertThat(record.getMetaSetupPrice()).isEqualTo("0.0");
         assertThat(record.getMetaMonthlyPrice()).isEqualTo("2.5");

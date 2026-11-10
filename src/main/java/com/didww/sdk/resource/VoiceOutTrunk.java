@@ -4,8 +4,12 @@ import com.didww.sdk.converter.AuthenticationMethodDeserializer;
 import com.didww.sdk.converter.AuthenticationMethodSerializer;
 import com.didww.sdk.resource.authenticationmethod.AuthenticationMethod;
 import com.didww.sdk.resource.enums.DefaultDstAction;
+import com.didww.sdk.resource.enums.IceMode;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
+import com.didww.sdk.resource.enums.RtcpFeedbackMode;
+import com.didww.sdk.resource.enums.RtcpMuxMode;
+import com.didww.sdk.resource.enums.VoiceOutCodec;
 import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -52,6 +56,26 @@ public class VoiceOutTrunk extends BaseResource {
 
     @JsonProperty("dst_prefixes")
     private List<String> dstPrefixes;
+
+    /**
+     * Codecs offered on calls from the trunk, in priority order: the first has the highest priority.
+     * Left out on create, the trunk offers {@code pcma}, {@code pcmu} and {@code telephone_event}.
+     * (API 2026-10-22)
+     */
+    @JsonProperty("codecs")
+    private List<VoiceOutCodec> codecs;
+
+    /** ICE on calls from the trunk. Defaults to {@link IceMode#ACCEPT}. (API 2026-10-22) */
+    @JsonProperty("ice_mode")
+    private IceMode iceMode;
+
+    /** RTP and RTCP on one port on calls from the trunk. Defaults to {@link RtcpMuxMode#ACCEPT}. (API 2026-10-22) */
+    @JsonProperty("rtcp_mux_mode")
+    private RtcpMuxMode rtcpMuxMode;
+
+    /** RTCP feedback (AVPF) on calls from the trunk. Defaults to {@link RtcpFeedbackMode#ACCEPT}. (API 2026-10-22) */
+    @JsonProperty("rtcp_feedback_mode")
+    private RtcpFeedbackMode rtcpFeedbackMode;
 
     @JsonProperty("force_symmetric_rtp")
     private Boolean forceSymmetricRtp;
@@ -125,6 +149,43 @@ public class VoiceOutTrunk extends BaseResource {
 
     public void setDstPrefixes(List<String> dstPrefixes) {
         this.dstPrefixes = markDirty("dstPrefixes", dstPrefixes);
+    }
+
+    /**
+     * Sets the codecs offered on calls from the trunk, in priority order: the first has the highest
+     * priority. The names differ from those of an inbound SIP trunk ({@code Codec}).
+     *
+     * @param codecs the codecs, at least one and each once
+     */
+    public void setCodecs(List<VoiceOutCodec> codecs) {
+        this.codecs = markDirty("codecs", codecs);
+    }
+
+    /**
+     * Sets ICE on calls from the trunk.
+     *
+     * @param iceMode the mode
+     */
+    public void setIceMode(IceMode iceMode) {
+        this.iceMode = markDirty("iceMode", iceMode);
+    }
+
+    /**
+     * Sets RTP and RTCP on one port on calls from the trunk.
+     *
+     * @param rtcpMuxMode the mode
+     */
+    public void setRtcpMuxMode(RtcpMuxMode rtcpMuxMode) {
+        this.rtcpMuxMode = markDirty("rtcpMuxMode", rtcpMuxMode);
+    }
+
+    /**
+     * Sets RTCP feedback (AVPF) on calls from the trunk.
+     *
+     * @param rtcpFeedbackMode the mode
+     */
+    public void setRtcpFeedbackMode(RtcpFeedbackMode rtcpFeedbackMode) {
+        this.rtcpFeedbackMode = markDirty("rtcpFeedbackMode", rtcpFeedbackMode);
     }
 
     public void setForceSymmetricRtp(Boolean forceSymmetricRtp) {

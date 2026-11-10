@@ -73,7 +73,7 @@ public class PricesDownloadExample {
         System.out.println("\n=== First rows ===");
         try (Stream<Map<String, String>> rows = PriceFileReader.rows(path)) {
             rows.limit(FIRST_ROWS).forEach(row -> System.out.println("  " + row.get("Country") + " "
-                    + row.get("Destination") + " " + row.get("Source type") + ": " + row.get("Rate (USD, excl. VAT)")));
+                    + row.get("Destination") + " " + row.get("Source type") + ": " + row.get("Rate")));
         }
     }
 

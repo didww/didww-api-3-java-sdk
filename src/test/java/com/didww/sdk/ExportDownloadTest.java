@@ -3,9 +3,11 @@ package com.didww.sdk;
 import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.didww.sdk.support.InterruptingBody;
+import com.didww.sdk.support.ObservedBody;
 import com.didww.sdk.support.RawHttpServer;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import okhttp3.OkHttpClient;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -294,6 +297,40 @@ class ExportDownloadTest extends BaseTest {
 
         assertThat(e).hasCauseInstanceOf(NoSuchFileException.class);
         assertThat(files()).isEmpty();
+    }
+
+    // The temporary file name does not grow with the destination name, so a
+    // name close to the 255-byte limit of most file systems still downloads.
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void testPathDestinationWithLongName(boolean decompress) throws IOException {
+        stubExport(gzip(CSV));
+        String name = "e".repeat(243) + ".csv.gz";
+        List<List<String>> during = new ArrayList<>();
+        DidwwClient observed = clientBuilder()
+                .httpClientBuilder(new OkHttpClient.Builder().addInterceptor(ObservedBody.interceptor(PATH,
+                        () -> during.add(uncheckedFiles()))))
+                .build();
+
+        if (decompress) {
+            observed.downloadAndDecompressExport(url(), dir.resolve(name));
+        } else {
+            observed.downloadExport(url(), dir.resolve(name));
+        }
+
+        assertThat(during).hasSize(1);
+        assertThat(during.get(0)).singleElement(InstanceOfAssertFactories.STRING)
+                .matches("\\.didww-[0-9a-f]{16}\\.tmp");
+        assertThat(files()).containsExactly(name);
+        assertThat(Files.size(dir.resolve(name))).isPositive();
+    }
+
+    private List<String> uncheckedFiles() {
+        try {
+            return files();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     @Test

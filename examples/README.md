@@ -40,7 +40,7 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 | [`com.didww.examples.RegionsExample`](src/main/java/com/didww/examples/RegionsExample.java) | Lists regions with filters/includes and fetches a specific region. |
 | [`com.didww.examples.DidGroupsExample`](src/main/java/com/didww/examples/DidGroupsExample.java) | Fetches DID groups with included SKUs, number type, demo flag and group details. |
 | [`com.didww.examples.DidsExample`](src/main/java/com/didww/examples/DidsExample.java) | Updates DID routing/capacity by assigning trunk and capacity pool. |
-| [`com.didww.examples.TrunksExample`](src/main/java/com/didww/examples/TrunksExample.java) | Lists trunks, creates SIP (with a point of presence) and PSTN trunks, updates and deletes them. |
+| [`com.didww.examples.TrunksExample`](src/main/java/com/didww/examples/TrunksExample.java) | Lists trunks, creates SIP (with a point of presence, codecs and ICE mode) and PSTN trunks, updates and deletes them. |
 | [`com.didww.examples.SharedCapacityGroupsExample`](src/main/java/com/didww/examples/SharedCapacityGroupsExample.java) | Creates a shared capacity group in a capacity pool. |
 | [`com.didww.examples.OrdersExample`](src/main/java/com/didww/examples/OrdersExample.java) | Lists orders and creates/cancels a DID order using live SKU lookup. |
 | [`com.didww.examples.OrdersSkuExample`](src/main/java/com/didww/examples/OrdersSkuExample.java) | Creates a DID order by SKU resolved from DID groups. |
@@ -53,7 +53,7 @@ DIDWW_API_KEY=your_api_key ./gradlew runExample -PexampleClass=com.didww.example
 | [`com.didww.examples.IdentityAddressProofsExample`](src/main/java/com/didww/examples/IdentityAddressProofsExample.java) | Creates identity and address, encrypts and uploads files, attaches proofs to both. |
 | [`com.didww.examples.VoiceInTrunkGroupsExample`](src/main/java/com/didww/examples/VoiceInTrunkGroupsExample.java) | CRUD for trunk groups with trunk relationships; cleans up when a step fails. |
 | [`com.didww.examples.VoiceInTrunkSipRegistrationExample`](src/main/java/com/didww/examples/VoiceInTrunkSipRegistrationExample.java) | End-to-end SIP registration flow: create with `enabledSipRegistration=true`, rename, disable by setting `host`, re-enable by toggling the flag. The SDK keeps the dependent fields (`host`, `port`, `useDidInRuri`) aligned with the server's validation rules automatically. |
-| [`com.didww.examples.VoiceOutTrunksExample`](src/main/java/com/didww/examples/VoiceOutTrunksExample.java) | CRUD for voice out trunks (requires account config). |
+| [`com.didww.examples.VoiceOutTrunksExample`](src/main/java/com/didww/examples/VoiceOutTrunksExample.java) | CRUD for voice out trunks, with codecs and ICE mode (requires account config). |
 | [`com.didww.examples.DidTrunkAssignmentExample`](src/main/java/com/didww/examples/DidTrunkAssignmentExample.java) | Demonstrates exclusive trunk/trunk group assignment on DIDs, then restores the DID's original routing. |
 | [`com.didww.examples.DidReservationsExample`](src/main/java/com/didww/examples/DidReservationsExample.java) | Creates, lists, finds and deletes DID reservations. |
 | [`com.didww.examples.ExportsExample`](src/main/java/com/didww/examples/ExportsExample.java) | Creates and lists CDR exports with from/to datetime range filters (UTC). |

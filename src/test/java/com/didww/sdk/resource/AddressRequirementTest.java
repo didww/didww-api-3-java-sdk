@@ -26,6 +26,8 @@ class AddressRequirementTest extends BaseTest {
         assertThat(requirements).hasSize(5);
         assertThat(requirements.get(0).getId()).isEqualTo("b6c80acb-3952-4d53-9e62-fe2348c0636b");
         assertThat(requirements.get(0).getIdentityType()).isEqualTo(IdentityType.ANY);
+        assertThat(requirements.get(0).getPersonalMandatoryFields()).containsExactly("country");
+        assertThat(requirements.get(0).getBusinessMandatoryFields()).as("empty, never null").isEmpty();
     }
 
     @Test
@@ -53,10 +55,9 @@ class AddressRequirementTest extends BaseTest {
         assertThat(requirement.getBusinessProofQty()).isEqualTo(1);
         assertThat(requirement.getAddressProofQty()).isEqualTo(1);
         assertThat(requirement.getRestrictionMessage()).isEqualTo("End User Registration is Required");
-        assertThat(requirement.getPersonalMandatoryFields()).isNotNull();
-        assertThat(requirement.getPersonalMandatoryFields()).contains("Birth Date");
-        assertThat(requirement.getBusinessMandatoryFields()).isNotNull();
-        assertThat(requirement.getBusinessMandatoryFields()).contains("Company ID");
+        assertThat(requirement.getPersonalMandatoryFields()).containsExactly("birth_date", "country", "personal_tax_id");
+        assertThat(requirement.getBusinessMandatoryFields())
+                .containsExactly("id_number", "tax_id", "country", "company_reg_number", "personal_tax_id");
         // relationship accessors
         assertThat(requirement.getCountry()).isNotNull();
         assertThat(requirement.getCountry().getId()).isEqualTo("5b156dc2-327e-4665-bdc5-35cd8729b885");
@@ -72,5 +73,7 @@ class AddressRequirementTest extends BaseTest {
         assertThat(requirement.getPersonalProofTypes()).hasSize(1);
         assertThat(requirement.getBusinessProofTypes()).hasSize(7);
         assertThat(requirement.getAddressProofTypes()).hasSize(1);
+        assertThat(requirement.getPersonalProofTypes()).extracting(ProofType::getEntityType).containsExactly("personal");
+        assertThat(requirement.getAddressProofTypes()).extracting(ProofType::getEntityType).containsExactly("address");
     }
 }

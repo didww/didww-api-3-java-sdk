@@ -87,7 +87,7 @@ public class VoiceInTrunkGroupsExample {
         SipConfiguration sip = new SipConfiguration();
         sip.setHost(host);
         sip.setPort(5060);
-        sip.setCodecIds(codecs);
+        sip.setCodecs(codecs);
         sip.setTransportProtocolId(TransportProtocol.UDP);
         trunk.setConfiguration(sip);
         trunk.setPop(pop);

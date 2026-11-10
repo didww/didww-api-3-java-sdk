@@ -1,5 +1,6 @@
 package com.didww.sdk;
 
+import com.didww.sdk.exception.DidwwApiException;
 import com.didww.sdk.exception.DidwwClientException;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import okhttp3.OkHttpClient;
@@ -142,8 +143,8 @@ class EncryptedFileUploadTest extends BaseTest {
 
         assertThatThrownBy(() -> client.uploadEncryptedFile(
                 "example".getBytes(StandardCharsets.UTF_8), "sample.pdf.enc", "fingerprint-123", null))
-                .isInstanceOf(DidwwClientException.class)
-                .hasMessageStartingWith("Failed to upload encrypted file: HTTP 422 {\"errors\"")
+                .isInstanceOfSatisfying(DidwwApiException.class, e -> assertThat(e.getHttpStatus()).isEqualTo(422))
+                .hasMessageStartingWith("DIDWW API error (HTTP 422): {\"errors\"")
                 .satisfies(e -> assertThat(e.getMessage().length()).isLessThanOrEqualTo((1 << 20) + 100));
     }
 }

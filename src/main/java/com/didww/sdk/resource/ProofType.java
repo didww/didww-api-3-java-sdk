@@ -12,6 +12,7 @@ public class ProofType extends BaseResource {
     @JsonProperty("name")
     private String name;
 
+    /** What the document proves: {@code address}, {@code business} or {@code personal}. */
     @JsonProperty("entity_type")
     private String entityType;
 }

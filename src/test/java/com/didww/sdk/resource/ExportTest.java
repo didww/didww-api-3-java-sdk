@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.ExportStatus;
+import com.didww.sdk.resource.enums.ExportServiceType;
 import com.didww.sdk.resource.enums.ExportTrunkType;
 import com.didww.sdk.resource.enums.ExportType;
 import org.junit.jupiter.api.Test;
@@ -190,7 +191,7 @@ class ExportTest extends BaseTest {
 
         assertThat(created.getId()).isEqualTo("5a2d3e4f-6b7c-4d8e-9f0a-1b2c3d4e5f60");
         assertThat(created.getExportType()).isEqualTo(ExportType.SMS_IN);
-        assertThat(created.getFilters()).containsEntry("trunk_type", Arrays.asList("SMPP SMSC", "HTTP IN"));
+        assertThat(created.getFilters()).containsEntry("trunk_type", Arrays.asList("smpp_smsc", "http_in"));
     }
 
     @Test
@@ -206,7 +207,7 @@ class ExportTest extends BaseTest {
         filters.put("from", "2026-10-01 00:00:00");
         filters.put("to", "2026-10-15 00:00:00");
         filters.put("sms_trunk.id", Arrays.asList("b2c3d4e5-0000-4000-8000-000000000001", "b2c3d4e5-0000-4000-8000-000000000003"));
-        filters.put("service_type", "a2p");
+        filters.put("service_type", ExportServiceType.A2P);
         filters.put("sender_id_verification.id", "c3d4e5f6-0000-4000-8000-000000000002");
 
         Export export = new Export();

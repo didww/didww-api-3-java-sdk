@@ -27,7 +27,7 @@ import java.util.stream.StreamSupport;
  * Reads a price file as downloaded (gzipped CSV), one row at a time.
  *
  * <p>Each row is a map keyed by the header line as is (for example
- * {@code Rate (USD, excl. VAT)}), in header order; the values are the CSV
+ * {@code Rate} or {@code Connection fee}), in header order; the values are the CSV
  * fields as is, empty for a missing value. A UTF-8 byte order mark is skipped,
  * invalid UTF-8 reads as U+FFFD, empty lines are skipped, and a file with only
  * a header has no rows.

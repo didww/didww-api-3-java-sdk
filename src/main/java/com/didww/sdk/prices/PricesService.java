@@ -9,6 +9,7 @@ import com.didww.sdk.http.JsonApiMediaType;
 import com.didww.sdk.internal.AtomicFile;
 import com.didww.sdk.internal.Bodies;
 import com.didww.sdk.internal.Jitter;
+import com.didww.sdk.internal.RetryAfter;
 import com.didww.sdk.internal.Sleeper;
 import com.didww.sdk.internal.Streams;
 import com.didww.sdk.internal.Urls;
@@ -222,7 +223,8 @@ public final class PricesService<T> {
 
     /**
      * Downloads the price file to {@code path}. The file is written to a
-     * temporary file next to {@code path}, flushed to the disk and moved over
+     * temporary file {@code .didww-<16 hex digits>.tmp} in the directory of
+     * {@code path}, flushed to the disk and moved over
      * {@code path} only when the whole file has arrived, so a failed download
      * leaves an existing file as it was. The new file gets the default
      * permissions of a new file (the umask on POSIX systems) and the
@@ -329,7 +331,7 @@ public final class PricesService<T> {
         if (response.code() != 503 || attempt > MAX_UNAVAILABLE_RETRIES) {
             return null;
         }
-        Duration retryAfter = retryAfter(response);
+        Duration retryAfter = RetryAfter.seconds(response);
         if (retryAfter == null || retryAfter.getSeconds() > MAX_UNAVAILABLE_RETRY_AFTER_SECONDS) {
             return null;
         }
@@ -430,17 +432,7 @@ public final class PricesService<T> {
                 kind = PricesErrorKind.UNEXPECTED_STATUS;
                 break;
         }
-        return new DidwwPricesException(kind, status, code, errors, retryAfter(response), null);
-    }
-
-    // The Retry-After of an answer when given in seconds; an HTTP date is ignored.
-    private static Duration retryAfter(Response response) {
-        String header = response.header("Retry-After");
-        if (header == null) {
-            return null;
-        }
-        String value = header.trim();
-        return value.matches("\\d{1,9}") ? Duration.ofSeconds(Long.parseLong(value)) : null;
+        return new DidwwPricesException(kind, status, code, errors, RetryAfter.seconds(response), null);
     }
 
     // The error objects of a JSON:API errors document; none for any other body.

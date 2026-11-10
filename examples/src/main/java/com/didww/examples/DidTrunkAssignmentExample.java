@@ -63,7 +63,7 @@ public class DidTrunkAssignmentExample {
             SipConfiguration sip = new SipConfiguration();
             sip.setHost("sip.example.com");
             sip.setPort(5060);
-            sip.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA));
+            sip.setCodecs(Arrays.asList(Codec.PCMU, Codec.PCMA));
             sip.setTransportProtocolId(TransportProtocol.UDP);
             trunk.setConfiguration(sip);
             trunk.setPop(Pop.FRA); // optional; leave it unset to let DIDWW choose
