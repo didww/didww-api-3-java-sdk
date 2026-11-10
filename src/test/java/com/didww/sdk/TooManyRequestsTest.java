@@ -73,7 +73,8 @@ class TooManyRequestsTest extends BaseTest {
     }
 
     private DidwwApiException failure(Operation operation) {
-        DidwwApiException e = catchThrowableOfType(() -> operation.run(client, origin(), dir), DidwwApiException.class);
+        String origin = origin();
+        DidwwApiException e = catchThrowableOfType(() -> operation.run(client, origin, dir), DidwwApiException.class);
         assertThat(e).as("a DidwwApiException").isNotNull();
         return e;
     }
