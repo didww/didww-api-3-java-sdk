@@ -298,6 +298,37 @@ class VoiceInTrunkTest extends BaseTest {
     }
 
     @Test
+    void testUpdateSendsBackCodecsAndModesTheSdkDoesNotKnow() {
+        String id = "a80006b6-4183-4865-8b99-7ebbd359a762";
+        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/show_unknown_media_values.json"))));
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/show_unknown_media_values.json"))));
+
+        SipConfiguration config = (SipConfiguration) client.voiceInTrunks().find(id).getData().getConfiguration();
+        assertThat(config.getCodecs()).hasToString("[evs, pcmu]");
+        assertThat(config.getIceMode()).hasToString("require");
+
+        config.setHost("203.0.113.111");
+        VoiceInTrunk trunk = new VoiceInTrunk().withId(id);
+        trunk.setConfiguration(config);
+        client.voiceInTrunks().update(trunk);
+
+        String attributes = "$.data.attributes.configuration.attributes.";
+        wireMock.verify(patchRequestedFor(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .withRequestBody(matchingJsonPath(attributes + "codecs", equalToJson("[\"evs\", \"pcmu\"]")))
+                .withRequestBody(matchingJsonPath(attributes + "ice_mode", equalTo("require")))
+                .withRequestBody(matchingJsonPath(attributes + "rtcp_mux_mode", equalTo("require")))
+                .withRequestBody(matchingJsonPath(attributes + "rtcp_feedback_mode", equalTo("require"))));
+    }
+
+    @Test
     void testCodecIdsAreGone() throws Exception {
         SipConfiguration config = new SipConfiguration();
         config.setCodecs(Arrays.asList(Codec.PCMU));
