@@ -1291,8 +1291,7 @@ The SDK provides enum classes in `com.didww.sdk.resource.enums`:
 
 `CallbackMethod`, `IdentityType`, `OrderStatus`, `ExportType`, `ExportStatus`, `CliFormat`,
 `OnCliMismatchAction`\*, `MediaEncryptionMode`, `DefaultDstAction`, `VoiceOutTrunkStatus`,
-`EmergencyCallingServiceStatus`, `EmergencyVerificationStatus`, `DiversionRelayPolicy`,
-`TransportProtocol`, `Codec`, `VoiceOutCodec`, `IceMode`, `RtcpMuxMode`, `RtcpFeedbackMode`,
+`EmergencyCallingServiceStatus`, `EmergencyVerificationStatus`, `DiversionRelayPolicy`, `TransportProtocol`,
 `RxDtmfFormat`, `TxDtmfFormat`, `SstRefreshMethod`, `ReroutingDisconnectCode`, `Feature`, `AreaLevel`,
 `AddressVerificationStatus`, `StirShakenMode`, `NumberType`, `Pop`, `SenderIdVerificationStatus`, `SenderType`,
 `SmsHttpMethod`, `SmsBodyType`, `SmsServerLocation`, `ExportTrunkType`, `ExportServiceType`
@@ -1301,7 +1300,9 @@ The SDK provides enum classes in `com.didww.sdk.resource.enums`:
 
 `Codec` holds the codecs of an inbound SIP trunk (`SipConfiguration#setCodecs`) and `VoiceOutCodec` those of a Voice OUT trunk (`VoiceOutTrunk#setCodecs`); the two lists differ. `IceMode`, `RtcpMuxMode` and `RtcpFeedbackMode` serve both.
 
-`ExportType` includes `SMS_IN` and `SMS_OUT`; `ExportTrunkType` and `ExportServiceType` are the values of the `trunk_type` and `service_type` filters of SMS exports. `VoiceOutPriceCategory` is in `com.didww.sdk.prices`, and `DidwwScope` in `com.didww.sdk.auth`. A value the API sends that this SDK does not know reads as `null`.
+These five, in the same package, are classes rather than enums, as the API adds codecs and modes over time. Each known value is a constant, such as `Codec.PCMU`, and `getValue()` is its API name. A value this version of the SDK does not know is kept as read, such as `Codec.of("evs")`, and sent back unchanged on update. Reading a known value returns its constant, so `==` and `equals` both work; there is no `values()`, `name()` or `switch` over them.
+
+`ExportType` includes `SMS_IN` and `SMS_OUT`; `ExportTrunkType` and `ExportServiceType` are the values of the `trunk_type` and `service_type` filters of SMS exports. `VoiceOutPriceCategory` is in `com.didww.sdk.prices`, and `DidwwScope` in `com.didww.sdk.auth`. For the enums, a value the API sends that this SDK does not know reads as `null`.
 
 The wire value of a string enum is declared with Jackson's `@JsonProperty` only: `name()` is not the wire form (`NumberType.TOLL_FREE.name()` is `TOLL_FREE`, the API value is `toll_free`). Write the wire value in filters, such as `filter("number_type", "toll_free")` or `filter("status", "changes_required")`.
 
@@ -1315,7 +1316,7 @@ Most code keeps working: `DidwwClient.builder().credentials(new DidwwCredentials
 - **API version.** `X-DIDWW-API-Version` is no longer sent: the version is requested in the token. The default is `2026-10-22`, and an earlier version makes `build()` throw an `IllegalArgumentException`.
 - **Validation.** `build()` throws an `IllegalArgumentException` for an invalid API key, API version or service URL (see [Configuration](#configuration)), which 4.x accepted.
 - **Removed resources.** `client.pops()`, `client.didGroupTypes()`, `com.didww.sdk.resource.Pop` and `com.didww.sdk.resource.DidGroupType` are removed, with the `did_group_type` relationship and include. `DidGroup`, `AddressRequirement`, `EmergencyRequirement` and `EmergencyCallingService` have `getNumberType()` instead of `getDidGroupType()`; filter with `number_type` instead of `did_group_type.id`, and with `did_group.number_type` on available DIDs.
-- **Codecs.** `SipConfiguration#setCodecIds` and `getCodecIds` (`codec_ids`) are replaced by `setCodecs` and `getCodecs` (`codecs`), the codec names in priority order. `Codec` is no longer an integer enum: its constants are sent by name (`PCMU` as `pcmu`), and `AMR` and `AMR_WB` are new. Voice OUT trunks have their own codec list, `VoiceOutCodec`. Both trunk kinds gain `iceMode`, `rtcpMuxMode` and `rtcpFeedbackMode`.
+- **Codecs.** `SipConfiguration#setCodecIds` and `getCodecIds` (`codec_ids`) are replaced by `setCodecs` and `getCodecs` (`codecs`), the codec names in priority order. `Codec` is no longer an enum: it is a class with a constant per codec, sent by name (`PCMU` as `pcmu`), `getValue()` returns that name instead of the former integer id, and `values()`, `valueOf`, `name()`, `switch` and `EnumSet` no longer apply (see [Enums](#enums)). `AMR` and `AMR_WB` are new. Voice OUT trunks have their own codec list, `VoiceOutCodec`. Both trunk kinds gain `iceMode`, `rtcpMuxMode` and `rtcpFeedbackMode`.
 - **Requirements and proof types.** The mandatory fields of `AddressRequirement` and `EmergencyRequirement` are field names as the API spells them (such as `birth_date` or `tax_id`, not labels such as `Birth Date`) and never `null`. `ProofType#getEntityType()` is lowercase: `address`, `business` or `personal`.
 - **Point of presence.** `VoiceInTrunk#setPop` takes the enum `com.didww.sdk.resource.enums.Pop` (for example `Pop.FRA`), and `getPop()` returns it; `pop` is an attribute, no longer a relationship, and cannot be included.
 - **Numbers in untyped maps.** Decimal numbers that the SDK reads into a `Map<String, Object>` or a Jackson node, such as `ApiResponse#getMeta()`, `GenericAuthenticationMethod#getAttributes()` (an unknown Voice OUT trunk authentication method), the `source` and `meta` of the errors of a `DidwwApiException`, `Export#getFilters()` and the maps of `HttpInConfiguration`, are now `BigDecimal` with their exact value, not `Double`. Integers are unchanged.

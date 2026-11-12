@@ -16,6 +16,7 @@ import com.didww.sdk.resource.enums.VoiceOutCodec;
 import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -320,5 +321,34 @@ class VoiceOutTrunkTest extends BaseTest {
         client.voiceOutTrunks().delete(id);
 
         wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_out_trunks/" + id)));
+    }
+
+    @Test
+    void testUpdateSendsBackCodecsTheSdkDoesNotKnow() {
+        String id = "425ce763-a3a9-49b4-af5b-ada1a65c8864";
+        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/show_unknown_media_values.json"))));
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/show_unknown_media_values.json"))));
+
+        VoiceOutTrunk trunk = client.voiceOutTrunks().find(id).getData();
+        assertThat(trunk.getCodecs()).hasToString("[evs, pcma]");
+        assertThat(trunk.getIceMode()).hasToString("require");
+        assertThat(trunk.getRtcpMuxMode()).hasToString("require");
+        assertThat(trunk.getRtcpFeedbackMode()).hasToString("require");
+
+        List<VoiceOutCodec> codecs = new ArrayList<>(trunk.getCodecs());
+        codecs.add(VoiceOutCodec.OPUS);
+        trunk.setCodecs(codecs);
+        client.voiceOutTrunks().update(trunk);
+
+        wireMock.verify(patchRequestedFor(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .withRequestBody(matchingJsonPath("$.data.attributes.codecs", equalToJson("[\"evs\", \"pcma\", \"opus\"]"))));
     }
 }
