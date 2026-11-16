@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * CRUD for SMS trunks (2026-10-22): lists trunks, creates an HTTP IN trunk, updates its configuration,
+ * CRUD for SMS trunks (2026-11-19): lists trunks, creates an HTTP IN trunk, updates its configuration,
  * regenerates the credentials of an HTTP OUT trunk, and deletes both trunks.
  *
  * Configuration types (com.didww.sdk.resource.smstrunkconfiguration):

@@ -82,11 +82,11 @@ class TokenProviderTest {
     }
 
     private TokenProvider provider() {
-        return provider(origin(), API_KEY, null, "2026-10-22", new MemoryTokenStore());
+        return provider(origin(), API_KEY, null, "2026-11-19", new MemoryTokenStore());
     }
 
     private TokenProvider provider(TokenStore store) {
-        return provider(origin(), API_KEY, null, "2026-10-22", store);
+        return provider(origin(), API_KEY, null, "2026-11-19", store);
     }
 
     private TokenProvider provider(String authUrl, String apiKey, DidwwScope scope, String version, TokenStore store) {
@@ -108,7 +108,7 @@ class TokenProviderTest {
 
     private static String tokenJson(String accessToken, String audience) {
         return "{\"access_token\":\"" + accessToken + "\",\"token_type\":\"Bearer\",\"expires_in\":900,"
-                + "\"aud\":[\"" + audience + "\"],\"scope\":\"full\",\"api_version\":\"2026-10-22\"}";
+                + "\"aud\":[\"" + audience + "\"],\"scope\":\"full\",\"api_version\":\"2026-11-19\"}";
     }
 
     private void stubToken(ResponseDefinitionBuilder response) {
@@ -159,7 +159,7 @@ class TokenProviderTest {
         assertThat(token.getExpiresIn()).isEqualTo(900);
         assertThat(token.getAudience()).containsExactly(API);
         assertThat(token.getScope()).isEqualTo("full");
-        assertThat(token.getApiVersion()).isEqualTo("2026-10-22");
+        assertThat(token.getApiVersion()).isEqualTo("2026-11-19");
         assertThat(token.getMintedAt()).isEqualTo(MINTED_AT);
         wireMock.verify(1, postRequestedFor(urlEqualTo("/token"))
                 .withHeader("Api-Key", equalTo(API_KEY))
@@ -175,7 +175,7 @@ class TokenProviderTest {
     void testMintRequestWithScope() {
         stubToken(okJson(tokenJson("t", API).replace("\"full\"", "\"read\"")));
 
-        provider(origin(), API_KEY, DidwwScope.READ, "2026-10-22", new MemoryTokenStore()).token(API);
+        provider(origin(), API_KEY, DidwwScope.READ, "2026-11-19", new MemoryTokenStore()).token(API);
 
         wireMock.verify(postRequestedFor(urlEqualTo("/token"))
                 .withRequestBody(equalToJson(fixture("token/create_request_read_scope.json"), false, false)));
@@ -183,7 +183,7 @@ class TokenProviderTest {
 
     @Test
     void testMintRequestWithApiVersion() {
-        stubToken(okJson(tokenJson("t", API).replace("2026-10-22", "2099-01-01")));
+        stubToken(okJson(tokenJson("t", API).replace("2026-11-19", "2099-01-01")));
 
         provider(origin(), API_KEY, null, "2099-01-01", new MemoryTokenStore()).token(API);
 
@@ -243,21 +243,21 @@ class TokenProviderTest {
 
     @Test
     void testCacheKey() {
-        String base = provider("https://auth.example.com", "key-1", null, "2026-10-22", new MemoryTokenStore()).cacheKey(API);
+        String base = provider("https://auth.example.com", "key-1", null, "2026-11-19", new MemoryTokenStore()).cacheKey(API);
 
-        assertThat(base).isEqualTo("didww:token:v1:2e1c5435f0e67f91d34497fabf69840a945923a47982fad172c353b3f26be539");
+        assertThat(base).isEqualTo("didww:token:v1:7f410b6b26861d5df39c9b3d800faec7f2feefa0c6949246c8d0cd3580714f57");
         assertThat(base).doesNotContain("key-1");
-        assertThat(provider("https://auth.example.com/", "key-1", null, "2026-10-22", new MemoryTokenStore()).cacheKey(API))
+        assertThat(provider("https://auth.example.com/", "key-1", null, "2026-11-19", new MemoryTokenStore()).cacheKey(API))
                 .isEqualTo(base);
-        assertThat(provider("https://auth.example.com", "key-1", null, "2026-10-22", new MemoryTokenStore()).cacheKey(SMS))
+        assertThat(provider("https://auth.example.com", "key-1", null, "2026-11-19", new MemoryTokenStore()).cacheKey(SMS))
                 .isNotEqualTo(base);
         assertThat(provider("https://auth.example.com", "key-1", null, "2099-01-01", new MemoryTokenStore()).cacheKey(API))
                 .isNotEqualTo(base);
-        assertThat(provider("https://auth.example.com", "key-1", DidwwScope.READ, "2026-10-22", new MemoryTokenStore()).cacheKey(API))
+        assertThat(provider("https://auth.example.com", "key-1", DidwwScope.READ, "2026-11-19", new MemoryTokenStore()).cacheKey(API))
                 .isNotEqualTo(base);
-        assertThat(provider("https://auth-sandbox.example.com", "key-1", null, "2026-10-22", new MemoryTokenStore()).cacheKey(API))
+        assertThat(provider("https://auth-sandbox.example.com", "key-1", null, "2026-11-19", new MemoryTokenStore()).cacheKey(API))
                 .isNotEqualTo(base);
-        assertThat(provider("https://auth.example.com", "key-2", null, "2026-10-22", new MemoryTokenStore()).cacheKey(API))
+        assertThat(provider("https://auth.example.com", "key-2", null, "2026-11-19", new MemoryTokenStore()).cacheKey(API))
                 .isNotEqualTo(base);
     }
 
@@ -332,7 +332,7 @@ class TokenProviderTest {
     @Test
     void testFlightRereadsStoreBeforeMinting() {
         AccessToken stored = new AccessToken("from-another-process", "Bearer", 900,
-                Collections.singletonList(API), "full", "2026-10-22", MINTED_AT);
+                Collections.singletonList(API), "full", "2026-11-19", MINTED_AT);
         AtomicReference<TokenProvider> ref = new AtomicReference<>();
         TestStores.Hooked store = new TestStores.Hooked(s -> {
             if (s.gets == 2) {
@@ -479,7 +479,7 @@ class TokenProviderTest {
         TestStores.Recording store = new TestStores.Recording();
         TokenProvider provider = provider(store);
         store.tokens.put(provider.cacheKey(API), new AccessToken("token-2", "Bearer", 900,
-                Collections.singletonList(API), "full", "2026-10-22", MINTED_AT));
+                Collections.singletonList(API), "full", "2026-11-19", MINTED_AT));
 
         provider.invalidate(API, "token-1");
 
@@ -577,7 +577,7 @@ class TokenProviderTest {
         assertThat(mints()).isEqualTo(1);
 
         stubToken(okJson(tokenJson("t", API)));
-        assertThat(provider(origin(), "other-api-key", null, "2026-10-22", new MemoryTokenStore()).token(API)
+        assertThat(provider(origin(), "other-api-key", null, "2026-11-19", new MemoryTokenStore()).token(API)
                 .getAccessToken()).isEqualTo("t");
         assertThat(mints()).isEqualTo(2);
     }
@@ -750,7 +750,7 @@ class TokenProviderTest {
             port = socket.getLocalPort();
         }
 
-        DidwwAuthException e = authError(() -> provider("http://127.0.0.1:" + port, API_KEY, null, "2026-10-22",
+        DidwwAuthException e = authError(() -> provider("http://127.0.0.1:" + port, API_KEY, null, "2026-11-19",
                 new MemoryTokenStore()).token(API));
 
         assertThat(e.getKind()).isEqualTo(AuthErrorKind.CONNECTION_ERROR);
@@ -762,7 +762,7 @@ class TokenProviderTest {
     @Test
     void testTlsAlertNotRetried() throws IOException {
         try (RawHttpServer server = RawHttpServer.tlsAlert()) {
-            DidwwAuthException e = authError(() -> provider(server.httpsUrl(), API_KEY, null, "2026-10-22",
+            DidwwAuthException e = authError(() -> provider(server.httpsUrl(), API_KEY, null, "2026-11-19",
                     new MemoryTokenStore()).token(API));
 
             assertThat(e.getKind()).isEqualTo(AuthErrorKind.CONNECTION_ERROR);
@@ -781,7 +781,7 @@ class TokenProviderTest {
             https.stubFor(post(urlEqualTo("/token")).willReturn(okJson(tokenJson("t", API))));
 
             DidwwAuthException e = authError(() -> provider("https://127.0.0.1:" + https.httpsPort(), API_KEY, null,
-                    "2026-10-22", new MemoryTokenStore()).token(API));
+                    "2026-11-19", new MemoryTokenStore()).token(API));
 
             assertThat(e.getKind()).isEqualTo(AuthErrorKind.CONNECTION_ERROR);
             assertThat(TokenProvider.isTlsError(e.getCause())).isTrue();
@@ -795,7 +795,7 @@ class TokenProviderTest {
     @Test
     void testConnectionClosedDuringHandshakeRetried() throws IOException {
         try (RawHttpServer server = RawHttpServer.closingDuringHandshake()) {
-            DidwwAuthException e = authError(() -> provider(server.httpsUrl(), API_KEY, null, "2026-10-22",
+            DidwwAuthException e = authError(() -> provider(server.httpsUrl(), API_KEY, null, "2026-11-19",
                     new MemoryTokenStore()).token(API));
 
             assertThat(e.getKind()).isEqualTo(AuthErrorKind.CONNECTION_ERROR);
@@ -824,7 +824,7 @@ class TokenProviderTest {
         byte[] answer = ("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 1000\r\n\r\n"
                 + "{\"access_token\":\"leaked-token-value\",\"token_type\":\"Bearer\"").getBytes(StandardCharsets.ISO_8859_1);
         try (RawHttpServer server = RawHttpServer.respondingWith(answer)) {
-            DidwwAuthException e = authError(() -> provider(server.url(), API_KEY, null, "2026-10-22",
+            DidwwAuthException e = authError(() -> provider(server.url(), API_KEY, null, "2026-11-19",
                     new MemoryTokenStore()).token(API));
 
             assertThat(e.getKind()).isEqualTo(AuthErrorKind.CONNECTION_ERROR);
@@ -837,7 +837,7 @@ class TokenProviderTest {
     void testOtherErrorDuringMintKeepsNoApiKey() {
         String apiKey = "s\u00e9cretKEY";
 
-        DidwwAuthException e = authError(() -> provider(origin(), apiKey, null, "2026-10-22",
+        DidwwAuthException e = authError(() -> provider(origin(), apiKey, null, "2026-11-19",
                 new MemoryTokenStore()).token(API));
 
         assertThat(e.getKind()).isEqualTo(AuthErrorKind.CONNECTION_ERROR);
@@ -887,7 +887,7 @@ class TokenProviderTest {
     @Test
     void testAudienceAsSingleString() {
         stubToken(okJson("{\"access_token\":\"t\",\"expires_in\":900,\"aud\":\"api.didww.com\",\"scope\":\"full\","
-                + "\"api_version\":\"2026-10-22\"}"));
+                + "\"api_version\":\"2026-11-19\"}"));
 
         assertThat(provider().token(API).getAudience()).containsExactly(API);
     }
@@ -896,7 +896,7 @@ class TokenProviderTest {
     void testScopeMismatchWarning() {
         stubToken(okJson(tokenJson("t", API)));
 
-        provider(origin(), API_KEY, DidwwScope.READ, "2026-10-22", new MemoryTokenStore()).token(API);
+        provider(origin(), API_KEY, DidwwScope.READ, "2026-11-19", new MemoryTokenStore()).token(API);
 
         assertThat(logger.messages(System.Logger.Level.WARNING))
                 .containsExactly("DIDWW token scope mismatch: requested read, granted full");
@@ -909,14 +909,14 @@ class TokenProviderTest {
         provider(origin(), API_KEY, null, "2099-01-01", new MemoryTokenStore()).token(API);
 
         assertThat(logger.messages(System.Logger.Level.WARNING))
-                .containsExactly("DIDWW token api_version mismatch: requested 2099-01-01, granted 2026-10-22");
+                .containsExactly("DIDWW token api_version mismatch: requested 2099-01-01, granted 2026-11-19");
     }
 
     @Test
     void testNoWarningWhenGrantMatches() {
         stubToken(okJson(tokenJson("t", API)));
 
-        provider(origin(), API_KEY, DidwwScope.FULL, "2026-10-22", new MemoryTokenStore()).token(API);
+        provider(origin(), API_KEY, DidwwScope.FULL, "2026-11-19", new MemoryTokenStore()).token(API);
 
         assertThat(logger.entries()).isEmpty();
     }
@@ -934,7 +934,7 @@ class TokenProviderTest {
     void testMintedDebugLog() {
         stubToken(okJson(tokenJson("secret-token-value", API)));
         RecordingLogger debug = new RecordingLogger(true);
-        TokenProvider provider = new TokenProvider(HTTP, origin(), API_KEY, "2026-10-22", null,
+        TokenProvider provider = new TokenProvider(HTTP, origin(), API_KEY, "2026-11-19", null,
                 new MemoryTokenStore(), debug);
 
         provider.token(API);
@@ -942,7 +942,7 @@ class TokenProviderTest {
         List<String> messages = debug.messages(System.Logger.Level.DEBUG);
         assertThat(messages).hasSize(1);
         assertThat(messages.get(0)).startsWith("DIDWW token minted: aud [api.didww.com], scope full, "
-                + "api_version 2026-10-22, expires_in 900, duration_ms ");
+                + "api_version 2026-11-19, expires_in 900, duration_ms ");
         for (RecordingLogger.Entry entry : debug.entries()) {
             assertThat(entry.message).doesNotContain("secret-token-value").doesNotContain(API_KEY);
         }

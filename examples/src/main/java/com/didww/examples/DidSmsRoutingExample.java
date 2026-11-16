@@ -9,7 +9,7 @@ import com.didww.sdk.resource.SmsTrunkGroup;
 import java.util.List;
 
 /**
- * Routes a DID's inbound SMS (2026-10-22) to an SMS trunk, then to an SMS trunk group. The two are
+ * Routes a DID's inbound SMS (2026-11-19) to an SMS trunk, then to an SMS trunk group. The two are
  * exclusive: assigning one sends the other as null in the same PATCH, just like voice IN trunks and
  * trunk groups. At the end the DID's original SMS routing is restored, also when a step fails.
  *

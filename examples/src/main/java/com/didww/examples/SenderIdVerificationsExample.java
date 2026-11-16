@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Lists Sender ID verifications (2026-10-22) with their SMS trunks, renames an active one and routes its
+ * Lists Sender ID verifications (2026-11-19) with their SMS trunks, renames an active one and routes its
  * outbound messages through an SMS trunk that sends them, then restores its original name and SMS trunk,
  * also when a step fails.
  *

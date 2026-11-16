@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * SMS trunk: how messages of the assigned DIDs are delivered, or accepted for sending (API 2026-10-22).
+ * SMS trunk: how messages of the assigned DIDs are delivered, or accepted for sending (API 2026-11-19).
  * The delivery is described by the {@code configuration}; on update its type must match
  * the stored one and the attributes left out keep their values.
  *

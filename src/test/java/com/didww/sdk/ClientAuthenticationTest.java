@@ -211,7 +211,7 @@ class ClientAuthenticationTest extends BaseTest {
     @Test
     void testApiVersionIsRequested() {
         wireMock.stubFor(post(urlEqualTo("/token")).atPriority(1)
-                .willReturn(okJson(tokenJson(TEST_ACCESS_TOKEN, API_AUDIENCE).replace("2026-10-22", "2099-01-01"))));
+                .willReturn(okJson(tokenJson(TEST_ACCESS_TOKEN, API_AUDIENCE).replace("2026-11-19", "2099-01-01"))));
         stubGetFixture("/v3/balance", "balance/index.json");
         DidwwClient later = clientBuilder().apiVersion("2099-01-01").build();
 

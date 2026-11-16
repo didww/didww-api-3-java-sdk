@@ -2,7 +2,7 @@ package com.didww.sdk.resource.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Number type of a DID group and of the requirements bound to it (API 2026-10-22). */
+/** Number type of a DID group and of the requirements bound to it (API 2026-11-19). */
 public enum NumberType {
     @JsonProperty("local") LOCAL,
     @JsonProperty("national") NATIONAL,

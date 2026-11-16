@@ -60,20 +60,20 @@ public class VoiceOutTrunk extends BaseResource {
     /**
      * Codecs offered on calls from the trunk, in priority order: the first has the highest priority.
      * Left out on create, the trunk offers {@code pcma}, {@code pcmu} and {@code telephone_event}.
-     * (API 2026-10-22)
+     * (API 2026-11-19)
      */
     @JsonProperty("codecs")
     private List<VoiceOutCodec> codecs;
 
-    /** ICE on calls from the trunk. Defaults to {@link IceMode#ACCEPT}. (API 2026-10-22) */
+    /** ICE on calls from the trunk. Defaults to {@link IceMode#ACCEPT}. (API 2026-11-19) */
     @JsonProperty("ice_mode")
     private IceMode iceMode;
 
-    /** RTP and RTCP on one port on calls from the trunk. Defaults to {@link RtcpMuxMode#ACCEPT}. (API 2026-10-22) */
+    /** RTP and RTCP on one port on calls from the trunk. Defaults to {@link RtcpMuxMode#ACCEPT}. (API 2026-11-19) */
     @JsonProperty("rtcp_mux_mode")
     private RtcpMuxMode rtcpMuxMode;
 
-    /** RTCP feedback (AVPF) on calls from the trunk. Defaults to {@link RtcpFeedbackMode#ACCEPT}. (API 2026-10-22) */
+    /** RTCP feedback (AVPF) on calls from the trunk. Defaults to {@link RtcpFeedbackMode#ACCEPT}. (API 2026-11-19) */
     @JsonProperty("rtcp_feedback_mode")
     private RtcpFeedbackMode rtcpFeedbackMode;
 

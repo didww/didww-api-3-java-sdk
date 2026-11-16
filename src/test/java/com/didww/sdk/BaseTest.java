@@ -76,7 +76,7 @@ public abstract class BaseTest {
 
     protected static String tokenJson(String accessToken, String audience) {
         return "{\"access_token\":\"" + accessToken + "\",\"token_type\":\"Bearer\",\"expires_in\":900,"
-                + "\"aud\":[\"" + audience + "\"],\"scope\":\"full\",\"api_version\":\"2026-10-22\"}";
+                + "\"aud\":[\"" + audience + "\"],\"scope\":\"full\",\"api_version\":\"2026-11-19\"}";
     }
 
     /** The number of token requests WireMock received. */

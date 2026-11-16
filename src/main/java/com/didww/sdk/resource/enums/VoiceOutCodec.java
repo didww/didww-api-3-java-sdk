@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Codec of a Voice OUT trunk ({@code VoiceOutTrunk#setCodecs}). An inbound SIP trunk has its own
- * list, {@link Codec}. (API 2026-10-22)
+ * list, {@link Codec}. (API 2026-11-19)
  *
  * <p>A value this version of the SDK does not know is kept as read and sent back unchanged.
  */

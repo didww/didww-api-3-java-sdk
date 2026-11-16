@@ -15,7 +15,7 @@ class MemoryTokenStoreTest {
 
     private static AccessToken token(String value) {
         return new AccessToken(value, "Bearer", 900, Collections.singletonList("api.didww.com"), "full",
-                "2026-10-22", Instant.parse("2026-10-22T08:00:00Z"));
+                "2026-11-19", Instant.parse("2026-10-22T08:00:00Z"));
     }
 
     @Test

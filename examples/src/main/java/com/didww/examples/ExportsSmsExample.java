@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Creates SMS exports (sms_in / sms_out, 2026-10-22) for yesterday and reads the columns of a completed
+ * Creates SMS exports (sms_in / sms_out, 2026-11-19) for yesterday and reads the columns of a completed
  * SMS-Out export.
  *
  * Filters on SMS exports (Export#setFilters):

@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
- * Verification of a sender identity used for outbound messages (API 2026-10-22). Supported operations: index,
+ * Verification of a sender identity used for outbound messages (API 2026-11-19). Supported operations: index,
  * show and update of {@code name} and {@code sms_trunk}; the API has no create or delete. A closed verification
  * cannot be updated.
  *

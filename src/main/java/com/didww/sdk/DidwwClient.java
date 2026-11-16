@@ -69,7 +69,7 @@ public class DidwwClient {
      * The API version requested when no other is configured. Earlier versions
      * are not supported by this major version of the SDK.
      */
-    public static final String DEFAULT_API_VERSION = "2026-10-22";
+    public static final String DEFAULT_API_VERSION = "2026-11-19";
 
     private static final String API_VERSION_PATTERN = "\\d{4}-\\d{2}-\\d{2}";
     private static final String DESTINATION_REQUIRED = "destination must not be null";
