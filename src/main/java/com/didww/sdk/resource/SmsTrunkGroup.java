@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
- * Group of SMS trunks (API 2026-10-22). {@code http_out} trunks cannot join a group. Deleting a group also
+ * Group of SMS trunks (API 2026-11-19). {@code http_out} trunks cannot join a group. Deleting a group also
  * deletes its trunks.
  */
 @Type("sms_trunk_groups")

@@ -1,5 +1,5 @@
 /**
- * Delivery configurations of an {@link com.didww.sdk.resource.SmsTrunk} (API 2026-10-22).
+ * Delivery configurations of an {@link com.didww.sdk.resource.SmsTrunk} (API 2026-11-19).
  *
  * <p>The configuration is sent as a whole object: null fields are left out of a request, and attributes
  * left out keep their stored values. On update the configuration type must match the stored one.

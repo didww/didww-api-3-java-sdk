@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * CRUD for SMS trunk groups (2026-10-22): creates two inbound SMS trunks, puts them in a group,
+ * CRUD for SMS trunk groups (2026-11-19): creates two inbound SMS trunks, puts them in a group,
  * lists groups, and deletes the group.
  *
  * A group spreads a DID's inbound messages over its trunks by their priority (higher first).

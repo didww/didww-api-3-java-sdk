@@ -44,7 +44,7 @@ class BearerTokenInterceptorTest {
                 .followSslRedirects(false)
                 .readTimeout(Duration.ofSeconds(5))
                 .build();
-        tokens = new TokenProvider(base, origin(), "test-api-key", "2026-10-22", null, store, null);
+        tokens = new TokenProvider(base, origin(), "test-api-key", "2026-11-19", null, store, null);
         http = base.newBuilder().addInterceptor(new BearerTokenInterceptor(tokens)).build();
     }
 
@@ -60,7 +60,7 @@ class BearerTokenInterceptorTest {
 
     private static String tokenJson(String accessToken, String audience) {
         return "{\"access_token\":\"" + accessToken + "\",\"token_type\":\"Bearer\",\"expires_in\":900,"
-                + "\"aud\":[\"" + audience + "\"],\"scope\":\"full\",\"api_version\":\"2026-10-22\"}";
+                + "\"aud\":[\"" + audience + "\"],\"scope\":\"full\",\"api_version\":\"2026-11-19\"}";
     }
 
     private void stubTokens(String... accessTokens) {

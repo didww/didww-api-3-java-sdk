@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Looks up Voice IN, Voice OUT, SMS OUT and SMS IN prices (2026-10-22) for one number.
+ * Looks up Voice IN, Voice OUT, SMS OUT and SMS IN prices (2026-11-19) for one number.
  *
  * Prices are served by separate hosts (api-vin, api-vout and api-sms); the SDK obtains a token for each of
  * them on first use. A read-scoped client ({@code DidwwClient.builder().scope(DidwwScope.READ)}) is enough

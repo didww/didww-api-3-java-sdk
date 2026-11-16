@@ -17,7 +17,7 @@ class AccessTokenTest {
 
     private static AccessToken token() {
         return new AccessToken("secret-access-token", "Bearer", 900, Arrays.asList("api.didww.com"), "full",
-                "2026-10-22", MINTED_AT);
+                "2026-11-19", MINTED_AT);
     }
 
     @Test
@@ -27,7 +27,7 @@ class AccessTokenTest {
         assertThat(text)
                 .doesNotContain("secret-access-token")
                 .isEqualTo("AccessToken{accessToken=[FILTERED], tokenType=Bearer, expiresIn=900, "
-                        + "audience=[api.didww.com], scope=full, apiVersion=2026-10-22, mintedAt=2026-10-22T08:00:00Z}");
+                        + "audience=[api.didww.com], scope=full, apiVersion=2026-11-19, mintedAt=2026-10-22T08:00:00Z}");
     }
 
     @Test
@@ -42,7 +42,7 @@ class AccessTokenTest {
         assertThat(node.get("expires_in").asInt()).isEqualTo(900);
         assertThat(node.get("aud").get(0).asText()).isEqualTo("api.didww.com");
         assertThat(node.get("scope").asText()).isEqualTo("full");
-        assertThat(node.get("api_version").asText()).isEqualTo("2026-10-22");
+        assertThat(node.get("api_version").asText()).isEqualTo("2026-11-19");
         assertThat(node.get("minted_at").asText()).isEqualTo("2026-10-22T08:00:00Z");
         assertThat(node.size()).isEqualTo(7);
 
@@ -76,7 +76,7 @@ class AccessTokenTest {
     @Test
     void testImmutable() {
         List<String> audience = new ArrayList<>(Arrays.asList("api.didww.com"));
-        AccessToken token = new AccessToken("t", "Bearer", 900, audience, "full", "2026-10-22", MINTED_AT);
+        AccessToken token = new AccessToken("t", "Bearer", 900, audience, "full", "2026-11-19", MINTED_AT);
         audience.add("api-sms.didww.com");
 
         assertThat(token.getAudience()).containsExactly("api.didww.com");

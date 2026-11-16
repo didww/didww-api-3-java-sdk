@@ -16,15 +16,15 @@ Read more https://doc.didww.com/api
 
 ## API Version
 
-This SDK targets DIDWW API version `2026-10-22` (`DidwwClient.DEFAULT_API_VERSION`). The version is not sent as a header: it is requested in the `api_version` of every access token the SDK mints (see [Authentication](#authentication)).
+This SDK targets DIDWW API version `2026-11-19` (`DidwwClient.DEFAULT_API_VERSION`). The version is not sent as a header: it is requested in the `api_version` of every access token the SDK mints (see [Authentication](#authentication)).
 
 | SDK Version | Branch | DIDWW API Version |
 |-------------|--------|-------------------|
-| **5.x** | [`main`](https://github.com/didww/didww-api-3-java-sdk) | [`2026-10-22`](https://doc.didww.com/api3/2026-10-22/index.html) |
+| **5.x** | [`main`](https://github.com/didww/didww-api-3-java-sdk) | [`2026-11-19`](https://doc.didww.com/api3/2026-11-19/index.html) |
 | **4.x** | [`release-4.1`](https://github.com/didww/didww-api-3-java-sdk/tree/release-4.1) | [`2026-04-16`](https://doc.didww.com/api3/2026-04-16/index.html) |
 | **3.x** | [`2022-05-10`](https://github.com/didww/didww-api-3-java-sdk/tree/2022-05-10) | [`2022-05-10`](https://doc.didww.com/api3/2022-05-10/index.html) |
 
-`DidwwClient.Builder#apiVersion` requests a later version. `build()` throws an `IllegalArgumentException` for a value that is not a `YYYY-MM-DD` date and for a version earlier than `2026-10-22`. The resources of earlier API versions are not in this release: use 4.x from the [`release-4.1`](https://github.com/didww/didww-api-3-java-sdk/tree/release-4.1) branch for API `2026-04-16` (see [Migrating from 4.x](#migrating-from-4x)).
+`DidwwClient.Builder#apiVersion` requests a later version. `build()` throws an `IllegalArgumentException` for a value that is not a `YYYY-MM-DD` date and for a version earlier than `2026-11-19`. The resources of earlier API versions are not in this release: use 4.x from the [`release-4.1`](https://github.com/didww/didww-api-3-java-sdk/tree/release-4.1) branch for API `2026-04-16` (see [Migrating from 4.x](#migrating-from-4x)).
 
 ## Requirements
 
@@ -160,7 +160,7 @@ The API key is sent only to the token service. An overridden URL, for example to
 `build()` throws a `NullPointerException` without credentials (and `new DidwwCredentials(...)` one for a `null` API key or environment), and an `IllegalArgumentException`, before any request, for:
 
 - an empty API key, or one with a character outside printable ASCII (a control character, such as a trailing newline or a tab, or a non-ASCII character, such as a non-breaking space);
-- an API version that is not a `YYYY-MM-DD` date, or that is earlier than `2026-10-22`;
+- an API version that is not a `YYYY-MM-DD` date, or that is earlier than `2026-11-19`;
 - a base, token service or prices URL that is not an http or https URL with a host, contains a space or a control character, or has a query or fragment.
 
 `DidwwCredentials#toString()` masks the API key.
@@ -360,7 +360,7 @@ List<SupportingDocumentTemplate> templates = client.supportingDocumentTemplates(
 Balance balance = client.balance().find().getData();
 ```
 
-`DidGroup`, `AddressRequirement`, `EmergencyRequirement` and `EmergencyCallingService` carry `getNumberType()`, one of the `NumberType` values (`LOCAL`, `NATIONAL`, `MOBILE`, `TOLL_FREE`, `SHARED_COST`, `GLOBAL`; in filters use the wire form, such as `toll_free`). `DidGroup#getIsDemo()` flags demo groups. `NumberType` replaces the `DidGroupType` resource and the `did_group_type` relationship, which API `2026-10-22` no longer has. The `pops` resource is gone too: a Voice IN trunk carries its point of presence in the `pop` attribute (see [Voice In Trunks](#voice-in-trunks)).
+`DidGroup`, `AddressRequirement`, `EmergencyRequirement` and `EmergencyCallingService` carry `getNumberType()`, one of the `NumberType` values (`LOCAL`, `NATIONAL`, `MOBILE`, `TOLL_FREE`, `SHARED_COST`, `GLOBAL`; in filters use the wire form, such as `toll_free`). `DidGroup#getIsDemo()` flags demo groups. `NumberType` replaces the `DidGroupType` resource and the `did_group_type` relationship, which API `2026-11-19` no longer has. The `pops` resource is gone too: a Voice IN trunk carries its point of presence in the `pop` attribute (see [Voice In Trunks](#voice-in-trunks)).
 
 The mandatory fields of `AddressRequirement` (`getPersonalMandatoryFields()`, `getBusinessMandatoryFields()`) and of `EmergencyRequirement` (`getAddressMandatoryFields()`, `getPersonalMandatoryFields()`, `getBusinessMandatoryFields()`) list the fields as the API spells them, such as `birth_date`, `id_number`, `country` or `area`, and are empty when nothing is mandatory. `tax_id` stands for `Identity#getVatId()`. `ProofType#getEntityType()` is `address`, `business` or `personal`.
 
@@ -949,7 +949,7 @@ try (OutputStream out = Files.newOutputStream(Path.of("/tmp/voice_in_prices.csv.
 
 ## Filtering, Sorting, and Pagination
 
-> See [`FILTERS.md`](FILTERS.md) for the list of `filter[KEY]` keys accepted by every list endpoint at API version `2026-10-22`.
+> See [`FILTERS.md`](FILTERS.md) for the list of `filter[KEY]` keys accepted by every list endpoint at API version `2026-11-19`.
 
 ```java
 import com.didww.sdk.http.QueryParams;
@@ -1308,12 +1308,12 @@ The wire value of a string enum is declared with Jackson's `@JsonProperty` only:
 
 ## Migrating from 4.x
 
-5.0.0 targets API `2026-10-22` only. To stay on API `2026-04-16`, keep 4.x (for example `4.1.4`, branch [`release-4.1`](https://github.com/didww/didww-api-3-java-sdk/tree/release-4.1)).
+5.0.0 targets API `2026-11-19` only. To stay on API `2026-04-16`, keep 4.x (for example `4.1.4`, branch [`release-4.1`](https://github.com/didww/didww-api-3-java-sdk/tree/release-4.1)).
 
 Most code keeps working: `DidwwClient.builder().credentials(new DidwwCredentials(apiKey, environment)).build()` is unchanged, and the SDK mints the access tokens itself. The breaking changes:
 
 - **Authentication.** Every request carries a bearer token minted from the API key (see [Authentication](#authentication)). The `Api-Key` header is sent only to the token service, so outgoing traffic must reach `auth.didww.com` (`auth-sandbox.didww.com` in the sandbox). The token service can throw a `DidwwAuthException` from any call. The public `com.didww.sdk.http.ApiKeyInterceptor` is removed.
-- **API version.** `X-DIDWW-API-Version` is no longer sent: the version is requested in the token. The default is `2026-10-22`, and an earlier version makes `build()` throw an `IllegalArgumentException`.
+- **API version.** `X-DIDWW-API-Version` is no longer sent: the version is requested in the token. The default is `2026-11-19`, and an earlier version makes `build()` throw an `IllegalArgumentException`.
 - **Validation.** `build()` throws an `IllegalArgumentException` for an invalid API key, API version or service URL (see [Configuration](#configuration)), which 4.x accepted.
 - **Removed resources.** `client.pops()`, `client.didGroupTypes()`, `com.didww.sdk.resource.Pop` and `com.didww.sdk.resource.DidGroupType` are removed, with the `did_group_type` relationship and include. `DidGroup`, `AddressRequirement`, `EmergencyRequirement` and `EmergencyCallingService` have `getNumberType()` instead of `getDidGroupType()`; filter with `number_type` instead of `did_group_type.id`, and with `did_group.number_type` on available DIDs.
 - **Codecs.** `SipConfiguration#setCodecIds` and `getCodecIds` (`codec_ids`) are replaced by `setCodecs` and `getCodecs` (`codecs`), the codec names in priority order. `Codec` is no longer an enum: it is a class with a constant per codec, sent by name (`PCMU` as `pcmu`), `getValue()` returns that name instead of the former integer id, and `values()`, `valueOf`, `name()`, `switch` and `EnumSet` no longer apply (see [Enums](#enums)). `AMR` and `AMR_WB` are new. Voice OUT trunks have their own codec list, `VoiceOutCodec`. Both trunk kinds gain `iceMode`, `rtcpMuxMode` and `rtcpFeedbackMode`.

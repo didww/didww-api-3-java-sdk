@@ -45,8 +45,8 @@ class DidwwClientBuilderTest {
     void testDefaultApiVersion() {
         DidwwClient client = builder("key").build();
 
-        assertThat(DidwwClient.DEFAULT_API_VERSION).isEqualTo("2026-10-22");
-        assertThat(client.getApiVersion()).isEqualTo("2026-10-22");
+        assertThat(DidwwClient.DEFAULT_API_VERSION).isEqualTo("2026-11-19");
+        assertThat(client.getApiVersion()).isEqualTo("2026-11-19");
         assertThat(client.getScope()).isNull();
     }
 
@@ -58,8 +58,8 @@ class DidwwClientBuilderTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"2026-4-16", "abc", "2026-10-22\n", "2026-10-22 ", " 2026-10-22", "2026/10/22",
-            "20261022", "\u0662\u0660\u0662\u0666-10-22", ""})
+    @ValueSource(strings = {"2026-4-16", "abc", "2026-11-19\n", "2026-11-19 ", " 2026-11-19", "2026/11/19",
+            "20261119", "\u0662\u0660\u0662\u0666-11-19", ""})
     void testMalformedApiVersionRejected(String version) {
         assertThatThrownBy(() -> builder("key").apiVersion(version).build())
                 .isInstanceOf(IllegalArgumentException.class)
@@ -70,7 +70,7 @@ class DidwwClientBuilderTest {
     void testEarlierApiVersionRejectedWithPointerToTheOlderSdk() {
         assertThatThrownBy(() -> builder("key").apiVersion("2026-04-16").build())
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("API version 2026-04-16 is not supported: this SDK requires 2026-10-22 or later; "
+                .hasMessage("API version 2026-04-16 is not supported: this SDK requires 2026-11-19 or later; "
                         + "use didww-api-3-java-sdk 4.x (branch release-4.1) for 2026-04-16");
     }
 
