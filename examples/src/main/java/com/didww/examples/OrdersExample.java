@@ -64,9 +64,10 @@ public class OrdersExample {
         System.out.println("Order canceled");
     }
 
-    // Returns the first SKU of the first DID group that has one.
+    // Returns the first SKU of the first DID group with numbers in stock that has one.
     private static String findSkuId(DidwwClient client) {
         QueryParams params = QueryParams.builder()
+                .filter("is_available", "true") // a group without numbers in stock refuses the order
                 .include("stock_keeping_units")
                 .page(1, 10)
                 .build();

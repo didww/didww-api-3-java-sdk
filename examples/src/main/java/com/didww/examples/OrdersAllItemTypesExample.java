@@ -53,8 +53,9 @@ public class OrdersAllItemTypesExample {
                 + ") sku=" + skuId2 + " - for reservation");
 
         // --- Get a separate SKU for the DidOrderItem (by quantity) ---
-        // Use a different DID group to avoid conflicts with ad1's pool
+        // Use a different DID group to avoid conflicts with ad1's pool, one with numbers in stock
         QueryParams dgParams = QueryParams.builder()
+                .filter("is_available", "true")
                 .include("stock_keeping_units")
                 .page(1, 10)
                 .build();

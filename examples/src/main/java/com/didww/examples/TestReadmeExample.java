@@ -1803,8 +1803,10 @@ public class TestReadmeExample {
         return client.senderIdVerifications().find(id, QueryParams.builder().include("sms_trunk").build()).getData();
     }
 
+    // The first SKU of a DID group with numbers in stock: a group without refuses the order
     private static String findSkuId() {
         QueryParams params = QueryParams.builder()
+                .filter("is_available", "true")
                 .include("stock_keeping_units")
                 .page(1, 10)
                 .build();
