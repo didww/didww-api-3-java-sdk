@@ -64,6 +64,8 @@ import java.util.function.LongSupplier;
 public final class TokenProvider {
     static final String CACHE_KEY_PREFIX = "didww:token:v1:";
     static final int MAX_MINT_ATTEMPTS = 4;
+    // The longest lifetime the token service grants: the fewer mints, the better.
+    static final int REQUESTED_LIFETIME = 3600;
     static final Duration DEFAULT_MINT_TIMEOUT = Duration.ofSeconds(10);
     static final Duration DEFAULT_STORE_TIMEOUT = Duration.ofSeconds(10);
     private static final Duration BACKOFF_BASE = Duration.ofMillis(500);
@@ -366,6 +368,7 @@ public final class TokenProvider {
         if (scope != null) {
             request.put("scope", scope);
         }
+        request.put("expires_in", REQUESTED_LIFETIME);
         byte[] body;
         try {
             body = MAPPER.writeValueAsBytes(request);

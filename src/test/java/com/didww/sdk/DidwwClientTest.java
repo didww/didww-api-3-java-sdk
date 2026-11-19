@@ -202,7 +202,7 @@ class DidwwClientTest {
                     .withHeader("Accept", equalTo("application/json"))
                     .withHeader("User-Agent", equalTo(SdkVersion.userAgent()))
                     .withoutHeader("Authorization")
-                    .withRequestBody(equalToJson("{\"aud\":[\"api.didww.com\"],\"api_version\":\"2026-11-19\"}")));
+                    .withRequestBody(equalToJson("{\"aud\":[\"api.didww.com\"],\"api_version\":\"2026-11-19\",\"expires_in\":3600}")));
         } finally {
             wireMock.stop();
         }

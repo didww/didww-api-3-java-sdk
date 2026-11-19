@@ -188,7 +188,7 @@ class TokenProviderTest {
         provider(origin(), API_KEY, null, "2099-01-01", new MemoryTokenStore()).token(API);
 
         wireMock.verify(postRequestedFor(urlEqualTo("/token"))
-                .withRequestBody(equalToJson("{\"aud\":[\"api.didww.com\"],\"api_version\":\"2099-01-01\"}", false, false)));
+                .withRequestBody(equalToJson("{\"aud\":[\"api.didww.com\"],\"api_version\":\"2099-01-01\",\"expires_in\":3600}", false, false)));
     }
 
     // --- caching and single flight ---
