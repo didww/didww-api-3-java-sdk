@@ -48,10 +48,10 @@ public class Did extends BaseResource {
     @JsonProperty(value = "emergency_enabled", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean emergencyEnabled;
 
-    @Relationship("order")
+    @Relationship(value = "order", serialise = false)
     private Order order;
 
-    @Relationship("did_group")
+    @Relationship(value = "did_group", serialise = false)
     private DidGroup didGroup;
 
     @Relationship("voice_in_trunk")
@@ -78,10 +78,10 @@ public class Did extends BaseResource {
     @Relationship("emergency_calling_service")
     private EmergencyCallingService emergencyCallingService;
 
-    @Relationship("emergency_verification")
+    @Relationship(value = "emergency_verification", serialise = false)
     private EmergencyVerification emergencyVerification;
 
-    @Relationship("identity")
+    @Relationship(value = "identity", serialise = false)
     private Identity identity;
 
     public void setTerminated(Boolean terminated) {
