@@ -39,6 +39,12 @@
           "type": "identities",
           "id": "9b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c63"
         }
+      },
+      "emergency_calling_service": {
+        "data": {
+          "type": "emergency_calling_services",
+          "id": "3c4d5e6f-7a8b-4c9d-8e0f-1a2b3c4d5e64"
+        }
       }
     }
   },
@@ -92,6 +98,16 @@
         "identity_type": "personal",
         "created_at": "2026-11-19T12:00:00.000Z",
         "verified": false
+      }
+    },
+    {
+      "id": "3c4d5e6f-7a8b-4c9d-8e0f-1a2b3c4d5e64",
+      "type": "emergency_calling_services",
+      "attributes": {
+        "name": "Emergency Calling Service #1",
+        "reference": "ABC-654321",
+        "status": "active",
+        "created_at": "2026-11-19T12:00:00.000Z"
       }
     }
   ]
