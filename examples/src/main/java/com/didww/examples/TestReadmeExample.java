@@ -319,7 +319,7 @@ public class TestReadmeExample {
         // The README's proxy.example.com is replaced by DIDWW_README_PROXY_URL; the calls go to the sandbox
         check("HTTP client: own OkHttpClient.Builder with a proxy", cleanup -> {
             URI proxyUrl = URI.create(requireEnv("DIDWW_README_PROXY_URL"));
-            int proxyPort = proxyUrl.getPort() != -1 ? proxyUrl.getPort() : 80;
+            int proxyPort = proxyUrl.getPort() == -1 ? 80 : proxyUrl.getPort();
             Set<Proxy> proxiesUsed = ConcurrentHashMap.newKeySet();
 
             OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
@@ -1496,9 +1496,11 @@ public class TestReadmeExample {
         List<AvailableDid> available = client.availableDids().list(availableParams).getData();
         require(!available.isEmpty(), "no available DID to order");
         AvailableDid availableDid = available.get(0);
-        List<StockKeepingUnit> skus = availableDid.getDidGroup() != null
-                ? availableDid.getDidGroup().getStockKeepingUnits() : null;
-        require(skus != null && !skus.isEmpty(), "no SKU for available DID " + availableDid.getNumber());
+        DidGroup availableGroup = availableDid.getDidGroup();
+        List<StockKeepingUnit> skus = availableGroup == null ? null : availableGroup.getStockKeepingUnits();
+        if (skus == null || skus.isEmpty()) {
+            throw new IllegalStateException("no SKU for available DID " + availableDid.getNumber());
+        }
 
         AvailableDidOrderItem item = new AvailableDidOrderItem();
         item.setAvailableDidId(availableDid.getId());
@@ -1986,7 +1988,7 @@ public class TestReadmeExample {
         // the reply: a String, a Long, or null.
         private Object command(String... args) {
             try (Socket socket = new Socket()) {
-                socket.connect(new InetSocketAddress(url.getHost(), url.getPort() != -1 ? url.getPort() : 6379),
+                socket.connect(new InetSocketAddress(url.getHost(), url.getPort() == -1 ? 6379 : url.getPort()),
                         TIMEOUT_MILLIS);
                 socket.setSoTimeout(TIMEOUT_MILLIS);
                 OutputStream out = new BufferedOutputStream(socket.getOutputStream());
