@@ -28,8 +28,9 @@ public class OrdersEmergencyExample {
     public static void main(String[] args) {
         DidwwClient client = ExampleClientFactory.fromEnv();
 
-        System.out.println("=== All Orders (filtering for Emergency) ===");
-        List<Order> orders = client.orders().list(null).getData();
+        System.out.println("=== Recent Orders (filtering for Emergency) ===");
+        QueryParams ordersParams = QueryParams.builder().sort("-created_at").page(1, 50).build();
+        List<Order> orders = client.orders().list(ordersParams).getData();
         List<Order> emergencyOrders = new ArrayList<>();
         for (Order o : orders) {
             if ("Emergency".equals(o.getDescription())) {
