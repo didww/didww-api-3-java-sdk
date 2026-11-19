@@ -16,12 +16,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Creates a DID order with all three item types:
+ * Creates ONE order with the three DID item variants:
  * 1. DidOrderItem - order by SKU and quantity (random DID from a DID group)
  * 2. AvailableDidOrderItem - order a specific available DID
  * 3. ReservationDidOrderItem - order a previously reserved DID
  *
+ * All three are sent as "did_order_items", so they fit in one order. A capacity item
+ * (CapacityOrderItem, "capacity_order_items") cannot share an order with DID items: the API
+ * answers "items - should have same type". Order capacity separately (see OrdersCapacityExample).
+ *
  * Then fetches the ordered DIDs by order ID.
+ * Usage: DIDWW_API_KEY=xxx ./gradlew runExample -PexampleClass=com.didww.examples.OrdersAllItemTypesExample
  */
 public class OrdersAllItemTypesExample {
 
@@ -48,8 +53,9 @@ public class OrdersAllItemTypesExample {
                 + ") sku=" + skuId2 + " - for reservation");
 
         // --- Get a separate SKU for the DidOrderItem (by quantity) ---
-        // Use a different DID group to avoid conflicts with ad1's pool
+        // Use a different DID group to avoid conflicts with ad1's pool, one with numbers in stock
         QueryParams dgParams = QueryParams.builder()
+                .filter("is_available", "true")
                 .include("stock_keeping_units")
                 .page(1, 10)
                 .build();

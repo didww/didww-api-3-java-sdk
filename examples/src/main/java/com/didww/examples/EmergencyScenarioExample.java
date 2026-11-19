@@ -101,8 +101,8 @@ public class EmergencyScenarioExample {
         Order createdOrder = client.orders().create(order).getData();
         System.out.println("  Order: " + createdOrder.getId() + " - " + createdOrder.getStatus());
 
-        // Wait for order to complete
-        for (int i = 0; i < 10; i++) {
+        // Wait for order to complete; the sandbox can take more than a minute
+        for (int i = 0; i < 24; i++) {
             if (createdOrder.isCompleted()) break;
             Thread.sleep(5000);
             createdOrder = client.orders().find(createdOrder.getId()).getData();

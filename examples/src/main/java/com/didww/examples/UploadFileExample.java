@@ -1,7 +1,6 @@
 package com.didww.examples;
 
 import com.didww.sdk.DidwwClient;
-import java.util.Collections;
 import com.didww.sdk.Encrypt;
 
 import java.io.ByteArrayOutputStream;
@@ -12,6 +11,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Encrypts a file with the DIDWW public keys and uploads it to encrypted_files; prints the encrypted file ID,
+ * which can be attached to a proof (see IdentityAddressProofsExample).
+ * Usage: DIDWW_API_KEY=xxx [FILE_PATH=/path/to/file] ./gradlew runExample -PexampleClass=com.didww.examples.UploadFileExample
+ */
 public class UploadFileExample {
 
     public static void main(String[] args) throws Exception {
@@ -44,10 +48,12 @@ public class UploadFileExample {
                 fingerprint,
                 originalName
         );
-        System.out.println("Uploaded encrypted file IDs: " + Collections.singletonList(uploadedId));
+        // Attach the ID to a proof (see IdentityAddressProofsExample)
+        System.out.println("Encrypted file ID: " + uploadedId);
     }
 
-    private static void createSamplePdf(Path path, String text) throws Exception {
+    // Writes a one-page PDF with the text; also used by TestReadmeExample
+    static void createSamplePdf(Path path, String text) throws Exception {
         String escapedText = text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)");
         String stream = "BT /F1 24 Tf 72 720 Td (" + escapedText + ") Tj ET";
 
