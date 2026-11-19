@@ -178,10 +178,11 @@ class DidTest extends BaseTest {
         QueryParams params = QueryParams.builder()
                 .include("order", "did_group", "emergency_verification", "identity").build();
         Did did = client.dids().find("21d0b02c-b556-4d3e-acbf-504b78295dbe", params).getData();
-        assertThat(did.getOrder()).isNotNull();
-        assertThat(did.getDidGroup()).isNotNull();
-        assertThat(did.getEmergencyVerification()).isNotNull();
-        assertThat(did.getIdentity()).isNotNull();
+        // serialise = false only affects writing: the included resources are still read in full
+        assertThat(did.getOrder().getReference()).isEqualTo("ABC-000001");
+        assertThat(did.getDidGroup().getAreaName()).isEqualTo("Odessa");
+        assertThat(did.getEmergencyVerification().getReference()).isEqualTo("ABC-123456");
+        assertThat(did.getIdentity().getFirstName()).isEqualTo("John");
         did.setDescription("patched from loaded resource");
 
         ApiResponse<Did> response = client.dids().update(did);
