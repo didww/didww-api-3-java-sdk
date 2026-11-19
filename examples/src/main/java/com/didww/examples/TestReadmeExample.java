@@ -885,7 +885,7 @@ public class TestReadmeExample {
         // A verification needs a DID of a group with an address requirement (some Ukrainian local groups,
         // such as Kiev, have one) and an identity and address that meet that requirement.
         check("Address verifications: create for a Ukrainian DID, update its external reference", cleanup -> {
-            Did did = didWithAddressRequirement();
+            Did did = didWithAddressRequirement(cleanup);
             DidGroup group = client.didGroups().find(did.getDidGroup().getId(),
                     QueryParams.builder().include("country", "address_requirement").build()).getData();
             AddressRequirement requirement = addressRequirement(group.getAddressRequirement().getId());
@@ -999,7 +999,7 @@ public class TestReadmeExample {
         // As EmergencyScenarioExample: an emergency-capable Ukrainian DID without an emergency calling service,
         // and an address of the account that meets the emergency requirement of the DID's number type
         check("Emergency services: create an emergency verification", cleanup -> {
-            Did did = emergencyDid();
+            Did did = emergencyDid(cleanup);
             DidGroup group = client.didGroups().find(did.getDidGroup().getId(),
                     QueryParams.builder().include("country").build()).getData();
             List<EmergencyRequirement> requirements = client.emergencyRequirements().list(QueryParams.builder()
@@ -1422,7 +1422,7 @@ public class TestReadmeExample {
     // requirement; when the account has none, one is ordered from such a group. The requirement shows only
     // with include=address_requirement, and whether a DID awaits registration depends on account rules,
     // so neither that flag nor the group's needs_registration is used.
-    private static Did didWithAddressRequirement() throws InterruptedException {
+    private static Did didWithAddressRequirement(Cleanup cleanup) throws InterruptedException {
         List<DidGroup> groups = client.didGroups().list(QueryParams.builder()
                 .filter("country.id", country("UA").getId())
                 .filter("number_type", EnumWire.value(NumberType.LOCAL))
@@ -1457,7 +1457,7 @@ public class TestReadmeExample {
                     .page(1, 1)
                     .build();
             if (!client.availableDids().list(available).getData().isEmpty()) {
-                return orderAvailableDid(available);
+                return orderAvailableDid(available, cleanup);
             }
         }
         throw new IllegalStateException("no available DID in the Ukrainian local groups with an address requirement");
@@ -1466,7 +1466,7 @@ public class TestReadmeExample {
     // An emergency-capable Ukrainian DID without an identity, emergency calling service or emergency
     // verification; when the account has none, one is ordered. A DID bound to an identity (by an earlier
     // verification) can be verified only with an address of that identity, so it is not reused.
-    private static Did emergencyDid() throws InterruptedException {
+    private static Did emergencyDid(Cleanup cleanup) throws InterruptedException {
         String ukraine = country("UA").getId();
         List<Did> dids = client.dids().list(QueryParams.builder()
                 .filter("country.id", ukraine)
@@ -1487,12 +1487,12 @@ public class TestReadmeExample {
                 .filter("did_group.features", "emergency")
                 .include("did_group.stock_keeping_units")
                 .page(1, 1)
-                .build());
+                .build(), cleanup);
     }
 
     // Orders the first available DID of the list, waits up to two minutes for the order (the sandbox can
     // take more than one) and returns the DID.
-    private static Did orderAvailableDid(QueryParams availableParams) throws InterruptedException {
+    private static Did orderAvailableDid(QueryParams availableParams, Cleanup cleanup) throws InterruptedException {
         List<AvailableDid> available = client.availableDids().list(availableParams).getData();
         require(!available.isEmpty(), "no available DID to order");
         AvailableDid availableDid = available.get(0);
@@ -1508,12 +1508,21 @@ public class TestReadmeExample {
         Order order = new Order();
         order.setItems(Collections.singletonList(item));
         Order created = client.orders().create(order).getData();
-        print("Ordered " + availableDid.getNumber() + " (order " + created.getId() + "); the DID stays on the account");
+        String orderId = created.getId();
+        // Cancelled when the check stops before the order completes (time-out, failed read, interrupt)
+        AtomicBoolean completed = new AtomicBoolean(created.isCompleted());
+        cleanup.add("cancel order " + orderId + " unless it completed", () -> {
+            if (!completed.get()) {
+                cancelPendingOrder(orderId);
+            }
+        });
+        print("Ordered " + availableDid.getNumber() + " (order " + orderId + "); the DID stays on the account");
         for (int attempt = 0; attempt < 24 && !created.isCompleted(); attempt++) {
             Thread.sleep(5000);
-            created = client.orders().find(created.getId()).getData();
+            created = client.orders().find(orderId).getData();
         }
-        require(created.isCompleted(), "order " + created.getId() + " is " + created.getStatus());
+        require(created.isCompleted(), "order " + orderId + " is " + created.getStatus());
+        completed.set(true);
 
         List<Did> dids = client.dids().list(QueryParams.builder()
                 .filter("order.id", created.getId())
@@ -1576,8 +1585,10 @@ public class TestReadmeExample {
             PermanentSupportingDocument document = new PermanentSupportingDocument();
             document.setIdentity(new Identity().withId(identityId));
             document.setTemplate(new SupportingDocumentTemplate().withId(template.getId()));
-            document.setFiles(Collections.singletonList(files.upload()));
+            EncryptedFile file = files.upload();
+            document.setFiles(Collections.singletonList(file));
             client.permanentSupportingDocuments().create(document);
+            files.attached(file);
             print("Permanent document " + template.getName() + " for the identity");
         }
         return created;
@@ -1647,8 +1658,10 @@ public class TestReadmeExample {
             Proof proof = new Proof();
             proof.setEntity(entity);
             proof.setProofType(new ProofType().withId(available.get(i).getId()));
-            proof.setFiles(Collections.singletonList(files.upload()));
+            EncryptedFile file = files.upload();
+            proof.setFiles(Collections.singletonList(file));
             client.proofs().create(proof);
+            files.attached(file);
             print("Proof " + available.get(i).getName() + " for the " + label);
         }
     }
@@ -1679,16 +1692,23 @@ public class TestReadmeExample {
                 refusals.add(address.getId() + ": " + e.getMessage());
             }
         }
-        throw new IllegalStateException("no address in " + country.getName()
+        // The account has no address to verify with: a gap in the account's data, not an SDK failure
+        throw new Skipped("no address in " + country.getName()
                 + " meets the emergency requirement " + requirement.getId() + " " + refusals);
     }
 
-    /** Encrypts a sample PDF and uploads it, once for each proof or document that needs a file. */
+    /**
+     * Encrypts a sample PDF and uploads it, once for each proof or document that needs a file. An uploaded
+     * file is deleted at cleanup unless attached() records that a proof or document was created with it.
+     */
     private static final class ProofFiles {
         private final Encrypt enc = new Encrypt(client);
+        private final Cleanup cleanup;
+        private final Set<String> attachedIds = ConcurrentHashMap.newKeySet();
         private final byte[] pdf;
 
         ProofFiles(Cleanup cleanup) throws Exception {
+            this.cleanup = cleanup;
             Path file = privateTempDirectory("didww-readme-proof-", cleanup).resolve("proof.pdf");
             UploadFileExample.createSamplePdf(file, "README address verification check");
             pdf = Files.readAllBytes(file);
@@ -1696,7 +1716,16 @@ public class TestReadmeExample {
 
         EncryptedFile upload() {
             String id = client.uploadEncryptedFile(enc.encrypt(pdf), "proof.pdf.enc", enc.getFingerprint(), "proof.pdf");
+            cleanup.add("delete encrypted file " + id + " unless a proof or document holds it", () -> {
+                if (!attachedIds.contains(id)) {
+                    client.encryptedFiles().delete(id);
+                }
+            });
             return new EncryptedFile().withId(id);
+        }
+
+        void attached(EncryptedFile file) {
+            attachedIds.add(file.getId());
         }
     }
 
@@ -1849,17 +1878,19 @@ public class TestReadmeExample {
             print("Order " + order.getId() + " is " + order.getStatus() + " and stays");
             return;
         }
-        cleanup.add("cancel order " + order.getId(), () -> {
-            try {
-                client.orders().delete(order.getId());
-            } catch (DidwwApiException e) {
-                OrderStatus status = client.orders().find(order.getId()).getData().getStatus();
-                if (status == OrderStatus.PENDING) {
-                    throw e;
-                }
-                print("order " + order.getId() + " is " + status + " and can no longer be cancelled");
+        cleanup.add("cancel order " + order.getId(), () -> cancelPendingOrder(order.getId()));
+    }
+
+    private static void cancelPendingOrder(String orderId) {
+        try {
+            client.orders().delete(orderId);
+        } catch (DidwwApiException e) {
+            OrderStatus status = client.orders().find(orderId).getData().getStatus();
+            if (status == OrderStatus.PENDING) {
+                throw e;
             }
-        });
+            print("order " + orderId + " is " + status + " and can no longer be cancelled");
+        }
     }
 
     // A new temporary directory that only the current user can open, deleted with its files at cleanup.
