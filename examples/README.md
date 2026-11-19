@@ -15,6 +15,7 @@ All examples read the API key from the `DIDWW_API_KEY` environment variable and 
 - `XDG_CACHE_HOME` (optional for `PricesDownloadExample`, Linux and other Unix systems): user cache directory, `~/.cache` if not set
 - `DIDWW_README_PROXY_URL` (optional for `TestReadmeExample`): HTTP proxy for the HTTP client check, such as `http://proxy.example.com:3128`; the check is skipped if not set
 - `DIDWW_README_REDIS_URL` (optional for `TestReadmeExample`): Redis server for the token store check, such as `redis://localhost:6379/0`; the check is skipped if not set
+- `DIDWW_README_PRODUCTION_API_KEY` (optional for `TestReadmeExample`): API key of a production account for the production client check, which only reads (balance, countries, one price lookup) with a read-only token; the check is skipped if not set
 
 ## Run an example
 
@@ -79,7 +80,7 @@ All classes are in the package `com.didww.examples`.
 | [`PricesDownloadExample`](src/main/java/com/didww/examples/PricesDownloadExample.java) `[dir]` | Downloads the Voice IN price file, fetches it again with If-Modified-Since (304), reads the first rows. Default directory: `didww-prices` in the user cache directory, created for the current user only. |
 | [`IncludesExample`](src/main/java/com/didww/examples/IncludesExample.java) | Reads regions with their country, DID groups with SKUs, available DIDs with a nested include and DIDs with their trunk; a relationship that is not included reads as `null`. |
 | [`WebhookExample`](src/main/java/com/didww/examples/WebhookExample.java) | Signs a sample callback the way DIDWW does and validates it with `RequestValidator`: `valid: true`, then `valid: false` for a tampered payload. |
-| [`TestReadmeExample`](src/main/java/com/didww/examples/TestReadmeExample.java) | Runs the code snippets of the SDK README against the sandbox, one check per snippet, cleans up, prints `Results: N passed, M failed` and exits with status 1 on a failure. Only the production client snippet is skipped. It creates an address verification and an emergency verification (ordering DIDs when needed) and prints each on a `REVIEW` line for DIDWW to approve or reject. |
+| [`TestReadmeExample`](src/main/java/com/didww/examples/TestReadmeExample.java) | Runs the code snippets of the SDK README against the sandbox, one check per snippet, cleans up, prints `Results: N passed, M failed` and exits with status 1 on a failure. The production client check only reads, with a read-only token, and runs when `DIDWW_README_PRODUCTION_API_KEY` is set. It creates an address verification and an emergency verification (ordering DIDs when needed) and prints each on a `REVIEW` line for DIDWW to approve or reject. |
 
 `SenderIdVerificationsExample`, `DidSmsRoutingExample`, `DidTrunkAssignmentExample` and `TestReadmeExample` change existing account state and restore it at the end; `DidReservationsExample`, `SharedCapacityGroupsExample`, `TrunksExample`, `VoiceInTrunkGroupsExample`, `SmsTrunksExample`, `SmsTrunkGroupsExample` and `TestReadmeExample` delete what they create. Both happen also when a step fails. Orders, exports, address verifications and emergency verifications cannot be deleted; the DIDs, identity and address a verification uses stay with it.
 

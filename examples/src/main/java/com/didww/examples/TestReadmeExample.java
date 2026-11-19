@@ -1,6 +1,8 @@
 package com.didww.examples;
 
 import com.didww.sdk.DidwwClient;
+import com.didww.sdk.DidwwCredentials;
+import com.didww.sdk.DidwwEnvironment;
 import com.didww.sdk.Encrypt;
 import com.didww.sdk.auth.AccessToken;
 import com.didww.sdk.auth.DidwwScope;
@@ -146,10 +148,12 @@ import java.util.stream.Stream;
  * is still pending. Each verification is printed on a line starting with "REVIEW" for DIDWW staff to
  * approve or reject.
  *
- * Only the production client snippet is skipped. A check is also reported as skipped when the sandbox
- * account cannot run it (no DID, no price plan) or when the environment variable it needs is not set:
+ * Every check runs on the sandbox, except the production client check, which sends a few reads to production
+ * with a read-only token. A check is reported as skipped when the sandbox account cannot run it (no DID, no
+ * price plan) or when the environment variable it needs is not set:
  *   - DIDWW_README_PROXY_URL: an HTTP proxy, such as http://proxy.example.com:3128, for the HTTP client snippet;
- *   - DIDWW_README_REDIS_URL: a Redis server, such as redis://localhost:6379/0, for the token store snippet.
+ *   - DIDWW_README_REDIS_URL: a Redis server, such as redis://localhost:6379/0, for the token store snippet;
+ *   - DIDWW_README_PRODUCTION_API_KEY: the API key of a production account, for the production client snippet.
  * The installation, development and release snippets are build files and shell commands and are not
  * run. Lists are limited to their first page, and created resources get a random name suffix.
  *
@@ -284,7 +288,24 @@ public class TestReadmeExample {
 
     private static void configuration() {
         section("Configuration");
-        skip("Production client", "production environment: these checks run against the sandbox only");
+        // The README's production client, for the production account of DIDWW_README_PRODUCTION_API_KEY. The read
+        // scope, not in the README snippet, makes the token service issue a read-only token, so production
+        // refuses any write with 403. Only reads are sent: balance, countries and one Voice IN price lookup.
+        // Nothing about the account (key, token, balance amount) is printed.
+        check("Production client: read-only calls with a read token", cleanup -> {
+            DidwwClient production = DidwwClient.builder()
+                    .credentials(new DidwwCredentials(requireEnv("DIDWW_README_PRODUCTION_API_KEY"),
+                            DidwwEnvironment.PRODUCTION))
+                    .scope(DidwwScope.READ)
+                    .build();
+            require(production.balance().find().getData() != null, "no balance"); // the first call mints the token
+            List<Country> productionCountries = production.countries().list(firstPage(5)).getData();
+            require(!productionCountries.isEmpty(), "no countries");
+            PriceLookup<VoiceInPrice> price = production.voiceInPrices().lookup(Map.of("number", "12125551234"));
+            require(!price.getRows().isEmpty(), "no price rows");
+            print("production: token minted (scope read), balance read, " + productionCountries.size()
+                    + " countries, price lookup ok");
+        });
 
         check("Sandbox client with read scope, logger and connect timeout", cleanup -> {
             DidwwClient sandbox = ExampleClientFactory.builder()
