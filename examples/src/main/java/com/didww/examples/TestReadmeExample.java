@@ -1442,8 +1442,9 @@ public class TestReadmeExample {
         throw new IllegalStateException("no available DID in the Ukrainian local groups with an address requirement");
     }
 
-    // An emergency-capable Ukrainian DID without an emergency calling service or verification; when the
-    // account has none, one is ordered.
+    // An emergency-capable Ukrainian DID without an identity, emergency calling service or emergency
+    // verification; when the account has none, one is ordered. A DID bound to an identity (by an earlier
+    // verification) can be verified only with an address of that identity, so it is not reused.
     private static Did emergencyDid() throws InterruptedException {
         String ukraine = country("UA").getId();
         List<Did> dids = client.dids().list(QueryParams.builder()
@@ -1451,12 +1452,12 @@ public class TestReadmeExample {
                 .filter("did_group.features", "emergency")
                 .filter("emergency_enabled", "false")
                 .filter("terminated", "false")
-                .include("did_group", "emergency_calling_service", "emergency_verification")
+                .include("did_group", "identity", "emergency_calling_service", "emergency_verification")
                 .page(1, 25)
                 .build()).getData();
         for (Did did : dids) {
-            if (did.getEmergencyCallingService() == null && did.getEmergencyVerification() == null
-                    && did.getDidGroup() != null) {
+            if (did.getIdentity() == null && did.getEmergencyCallingService() == null
+                    && did.getEmergencyVerification() == null && did.getDidGroup() != null) {
                 return did;
             }
         }
