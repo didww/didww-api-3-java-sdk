@@ -21,6 +21,9 @@ import com.didww.sdk.prices.SmsOutPrice;
 import com.didww.sdk.prices.VoiceInPrice;
 import com.didww.sdk.prices.VoiceOutPrice;
 import com.didww.sdk.resource.Address;
+import com.didww.sdk.resource.AddressRequirement;
+import com.didww.sdk.resource.AddressRequirementValidation;
+import com.didww.sdk.resource.AddressVerification;
 import com.didww.sdk.resource.AvailableDid;
 import com.didww.sdk.resource.Balance;
 import com.didww.sdk.resource.BaseResource;
@@ -32,9 +35,16 @@ import com.didww.sdk.resource.DidHistory;
 import com.didww.sdk.resource.DidReservation;
 import com.didww.sdk.resource.EmergencyCallingService;
 import com.didww.sdk.resource.EmergencyRequirement;
+import com.didww.sdk.resource.EmergencyRequirementValidation;
+import com.didww.sdk.resource.EmergencyVerification;
+import com.didww.sdk.resource.EncryptedFile;
 import com.didww.sdk.resource.Export;
 import com.didww.sdk.resource.Identity;
 import com.didww.sdk.resource.Order;
+import com.didww.sdk.resource.PermanentSupportingDocument;
+import com.didww.sdk.resource.Proof;
+import com.didww.sdk.resource.ProofEntity;
+import com.didww.sdk.resource.ProofType;
 import com.didww.sdk.resource.PublicKey;
 import com.didww.sdk.resource.Region;
 import com.didww.sdk.resource.SenderIdVerification;
@@ -42,11 +52,14 @@ import com.didww.sdk.resource.SharedCapacityGroup;
 import com.didww.sdk.resource.SmsTrunk;
 import com.didww.sdk.resource.SmsTrunkGroup;
 import com.didww.sdk.resource.SmsTrunkRegenerateCredential;
+import com.didww.sdk.resource.StockKeepingUnit;
+import com.didww.sdk.resource.SupportingDocumentTemplate;
 import com.didww.sdk.resource.VoiceInTrunk;
 import com.didww.sdk.resource.VoiceInTrunkGroup;
 import com.didww.sdk.resource.VoiceOutTrunk;
 import com.didww.sdk.resource.authenticationmethod.CredentialsAndIpAuthenticationMethod;
 import com.didww.sdk.resource.configuration.SipConfiguration;
+import com.didww.sdk.resource.enums.CallbackMethod;
 import com.didww.sdk.resource.enums.CliFormat;
 import com.didww.sdk.resource.enums.Codec;
 import com.didww.sdk.resource.enums.DefaultDstAction;
@@ -71,13 +84,27 @@ import com.didww.sdk.resource.smstrunkconfiguration.GenericSmsTrunkConfiguration
 import com.didww.sdk.resource.smstrunkconfiguration.HttpInConfiguration;
 import com.didww.sdk.resource.smstrunkconfiguration.HttpOutConfiguration;
 import com.didww.sdk.resource.smstrunkconfiguration.SmsTrunkConfiguration;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import okhttp3.Call;
+import okhttp3.EventListener;
 import okhttp3.OkHttpClient;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -102,6 +129,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -113,12 +141,17 @@ import java.util.stream.Stream;
  *
  * What a check creates is deleted, and what it changes on existing resources (the routing and
  * description of a DID, the SMS trunk of a Sender ID verification) is restored, in a finally block,
- * also when the check fails. Exports cannot be deleted; an order is cancelled while it is still pending.
+ * also when the check fails. Exports, address verifications and emergency verifications cannot be
+ * deleted, and DIDs ordered for the verifications stay on the account; an order is cancelled while it
+ * is still pending. Each verification is printed on a line starting with "REVIEW" for DIDWW staff to
+ * approve or reject.
  *
- * Snippets that only production or DIDWW staff can complete are reported as skipped with the reason,
- * and so are checks the sandbox account cannot run (no DID, no price plan). The installation,
- * development and release snippets are build files and shell commands and are not run. Lists are
- * limited to their first page, and created resources get a random name suffix.
+ * Only the production client snippet is skipped. A check is also reported as skipped when the sandbox
+ * account cannot run it (no DID, no price plan) or when the environment variable it needs is not set:
+ *   - DIDWW_README_PROXY_URL: an HTTP proxy, such as http://proxy.example.com:3128, for the HTTP client snippet;
+ *   - DIDWW_README_REDIS_URL: a Redis server, such as redis://localhost:6379/0, for the token store snippet.
+ * The installation, development and release snippets are build files and shell commands and are not
+ * run. Lists are limited to their first page, and created resources get a random name suffix.
  *
  * Prints "Results: N passed, M failed" and exits with status 1 when a check failed.
  *
@@ -184,7 +217,7 @@ public class TestReadmeExample {
     private static final String SUFFIX = UUID.randomUUID().toString().substring(0, 8);
 
     private static DidwwClient client;
-    private static Country unitedStates;
+    private static final Map<String, Country> countriesByIso = new HashMap<>();
     private static int nameCount;
     private static int passed;
     private static int failed;
@@ -262,15 +295,29 @@ public class TestReadmeExample {
             print("Balance: " + sandbox.balance().find().getData().getTotalBalance());
         });
 
-        // The README routes the calls through an HTTP proxy at an example host; this check keeps the timeouts
-        check("HTTP client: own OkHttpClient.Builder (without the example proxy)", cleanup -> {
+        // The README's proxy.example.com is replaced by DIDWW_README_PROXY_URL; the calls go to the sandbox
+        check("HTTP client: own OkHttpClient.Builder with a proxy", cleanup -> {
+            URI proxyUrl = URI.create(requireEnv("DIDWW_README_PROXY_URL"));
+            int proxyPort = proxyUrl.getPort() != -1 ? proxyUrl.getPort() : 80;
+            Set<Proxy> proxiesUsed = ConcurrentHashMap.newKeySet();
+
             OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
+                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyUrl.getHost(), proxyPort)))
                     .connectTimeout(Duration.ofSeconds(10))
-                    .readTimeout(Duration.ofSeconds(60));
-            DidwwClient custom = ExampleClientFactory.builder()
+                    .readTimeout(Duration.ofSeconds(60))
+                    // Not in the README: records the proxy of each connection, to show the calls went through it
+                    .eventListener(new EventListener() {
+                        @Override
+                        public void connectStart(Call call, InetSocketAddress address, Proxy proxy) {
+                            proxiesUsed.add(proxy);
+                        }
+                    });
+            DidwwClient proxied = ExampleClientFactory.builder()
                     .httpClientBuilder(httpBuilder)
                     .build();
-            print("Balance: " + custom.balance().find().getData().getTotalBalance());
+            print("Balance through the proxy: " + proxied.balance().find().getData().getTotalBalance());
+            require(!proxiesUsed.isEmpty() && proxiesUsed.stream().allMatch(p -> p.type() == Proxy.Type.HTTP),
+                    "the calls did not go through the proxy: " + proxiesUsed);
         });
     }
 
@@ -314,6 +361,33 @@ public class TestReadmeExample {
             require(restored.getAccessToken().equals(token.getAccessToken()), "the token did not survive JSON");
             require(!restored.toString().contains(token.getAccessToken()), "toString() shows the access token");
             print("Stored " + store.keys().size() + " token(s): " + restored);
+        });
+
+        // The README's myRedisStore: two clients with their own store over one Redis share the token
+        check("Token cache: a TokenStore over Redis, shared by two clients", cleanup -> {
+            String redisUrl = requireEnv("DIDWW_README_REDIS_URL");
+            String namespace = "didww-readme-java-" + SUFFIX + ":"; // keeps this run apart from others
+            RedisTokenStore firstStore = new RedisTokenStore(redisUrl, namespace);
+            cleanup.add("delete the tokens of this run from Redis", firstStore::deleteWritten);
+            DidwwClient first = ExampleClientFactory.builder()
+                    .tokenStore(firstStore)
+                    .build();
+            first.balance().find();
+            require(!firstStore.written().isEmpty(), "the first client stored no token in Redis");
+
+            RedisTokenStore secondStore = new RedisTokenStore(redisUrl, namespace);
+            cleanup.add("delete the tokens the second client stored in Redis", secondStore::deleteWritten);
+            for (Map.Entry<String, AccessToken> entry : firstStore.written().entrySet()) {
+                AccessToken stored = secondStore.get(entry.getKey());
+                require(stored != null && stored.getAccessToken().equals(entry.getValue().getAccessToken()),
+                        "the token read back from Redis differs from the one stored");
+            }
+            DidwwClient second = ExampleClientFactory.builder()
+                    .tokenStore(secondStore)
+                    .build();
+            second.balance().find();
+            require(secondStore.written().isEmpty(), "the second client minted a token instead of reusing the stored one");
+            print("The second client reused the token stored in Redis by the first");
         });
 
         check("Logging through System.Logger", cleanup -> {
@@ -764,7 +838,7 @@ public class TestReadmeExample {
     private static void identitiesAndAddresses() {
         section("Identities and addresses");
         check("Identities and addresses: create a personal identity and its address", cleanup -> {
-            Country country = unitedStates();
+            Country country = country("US");
             Identity identity = new Identity();
             identity.setFirstName("John");
             identity.setLastName("Doe");
@@ -787,8 +861,47 @@ public class TestReadmeExample {
             print("Identity " + createdIdentity.getId() + ", address " + createdAddress.getId());
         });
 
-        skip("Address verifications: create", "DIDWW staff review every address verification and the API cannot"
-                + " delete one; it also needs DIDs whose DID group requires an address");
+        // A verification needs a DID that awaits registration and an identity and address that meet the
+        // address requirement of its country and number type; Ukrainian local DIDs have one.
+        check("Address verifications: create for a Ukrainian DID, update its external reference", cleanup -> {
+            Did did = didAwaitingRegistration();
+            DidGroup group = client.didGroups().find(did.getDidGroup().getId(),
+                    QueryParams.builder().include("country").build()).getData();
+            AddressRequirement requirement = addressRequirement(group.getCountry(), group.getNumberType());
+            print("DID " + did.getNumber() + " in " + group.getAreaName() + ", requirement " + requirement.getId());
+
+            // Once the verification exists the API refuses to delete its address and identity (409).
+            // The files of the proofs are not deleted either: the proofs hold them until they expire.
+            AtomicBoolean verificationCreated = new AtomicBoolean(false);
+            ProofFiles files = new ProofFiles(cleanup);
+            Identity identity = identityFor(requirement, group.getCountry(), files, cleanup, verificationCreated);
+            Address address = addressFor(requirement, identity, group, files, cleanup, verificationCreated);
+
+            AddressRequirementValidation validation = new AddressRequirementValidation();
+            validation.setAddressRequirement(new AddressRequirement().withId(requirement.getId()));
+            validation.setAddress(new Address().withId(address.getId()));
+            validation.setIdentity(new Identity().withId(identity.getId()));
+            client.addressRequirementValidations().create(validation); // 422 with the reasons when not met
+
+            AddressVerification verification = new AddressVerification();
+            verification.setCallbackUrl("http://example.com/callback");
+            verification.setCallbackMethod(CallbackMethod.GET);
+            verification.setAddress(new Address().withId(address.getId()));
+            verification.setDids(Collections.singletonList(new Did().withId(did.getId())));
+            if (Boolean.TRUE.equals(requirement.getServiceDescriptionRequired())) {
+                verification.setServiceDescription("README check of the DIDWW Java SDK");
+            }
+            AddressVerification created = client.addressVerifications().create(verification).getData();
+            verificationCreated.set(true);
+            System.out.println("REVIEW address_verification " + created.getId() + " " + created.getReference());
+
+            AddressVerification update = new AddressVerification().withId(created.getId());
+            update.setExternalReferenceId("readme-java-" + SUFFIX);
+            AddressVerification updated = client.addressVerifications().update(update).getData();
+            require(("readme-java-" + SUFFIX).equals(updated.getExternalReferenceId()),
+                    "the external reference was not updated");
+            print("Status " + updated.getStatus() + "; the DID, identity and address stay with the verification");
+        });
     }
 
     // ─── Exports ─────────────────────────────────────────────
@@ -862,9 +975,29 @@ public class TestReadmeExample {
             print(emergReqs.size() + " requirement(s), " + emergServices.size() + " calling service(s)");
         });
 
-        skip("Emergency services: create an emergency verification", "DIDWW staff review every emergency"
-                + " verification and the API cannot delete one; it also needs a DID with emergency calling and an"
-                + " address that meets its requirement (EmergencyScenarioExample walks through it)");
+        // As EmergencyScenarioExample: an emergency-capable Ukrainian DID without an emergency calling service,
+        // and an address of the account that meets the emergency requirement of the DID's number type
+        check("Emergency services: create an emergency verification", cleanup -> {
+            Did did = emergencyDid();
+            DidGroup group = client.didGroups().find(did.getDidGroup().getId(),
+                    QueryParams.builder().include("country").build()).getData();
+            List<EmergencyRequirement> requirements = client.emergencyRequirements().list(QueryParams.builder()
+                    .filter("country.id", group.getCountry().getId())
+                    .filter("number_type", EnumWire.value(group.getNumberType()))
+                    .build()).getData();
+            require(!requirements.isEmpty(), "no emergency requirement for " + group.getCountry().getName());
+            Address address = emergencyAddress(requirements.get(0), group.getCountry());
+            print("DID " + did.getNumber() + ", address " + address.getId());
+
+            EmergencyVerification emergVerification = new EmergencyVerification();
+            emergVerification.setCallbackUrl("https://example.com/callback");
+            emergVerification.setCallbackMethod("post");
+            emergVerification.setAddress(address);
+            emergVerification.setDids(Arrays.asList(did));
+            EmergencyVerification created = client.emergencyVerifications().create(emergVerification).getData();
+            System.out.println("REVIEW emergency_verification " + created.getId() + " " + created.getReference());
+            print("Status " + created.getStatus() + "; the verification and its DID stay on the account");
+        });
 
         check("DID history: list", cleanup -> {
             List<DidHistory> history = client.didHistory().list(firstPage(5)).getData();
@@ -936,7 +1069,7 @@ public class TestReadmeExample {
         section("Filtering, sorting and pagination");
         check("Regions filtered by country and name, with country, sorted, paged", cleanup -> {
             QueryParams params = QueryParams.builder()
-                    .filter("country.id", unitedStates().getId())
+                    .filter("country.id", country("US").getId())
                     .filter("name", "Arizona")
                     .include("country")
                     .sort("name")
@@ -1246,13 +1379,284 @@ public class TestReadmeExample {
         }
     }
 
-    private static Country unitedStates() {
-        if (unitedStates == null) {
-            List<Country> countries = client.countries().list(QueryParams.builder().filter("iso", "US").build()).getData();
-            require(!countries.isEmpty(), "country US not found");
-            unitedStates = countries.get(0);
+    private static Country country(String iso) {
+        return countriesByIso.computeIfAbsent(iso, code -> {
+            List<Country> found = client.countries().list(QueryParams.builder().filter("iso", code).build()).getData();
+            require(!found.isEmpty(), "country " + code + " not found");
+            return found.get(0);
+        });
+    }
+
+    private static String requireEnv(String name) {
+        String value = System.getenv(name);
+        if (value == null || value.isBlank()) {
+            throw new Skipped("set " + name + " to run this check");
         }
-        return unitedStates;
+        return value;
+    }
+
+    // ─── Helpers of the verification checks ──────────────────
+
+    // An active Ukrainian DID that awaits registration and has no address verification yet; when the
+    // account has none, a local one that needs registration is ordered.
+    private static Did didAwaitingRegistration() throws InterruptedException {
+        String ukraine = country("UA").getId();
+        List<Did> dids = client.dids().list(QueryParams.builder()
+                .filter("country.id", ukraine)
+                .filter("awaiting_registration", "true")
+                .filter("terminated", "false")
+                .include("did_group", "address_verification")
+                .page(1, 25)
+                .build()).getData();
+        for (Did did : dids) {
+            if (did.getAddressVerification() == null && did.getDidGroup() != null) {
+                return did;
+            }
+        }
+        return orderAvailableDid(QueryParams.builder()
+                .filter("country.id", ukraine)
+                .filter("did_group.needs_registration", "true")
+                .filter("did_group.number_type", EnumWire.value(NumberType.LOCAL))
+                .include("did_group.stock_keeping_units")
+                .page(1, 1)
+                .build());
+    }
+
+    // An emergency-capable Ukrainian DID without an emergency calling service or verification; when the
+    // account has none, one is ordered.
+    private static Did emergencyDid() throws InterruptedException {
+        String ukraine = country("UA").getId();
+        List<Did> dids = client.dids().list(QueryParams.builder()
+                .filter("country.id", ukraine)
+                .filter("did_group.features", "emergency")
+                .filter("emergency_enabled", "false")
+                .filter("terminated", "false")
+                .include("did_group", "emergency_calling_service", "emergency_verification")
+                .page(1, 25)
+                .build()).getData();
+        for (Did did : dids) {
+            if (did.getEmergencyCallingService() == null && did.getEmergencyVerification() == null
+                    && did.getDidGroup() != null) {
+                return did;
+            }
+        }
+        return orderAvailableDid(QueryParams.builder()
+                .filter("country.id", ukraine)
+                .filter("did_group.features", "emergency")
+                .include("did_group.stock_keeping_units")
+                .page(1, 1)
+                .build());
+    }
+
+    // Orders the first available DID of the list, waits up to a minute for the order and returns the DID.
+    private static Did orderAvailableDid(QueryParams availableParams) throws InterruptedException {
+        List<AvailableDid> available = client.availableDids().list(availableParams).getData();
+        require(!available.isEmpty(), "no available DID to order");
+        AvailableDid availableDid = available.get(0);
+        List<StockKeepingUnit> skus = availableDid.getDidGroup() != null
+                ? availableDid.getDidGroup().getStockKeepingUnits() : null;
+        require(skus != null && !skus.isEmpty(), "no SKU for available DID " + availableDid.getNumber());
+
+        AvailableDidOrderItem item = new AvailableDidOrderItem();
+        item.setAvailableDidId(availableDid.getId());
+        item.setSkuId(skus.get(0).getId());
+        Order order = new Order();
+        order.setItems(Collections.singletonList(item));
+        Order created = client.orders().create(order).getData();
+        print("Ordered " + availableDid.getNumber() + " (order " + created.getId() + "); the DID stays on the account");
+        for (int attempt = 0; attempt < 12 && !created.isCompleted(); attempt++) {
+            Thread.sleep(5000);
+            created = client.orders().find(created.getId()).getData();
+        }
+        require(created.isCompleted(), "order " + created.getId() + " is " + created.getStatus());
+
+        List<Did> dids = client.dids().list(QueryParams.builder()
+                .filter("order.id", created.getId())
+                .include("did_group")
+                .build()).getData();
+        require(!dids.isEmpty(), "no DID in order " + created.getId());
+        return dids.get(0);
+    }
+
+    // The address requirement of a country and number type, with its proof types and documents.
+    private static AddressRequirement addressRequirement(Country country, NumberType numberType) {
+        List<AddressRequirement> requirements = client.addressRequirements().list(QueryParams.builder()
+                .filter("country.id", country.getId())
+                .filter("number_type", EnumWire.value(numberType))
+                .include("personal_proof_types", "business_proof_types", "address_proof_types",
+                        "personal_permanent_document", "business_permanent_document",
+                        "personal_onetime_document", "business_onetime_document")
+                .build()).getData();
+        require(requirements.size() == 1, requirements.size() + " address requirements for " + country.getName());
+        return requirements.get(0);
+    }
+
+    // Creates an identity with the type, mandatory fields, proofs and permanent document the requirement asks for.
+    private static Identity identityFor(AddressRequirement requirement, Country country, ProofFiles files,
+                                        Cleanup cleanup, AtomicBoolean referenced) {
+        boolean business = requirement.getIdentityType() == IdentityType.BUSINESS
+                || (requirement.getIdentityType() == IdentityType.ANY
+                && requirement.getPersonalOnetimeDocument() != null && requirement.getBusinessOnetimeDocument() == null);
+        SupportingDocumentTemplate onetime = business
+                ? requirement.getBusinessOnetimeDocument() : requirement.getPersonalOnetimeDocument();
+        require(onetime == null, "the requirement asks for a one-time document (" + onetime
+                + "), which an address verification of the API cannot carry");
+
+        Identity identity = new Identity();
+        identity.setIdentityType(business ? IdentityType.BUSINESS : IdentityType.PERSONAL);
+        identity.setPhoneNumber("380487000000");
+        identity.setCountry(country);
+        if (business) {
+            identity.setCompanyName(uniqueName("README Check"));
+        } else {
+            identity.setFirstName("John");
+            identity.setLastName("Doe");
+        }
+        List<String> mandatory = business
+                ? requirement.getBusinessMandatoryFields() : requirement.getPersonalMandatoryFields();
+        for (String field : mandatory != null ? mandatory : Collections.<String>emptyList()) {
+            fillIdentityField(identity, field, country);
+        }
+        Identity created = client.identities().create(identity).getData();
+        String identityId = created.getId();
+        cleanup.add("delete identity " + identityId + " unless a verification references it", () -> {
+            if (referenced.get()) {
+                print("identity " + identityId + " stays: the address verification references it");
+            } else {
+                client.identities().delete(identityId);
+            }
+        });
+
+        createProofs(created, business ? requirement.getBusinessProofTypes() : requirement.getPersonalProofTypes(),
+                business ? requirement.getBusinessProofQty() : requirement.getPersonalProofQty(), files, "identity");
+        SupportingDocumentTemplate template = business
+                ? requirement.getBusinessPermanentDocument() : requirement.getPersonalPermanentDocument();
+        if (template != null) {
+            PermanentSupportingDocument document = new PermanentSupportingDocument();
+            document.setIdentity(new Identity().withId(identityId));
+            document.setTemplate(new SupportingDocumentTemplate().withId(template.getId()));
+            document.setFiles(Collections.singletonList(files.upload()));
+            client.permanentSupportingDocuments().create(document);
+            print("Permanent document " + template.getName() + " for the identity");
+        }
+        return created;
+    }
+
+    private static void fillIdentityField(Identity identity, String field, Country country) {
+        switch (field) {
+            case "birth_date":
+                identity.setBirthDate(LocalDate.of(1990, 1, 15));
+                break;
+            case "birth_country":
+                identity.setBirthCountry(country);
+                break;
+            case "country":
+                identity.setCountry(country);
+                break;
+            case "id_number":
+                identity.setIdNumber("AB123456");
+                break;
+            case "personal_tax_id":
+                identity.setPersonalTaxId("1234567890");
+                break;
+            case "contact_email":
+                identity.setContactEmail("readme-check@example.com");
+                break;
+            case "tax_id":
+                identity.setVatId("UA12345678");
+                break;
+            case "company_reg_number":
+                identity.setCompanyRegNumber("12345678");
+                break;
+            default:
+                print("mandatory field " + field + " is not filled in by this check");
+        }
+    }
+
+    // Creates an address of the identity in the DID's country, with the proofs the requirement asks for.
+    // The API sets no city or area on a new address, so the DID's city is not compared with it.
+    private static Address addressFor(AddressRequirement requirement, Identity identity, DidGroup group,
+                                      ProofFiles files, Cleanup cleanup, AtomicBoolean referenced) {
+        Address address = new Address();
+        address.setCityName(group.getAreaName() != null ? group.getAreaName() : "Odesa");
+        address.setPostalCode("65000");
+        address.setAddress("1 Deribasivska St");
+        address.setIdentity(new Identity().withId(identity.getId()));
+        address.setCountry(group.getCountry());
+        Address created = client.addresses().create(address).getData();
+        String addressId = created.getId();
+        cleanup.add("delete address " + addressId + " unless a verification references it", () -> {
+            if (referenced.get()) {
+                print("address " + addressId + " stays: the address verification references it");
+            } else {
+                client.addresses().delete(addressId);
+            }
+        });
+        createProofs(created, requirement.getAddressProofTypes(), requirement.getAddressProofQty(), files, "address");
+        return created;
+    }
+
+    // Creates qty proofs of different types for the identity or address, each with an uploaded file.
+    private static void createProofs(ProofEntity entity, List<ProofType> types, Integer qty, ProofFiles files,
+                                     String label) {
+        int needed = qty != null ? qty : 0;
+        List<ProofType> available = types != null ? types : Collections.<ProofType>emptyList();
+        require(available.size() >= needed, needed + " " + label + " proof(s) needed, " + available.size() + " type(s) listed");
+        for (int i = 0; i < needed; i++) {
+            Proof proof = new Proof();
+            proof.setEntity(entity);
+            proof.setProofType(new ProofType().withId(available.get(i).getId()));
+            proof.setFiles(Collections.singletonList(files.upload()));
+            client.proofs().create(proof);
+            print("Proof " + available.get(i).getName() + " for the " + label);
+        }
+    }
+
+    // The first address of the account in the country, with its identity, that meets the emergency requirement.
+    private static Address emergencyAddress(EmergencyRequirement requirement, Country country) {
+        List<Address> addresses = client.addresses().list(QueryParams.builder()
+                .filter("country.id", country.getId())
+                .include("identity")
+                .page(1, 10)
+                .build()).getData();
+        List<String> refusals = new ArrayList<>();
+        for (Address address : addresses) {
+            if (address.getIdentity() == null) {
+                continue;
+            }
+            EmergencyRequirementValidation validation = new EmergencyRequirementValidation();
+            validation.setEmergencyRequirement(new EmergencyRequirement().withId(requirement.getId()));
+            validation.setAddress(new Address().withId(address.getId()));
+            validation.setIdentity(new Identity().withId(address.getIdentity().getId()));
+            try {
+                client.emergencyRequirementValidations().create(validation);
+                return address;
+            } catch (DidwwApiException e) {
+                if (e.getHttpStatus() != 422) {
+                    throw e;
+                }
+                refusals.add(address.getId() + ": " + e.getMessage());
+            }
+        }
+        throw new IllegalStateException("no address in " + country.getName()
+                + " meets the emergency requirement " + requirement.getId() + " " + refusals);
+    }
+
+    /** Encrypts a sample PDF and uploads it, once for each proof or document that needs a file. */
+    private static final class ProofFiles {
+        private final Encrypt enc = new Encrypt(client);
+        private final byte[] pdf;
+
+        ProofFiles(Cleanup cleanup) throws Exception {
+            Path file = privateTempDirectory("didww-readme-proof-", cleanup).resolve("proof.pdf");
+            UploadFileExample.createSamplePdf(file, "README address verification check");
+            pdf = Files.readAllBytes(file);
+        }
+
+        EncryptedFile upload() {
+            String id = client.uploadEncryptedFile(enc.encrypt(pdf), "proof.pdf.enc", enc.getFingerprint(), "proof.pdf");
+            return new EncryptedFile().withId(id);
+        }
     }
 
     // The first DID that is not terminated, with its voice and SMS routing included.
@@ -1470,6 +1874,159 @@ public class TestReadmeExample {
 
         Set<String> keys() {
             return tokens.keySet();
+        }
+    }
+
+    /**
+     * A TokenStore over Redis, the README's myRedisStore. It holds the JSON of each AccessToken under the
+     * SDK's key with a namespace in front. A minimal Redis client keeps the example free of a Redis library:
+     * each call opens a connection with short timeouts, sends one command and closes it. The URL is
+     * redis://[[user]:password@]host[:port][/database].
+     */
+    private static final class RedisTokenStore implements TokenStore {
+        private static final int TIMEOUT_MILLIS = 3000;
+
+        private final URI url;
+        private final String namespace;
+        private final ObjectMapper mapper = new ObjectMapper();
+        private final Map<String, AccessToken> written = new ConcurrentHashMap<>();
+
+        RedisTokenStore(String url, String namespace) {
+            this.url = URI.create(url);
+            this.namespace = namespace;
+        }
+
+        @Override
+        public AccessToken get(String key) {
+            Object json = command("GET", namespace + key);
+            if (json == null) {
+                return null;
+            }
+            try {
+                return mapper.readValue((String) json, AccessToken.class);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+
+        @Override
+        public void set(String key, AccessToken token, Duration ttl) {
+            String json;
+            try {
+                json = mapper.writeValueAsString(token);
+            } catch (JsonProcessingException e) {
+                throw new UncheckedIOException(e);
+            }
+            if (ttl != null && !ttl.isZero() && !ttl.isNegative()) {
+                command("SET", namespace + key, json, "PX", Long.toString(ttl.toMillis()));
+            } else {
+                command("SET", namespace + key, json);
+            }
+            written.put(key, token);
+        }
+
+        @Override
+        public void delete(String key) {
+            command("DEL", namespace + key);
+        }
+
+        // The tokens this store has written, by key
+        Map<String, AccessToken> written() {
+            return written;
+        }
+
+        void deleteWritten() {
+            for (String key : written.keySet()) {
+                delete(key);
+            }
+        }
+
+        // Sends one command, after AUTH and SELECT when the URL has a password or a database, and returns
+        // the reply: a String, a Long, or null.
+        private Object command(String... args) {
+            try (Socket socket = new Socket()) {
+                socket.connect(new InetSocketAddress(url.getHost(), url.getPort() != -1 ? url.getPort() : 6379),
+                        TIMEOUT_MILLIS);
+                socket.setSoTimeout(TIMEOUT_MILLIS);
+                OutputStream out = new BufferedOutputStream(socket.getOutputStream());
+                InputStream in = new BufferedInputStream(socket.getInputStream());
+                String userInfo = url.getRawUserInfo();
+                if (userInfo != null) {
+                    int colon = userInfo.indexOf(':');
+                    String user = colon >= 0 ? decode(userInfo.substring(0, colon)) : "";
+                    String password = decode(colon >= 0 ? userInfo.substring(colon + 1) : userInfo);
+                    if (user.isEmpty()) {
+                        send(out, in, "AUTH", password);
+                    } else {
+                        send(out, in, "AUTH", user, password);
+                    }
+                }
+                String path = url.getPath();
+                if (path != null && path.length() > 1) {
+                    send(out, in, "SELECT", path.substring(1));
+                }
+                return send(out, in, args);
+            } catch (IOException e) {
+                throw new UncheckedIOException("Redis " + args[0] + " failed", e);
+            }
+        }
+
+        private static String decode(String value) {
+            return URLDecoder.decode(value, StandardCharsets.UTF_8);
+        }
+
+        private static Object send(OutputStream out, InputStream in, String... args) throws IOException {
+            ByteArrayOutputStream request = new ByteArrayOutputStream();
+            request.write(("*" + args.length + "\r\n").getBytes(StandardCharsets.UTF_8));
+            for (String arg : args) {
+                byte[] bytes = arg.getBytes(StandardCharsets.UTF_8);
+                request.write(("$" + bytes.length + "\r\n").getBytes(StandardCharsets.UTF_8));
+                request.write(bytes);
+                request.write("\r\n".getBytes(StandardCharsets.UTF_8));
+            }
+            request.writeTo(out);
+            out.flush();
+            return reply(in);
+        }
+
+        private static Object reply(InputStream in) throws IOException {
+            String line = readLine(in);
+            if (line.isEmpty()) {
+                throw new IOException("Empty Redis reply");
+            }
+            String rest = line.substring(1);
+            switch (line.charAt(0)) {
+                case '+':
+                    return rest;
+                case ':':
+                    return Long.parseLong(rest);
+                case '-':
+                    throw new IOException("Redis error: " + rest);
+                case '$':
+                    int length = Integer.parseInt(rest);
+                    if (length < 0) {
+                        return null;
+                    }
+                    byte[] data = in.readNBytes(length + 2); // the value and its CRLF
+                    if (data.length < length + 2) {
+                        throw new EOFException("Redis reply cut short");
+                    }
+                    return new String(data, 0, length, StandardCharsets.UTF_8);
+                default:
+                    throw new IOException("Unexpected Redis reply type " + line.charAt(0));
+            }
+        }
+
+        private static String readLine(InputStream in) throws IOException {
+            ByteArrayOutputStream line = new ByteArrayOutputStream();
+            for (int b = in.read(); b != '\n'; b = in.read()) {
+                if (b == -1) {
+                    throw new EOFException("Redis closed the connection");
+                }
+                line.write(b);
+            }
+            String text = line.toString(StandardCharsets.UTF_8);
+            return text.endsWith("\r") ? text.substring(0, text.length() - 1) : text;
         }
     }
 }
