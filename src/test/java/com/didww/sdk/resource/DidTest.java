@@ -165,8 +165,8 @@ class DidTest extends BaseTest {
     }
 
     @Test
-    void testUpdateDidLoadedWithIncludeDoesNotResendIncludedRelationships() {
-        stubGetFixture("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe", "dids/show_with_included_trunk.json");
+    void testUpdateDidLoadedWithIncludeDoesNotResendReadOnlyRelationships() {
+        stubGetFixture("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe", "dids/show_with_included_emergency_verification.json");
 
         wireMock.stubFor(patch(urlPathEqualTo("/v3/dids/21d0b02c-b556-4d3e-acbf-504b78295dbe"))
                 .withRequestBody(equalToJson(loadFixture("dids/update_from_loaded_with_include_request.json"), true, false))
@@ -175,9 +175,9 @@ class DidTest extends BaseTest {
                         .withHeader("Content-Type", "application/vnd.api+json")
                         .withBody(loadFixture("dids/update.json"))));
 
-        QueryParams params = QueryParams.builder().include("voice_in_trunk").build();
+        QueryParams params = QueryParams.builder().include("emergency_verification").build();
         Did did = client.dids().find("21d0b02c-b556-4d3e-acbf-504b78295dbe", params).getData();
-        assertThat(did.getVoiceInTrunk()).isNotNull();
+        assertThat(did.getEmergencyVerification()).isNotNull();
         did.setDescription("patched from loaded resource");
 
         ApiResponse<Did> response = client.dids().update(did);

@@ -18,6 +18,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 
 public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
@@ -126,9 +127,10 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
                         continue;
                     }
                     if (!resource.isFieldDirty(field.getName())) {
-                        // A relationship read with include (or set before tracking) is not a change:
-                        // sending it again would PATCH read-only relationships such as emergency_verification
-                        if (relationshipsNode.remove(relationship.value()) != null) {
+                        // A relationship without a setter is read-only (emergency_verification, identity…):
+                        // read with include, it must not go back in an update, which the API would refuse
+                        if (!hasSetter(resource.getClass(), field)
+                                && relationshipsNode.remove(relationship.value()) != null) {
                             changed = true;
                         }
                         continue;
@@ -158,6 +160,16 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
         } catch (Exception e) {
             throw new DidwwClientException("Failed to serialize null relationships for update", e);
         }
+    }
+
+    private static boolean hasSetter(Class<?> type, Field field) {
+        String name = "set" + Character.toUpperCase(field.getName().charAt(0)) + field.getName().substring(1);
+        for (Method method : type.getMethods()) {
+            if (method.getName().equals(name) && method.getParameterCount() == 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private ObjectNode getOrCreateRelationshipsNode(ObjectNode dataObject) {
