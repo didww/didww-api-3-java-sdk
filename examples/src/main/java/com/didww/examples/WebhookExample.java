@@ -74,7 +74,8 @@ public class WebhookExample {
             data.append(field.getKey()).append(field.getValue());
         }
         try {
-            Mac mac = Mac.getInstance("HmacSHA1");
+            // DIDWW signs callbacks with HMAC-SHA1; a signature made any other way does not match
+            Mac mac = Mac.getInstance("HmacSHA1"); // NOSONAR the algorithm DIDWW callbacks are signed with
             mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA1"));
             byte[] digest = mac.doFinal(data.toString().getBytes(StandardCharsets.UTF_8));
             StringBuilder hex = new StringBuilder(digest.length * 2);
@@ -92,7 +93,10 @@ public class WebhookExample {
         URI uri = URI.create(url);
         String scheme = uri.getScheme().toLowerCase(Locale.ROOT);
         String userInfo = uri.getUserInfo() != null ? uri.getUserInfo() + "@" : "";
-        int port = uri.getPort() != -1 ? uri.getPort() : ("https".equals(scheme) ? 443 : 80);
+        int port = uri.getPort();
+        if (port == -1) {
+            port = "https".equals(scheme) ? 443 : 80;
+        }
         String query = uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "";
         String fragment = uri.getRawFragment() != null ? "#" + uri.getRawFragment() : "";
         return scheme + "://" + userInfo + uri.getHost() + ":" + port + uri.getRawPath() + query + fragment;

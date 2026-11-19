@@ -79,8 +79,10 @@ import okhttp3.OkHttpClient;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -523,6 +525,17 @@ public class TestReadmeExample {
     private static void voiceOutTrunks() {
         section("Voice OUT trunks (need account configuration)");
         check("Voice OUT trunks: create with credentials and IP authentication", cleanup -> {
+            // Without the account configuration the API answers every Voice OUT trunk request with 403,
+            // a list included; any error of the create below still fails the check
+            try {
+                client.voiceOutTrunks().list(firstPage(1));
+            } catch (DidwwApiException e) {
+                if (e.getHttpStatus() != 403) {
+                    throw e;
+                }
+                throw new Skipped("Voice OUT trunks are not enabled for the account (HTTP 403)");
+            }
+
             // 203.0.113.0/24 is documentation address space
             CredentialsAndIpAuthenticationMethod auth = new CredentialsAndIpAuthenticationMethod();
             auth.setAllowedSipIps(Collections.singletonList("203.0.113.0/24"));
@@ -828,8 +841,7 @@ public class TestReadmeExample {
             Export completed = done.get(0);
             require(completed.isCompleted(), "export " + completed.getId() + " is " + completed.getStatus());
 
-            Path dir = Files.createTempDirectory("didww-readme-export-");
-            cleanup.add("delete " + dir, () -> deleteDirectory(dir));
+            Path dir = privateTempDirectory("didww-readme-export-", cleanup);
             client.downloadExport(completed.getUrl(), dir.resolve("export.csv.gz"));           // gzipped CSV, as served
             client.downloadAndDecompressExport(completed.getUrl(), dir.resolve("export.csv")); // plain CSV
             try (OutputStream out = Files.newOutputStream(dir.resolve("copy.csv.gz"))) {
@@ -892,8 +904,7 @@ public class TestReadmeExample {
 
         check("Price files: fetch, read rows, head, download", cleanup -> {
             PricesService<VoiceInPrice> prices = client.voiceInPrices();
-            Path dir = Files.createTempDirectory("didww-readme-prices-");
-            cleanup.add("delete " + dir, () -> deleteDirectory(dir));
+            Path dir = privateTempDirectory("didww-readme-prices-", cleanup);
             Path path = dir.resolve("voice_in_prices.csv.gz");
 
             // Download unless the copy at the path is current
@@ -1026,8 +1037,7 @@ public class TestReadmeExample {
         });
 
         check("File encryption: upload an encrypted file", cleanup -> {
-            Path pdf = Files.createTempFile("didww-readme-", ".pdf");
-            cleanup.add("delete " + pdf, () -> Files.deleteIfExists(pdf));
+            Path pdf = privateTempDirectory("didww-readme-upload-", cleanup).resolve("document.pdf");
             UploadFileExample.createSamplePdf(pdf, "README upload check");
 
             Encrypt enc = new Encrypt(client);
@@ -1096,7 +1106,8 @@ public class TestReadmeExample {
             }
         });
 
-        // The README's last catch (DidwwException) is left out: it would turn any API error into a pass
+        // The README ends this snippet with a catch-all for every SDK error; it is left out here, as it would
+        // turn any API error into a pass
         check("Token service and prices error kinds", cleanup -> {
             try {
                 client.smsOutA2pPrices().lookup(Map.of("dst_number", "4915123456789"));
@@ -1384,7 +1395,8 @@ public class TestReadmeExample {
         throw new Skipped("no DID group with stock keeping units");
     }
 
-    // Orders cannot be deleted; a pending one is cancelled. A cancel the API refuses is reported, not failed.
+    // Orders cannot be deleted; a pending one is cancelled. A refused cancel fails the check, unless the
+    // order is no longer pending by then (it completed meanwhile), which the reloaded order tells.
     private static void cancelIfPending(Cleanup cleanup, Order order) {
         if (order.getStatus() != OrderStatus.PENDING) {
             print("Order " + order.getId() + " is " + order.getStatus() + " and stays");
@@ -1394,9 +1406,27 @@ public class TestReadmeExample {
             try {
                 client.orders().delete(order.getId());
             } catch (DidwwApiException e) {
-                print("order " + order.getId() + " was not cancelled: " + e.getMessage());
+                OrderStatus status = client.orders().find(order.getId()).getData().getStatus();
+                if (status == OrderStatus.PENDING) {
+                    throw e;
+                }
+                print("order " + order.getId() + " is " + status + " and can no longer be cancelled");
             }
         });
+    }
+
+    // A new temporary directory that only the current user can open, deleted with its files at cleanup.
+    // Where the file system has no POSIX permissions (Windows), the temporary directory is per user already.
+    private static Path privateTempDirectory(String prefix, Cleanup cleanup) throws IOException {
+        Path dir;
+        if (FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
+            dir = Files.createTempDirectory(prefix, PosixFilePermissions.asFileAttribute(
+                    PosixFilePermissions.fromString("rwx------")));
+        } else {
+            dir = Files.createTempDirectory(prefix); // NOSONAR the per-user temporary directory, see above
+        }
+        cleanup.add("delete " + dir, () -> deleteDirectory(dir));
+        return dir;
     }
 
     private static void deleteDirectory(Path dir) throws IOException {
