@@ -126,6 +126,11 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
                         continue;
                     }
                     if (!resource.isFieldDirty(field.getName())) {
+                        // A relationship read with include (or set before tracking) is not a change:
+                        // sending it again would PATCH read-only relationships such as emergency_verification
+                        if (relationshipsNode.remove(relationship.value()) != null) {
+                            changed = true;
+                        }
                         continue;
                     }
 
@@ -145,6 +150,9 @@ public class Repository<T extends BaseResource> extends ReadOnlyRepository<T> {
 
             if (!changed) {
                 return payload;
+            }
+            if (relationshipsNode.isEmpty()) {
+                dataObject.remove("relationships");
             }
             return objectMapper.writeValueAsBytes(rootNode);
         } catch (Exception e) {
