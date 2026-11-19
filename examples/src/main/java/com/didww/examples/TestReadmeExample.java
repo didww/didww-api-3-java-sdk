@@ -861,13 +861,13 @@ public class TestReadmeExample {
             print("Identity " + createdIdentity.getId() + ", address " + createdAddress.getId());
         });
 
-        // A verification needs a DID that awaits registration and an identity and address that meet the
-        // address requirement of its country and number type; Ukrainian local DIDs have one.
+        // A verification needs a DID of a group with an address requirement (some Ukrainian local groups,
+        // such as Kiev, have one) and an identity and address that meet that requirement.
         check("Address verifications: create for a Ukrainian DID, update its external reference", cleanup -> {
-            Did did = didAwaitingRegistration();
+            Did did = didWithAddressRequirement();
             DidGroup group = client.didGroups().find(did.getDidGroup().getId(),
-                    QueryParams.builder().include("country").build()).getData();
-            AddressRequirement requirement = addressRequirement(group.getCountry(), group.getNumberType());
+                    QueryParams.builder().include("country", "address_requirement").build()).getData();
+            AddressRequirement requirement = addressRequirement(group.getAddressRequirement().getId());
             print("DID " + did.getNumber() + " in " + group.getAreaName() + ", requirement " + requirement.getId());
 
             // Once the verification exists the API refuses to delete its address and identity (409).
@@ -1397,29 +1397,49 @@ public class TestReadmeExample {
 
     // ─── Helpers of the verification checks ──────────────────
 
-    // An active Ukrainian DID that awaits registration and has no address verification yet; when the
-    // account has none, a local one that needs registration is ordered.
-    private static Did didAwaitingRegistration() throws InterruptedException {
-        String ukraine = country("UA").getId();
-        List<Did> dids = client.dids().list(QueryParams.builder()
-                .filter("country.id", ukraine)
-                .filter("awaiting_registration", "true")
-                .filter("terminated", "false")
-                .include("did_group", "address_verification")
-                .page(1, 25)
+    // An active DID without an address verification in a Ukrainian local DID group that has an address
+    // requirement; when the account has none, one is ordered from such a group. The requirement shows only
+    // with include=address_requirement, and whether a DID awaits registration depends on account rules,
+    // so neither that flag nor the group's needs_registration is used.
+    private static Did didWithAddressRequirement() throws InterruptedException {
+        List<DidGroup> groups = client.didGroups().list(QueryParams.builder()
+                .filter("country.id", country("UA").getId())
+                .filter("number_type", EnumWire.value(NumberType.LOCAL))
+                .include("address_requirement")
+                .page(1, 100)
                 .build()).getData();
-        for (Did did : dids) {
-            if (did.getAddressVerification() == null && did.getDidGroup() != null) {
-                return did;
+        List<String> groupIds = new ArrayList<>();
+        for (DidGroup group : groups) {
+            if (group.getAddressRequirement() != null) {
+                groupIds.add(group.getId());
             }
         }
-        return orderAvailableDid(QueryParams.builder()
-                .filter("country.id", ukraine)
-                .filter("did_group.needs_registration", "true")
-                .filter("did_group.number_type", EnumWire.value(NumberType.LOCAL))
-                .include("did_group.stock_keeping_units")
-                .page(1, 1)
-                .build());
+        require(!groupIds.isEmpty(), "no Ukrainian local DID group with an address requirement");
+
+        for (String groupId : groupIds) {
+            List<Did> dids = client.dids().list(QueryParams.builder()
+                    .filter("did_group.id", groupId)
+                    .filter("terminated", "false")
+                    .include("did_group", "address_verification")
+                    .page(1, 25)
+                    .build()).getData();
+            for (Did did : dids) {
+                if (did.getAddressVerification() == null && did.getDidGroup() != null) {
+                    return did;
+                }
+            }
+        }
+        for (String groupId : groupIds) {
+            QueryParams available = QueryParams.builder()
+                    .filter("did_group.id", groupId)
+                    .include("did_group.stock_keeping_units")
+                    .page(1, 1)
+                    .build();
+            if (!client.availableDids().list(available).getData().isEmpty()) {
+                return orderAvailableDid(available);
+            }
+        }
+        throw new IllegalStateException("no available DID in the Ukrainian local groups with an address requirement");
     }
 
     // An emergency-capable Ukrainian DID without an emergency calling service or verification; when the
@@ -1478,17 +1498,13 @@ public class TestReadmeExample {
         return dids.get(0);
     }
 
-    // The address requirement of a country and number type, with its proof types and documents.
-    private static AddressRequirement addressRequirement(Country country, NumberType numberType) {
-        List<AddressRequirement> requirements = client.addressRequirements().list(QueryParams.builder()
-                .filter("country.id", country.getId())
-                .filter("number_type", EnumWire.value(numberType))
+    // The address requirement with its proof types and documents.
+    private static AddressRequirement addressRequirement(String requirementId) {
+        return client.addressRequirements().find(requirementId, QueryParams.builder()
                 .include("personal_proof_types", "business_proof_types", "address_proof_types",
                         "personal_permanent_document", "business_permanent_document",
                         "personal_onetime_document", "business_onetime_document")
                 .build()).getData();
-        require(requirements.size() == 1, requirements.size() + " address requirements for " + country.getName());
-        return requirements.get(0);
     }
 
     // Creates an identity with the type, mandatory fields, proofs and permanent document the requirement asks for.
