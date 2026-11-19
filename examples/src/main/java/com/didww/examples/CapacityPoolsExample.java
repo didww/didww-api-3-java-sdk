@@ -9,7 +9,7 @@ import com.didww.sdk.resource.SharedCapacityGroup;
 import java.util.List;
 
 /**
- * Capacity Pools: list with included shared capacity groups and qty-based pricings.
+ * Capacity Pools: list with included shared capacity groups and qty-based pricings, then find one by ID.
  * Usage: DIDWW_API_KEY=xxx ./gradlew runExample -PexampleClass=com.didww.examples.CapacityPoolsExample
  */
 public class CapacityPoolsExample {
@@ -51,6 +51,19 @@ public class CapacityPoolsExample {
                             + " monthly=" + p.getMonthlyPrice());
                 }
             }
+        }
+
+        // Find one capacity pool by ID, with its qty-based pricings
+        if (!pools.isEmpty()) {
+            QueryParams findParams = QueryParams.builder()
+                    .include("qty_based_pricings")
+                    .build();
+            CapacityPool pool = client.capacityPools().find(pools.get(0).getId(), findParams).getData();
+            int pricingCount = pool.getQtyBasedPricings() != null ? pool.getQtyBasedPricings().size() : 0;
+            System.out.println("\nFound pool: " + pool.getName() + " (" + pool.getId() + ")");
+            System.out.println("  minimum limit: " + pool.getMinimumLimit()
+                    + ", minimum qty per order: " + pool.getMinimumQtyPerOrder()
+                    + ", qty-based pricings: " + pricingCount);
         }
     }
 }

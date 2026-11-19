@@ -8,7 +8,7 @@ import com.didww.sdk.resource.DidReservation;
 import java.util.List;
 
 /**
- * DID Reservations: create, list, find, and delete.
+ * DID Reservations: reserves an available DID, lists and finds reservations, deletes the reservation.
  * Usage: DIDWW_API_KEY=xxx ./gradlew runExample -PexampleClass=com.didww.examples.DidReservationsExample
  */
 public class DidReservationsExample {
@@ -37,23 +37,25 @@ public class DidReservationsExample {
         System.out.println("  description: " + reservation.getDescription());
         System.out.println("  expires at: " + reservation.getExpiresAt());
 
-        // List reservations with includes
-        QueryParams params = QueryParams.builder()
-                .include("available_did")
-                .build();
-        List<DidReservation> reservations = client.didReservations().list(params).getData();
-        System.out.println("\nAll reservations (" + reservations.size() + "):");
-        for (DidReservation r : reservations) {
-            String number = r.getAvailableDid() != null ? r.getAvailableDid().getNumber() : "unknown";
-            System.out.println("  " + r.getId() + " - " + number);
+        try {
+            // List reservations with includes
+            QueryParams params = QueryParams.builder()
+                    .include("available_did")
+                    .build();
+            List<DidReservation> reservations = client.didReservations().list(params).getData();
+            System.out.println("\nAll reservations (" + reservations.size() + "):");
+            for (DidReservation r : reservations) {
+                String number = r.getAvailableDid() != null ? r.getAvailableDid().getNumber() : "unknown";
+                System.out.println("  " + r.getId() + " - " + number);
+            }
+
+            // Find by ID
+            DidReservation found = client.didReservations().find(reservation.getId()).getData();
+            System.out.println("\nFound reservation: " + found.getId());
+        } finally {
+            // Delete the reservation, also when a step above fails
+            client.didReservations().delete(reservation.getId());
+            System.out.println("Deleted reservation");
         }
-
-        // Find by ID
-        DidReservation found = client.didReservations().find(reservation.getId()).getData();
-        System.out.println("\nFound reservation: " + found.getId());
-
-        // Delete reservation
-        client.didReservations().delete(reservation.getId());
-        System.out.println("Deleted reservation");
     }
 }
