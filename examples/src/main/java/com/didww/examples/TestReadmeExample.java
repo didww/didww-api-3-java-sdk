@@ -1469,7 +1469,8 @@ public class TestReadmeExample {
                 .build());
     }
 
-    // Orders the first available DID of the list, waits up to a minute for the order and returns the DID.
+    // Orders the first available DID of the list, waits up to two minutes for the order (the sandbox can
+    // take more than one) and returns the DID.
     private static Did orderAvailableDid(QueryParams availableParams) throws InterruptedException {
         List<AvailableDid> available = client.availableDids().list(availableParams).getData();
         require(!available.isEmpty(), "no available DID to order");
@@ -1485,7 +1486,7 @@ public class TestReadmeExample {
         order.setItems(Collections.singletonList(item));
         Order created = client.orders().create(order).getData();
         print("Ordered " + availableDid.getNumber() + " (order " + created.getId() + "); the DID stays on the account");
-        for (int attempt = 0; attempt < 12 && !created.isCompleted(); attempt++) {
+        for (int attempt = 0; attempt < 24 && !created.isCompleted(); attempt++) {
             Thread.sleep(5000);
             created = client.orders().find(created.getId()).getData();
         }
