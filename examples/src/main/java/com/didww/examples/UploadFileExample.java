@@ -52,7 +52,8 @@ public class UploadFileExample {
         System.out.println("Encrypted file ID: " + uploadedId);
     }
 
-    private static void createSamplePdf(Path path, String text) throws Exception {
+    // Writes a one-page PDF with the text; also used by TestReadmeExample
+    static void createSamplePdf(Path path, String text) throws Exception {
         String escapedText = text.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)");
         String stream = "BT /F1 24 Tf 72 720 Td (" + escapedText + ") Tj ET";
 
