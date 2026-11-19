@@ -176,13 +176,14 @@ class DidTest extends BaseTest {
                         .withBody(loadFixture("dids/update.json"))));
 
         QueryParams params = QueryParams.builder()
-                .include("order", "did_group", "emergency_verification", "identity").build();
+                .include("order", "did_group", "emergency_verification", "identity", "emergency_calling_service").build();
         Did did = client.dids().find("21d0b02c-b556-4d3e-acbf-504b78295dbe", params).getData();
         // serialise = false only affects writing: the included resources are still read in full
         assertThat(did.getOrder().getReference()).isEqualTo("ABC-000001");
         assertThat(did.getDidGroup().getAreaName()).isEqualTo("Odessa");
         assertThat(did.getEmergencyVerification().getReference()).isEqualTo("ABC-123456");
         assertThat(did.getIdentity().getFirstName()).isEqualTo("John");
+        assertThat(did.getEmergencyCallingService().getName()).isEqualTo("Emergency Calling Service #1");
         did.setDescription("patched from loaded resource");
 
         ApiResponse<Did> response = client.dids().update(did);
