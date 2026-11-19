@@ -2,6 +2,7 @@ package com.didww.sdk.resource;
 
 import com.didww.sdk.resource.enums.AreaLevel;
 import com.didww.sdk.resource.enums.IdentityType;
+import com.didww.sdk.resource.enums.NumberType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -35,9 +36,19 @@ public class AddressRequirement extends BaseResource {
     @JsonProperty("address_proof_qty")
     private Integer addressProofQty;
 
+    /**
+     * Identity fields that must be filled in for a personal identity, among {@code birth_date},
+     * {@code country}, {@code birth_country}, {@code id_number}, {@code personal_tax_id} and
+     * {@code contact_email}. Empty when none are.
+     */
     @JsonProperty("personal_mandatory_fields")
     private List<String> personalMandatoryFields;
 
+    /**
+     * Identity fields that must be filled in for a business identity, among {@code id_number},
+     * {@code tax_id} (the {@code vat_id} of an {@link Identity}), {@code country}, {@code company_reg_number},
+     * {@code personal_tax_id} and {@code contact_email}. Empty when none are.
+     */
     @JsonProperty("business_mandatory_fields")
     private List<String> businessMandatoryFields;
 
@@ -47,11 +58,11 @@ public class AddressRequirement extends BaseResource {
     @JsonProperty("restriction_message")
     private String restrictionMessage;
 
+    @JsonProperty("number_type")
+    private NumberType numberType;
+
     @Relationship("country")
     private Country country;
-
-    @Relationship("did_group_type")
-    private DidGroupType didGroupType;
 
     @Relationship("personal_permanent_document")
     private SupportingDocumentTemplate personalPermanentDocument;

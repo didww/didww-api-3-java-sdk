@@ -9,6 +9,11 @@ import com.didww.sdk.resource.enums.DiversionInjectMode;
 import com.didww.sdk.resource.enums.DiversionRelayPolicy;
 import com.didww.sdk.resource.enums.NetworkProtocolPriority;
 import com.didww.sdk.resource.enums.Codec;
+import com.didww.sdk.resource.enums.IceMode;
+import com.didww.sdk.resource.enums.IntEnum;
+import com.didww.sdk.resource.enums.Pop;
+import com.didww.sdk.resource.enums.RtcpFeedbackMode;
+import com.didww.sdk.resource.enums.RtcpMuxMode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.didww.sdk.resource.enums.ReroutingDisconnectCode;
 import com.didww.sdk.resource.enums.RxDtmfFormat;
@@ -21,6 +26,7 @@ import com.didww.sdk.resource.configuration.SipConfiguration;
 import com.didww.sdk.resource.configuration.TrunkConfiguration;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +40,7 @@ class VoiceInTrunkTest extends BaseTest {
         stubGetFixture("/v3/voice_in_trunks", "voice_in_trunks/index.json");
 
         QueryParams params = QueryParams.builder()
-                .include("trunk_group", "pop")
+                .include("voice_in_trunk_group")
                 .build();
         ApiResponse<List<VoiceInTrunk>> response = client.voiceInTrunks().list(params);
         List<VoiceInTrunk> trunks = response.getData();
@@ -51,8 +57,7 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(first.getPop()).isNull();
 
         VoiceInTrunk second = trunks.get(1);
-        assertThat(second.getPop()).isNotNull();
-        assertThat(second.getPop().getName()).isEqualTo("DE, FRA");
+        assertThat(second.getPop()).isEqualTo(Pop.FRA);
     }
 
     @Test
@@ -75,7 +80,10 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(config.getUsername()).isEqualTo("username");
         assertThat(config.getHost()).isEqualTo("203.0.113.78");
         assertThat(config.getPort()).isEqualTo(8060);
-        assertThat(config.getCodecIds()).containsExactly(Codec.PCMU, Codec.PCMA, Codec.G729);
+        assertThat(config.getCodecs()).containsExactly(Codec.PCMU, Codec.PCMA, Codec.G729, Codec.AMR_WB);
+        assertThat(config.getIceMode()).isEqualTo(IceMode.ACCEPT);
+        assertThat(config.getRtcpMuxMode()).isEqualTo(RtcpMuxMode.INITIATE);
+        assertThat(config.getRtcpFeedbackMode()).isEqualTo(RtcpFeedbackMode.DISABLED);
         assertThat(config.getTransportProtocolId()).isEqualTo(TransportProtocol.UDP);
         assertThat(config.getAuthEnabled()).isTrue();
         assertThat(config.getAuthUser()).isEqualTo("auth_user");
@@ -103,7 +111,7 @@ class VoiceInTrunkTest extends BaseTest {
     @Test
     void testCreateSipTrunkWithReroutingDisconnectCodes() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunks"))
-                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_sip_with_rerouting_request.json"), true, false))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_sip_with_rerouting_request.json"), false, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
@@ -114,7 +122,10 @@ class VoiceInTrunkTest extends BaseTest {
         sipConfig.setHost("203.0.113.110");
         sipConfig.setSstRefreshMethodId(SstRefreshMethod.INVITE);
         sipConfig.setPort(5060);
-        sipConfig.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA, Codec.G729, Codec.G723, Codec.TELEPHONE_EVENT));
+        sipConfig.setCodecs(Arrays.asList(Codec.PCMA, Codec.PCMU, Codec.AMR_WB, Codec.TELEPHONE_EVENT));
+        sipConfig.setIceMode(IceMode.ACCEPT);
+        sipConfig.setRtcpMuxMode(RtcpMuxMode.INITIATE);
+        sipConfig.setRtcpFeedbackMode(RtcpFeedbackMode.ACCEPT);
         sipConfig.setReroutingDisconnectCodeIds(Arrays.asList(
                 ReroutingDisconnectCode.SIP_400_BAD_REQUEST,
                 ReroutingDisconnectCode.SIP_402_PAYMENT_REQUIRED,
@@ -247,7 +258,7 @@ class VoiceInTrunkTest extends BaseTest {
     @Test
     void testUpdateSipTrunk() {
         wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/a80006b6-4183-4865-8b99-7ebbd359a762"))
-                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/update_sip_request.json"), true, false))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/update_sip_request.json"), false, false))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/vnd.api+json")
@@ -257,7 +268,10 @@ class VoiceInTrunkTest extends BaseTest {
         sipConfig.setUsername("new-username");
         sipConfig.setHost("203.0.113.110");
         sipConfig.setPort(5060);
-        sipConfig.setCodecIds(Arrays.asList(Codec.PCMU, Codec.PCMA, Codec.G729, Codec.G723, Codec.TELEPHONE_EVENT));
+        sipConfig.setCodecs(Arrays.asList(Codec.L16, Codec.PCMU));
+        sipConfig.setIceMode(IceMode.INITIATE);
+        sipConfig.setRtcpMuxMode(RtcpMuxMode.DISABLED);
+        sipConfig.setRtcpFeedbackMode(RtcpFeedbackMode.INITIATE);
         sipConfig.setSstRefreshMethodId(SstRefreshMethod.INVITE);
         sipConfig.setMediaEncryptionMode(MediaEncryptionMode.ZRTP);
         sipConfig.setStirShakenMode(StirShakenMode.PAI);
@@ -281,6 +295,50 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(updatedSipConfig.getStirShakenMode()).isEqualTo(StirShakenMode.PAI);
         assertThat(updatedSipConfig.getAllowedRtpIps()).containsExactly("203.0.113.1");
         assertThat(updatedSipConfig.getReroutingDisconnectCodeIds()).hasSize(45);
+    }
+
+    @Test
+    void testUpdateSendsBackCodecsAndModesTheSdkDoesNotKnow() {
+        String id = "a80006b6-4183-4865-8b99-7ebbd359a762";
+        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/show_unknown_media_values.json"))));
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/show_unknown_media_values.json"))));
+
+        SipConfiguration config = (SipConfiguration) client.voiceInTrunks().find(id).getData().getConfiguration();
+        assertThat(config.getCodecs()).hasToString("[evs, pcmu]");
+        assertThat(config.getIceMode()).hasToString("require");
+
+        config.setHost("203.0.113.111");
+        VoiceInTrunk trunk = new VoiceInTrunk().withId(id);
+        trunk.setConfiguration(config);
+        client.voiceInTrunks().update(trunk);
+
+        String attributes = "$.data.attributes.configuration.attributes.";
+        wireMock.verify(patchRequestedFor(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .withRequestBody(matchingJsonPath(attributes + "codecs", equalToJson("[\"evs\", \"pcmu\"]")))
+                .withRequestBody(matchingJsonPath(attributes + "ice_mode", equalTo("require")))
+                .withRequestBody(matchingJsonPath(attributes + "rtcp_mux_mode", equalTo("require")))
+                .withRequestBody(matchingJsonPath(attributes + "rtcp_feedback_mode", equalTo("require"))));
+    }
+
+    @Test
+    void testCodecIdsAreGone() throws Exception {
+        SipConfiguration config = new SipConfiguration();
+        config.setCodecs(Arrays.asList(Codec.PCMU));
+
+        assertThat(new ObjectMapper().writeValueAsString(config))
+                .contains("\"codecs\":[\"pcmu\"]")
+                .doesNotContain("codec_ids");
+        assertThat(SipConfiguration.class.getMethods()).extracting(Method::getName)
+                .doesNotContain("getCodecIds", "setCodecIds");
+        assertThat(IntEnum.class.isAssignableFrom(Codec.class)).as("codecs are names, not ids").isFalse();
     }
 
     @Test
@@ -539,5 +597,45 @@ class VoiceInTrunkTest extends BaseTest {
         assertThat(output).contains("[FILTERED]");
         assertThat(output).doesNotContain("sipreg-user-1");
         assertThat(output).doesNotContain("s3cret-Pa55");
+    }
+
+    @Test
+    void testCreateVoiceInTrunkWithPop() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/voice_in_trunks"))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/create_with_pop_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/create_with_pop.json"))));
+
+        PstnConfiguration config = new PstnConfiguration();
+        config.setDst("558540420024");
+
+        VoiceInTrunk trunk = new VoiceInTrunk();
+        trunk.setName("hello, test pstn trunk");
+        trunk.setConfiguration(config);
+        trunk.setPop(Pop.FRA);
+
+        VoiceInTrunk created = client.voiceInTrunks().create(trunk).getData();
+
+        assertThat(created.getPop()).isEqualTo(Pop.FRA);
+    }
+
+    @Test
+    void testUpdateClearsPop() {
+        String id = "41b94706-325e-4704-a433-d65105758836";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_in_trunks/" + id))
+                .withRequestBody(equalToJson(loadFixture("voice_in_trunks/update_clear_pop_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_in_trunks/update_pstn.json"))));
+
+        VoiceInTrunk trunk = new VoiceInTrunk().withId(id);
+        trunk.setPop(null);
+
+        VoiceInTrunk updated = client.voiceInTrunks().update(trunk).getData();
+
+        assertThat(updated.getPop()).isNull();
     }
 }

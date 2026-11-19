@@ -31,7 +31,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Drivers License",
-        "entity_type": "Personal"
+        "entity_type": "personal"
       }
     }
   ],

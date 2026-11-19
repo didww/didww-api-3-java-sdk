@@ -1,0 +1,1 @@
+{"data":{"id":"1a2b3c4d-0002-4a5b-8c6d-7e8f9a0b1c02","type":"sms_trunks","attributes":{"configuration":{"type":"http_in","attributes":{"http_method":"get","body_type":null,"body":null}}}}}

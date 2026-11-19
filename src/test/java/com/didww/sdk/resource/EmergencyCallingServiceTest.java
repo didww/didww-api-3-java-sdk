@@ -3,6 +3,7 @@ package com.didww.sdk.resource;
 import com.didww.sdk.BaseTest;
 import com.didww.sdk.repository.ApiResponse;
 import com.didww.sdk.resource.enums.EmergencyCallingServiceStatus;
+import com.didww.sdk.resource.enums.NumberType;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -36,6 +37,7 @@ class EmergencyCallingServiceTest extends BaseTest {
         assertThat(first.getCanceledAt()).isNull();
         assertThat(first.getCreatedAt()).isNotNull();
         assertThat(first.getRenewDate()).isEqualTo(LocalDate.of(2026, 5, 1));
+        assertThat(first.getNumberType()).isEqualTo(NumberType.LOCAL);
         assertThat(first.getMetaSetupPrice()).isEqualTo("0.0");
         assertThat(first.getMetaMonthlyPrice()).isEqualTo("2.5");
     }
@@ -56,6 +58,7 @@ class EmergencyCallingServiceTest extends BaseTest {
         assertThat(record.isActive()).isFalse();
         assertThat(record.getActivatedAt()).isNotNull();
         assertThat(record.getRenewDate()).isEqualTo(LocalDate.of(2026, 6, 15));
+        assertThat(record.getNumberType()).isEqualTo(NumberType.LOCAL);
         assertThat(record.getMetaSetupPrice()).isEqualTo("5.0");
         assertThat(record.getMetaMonthlyPrice()).isEqualTo("3.75");
     }

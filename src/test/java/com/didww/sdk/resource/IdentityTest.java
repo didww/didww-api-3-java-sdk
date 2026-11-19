@@ -175,4 +175,42 @@ class IdentityTest extends BaseTest {
 
         wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/identities/" + id)));
     }
+
+    @Test
+    void testCreatePersonalIdentityOmitsCompanyWebsite() {
+        wireMock.stubFor(post(urlPathEqualTo("/v3/identities"))
+                .willReturn(aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("identities/create_personal.json"))));
+
+        Identity identity = new Identity();
+        identity.setFirstName("John");
+        identity.setLastName("Doe");
+        identity.setIdentityType(IdentityType.PERSONAL);
+
+        client.identities().create(identity);
+
+        wireMock.verify(postRequestedFor(urlPathEqualTo("/v3/identities"))
+                .withRequestBody(matchingJsonPath("$.data.attributes.first_name", equalTo("John")))
+                .withRequestBody(notContaining("company_website")));
+    }
+
+    @Test
+    void testUpdateCompanyWebsite() {
+        String id = "e96ae7d1-11d5-42bc-a5c5-211f3c3788ae";
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/identities/" + id))
+                .withRequestBody(equalToJson(loadFixture("identities/update_company_website_request.json"), true, false))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("identities/update_company_website.json"))));
+
+        Identity identity = new Identity().withId(id);
+        identity.setCompanyWebsite("https://www.example.org");
+
+        Identity updated = client.identities().update(identity).getData();
+
+        assertThat(updated.getCompanyWebsite()).isEqualTo("https://www.example.org");
+    }
 }

@@ -5,7 +5,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Utility Bill",
-        "entity_type": "Address"
+        "entity_type": "address"
       }
     },
     {
@@ -13,7 +13,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Rental Receipt",
-        "entity_type": "Address"
+        "entity_type": "address"
       }
     },
     {
@@ -21,7 +21,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Other",
-        "entity_type": "Address"
+        "entity_type": "address"
       }
     },
     {
@@ -29,7 +29,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Drivers License",
-        "entity_type": "Personal"
+        "entity_type": "personal"
       }
     },
     {
@@ -37,7 +37,7 @@
       "type": "proof_types",
       "attributes": {
         "name": "Copy of Phone Bill",
-        "entity_type": "Address"
+        "entity_type": "address"
       }
     }
   ],

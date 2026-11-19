@@ -7,11 +7,16 @@ import com.didww.sdk.resource.authenticationmethod.CredentialsAndIpAuthenticatio
 import com.didww.sdk.resource.authenticationmethod.IpOnlyAuthenticationMethod;
 import com.didww.sdk.resource.authenticationmethod.TwilioAuthenticationMethod;
 import com.didww.sdk.resource.enums.DefaultDstAction;
+import com.didww.sdk.resource.enums.IceMode;
 import com.didww.sdk.resource.enums.MediaEncryptionMode;
 import com.didww.sdk.resource.enums.OnCliMismatchAction;
+import com.didww.sdk.resource.enums.RtcpFeedbackMode;
+import com.didww.sdk.resource.enums.RtcpMuxMode;
+import com.didww.sdk.resource.enums.VoiceOutCodec;
 import com.didww.sdk.resource.enums.VoiceOutTrunkStatus;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -71,6 +76,10 @@ class VoiceOutTrunkTest extends BaseTest {
         assertThat(trunk.getThresholdAmount()).isEqualTo("200.0");
         assertThat(trunk.getCallbackUrl()).isNull();
         assertThat(trunk.getDstPrefixes()).containsExactly("370");
+        assertThat(trunk.getCodecs()).containsExactly(VoiceOutCodec.OPUS, VoiceOutCodec.G722, VoiceOutCodec.PCMA);
+        assertThat(trunk.getIceMode()).isEqualTo(IceMode.INITIATE);
+        assertThat(trunk.getRtcpMuxMode()).isEqualTo(RtcpMuxMode.DISABLED);
+        assertThat(trunk.getRtcpFeedbackMode()).isEqualTo(RtcpFeedbackMode.ACCEPT);
         assertThat(trunk.getAllowedRtpIps()).isNull();
         assertThat(trunk.getDids()).hasSize(2);
         assertThat(trunk.getDefaultDid()).isNotNull();
@@ -150,7 +159,7 @@ class VoiceOutTrunkTest extends BaseTest {
     @Test
     void testCreateVoiceOutTrunk() {
         wireMock.stubFor(post(urlPathEqualTo("/v3/voice_out_trunks"))
-                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/create_request.json"), true, false))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/create_request.json"), false, false))
                 .willReturn(aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/vnd.api+json")
@@ -164,6 +173,10 @@ class VoiceOutTrunkTest extends BaseTest {
         VoiceOutTrunk trunk = new VoiceOutTrunk();
         trunk.setName("java-test");
         trunk.setOnCliMismatchAction(OnCliMismatchAction.REPLACE_CLI);
+        trunk.setCodecs(Arrays.asList(VoiceOutCodec.OPUS, VoiceOutCodec.PCMA, VoiceOutCodec.TELEPHONE_EVENT));
+        trunk.setIceMode(IceMode.INITIATE);
+        trunk.setRtcpMuxMode(RtcpMuxMode.ACCEPT);
+        trunk.setRtcpFeedbackMode(RtcpFeedbackMode.INITIATE);
         trunk.setAuthenticationMethod(auth);
         trunk.setDefaultDid(did);
         trunk.setDids(Collections.singletonList(did));
@@ -183,7 +196,7 @@ class VoiceOutTrunkTest extends BaseTest {
     @Test
     void testUpdateVoiceOutTrunk() {
         wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/425ce763-a3a9-49b4-af5b-ada1a65c8864"))
-                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/update_request.json"), true, false))
+                .withRequestBody(equalToJson(loadFixture("voice_out_trunks/update_request.json"), false, false))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/vnd.api+json")
@@ -200,6 +213,10 @@ class VoiceOutTrunkTest extends BaseTest {
         trunk.setDstPrefixes(Collections.singletonList("370"));
         trunk.setForceSymmetricRtp(true);
         trunk.setRtpPing(true);
+        trunk.setCodecs(Arrays.asList(VoiceOutCodec.G722, VoiceOutCodec.OPUS, VoiceOutCodec.TELEPHONE_EVENT));
+        trunk.setIceMode(IceMode.DISABLED);
+        trunk.setRtcpMuxMode(RtcpMuxMode.INITIATE);
+        trunk.setRtcpFeedbackMode(RtcpFeedbackMode.DISABLED);
         trunk.setAuthenticationMethod(auth);
 
         ApiResponse<VoiceOutTrunk> response = client.voiceOutTrunks().update(trunk);
@@ -304,5 +321,34 @@ class VoiceOutTrunkTest extends BaseTest {
         client.voiceOutTrunks().delete(id);
 
         wireMock.verify(deleteRequestedFor(urlPathEqualTo("/v3/voice_out_trunks/" + id)));
+    }
+
+    @Test
+    void testUpdateSendsBackCodecsTheSdkDoesNotKnow() {
+        String id = "425ce763-a3a9-49b4-af5b-ada1a65c8864";
+        wireMock.stubFor(get(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/show_unknown_media_values.json"))));
+        wireMock.stubFor(patch(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("voice_out_trunks/show_unknown_media_values.json"))));
+
+        VoiceOutTrunk trunk = client.voiceOutTrunks().find(id).getData();
+        assertThat(trunk.getCodecs()).hasToString("[evs, pcma]");
+        assertThat(trunk.getIceMode()).hasToString("require");
+        assertThat(trunk.getRtcpMuxMode()).hasToString("require");
+        assertThat(trunk.getRtcpFeedbackMode()).hasToString("require");
+
+        List<VoiceOutCodec> codecs = new ArrayList<>(trunk.getCodecs());
+        codecs.add(VoiceOutCodec.OPUS);
+        trunk.setCodecs(codecs);
+        client.voiceOutTrunks().update(trunk);
+
+        wireMock.verify(patchRequestedFor(urlPathEqualTo("/v3/voice_out_trunks/" + id))
+                .withRequestBody(matchingJsonPath("$.data.attributes.codecs", equalToJson("[\"evs\", \"pcma\", \"opus\"]"))));
     }
 }

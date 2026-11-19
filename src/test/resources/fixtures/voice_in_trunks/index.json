@@ -18,20 +18,14 @@
             "dst": "442080995011"
           }
         },
-        "created_at": "2018-12-28T15:03:48.751Z"
+        "created_at": "2018-12-28T15:03:48.751Z",
+        "pop": null
       },
       "relationships": {
         "voice_in_trunk_group": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/2b4b1fcf-fe6a-4de9-8a58-7df46820ba13/relationships/voice_in_trunk_group",
             "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/2b4b1fcf-fe6a-4de9-8a58-7df46820ba13/voice_in_trunk_group"
-          },
-          "data": null
-        },
-        "pop": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/2b4b1fcf-fe6a-4de9-8a58-7df46820ba13/relationships/pop",
-            "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/2b4b1fcf-fe6a-4de9-8a58-7df46820ba13/pop"
           },
           "data": null
         }
@@ -63,11 +57,15 @@
             "username": "username",
             "host": "203.0.113.78",
             "port": 8060,
-            "codec_ids": [
-              9,
-              10,
-              8
+            "codecs": [
+              "pcmu",
+              "pcma",
+              "g729",
+              "amr_wb"
             ],
+            "ice_mode": "accept",
+            "rtcp_mux_mode": "initiate",
+            "rtcp_feedback_mode": "disabled",
             "rx_dtmf_format_id": 1,
             "tx_dtmf_format_id": 1,
             "resolve_ruri": true,
@@ -97,7 +95,8 @@
             "allowed_rtp_ips": null
           }
         },
-        "created_at": "2018-12-28T15:00:43.522Z"
+        "created_at": "2018-12-28T15:00:43.522Z",
+        "pop": "fra"
       },
       "relationships": {
         "voice_in_trunk_group": {
@@ -106,16 +105,6 @@
             "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/24cec518-da51-4274-9a4b-1aad910b996f/voice_in_trunk_group"
           },
           "data": null
-        },
-        "pop": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/24cec518-da51-4274-9a4b-1aad910b996f/relationships/pop",
-            "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/24cec518-da51-4274-9a4b-1aad910b996f/pop"
-          },
-          "data": {
-            "type": "pops",
-            "id": "ba7ccbef-82ac-4372-9391-eac90d5c9479"
-          }
         }
       }
     }
@@ -139,13 +128,6 @@
       },
       "meta": {
         "trunks_count": 2
-      }
-    },
-    {
-      "id": "ba7ccbef-82ac-4372-9391-eac90d5c9479",
-      "type": "pops",
-      "attributes": {
-        "name": "DE, FRA"
       }
     }
   ],

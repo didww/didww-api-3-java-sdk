@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.didww"
-version = "4.1.0"
+version = "5.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -23,7 +23,7 @@ dependencies {
     api("com.github.jasminb:jsonapi-converter:0.14")
     api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    api("com.squareup.okhttp3:okhttp:4.12.0")
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
 
@@ -55,6 +55,18 @@ val generateVersionProperties by tasks.registering {
 }
 
 sourceSets["main"].resources.srcDir(generateVersionProperties.map { it.outputs.files.singleFile })
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Javadoc> {
+    options.encoding = "UTF-8"
+    (options as StandardJavadocDocletOptions).apply {
+        docEncoding = "UTF-8"
+        charSet = "UTF-8"
+    }
+}
 
 tasks.test {
     useJUnitPlatform()

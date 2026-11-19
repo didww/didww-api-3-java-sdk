@@ -1,5 +1,6 @@
 package com.didww.sdk.resource;
 
+import com.didww.sdk.resource.enums.NumberType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
@@ -10,7 +11,7 @@ import java.util.List;
 
 /**
  * Requirements that must be satisfied before ordering an emergency
- * calling service for a given country/did_group_type. Introduced in API 2026-04-16.
+ * calling service for a given country/number_type. Introduced in API 2026-04-16.
  *
  * <p>Server-provided {@code meta} carries {@code setup_price} and {@code monthly_price}, both
  * decimal strings (e.g. "0.0").
@@ -34,12 +35,22 @@ public class EmergencyRequirement extends MetaResource {
     @JsonProperty("business_area_level")
     private String businessAreaLevel;
 
+    /** Address fields that must be filled in ({@code area}). Empty when none are. */
     @JsonProperty("address_mandatory_fields")
     private List<String> addressMandatoryFields;
 
+    /**
+     * Fields that must be filled in for a personal identity, among {@code birth_date}, {@code country},
+     * {@code id_number}, {@code personal_tax_id} and {@code contact_email}. Empty when none are.
+     */
     @JsonProperty("personal_mandatory_fields")
     private List<String> personalMandatoryFields;
 
+    /**
+     * Fields that must be filled in for a business identity, among {@code id_number}, {@code tax_id}
+     * (the {@code vat_id} of an {@link Identity}), {@code country}, {@code company_reg_number}, {@code personal_tax_id},
+     * {@code contact_email} and {@code birth_date}. Empty when none are.
+     */
     @JsonProperty("business_mandatory_fields")
     private List<String> businessMandatoryFields;
 
@@ -49,11 +60,11 @@ public class EmergencyRequirement extends MetaResource {
     @JsonProperty("requirement_restriction_message")
     private String requirementRestrictionMessage;
 
+    @JsonProperty("number_type")
+    private NumberType numberType;
+
     @Relationship("country")
     private Country country;
-
-    @Relationship("did_group_type")
-    private DidGroupType didGroupType;
 
     /**
      * Returns the one-time setup price from the resource meta.

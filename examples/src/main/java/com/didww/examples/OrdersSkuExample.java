@@ -15,7 +15,9 @@ public class OrdersSkuExample {
     public static void main(String[] args) {
         DidwwClient client = ExampleClientFactory.fromEnv();
 
+        // A DID group with numbers in stock: one without refuses the order
         QueryParams params = QueryParams.builder()
+                .filter("is_available", "true")
                 .include("stock_keeping_units")
                 .page(1, 1)
                 .build();

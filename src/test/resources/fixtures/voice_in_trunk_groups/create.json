@@ -48,11 +48,14 @@
             "username": "{CALL_DID}",
             "host": "203.0.113.1",
             "port": null,
-            "codec_ids": [
-              9,
-              8,
-              6
+            "codecs": [
+              "pcmu",
+              "g729",
+              "telephone_event"
             ],
+            "ice_mode": "disabled",
+            "rtcp_mux_mode": "disabled",
+            "rtcp_feedback_mode": "disabled",
             "rx_dtmf_format_id": 1,
             "tx_dtmf_format_id": 1,
             "resolve_ruri": false,
@@ -82,19 +85,14 @@
             "allowed_rtp_ips": null
           }
         },
-        "created_at": "2015-05-03T13:38:21.000Z"
+        "created_at": "2015-05-03T13:38:21.000Z",
+        "pop": null
       },
       "relationships": {
         "voice_in_trunk_group": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/7c15bca2-7f17-46fb-9486-7e2a17158c7e/relationships/voice_in_trunk_group",
             "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/7c15bca2-7f17-46fb-9486-7e2a17158c7e/voice_in_trunk_group"
-          }
-        },
-        "pop": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/7c15bca2-7f17-46fb-9486-7e2a17158c7e/relationships/pop",
-            "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/7c15bca2-7f17-46fb-9486-7e2a17158c7e/pop"
           }
         }
       }
@@ -117,13 +115,16 @@
             "username": "{DID}",
             "host": "didww.com",
             "port": null,
-            "codec_ids": [
-              9,
-              10,
-              8,
-              7,
-              6
+            "codecs": [
+              "pcmu",
+              "pcma",
+              "g729",
+              "g723",
+              "telephone_event"
             ],
+            "ice_mode": "disabled",
+            "rtcp_mux_mode": "disabled",
+            "rtcp_feedback_mode": "disabled",
             "rx_dtmf_format_id": 1,
             "tx_dtmf_format_id": 1,
             "resolve_ruri": false,
@@ -150,19 +151,14 @@
             "max_30x_redirects": 0
           }
         },
-        "created_at": "2016-12-12T14:05:51.304Z"
+        "created_at": "2016-12-12T14:05:51.304Z",
+        "pop": null
       },
       "relationships": {
         "voice_in_trunk_group": {
           "links": {
             "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/b07a4cab-48c6-4b3a-9670-11b90b81bdef/relationships/voice_in_trunk_group",
             "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/b07a4cab-48c6-4b3a-9670-11b90b81bdef/voice_in_trunk_group"
-          }
-        },
-        "pop": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/voice_in_trunks/b07a4cab-48c6-4b3a-9670-11b90b81bdef/relationships/pop",
-            "related": "https://sandbox-api.didww.com/v3/voice_in_trunks/b07a4cab-48c6-4b3a-9670-11b90b81bdef/pop"
           }
         }
       }

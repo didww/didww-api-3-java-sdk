@@ -30,7 +30,9 @@
         ],
         "is_metered": false,
         "area_name": "Grand Rapids",
-        "allow_additional_channels": true
+        "allow_additional_channels": true,
+        "number_type": "local",
+        "is_demo": false
       },
       "relationships": {
         "country": {
@@ -43,12 +45,6 @@
           "links": {
             "self": "https://sandbox-api.didww.com/v3/did_groups/a9e3d346-d7bc-4a85-adb0-8ef1119cf237/relationships/city",
             "related": "https://sandbox-api.didww.com/v3/did_groups/a9e3d346-d7bc-4a85-adb0-8ef1119cf237/city"
-          }
-        },
-        "did_group_type": {
-          "links": {
-            "self": "https://sandbox-api.didww.com/v3/did_groups/a9e3d346-d7bc-4a85-adb0-8ef1119cf237/relationships/did_group_type",
-            "related": "https://sandbox-api.didww.com/v3/did_groups/a9e3d346-d7bc-4a85-adb0-8ef1119cf237/did_group_type"
           }
         },
         "region": {

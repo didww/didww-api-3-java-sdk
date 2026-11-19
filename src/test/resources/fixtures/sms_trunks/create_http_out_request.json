@@ -1,0 +1,1 @@
+{"data":{"type":"sms_trunks","attributes":{"name":"http_out trunk","configuration":{"type":"http_out","attributes":{"callback_url":"https://example.com/sms/status","allowed_ips":["203.0.113.10"]}}}}}

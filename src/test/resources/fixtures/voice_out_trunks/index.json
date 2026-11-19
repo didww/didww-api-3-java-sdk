@@ -20,6 +20,14 @@
         ],
         "force_symmetric_rtp": true,
         "rtp_ping": true,
+        "codecs": [
+          "pcma",
+          "pcmu",
+          "telephone_event"
+        ],
+        "ice_mode": "accept",
+        "rtcp_mux_mode": "accept",
+        "rtcp_feedback_mode": "accept",
         "callback_url": null,
         "emergency_enable_all": false,
         "rtp_timeout": 30,
@@ -76,6 +84,14 @@
         "dst_prefixes": [],
         "force_symmetric_rtp": false,
         "rtp_ping": false,
+        "codecs": [
+          "pcma",
+          "pcmu",
+          "telephone_event"
+        ],
+        "ice_mode": "accept",
+        "rtcp_mux_mode": "accept",
+        "rtcp_feedback_mode": "accept",
         "callback_url": null,
         "emergency_enable_all": false,
         "rtp_timeout": null,

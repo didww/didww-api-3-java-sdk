@@ -1,6 +1,7 @@
 package com.didww.sdk.resource;
 
 import com.didww.sdk.resource.enums.Feature;
+import com.didww.sdk.resource.enums.NumberType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
@@ -31,6 +32,12 @@ public class DidGroup extends BaseResource {
     @JsonProperty("service_restrictions")
     private String serviceRestrictions;
 
+    @JsonProperty("number_type")
+    private NumberType numberType;
+
+    @JsonProperty("is_demo")
+    private Boolean isDemo;
+
     @Relationship("stock_keeping_units")
     private List<StockKeepingUnit> stockKeepingUnits;
 
@@ -42,9 +49,6 @@ public class DidGroup extends BaseResource {
 
     @Relationship("city")
     private City city;
-
-    @Relationship("did_group_type")
-    private DidGroupType didGroupType;
 
     @Relationship("address_requirement")
     private AddressRequirement addressRequirement;

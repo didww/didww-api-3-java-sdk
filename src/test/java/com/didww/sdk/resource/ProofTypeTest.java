@@ -21,6 +21,7 @@ class ProofTypeTest extends BaseTest {
         assertThat(proofTypes).isNotEmpty();
         assertThat(proofTypes.get(0).getId()).isEqualTo("ab1fb565-ac55-4c73-bc55-64dc61e70169");
         assertThat(proofTypes.get(0).getName()).isEqualTo("Utility Bill");
-        assertThat(proofTypes.get(0).getEntityType()).isEqualTo("Address");
+        assertThat(proofTypes).extracting(ProofType::getEntityType)
+                .containsExactly("address", "address", "address", "personal", "address");
     }
 }

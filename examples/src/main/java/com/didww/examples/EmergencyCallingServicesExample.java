@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * Lists and cancels customer Emergency Calling Services (2026-04-16).
  *
  * An EmergencyCallingService represents a customer's 911/112 subscription
- * attached to one or more DIDs. It ties an address, identity, DID group type
+ * attached to one or more DIDs. It ties an address, identity, number type
  * and country together.
  *
  * Supported operations: index, show, destroy (cancel).
@@ -26,7 +26,7 @@ public class EmergencyCallingServicesExample {
 
         System.out.println("=== Emergency Calling Services ===");
         QueryParams params = QueryParams.builder()
-                .include("country", "did_group_type", "dids")
+                .include("country", "dids")
                 .build();
         List<EmergencyCallingService> services = client.emergencyCallingServices().list(params).getData();
         System.out.println("Found " + services.size() + " emergency calling services");
@@ -41,9 +41,7 @@ public class EmergencyCallingServicesExample {
             if (svc.getCountry() != null) {
                 System.out.println("  Country: " + svc.getCountry().getName());
             }
-            if (svc.getDidGroupType() != null) {
-                System.out.println("  DID Group Type: " + svc.getDidGroupType().getName());
-            }
+            System.out.println("  Number type: " + svc.getNumberType());
             System.out.println("  Activated: " + svc.getActivatedAt());
             if (svc.getCanceledAt() != null) {
                 System.out.println("  Canceled: " + svc.getCanceledAt());

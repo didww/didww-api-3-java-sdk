@@ -13,7 +13,12 @@ class PublicKeyTest extends BaseTest {
 
     @Test
     void testListPublicKeys() {
-        stubGetFixture("/v3/public_keys", "public_keys/index.json");
+        wireMock.stubFor(get(urlPathEqualTo("/v3/public_keys"))
+                .withHeader("Authorization", absent())
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/vnd.api+json")
+                        .withBody(loadFixture("public_keys/index.json"))));
 
         ApiResponse<List<PublicKey>> response = client.publicKeys().list();
         List<PublicKey> keys = response.getData();
@@ -24,6 +29,8 @@ class PublicKeyTest extends BaseTest {
         assertThat(keys.get(0).getKey()).startsWith("-----BEGIN PUBLIC KEY-----");
 
         wireMock.verify(getRequestedFor(urlPathEqualTo("/v3/public_keys"))
-                .withoutHeader("Api-Key"));
+                .withoutHeader("Api-Key")
+                .withoutHeader("Authorization"));
+        assertThat(mints()).isZero();
     }
 }

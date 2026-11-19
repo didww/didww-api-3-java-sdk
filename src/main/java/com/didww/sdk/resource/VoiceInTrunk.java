@@ -4,6 +4,7 @@ import com.didww.sdk.converter.TrunkConfigurationDeserializer;
 import com.didww.sdk.converter.TrunkConfigurationSerializer;
 import com.didww.sdk.resource.configuration.TrunkConfiguration;
 import com.didww.sdk.resource.enums.CliFormat;
+import com.didww.sdk.resource.enums.Pop;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -53,7 +54,8 @@ public class VoiceInTrunk extends BaseResource {
     @JsonSerialize(using = TrunkConfigurationSerializer.class)
     private TrunkConfiguration configuration;
 
-    @Relationship("pop")
+    /** Point of presence the trunk is served from. An unknown value reads as null. */
+    @JsonProperty("pop")
     private Pop pop;
 
     @Relationship("voice_in_trunk_group")
@@ -95,6 +97,12 @@ public class VoiceInTrunk extends BaseResource {
         this.configuration = markDirty("configuration", configuration);
     }
 
+    /**
+     * Sets the point of presence; null lets DIDWW choose. On an update, null is sent as {@code "pop": null}
+     * and clears it.
+     *
+     * @param pop the point of presence, or null
+     */
     public void setPop(Pop pop) {
         this.pop = markDirty("pop", pop);
     }

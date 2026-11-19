@@ -26,7 +26,7 @@ public class EmergencyRequirementValidationsExample {
         // First, find an emergency requirement to validate against
         System.out.println("=== Finding an Emergency Requirement ===");
         QueryParams params = QueryParams.builder()
-                .include("country", "did_group_type")
+                .include("country")
                 .build();
         List<EmergencyRequirement> requirements = client.emergencyRequirements().list(params).getData();
 

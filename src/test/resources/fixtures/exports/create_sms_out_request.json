@@ -1,0 +1,1 @@
+{"data":{"type":"exports","attributes":{"export_type":"sms_out","filters":{"from":"2026-10-01 00:00:00","to":"2026-10-15 00:00:00","sms_trunk.id":["b2c3d4e5-0000-4000-8000-000000000001","b2c3d4e5-0000-4000-8000-000000000003"],"service_type":"a2p","sender_id_verification.id":"c3d4e5f6-0000-4000-8000-000000000002"}}}}

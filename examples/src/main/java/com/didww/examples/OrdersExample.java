@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Orders example — demonstrates creating and listing orders.
+ * Orders example: lists the most recent orders, orders a DID by SKU and cancels (deletes) that order.
  * 2026-04-16: external_reference_id is a customer-supplied tag (max 100 chars).
+ * Usage: DIDWW_API_KEY=xxx ./gradlew runExample -PexampleClass=com.didww.examples.OrdersExample
  */
 
 public class OrdersExample {
@@ -21,11 +22,16 @@ public class OrdersExample {
     public static void main(String[] args) {
         DidwwClient client = ExampleClientFactory.fromEnv();
 
-        // List orders
-        List<Order> orders = client.orders().list().getData();
+        // List the most recent orders
+        QueryParams recent = QueryParams.builder()
+                .sort("-created_at")
+                .page(1, 5)
+                .build();
+        List<Order> orders = client.orders().list(recent).getData();
+        System.out.println("Recent orders (" + orders.size() + "):");
         for (Order order : orders) {
             System.out.println("Order " + order.getId() + ": " + order.getStatus()
-                    + " ($" + order.getAmount() + ")");
+                    + " ($" + order.getAmount() + ") created " + order.getCreatedAt());
             if (order.getItems() != null) {
                 for (OrderItem item : order.getItems()) {
                     System.out.println("  - " + item.getType());
@@ -36,24 +42,12 @@ public class OrdersExample {
             }
         }
 
-        // Create an order with DID order items
+        // Create an order with a DID order item, by SKU
         Order newOrder = new Order();
         newOrder.setAllowBackOrdering(false);
 
-        QueryParams params = QueryParams.builder()
-                .include("stock_keeping_units")
-                .page(1, 1)
-                .build();
-        List<DidGroup> didGroups = client.didGroups().list(params).getData();
-        if (didGroups.isEmpty()
-                || didGroups.get(0).getStockKeepingUnits() == null
-                || didGroups.get(0).getStockKeepingUnits().isEmpty()) {
-            throw new IllegalStateException("No DID group with stock_keeping_units found");
-        }
-        String skuId = didGroups.get(0).getStockKeepingUnits().get(0).getId();
-
         DidOrderItem didItem = new DidOrderItem();
-        didItem.setSkuId(skuId);
+        didItem.setSkuId(findSkuId(client));
         didItem.setQty(1);
 
         // 2026-04-16 external_reference_id — customer-supplied tag (max 100 chars)
@@ -62,11 +56,26 @@ public class OrdersExample {
         newOrder.setItems(Arrays.asList(didItem));
 
         Order created = client.orders().create(newOrder).getData();
-        System.out.println("Created order: " + created.getId() + " - " + created.getStatus());
+        System.out.println("\nCreated order: " + created.getId() + " - " + created.getStatus());
         System.out.println("  External reference: " + created.getExternalReferenceId());
 
         // Delete order (cancel)
         client.orders().delete(created.getId());
         System.out.println("Order canceled");
+    }
+
+    // Returns the first SKU of the first DID group with numbers in stock that has one.
+    private static String findSkuId(DidwwClient client) {
+        QueryParams params = QueryParams.builder()
+                .filter("is_available", "true") // a group without numbers in stock refuses the order
+                .include("stock_keeping_units")
+                .page(1, 10)
+                .build();
+        for (DidGroup group : client.didGroups().list(params).getData()) {
+            if (group.getStockKeepingUnits() != null && !group.getStockKeepingUnits().isEmpty()) {
+                return group.getStockKeepingUnits().get(0).getId();
+            }
+        }
+        throw new IllegalStateException("No DID group with stock_keeping_units found");
     }
 }
