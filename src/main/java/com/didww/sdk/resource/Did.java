@@ -75,7 +75,7 @@ public class Did extends BaseResource {
     @Relationship("address_verification")
     private AddressVerification addressVerification;
 
-    @Relationship("emergency_calling_service")
+    @Relationship(value = "emergency_calling_service", serialise = false)
     private EmergencyCallingService emergencyCallingService;
 
     @Relationship(value = "emergency_verification", serialise = false)
